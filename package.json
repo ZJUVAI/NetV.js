@@ -4,7 +4,6 @@
     "description": "A network visualization library based on WebGL",
     "main": "build/G.js",
     "scripts": {
-        "test": "echo \"Error: no test specified\" && exit 1",
         "build": "webpack --env.watch=false",
         "watch": "webpack --env.watch=true"
     },
