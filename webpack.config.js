@@ -53,9 +53,9 @@ module.exports = (env, argv) => {
         ],
         watch: watch,
         watchOptions: {
-            ignored: /node_modules/, // 忽略监听文件
-            aggregateTimeout: 300, //文件变动后多久发起构建
-            poll: 1000, //每秒询问次数，越小越好
+            ignored: /node_modules/,
+            aggregateTimeout: 300,
+            poll: 1000,
         },
     }
 }

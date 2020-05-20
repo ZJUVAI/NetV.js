@@ -5,7 +5,7 @@
         "target": "es6",
         "allowJs": true,
         "outDir": "generated"
-    }, //这里用来配置ts-node run的
+    },
     "exclude": ["node_modules", "test"],
     // "files": ["./node_modules/@types/webgl2/index.d.ts"]
 }
