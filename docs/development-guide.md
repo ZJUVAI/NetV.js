@@ -6,8 +6,8 @@
     -   We hope that our developers and reviewers consdier how to write beautiful code. It is as important as research because great research work needs landing and application to benefit others. In addition, excellent engineering ability is helpful for our career development.
     -   Research is science while engineering is more like art. Great SDEs should pursue from usable to robust, reliable and tolerant code. [Recommended reading](https://zhuanlan.zhihu.com/p/25595871).
 -   Our configuration
-    -   [TSLint](https://palantir.github.io/tslint/) and [Prettier](https://prettier.io/) are applied to unified the code format and ensure code quality when developing in our built-in hot-reload server, but **we hope our developers understand which rules need attention**.
-    -   Further, some rules are out of the scope of linters but are as important, thus efforts are required from developers and maintainers to enforce them. We derived a set of such rules from [Google JavaScript Style Guide](https://google.github.io/styleguide/jsguide.html) and [Palantir TSLint core rules](https://palantir.github.io/tslint/rules/), and they are described as follows.
+    -   [ESLint](https://eslint.org/) and [Prettier](https://prettier.io/) are applied to unified the code format and ensure code quality when developing in our built-in hot-reload server, but **we hope our developers understand which rules need attention**.
+    -   Further, some rules are out of the scope of linters but are as important, thus efforts are required from developers and maintainers to enforce them. We derived a set of such rules from [Google JavaScript Style Guide](https://google.github.io/styleguide/jsguide.html), and they are described as follows.
 
 ## 1 Files
 
@@ -50,8 +50,6 @@ components/
 ## 2 Modules
 
 1. File extension must always be included.
-
-    Note that, if you are using `Visual Studio Code`，`'.ts'` cannot be supported by default. Please install this extension [Deno](https://marketplace.visualstudio.com/items?itemName=justjavac.vscode-deno) for importing files with `'.ts'`  extension.
 
 2. Naming imports
     1. Module import names (`import * as name`) should be lowerCamelCase names derived from the imported file names.
@@ -260,7 +258,7 @@ const data = []
  */
 const Option = {
     FIRST_OPTION: 1,
-    SECOND_OPTION: 2,
+    SECOND_OPTION: 2
 }
 ```
 
