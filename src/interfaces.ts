@@ -1,3 +1,5 @@
+import Map2 from './utils/map2.js'
+
 export interface Color {
     r: number
     g: number
@@ -31,8 +33,14 @@ export interface Node {
     id: Function
 }
 
+export interface Link {
+    source: Function
+    target: Function
+}
+
 export interface Core {
     $_id2node: Map<string, Node>
+    $_ends2link: Map2
     data: Function
     addNode: Function
     addLink: Function

@@ -11,6 +11,7 @@ import Link from './link'
 
 class NetV implements interfaces.Core {
     public $_id2node = new Map()
+    public $_ends2link = new Map2()
 
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
 
@@ -46,20 +47,32 @@ class NetV implements interfaces.Core {
         return node
     }
 
+    /**
+     * @description initilize and add a link
+     * @param {linkData} the data of a link, include source, target, and styles...
+     */
     public addLink(linkData: interfaces.LinkData) {
         linkData.source = linkData.source.toString()
         linkData.target = linkData.target.toString()
-        // TODO
-        const source = this.getNodeById(linkData.source)
-        const target = this.getNodeById(linkData.target)
+        const link = new Link(this, linkData)
+        return link
     }
 
     /**
-     * @description get an Node object from the Map data structure
+     * @description get a Node object from the id2node Map data structure
      * @param {id} node id
      */
     public getNodeById(id: string) {
         return this.$_id2node.get[id]
+    }
+
+    /**
+     * @description get a Link object from the ends2link Map2 data structure
+     * @param endId1 one end id of the link (source or target)
+     * @param endId2 another end id of the link (source or target)
+     */
+    public getLinkByEnds(endId1, endId2) {
+        return this.$_ends2link.get([endId1, endId2])
     }
 }
 
