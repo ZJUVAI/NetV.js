@@ -2,9 +2,9 @@ const path = require('path')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin
 
 module.exports = (env, argv) => {
-    watch = false
+    let watch = false
     if ('watch' in env) {
-        if (env['watch'] == 'true') {
+        if (env['watch'] === 'true') {
             watch = true
         }
     }
@@ -16,27 +16,27 @@ module.exports = (env, argv) => {
             filename: 'NetV.js',
             libraryTarget: 'umd',
             library: 'netv',
-            path: path.resolve(__dirname, 'build'),
+            path: path.resolve(__dirname, 'build')
         },
         resolve: {
             // Add `.ts` and `.tsx` as a resolvable extension.
-            extensions: ['.ts', '.tsx', '.js'],
+            extensions: ['.ts', '.tsx', '.js']
         },
         node: {
-            fs: 'empty',
+            fs: 'empty'
         },
         module: {
             rules: [
                 {
                     test: /\.glsl$/,
-                    loader: 'raw-loader',
+                    loader: 'raw-loader'
                 },
                 // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
                 {
                     test: /\.tsx?$/,
-                    loader: 'ts-loader',
-                },
-            ],
+                    loader: 'ts-loader'
+                }
+            ]
         },
         externals: {
             // loadsh: 'lodash',
@@ -47,15 +47,15 @@ module.exports = (env, argv) => {
                 analyzerMode: 'disabled',
                 generateStatsFile: true,
                 statsOptions: {
-                    source: false,
-                },
-            }),
+                    source: false
+                }
+            })
         ],
         watch: watch,
         watchOptions: {
             ignored: /node_modules/,
             aggregateTimeout: 300,
-            poll: 1000,
-        },
+            poll: 1000
+        }
     }
 }
