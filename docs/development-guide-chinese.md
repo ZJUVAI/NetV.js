@@ -6,8 +6,8 @@
   - 研究是科学，而工程更像艺术。 优秀的软件开发工程师应该从可用代码发展为健壮，可靠和宽容的代码。 [推荐阅读:为什么你的前端工作经验不值钱？](https://zhuanlan.zhihu.com/p/25595871)
 
 - 配置
-  - 我们使用了[TSLint](https://palantir.github.io/tslint/) 和 [Prettier](https://prettier.io/)来统一代码风格，保证代码质量，但是**我们希望开发者能够理解一些值得注意的规则**。
-  - 仍有一些规则不在我们的linter范围内，我们希望开发者和维护者都能努力执行这些规则。我们从[Google JavaScript Style Guide](https://google.github.io/styleguide/jsguide.html)和[Palantir TSLint core rules](https://palantir.github.io/tslint/rules/)中总结了一些规则如下。
+  - 我们使用了[ESLint](https://eslint.org/) 和 [Prettier](https://prettier.io/)来统一代码风格，保证代码质量，但是**我们希望开发者能够理解一些值得注意的规则**。
+  - 仍有一些规则不在我们的linter范围内，我们希望开发者和维护者都能努力执行这些规则。我们从[Google JavaScript Style Guide](https://google.github.io/styleguide/jsguide.html)中总结了一些规则如下。
 
 
 
@@ -49,8 +49,6 @@
 ## 2 模块
 
 1. 引入模块时，需要有模块的扩展名；
-
-   注意，如果你使用 `Visual Studio Code`，`'.ts'`的扩展名还没有被支持。需要安装这个扩展：[Deno](https://marketplace.visualstudio.com/items?itemName=justjavac.vscode-deno)。
 
 2. 命名引入的模块
    1. 使用`import * as name`时，`name`应该用首字母小写的驼峰规则（lowerCamelCase）对文件名进行重写。
@@ -275,7 +273,7 @@ customerId // "Id" is both ubiquitous and unlikely to be misunderstood.
     */
    const Option = {
        FIRST_OPTION: 1,
-       SECOND_OPTION: 2,
+       SECOND_OPTION: 2
    }
    ```
 

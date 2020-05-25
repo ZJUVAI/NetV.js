@@ -4,12 +4,8 @@
         "module": "commonjs",
         "target": "es6",
         "allowJs": true,
-        "outDir": "generated",
-        "plugins": [{
-            "name": "typescript-deno-plugin",
-            "enable": true, // default is `true`
-        }]
+        "outDir": "generated"
     },
-    "exclude": ["node_modules", "test"],
+    "exclude": ["node_modules", "test"]
     // "files": ["./node_modules/@types/webgl2/index.d.ts"]
 }
