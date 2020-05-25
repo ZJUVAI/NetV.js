@@ -1,7 +1,7 @@
 /**
  * @author Jiacheng Pan <jackieanxis@gmail.com>
  * @description Provide the entrance of NetV.js.
- * @dependences interfaces.ts, node.ts
+ * @dependences interfaces.ts, utils/map2.js, node.ts, link.ts
  */
 
 import * as interfaces from './interfaces'

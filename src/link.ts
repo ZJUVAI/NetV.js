@@ -1,7 +1,7 @@
 /**
  * @author Jiacheng Pan <jackieanxis@gmail.com>
  * @description Provide a Link class.
- * @dependences No dependeces yet.
+ * @dependences interfaces.ts, utils/is.ts
  */
 
 import * as interfaces from './interfaces'
