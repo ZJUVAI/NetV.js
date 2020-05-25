@@ -50,10 +50,14 @@ components/
 ## 2 Modules
 
 1. File extension must always be included.
+
+    Note that, if you are using `Visual Studio Code`，`'.ts'` cannot be supported by default. Please install this extension [Deno](https://marketplace.visualstudio.com/items?itemName=justjavac.vscode-deno) for importing files with `'.ts'`  extension.
+
 2. Naming imports
     1. Module import names (`import * as name`) should be lowerCamelCase names derived from the imported file names.
     2. Default import names are derived from the imported file names and follow [the naming rules](#4-naming) based on imported object types.
     3. Named imports should keep the same name. Renaming requires caution.
+
 3. Do not create cycles between ES module.
 
 Example
