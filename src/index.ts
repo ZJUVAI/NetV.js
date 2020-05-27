@@ -5,7 +5,7 @@
  */
 
 import * as interfaces from './interfaces'
-import Map2 from './utils/map2.js'
+import Map2 from './utils/map2'
 import Node from './node'
 import Link from './link'
 

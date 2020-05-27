@@ -53,7 +53,7 @@ class Link {
                 } else {
                     if (this.$_source && this.$_target) {
                         // delete old Map
-                        this.$_core.$_ends2link.delete([this.$_source.id, this.$_target.id])
+                        this.$_core.$_ends2link.delete([this.$_source.id(), this.$_target.id()])
                     }
 
                     if (endType === END.source) {
@@ -62,7 +62,7 @@ class Link {
                         this.$_target = end
                     }
 
-                    this.$_core.$_ends2link.set([this.$_source.id, this.$_target.id], this)
+                    this.$_core.$_ends2link.set([this.$_source.id(), this.$_target.id()], this)
 
                     return this
                 }
