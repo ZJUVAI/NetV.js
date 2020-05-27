@@ -5,12 +5,6 @@
  */
 
 import * as interfaces from './interfaces'
-import { isValidId } from './utils/is'
-
-enum END {
-    source,
-    target
-}
 
 class Link {
     private $_source: interfaces.Node = undefined
@@ -19,8 +13,7 @@ class Link {
 
     public constructor(core, linkData: interfaces.LinkData) {
         this.$_core = core
-        this.source(linkData.source)
-        this.target(linkData.target)
+        this.sourceTarget(linkData)
     }
 
     public source(nodeId?: string) {
@@ -29,58 +22,75 @@ class Link {
             return this.$_source
         } else {
             // setter
-            return this.end(END.source, nodeId)
+            return this.sourceTarget({
+                source: nodeId,
+                target: this.$_target.id()
+            })
         }
     }
+
     public target(nodeId?: string) {
         if (arguments.length === 0) {
             // getter
             return this.$_target
         } else {
             // setter
-            return this.end(END.target, nodeId)
+            return this.sourceTarget({
+                source: this.$_source.id(),
+                target: nodeId
+            })
         }
     }
 
     /**
-     * @description setting an end of a link (source or target)
-     * @param endType
-     * @param value the end node's id;
+     * getter/setter of source and target
+     *
+     * @param {interfaces.LinkData} [linkData]
+     * @returns Object {source: Node, target: Node}
+     * @memberof Link
      */
-    private end(endType: END, value: string) {
-        if (isValidId(value)) {
-            const end = this.$_core.$_id2node.get(value)
-            if (!end) {
-                // source or target not exist
-                throw new Error(`Link's end: ${value} not exist.`)
-            } else {
-                if (this.$_source && this.$_target) {
-                    // delete old Map
-                    this.$_core.$_ends2link.delete([this.$_source.id(), this.$_target.id()])
-                }
+    public sourceTarget(linkData?: interfaces.LinkData) {
+        if (arguments.length > 0) {
+            linkData.source = linkData.source.toString()
+            linkData.target = linkData.target.toString()
+            const oldSource = this.$_source
+            const oldTarget = this.$_target
+            const newSource = this.$_core.$_id2node.get(linkData.source)
+            const newTarget = this.$_core.$_id2node.get(linkData.target)
 
-                if (endType === END.source) {
-                    if (this.$_target === end) {
-                        throw new Error(
-                            `Self loop (${this.$_target.id()} <=> ${end.id()}) is not allowed.`
-                        )
-                    }
-                    this.$_source = end
-                } else {
-                    if (this.$_source === end) {
-                        throw new Error(
-                            `Self loop (${this.$_source.id()} <=> ${end.id()}) is not allowed.`
-                        )
-                    }
-                    this.$_target = end
-                }
-                if (this.$_source !== undefined && this.$_target !== undefined) {
-                    this.$_core.$_ends2link.set([this.$_source.id(), this.$_target.id()], this)
-                }
-                return this
+            if (newSource === undefined) {
+                throw new Error(`Source ${linkData.source} does not exist.`)
             }
-        } else {
-            throw new Error(`Invalid link end id: ${value}.`)
+            if (newTarget === undefined) {
+                throw new Error(`Target ${linkData.target} does not exist.`)
+            }
+
+            if (newSource === newTarget) {
+                // self loop
+                throw new Error(
+                    `Self loop (${this.$_target.id()} <=> ${this.$_source.id()}) is not allowed.`
+                )
+            }
+
+            if (this.$_core.$_ends2link.has([linkData.source, linkData.target])) {
+                // multiple link is not allowed
+                throw new Error(
+                    `Multiple link (${linkData.source} <=> ${linkData.target}) is not allowd.`
+                )
+            }
+
+            if (oldSource && oldTarget) {
+                // delete old Map
+                this.$_core.$_ends2link.delete([oldSource.id(), oldTarget.id()])
+            }
+
+            this.$_source = newSource
+            this.$_target = newTarget
+            this.$_core.$_ends2link.set([linkData.source, linkData.target], this)
+        }
+        return {
+            source: this.$_source,
+            target: this.$_target
         }
     }
 }

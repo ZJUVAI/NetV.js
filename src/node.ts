@@ -13,30 +13,38 @@ class Node {
 
     public constructor(core, nodeData: interfaces.NodeData) {
         this.$_core = core
-        this.id(nodeData.id) // set id
+        this.$_setId(nodeData.id) // set id
     }
 
     /**
-     * @description node id getter setter
-     * @param value? the node's id, provided?setter:getter;
+     * getter of private property $_id
+     * @memberof Node
      */
-    public id(value?: string) {
-        if (arguments.length === 0) {
-            // getter
-            return this.$_id
-        } else {
-            // setter
-            if (isValidId(value)) {
-                if (isValidId(this.$_id)) {
-                    // delete old id from id2node Map
-                    this.$_core.$_id2node.delete(this.$_id)
-                }
-                this.$_core.$_id2node.set(value, this)
-                this.$_id = value
-                return this
-            } else {
-                throw new Error(`Invalid ID ${value}`)
+    public id() {
+        return this.$_id
+    }
+
+    /**
+     * set the id of this node.
+     * it is only used for constructor
+     * because a node's id is not allowed to be changed.
+     * @private
+     * @param {string} value
+     * @returns nothing
+     * @memberof Node
+     */
+    private $_setId(value: string) {
+        if (isValidId(value)) {
+            if (this.$_core.$_id2node.has(value)) {
+                throw new Error(`Duplicate node (${value}) is not allowed.`)
             }
+            if (isValidId(this.$_id)) {
+                throw new Error('Can not change the id of an exist node.')
+            }
+            this.$_core.$_id2node.set(value, this)
+            this.$_id = value
+        } else {
+            throw new Error(`Invalid ID ${value}`)
         }
     }
 }

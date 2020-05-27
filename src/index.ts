@@ -39,12 +39,8 @@ class NetV implements interfaces.Core {
      */
     public addNode(nodeData: interfaces.NodeData) {
         nodeData.id = nodeData.id.toString()
-        if (!this.$_id2node.has(nodeData.id)) {
-            const node = new Node(this, nodeData)
-            return node
-        } else {
-            throw new Error(`Duplicate node (${nodeData.id}) is not allowed.`)
-        }
+        const node = new Node(this, nodeData)
+        return node
     }
 
     /**
@@ -54,14 +50,9 @@ class NetV implements interfaces.Core {
     public addLink(linkData: interfaces.LinkData) {
         linkData.source = linkData.source.toString()
         linkData.target = linkData.target.toString()
-        if (!this.$_ends2link.has([linkData.source, linkData.target])) {
-            const link = new Link(this, linkData)
-            return link
-        } else {
-            throw new Error(
-                `Duplicate node (${linkData.source} <=> ${linkData.target}) is not allowed.`
-            )
-        }
+
+        const link = new Link(this, linkData)
+        return link
     }
 
     /**

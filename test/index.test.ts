@@ -1,6 +1,6 @@
 /**
  * @author Jiacheng Pan <jackieanxis@gmail.com>
- * @description node.ts test
+ * @description index.ts test
  */
 
 import NetV from '../src/index'
