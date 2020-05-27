@@ -18,7 +18,7 @@ class Node {
 
     /**
      * @description node id getter setter
-     * @param {value?} the node's id, provided?setter:getter;
+     * @param value? the node's id, provided?setter:getter;
      */
     public id(value?: string) {
         if (arguments.length === 0) {

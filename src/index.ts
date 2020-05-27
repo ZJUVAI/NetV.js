@@ -17,53 +17,59 @@ class NetV implements interfaces.Core {
 
     /**
      * @description data getter setter
-     * @param {nodeLinkData?} the node-link-data of a graph, provided?setter:getter;
+     * @param nodeLinkData? the node-link-data of a graph, provided?setter:getter;
      */
     public data(nodeLinkData?: interfaces.NodeLinkData) {
         if (nodeLinkData === undefined) {
             return this.$_data
         } else {
             this.$_data = nodeLinkData
-            try {
-                nodeLinkData.nodes.forEach((node) => {
-                    this.addNode(node)
-                })
-                nodeLinkData.links.forEach((link) => {
-                    this.addLink(link)
-                })
-            } catch (e) {
-                console.error(e)
-            }
+            nodeLinkData.nodes.forEach((node) => {
+                this.addNode(node)
+            })
+            nodeLinkData.links.forEach((link) => {
+                this.addLink(link)
+            })
         }
     }
 
     /**
      * @description initilize and add a node
-     * @param {nodeData} the data of a node, include id, styles...
+     * @param nodeData the data of a node, include id, styles...
      */
     public addNode(nodeData: interfaces.NodeData) {
         nodeData.id = nodeData.id.toString()
-        const node = new Node(this, nodeData)
-        return node
+        if (!this.$_id2node.has(nodeData.id)) {
+            const node = new Node(this, nodeData)
+            return node
+        } else {
+            throw new Error(`Duplicate node (${nodeData.id}) is not allowed.`)
+        }
     }
 
     /**
      * @description initilize and add a link
-     * @param {linkData} the data of a link, include source, target, and styles...
+     * @param linkData the data of a link, include source, target, and styles...
      */
     public addLink(linkData: interfaces.LinkData) {
         linkData.source = linkData.source.toString()
         linkData.target = linkData.target.toString()
-        const link = new Link(this, linkData)
-        return link
+        if (!this.$_ends2link.has([linkData.source, linkData.target])) {
+            const link = new Link(this, linkData)
+            return link
+        } else {
+            throw new Error(
+                `Duplicate node (${linkData.source} <=> ${linkData.target}) is not allowed.`
+            )
+        }
     }
 
     /**
      * @description get a Node object from the id2node Map data structure
-     * @param {id} node id
+     * @param id node id
      */
     public getNodeById(id: string) {
-        return this.$_id2node.get[id]
+        return this.$_id2node.get(id)
     }
 
     /**
@@ -76,4 +82,4 @@ class NetV implements interfaces.Core {
     }
 }
 
-export { NetV }
+export default NetV
