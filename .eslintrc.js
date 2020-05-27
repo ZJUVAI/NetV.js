@@ -4,10 +4,10 @@ module.exports = {
         // Your environments (which contains several predefined global variables)
         //
         browser: true,
-        es6: true
+        es6: true,
+        jest: true
         // node: true,
         // mocha: true,
-        // jest: true,
         // jquery: true
     },
     globals: {
