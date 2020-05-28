@@ -4,12 +4,33 @@
  */
 
 import NetV from '../src/index'
+import { JSDOM } from 'jsdom'
+const dom = new JSDOM()
+const document = dom.window.document
+
+/**
+ * constructor test
+ */
+
+test('constructor: container', () => {
+    expect(() => {
+        // @ts-ignore
+        const netV = new NetV()
+    }).toThrowError(new Error('Container should be specified as a div element!'))
+
+    expect(() => {
+        // @ts-ignore
+        const netV = new NetV(document.createElement('canvas'))
+    }).toThrowError(new Error('Container should be specified as a div element!'))
+
+    const netV = new NetV(document.createElement('div'))
+})
 
 /**
  * ! normal cases test block
  */
 test('normal cases: method data', () => {
-    let netV = new NetV()
+    let netV = new NetV(document.createElement('div'))
     netV.data({
         nodes: [{ id: '1' }, { id: '2' }, { id: '3' }],
         links: [
@@ -27,7 +48,7 @@ test('normal cases: method data', () => {
 
 test('normal cases: addNode/addLink', () => {
     // add node into a empty class
-    let netV = new NetV()
+    let netV = new NetV(document.createElement('div'))
     const node1 = netV.addNode({
         id: '1'
     })
@@ -35,7 +56,7 @@ test('normal cases: addNode/addLink', () => {
     expect(netV.$_id2node.size).toBe(1)
     expect(netV.getNodeById('1')).toBe(node1)
 
-    netV = new NetV()
+    netV = new NetV(document.createElement('div'))
     netV.data({
         nodes: [{ id: '1' }, { id: '2' }, { id: '3' }],
         links: [
@@ -68,7 +89,7 @@ test('normal cases: addNode/addLink', () => {
  */
 test('error cases: method data', () => {
     // without any substantial data
-    let netV = new NetV()
+    let netV = new NetV(document.createElement('div'))
     netV.data({
         nodes: [],
         links: []
@@ -77,7 +98,7 @@ test('error cases: method data', () => {
     expect(netV.$_ends2link.size).toBe(0)
 
     // with a link connected two nonexist node
-    netV = new NetV()
+    netV = new NetV(document.createElement('div'))
     expect(() => {
         netV.data({
             nodes: [],
@@ -88,7 +109,7 @@ test('error cases: method data', () => {
     expect(netV.$_ends2link.size).toBe(0)
 
     // with a link induced by a nonexist node
-    netV = new NetV()
+    netV = new NetV(document.createElement('div'))
     expect(() => {
         netV.data({
             nodes: [{ id: '1' }],
@@ -101,7 +122,7 @@ test('error cases: method data', () => {
 
 test('error cases: method addNode', () => {
     // add a node with an invalid id
-    let netV = new NetV()
+    let netV = new NetV(document.createElement('div'))
     expect(() => {
         netV.addNode({
             id: ''
@@ -141,7 +162,7 @@ test('error cases: method addNode', () => {
 })
 
 test('error cases: method addLink', () => {
-    let netV = new NetV()
+    let netV = new NetV(document.createElement('div'))
     // inject a link into an empty NetV instance
     expect(() => {
         netV.addLink({

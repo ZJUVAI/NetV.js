@@ -4,11 +4,14 @@
  */
 
 import NetV from '../src/index'
+import { JSDOM } from 'jsdom'
+const dom = new JSDOM()
+const document = dom.window.document
 
 // method sourceTarget() test
 // normal cases test
 describe('normal cases', () => {
-    let netV1 = new NetV()
+    let netV1 = new NetV(document.createElement('div'))
     netV1.data({
         nodes: [{ id: '1' }, { id: '2' }, { id: '3' }],
         links: [
@@ -41,7 +44,7 @@ describe('normal cases', () => {
 
 // error cases test
 describe('error cases', () => {
-    let netV2 = new NetV()
+    let netV2 = new NetV(document.createElement('div'))
     netV2.data({
         nodes: [{ id: '1' }, { id: '2' }, { id: '3' }],
         links: [

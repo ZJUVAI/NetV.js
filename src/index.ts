@@ -12,8 +12,16 @@ import Link from './link'
 class NetV implements interfaces.Core {
     public $_id2node = new Map()
     public $_ends2link = new Map2()
+    public $_container = null
 
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
+
+    constructor(container: HTMLDivElement) {
+        if (!container || container.tagName !== 'DIV') {
+            throw Error('Container should be specified as a div element!')
+        }
+        this.$_container = container
+    }
 
     /**
      * @description data getter setter
