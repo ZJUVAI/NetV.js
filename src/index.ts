@@ -8,11 +8,13 @@ import * as interfaces from './interfaces'
 import Map2 from './utils/map2'
 import Node from './node'
 import Link from './link'
+import { defaultConfigs } from './utils/configs'
 
 class NetV implements interfaces.Core {
     public $_id2node = new Map()
     public $_ends2link = new Map2()
     public $_container = null
+    public $_configs = defaultConfigs
 
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
 
