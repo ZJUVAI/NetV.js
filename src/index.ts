@@ -99,6 +99,16 @@ class NetV implements interfaces.Core {
     public getLinkByEnds(endId1: string, endId2: string) {
         return this.$_ends2link.get([endId1, endId2])
     }
+
+    /**
+     * @description wipe all the data in the instance
+     * @memberof NetV
+     */
+    public wipe() {
+        this.$_data = undefined
+        this.$_id2node = new Map()
+        this.$_ends2link = new Map2()
+    }
 }
 
 export default NetV
