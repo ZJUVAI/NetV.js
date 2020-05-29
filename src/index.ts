@@ -96,7 +96,7 @@ class NetV implements interfaces.Core {
      * @param endId1 one end id of the link (source or target)
      * @param endId2 another end id of the link (source or target)
      */
-    public getLinkByEnds(endId1, endId2) {
+    public getLinkByEnds(endId1: string, endId2: string) {
         return this.$_ends2link.get([endId1, endId2])
     }
 }
