@@ -6,10 +6,11 @@
 
 import * as interfaces from './interfaces'
 import { isValidId } from './utils/is'
+import NetV from './index'
 
 class Node {
     private $_id = ''
-    private $_core: interfaces.Core = undefined
+    private $_core: NetV = undefined
 
     public constructor(core, nodeData: interfaces.NodeData) {
         this.$_core = core

@@ -11,7 +11,7 @@ import Link from './link'
 import { defaultConfigs } from './utils/configs'
 import * as dataset from './dataset'
 
-class NetV implements interfaces.Core {
+class NetV {
     public $_id2node = new Map()
     public $_ends2link = new Map2()
     public $_container = undefined

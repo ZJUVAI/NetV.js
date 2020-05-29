@@ -37,15 +37,3 @@ export interface Link {
     source: Function
     target: Function
 }
-
-export interface Core {
-    $_id2node: Map<string, Node>
-    $_ends2link: Map2
-    data: Function
-    addNode: Function
-    addLink: Function
-    getNodeById: Function
-    addNodes: Function
-    addLinks: Function
-    wipe: Function
-}
