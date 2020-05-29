@@ -42,8 +42,18 @@ test('normal cases: method data', () => {
     expect(netV.$_id2node.size).toBe(3)
     expect(netV.getNodeById('2').id()).toBe('2')
     expect(netV.$_ends2link.size).toBe(3)
-    const link = netV.getLinkByEnds('2', '3')
-    expect([link.source(), link.target()]).toContain(netV.getNodeById('2'))
+    const link23 = netV.getLinkByEnds('2', '3')
+    expect([link23.source(), link23.target()]).toContain(netV.getNodeById('2'))
+
+    netV.data({
+        nodes: [{ id: '4' }, { id: '5' }],
+        links: [{ source: '5', target: '4' }]
+    })
+    expect(netV.$_id2node.size).toBe(2)
+    expect(netV.getNodeById('2')).toBeUndefined()
+    expect(netV.$_ends2link.size).toBe(1)
+    const link45 = netV.getLinkByEnds('4', '5')
+    expect([link45.source(), link45.target()]).toContain(netV.getNodeById('4'))
 })
 
 test('normal cases: addNode/addLink', () => {
@@ -114,6 +124,31 @@ test('error cases: method data', () => {
         netV.data({
             nodes: [{ id: '1' }],
             links: [{ source: '1', target: '2' }]
+        })
+    }).toThrow(Error)
+    expect(netV.$_id2node.size).toBe(1)
+    expect(netV.$_ends2link.size).toBe(0)
+
+    // with two duplicate nodes
+    netV = new NetV(document.createElement('div'))
+    expect(() => {
+        netV.data({
+            nodes: [{ id: '1' }, { id: '1' }],
+            links: [{ source: '1', target: '2' }]
+        })
+    }).toThrow(Error)
+    expect(netV.$_id2node.size).toBe(1)
+    expect(netV.$_ends2link.size).toBe(0)
+
+    // with two duplicate links
+    netV = new NetV(document.createElement('div'))
+    expect(() => {
+        netV.data({
+            nodes: [{ id: '1' }],
+            links: [
+                { source: '1', target: '2' },
+                { source: '2', target: '1' }
+            ]
         })
     }).toThrow(Error)
     expect(netV.$_id2node.size).toBe(1)
