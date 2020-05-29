@@ -49,12 +49,11 @@
 ## 2 模块
 
 1. 引入模块时，需要有模块的扩展名；
-
+- 注意：当前的TypeScript (3.9.3) 不支持引入带拓展名的ts文件，所以引入`.ts`文件时不需要加拓展名。
 2. 命名引入的模块
    1. 使用`import * as name`时，`name`应该用首字母小写的驼峰规则（lowerCamelCase）对文件名进行重写。
    2. 引入`default`模块时，命名应直接源自原模块，并且应该根据对象类型使命名符合[命名规则](# 4 命名)。
    3. 引入带名字的模块时，应该保持原名。重命名的话需要最好打上警告。
-
 3. 不要循环引用
 
 示例：
@@ -283,3 +282,29 @@ customerId // "Id" is both ubiquitous and unlikely to be misunderstood.
 
    1. 弃用的类/接口应该用`@deprecated`进行标注
    2. 弃用评论必须包含简单明了的指导，以便人们修复调用栈。
+
+
+
+## 6 Pull Requests
+
+在发起Pull Requests的同时，需要按照以下模板填写当前PR的描述：
+
+```
+### This is a ...
+
+- [ ] New feature (addNodes/addLinks)
+- [ ] Other (documents)
+
+### Description
+
+
+### Self check
+- [x] Test passed or not need
+- [x] Doc is ready or not need
+- [x] Demo is provided or not need
+
+### Additional Plan?
+> If this PR related with other PR or following info. You can type here.
+
+```
+

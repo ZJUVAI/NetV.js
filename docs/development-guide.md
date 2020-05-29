@@ -50,12 +50,11 @@ components/
 ## 2 Modules
 
 1. File extension must always be included.
-
+- Note: TypeScript (3.9.3) does not support import files with `.ts` extension yet. Thus please do not add `.ts` extension to the imported TypeScript files.
 2. Naming imports
     1. Module import names (`import * as name`) should be lowerCamelCase names derived from the imported file names.
     2. Default import names are derived from the imported file names and follow [the naming rules](#4-naming) based on imported object types.
     3. Named imports should keep the same name. Renaming requires caution.
-
 3. Do not create cycles between ES module.
 
 Example
@@ -265,3 +264,29 @@ const Option = {
 5. Deprecation
     1. Mark deprecated methods, classes or interfaces with @deprecated annotations.
     2. A deprecation comment must include simple, clear directions for people to fix their call sites.
+
+
+
+## Pull Requests
+
+When you new a Pull request, you need to describe your pull request follow the template:
+
+```
+### This is a ...
+
+- [ ] New feature (addNodes/addLinks)
+- [ ] Other (documents)
+
+### Description
+
+
+### Self check
+- [x] Test passed or not need
+- [x] Doc is ready or not need
+- [x] Demo is provided or not need
+
+### Additional Plan?
+> If this PR related with other PR or following info. You can type here.
+
+```
+
