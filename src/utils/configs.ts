@@ -1,3 +1,7 @@
+/**
+ * @description default configurations in NetV
+ * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
+ */
 import { Color } from 'src/interfaces'
 
 export const defaultConfigs = {

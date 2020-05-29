@@ -18,7 +18,11 @@ class NetV implements interfaces.Core {
 
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
 
-    constructor(container: HTMLDivElement) {
+    /**
+     * @description create NetV object.
+     * @param container where you draw your graph, neccesary for NetV.
+     */
+    public constructor(container: HTMLDivElement) {
         if (!container || container.tagName !== 'DIV') {
             throw Error('Container should be specified as a div element!')
         }
