@@ -94,6 +94,40 @@ test('normal cases: addNode/addLink', () => {
     expect([link.source(), link.target()]).toContain(netV.getNodeById('4'))
 })
 
+test('normal cases: wipe', () => {
+    let netV = new NetV(document.createElement('div'))
+    netV.data({
+        nodes: [{ id: '1' }, { id: '2' }, { id: '3' }],
+        links: [
+            { source: '1', target: '2' },
+            { source: '2', target: '3' },
+            { source: '3', target: '1' }
+        ]
+    })
+    netV.wipe()
+
+    expect(netV.$_id2node.size).toBe(0)
+    expect(netV.getNodeById('2')).toBeUndefined()
+
+    expect(netV.$_ends2link.size).toBe(0)
+    expect(netV.getLinkByEnds('1', '2')).toBeUndefined()
+
+    // add data again
+    netV.data({
+        nodes: [{ id: '1' }, { id: '2' }, { id: '3' }],
+        links: [
+            { source: '1', target: '2' },
+            { source: '2', target: '3' },
+            { source: '3', target: '1' }
+        ]
+    })
+    expect(netV.$_id2node.size).toBe(3)
+    expect(netV.getNodeById('2').id()).toBe('2')
+    expect(netV.$_ends2link.size).toBe(3)
+    const link = netV.getLinkByEnds('2', '3')
+    expect([link.source(), link.target()]).toContain(netV.getNodeById('2'))
+})
+
 /**
  * ! error cases test block
  */

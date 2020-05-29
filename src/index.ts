@@ -106,6 +106,16 @@ class NetV {
     }
 
     /**
+     * @description wipe all the data in the instance
+     * @memberof NetV
+     */
+    public wipe() {
+        this.$_data = undefined
+        this.$_id2node = new Map()
+        this.$_ends2link = new Map2()
+    }
+
+    /**
      * @description return build-in dataset according to name
      * @param name dataset name
      */
