@@ -38,17 +38,13 @@ class NetV implements interfaces.Core {
             return this.$_data
         } else {
             this.$_data = nodeLinkData
-            nodeLinkData.nodes.forEach((node) => {
-                this.addNode(node)
-            })
-            nodeLinkData.links.forEach((link) => {
-                this.addLink(link)
-            })
+            this.addNodes(nodeLinkData.nodes)
+            this.addLinks(nodeLinkData.links)
         }
     }
 
     /**
-     * @description initilize and add a node
+     * @description initialize and add a node
      * @param nodeData the data of a node, include id, styles...
      */
     public addNode(nodeData: interfaces.NodeData) {
@@ -58,7 +54,7 @@ class NetV implements interfaces.Core {
     }
 
     /**
-     * @description initilize and add a link
+     * @description initialize and add a link
      * @param linkData the data of a link, include source, target, and styles...
      */
     public addLink(linkData: interfaces.LinkData) {
@@ -67,6 +63,24 @@ class NetV implements interfaces.Core {
 
         const link = new Link(this, linkData)
         return link
+    }
+
+    /**
+     * @description initialize and add an array of nodes.
+     * @param {interfaces.NodeData[]} nodesData: a data array of nodes tobe added
+     * @memberof NetV
+     */
+    public addNodes(nodesData: interfaces.NodeData[]) {
+        nodesData.forEach((nodeData) => this.addNode(nodeData))
+    }
+
+    /**
+     * @description initialize and add an array of links.
+     * @param {interfaces.LinkData[]} linksData: a data array of links tobe added
+     * @memberof NetV
+     */
+    public addLinks(linksData: interfaces.LinkData[]) {
+        linksData.forEach((linkData) => this.addLink(linkData))
     }
 
     /**

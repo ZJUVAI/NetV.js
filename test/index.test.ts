@@ -118,6 +118,31 @@ test('error cases: method data', () => {
     }).toThrow(Error)
     expect(netV.$_id2node.size).toBe(1)
     expect(netV.$_ends2link.size).toBe(0)
+
+    // with two duplicate nodes
+    netV = new NetV(document.createElement('div'))
+    expect(() => {
+        netV.data({
+            nodes: [{ id: '1' }, { id: '1' }],
+            links: [{ source: '1', target: '2' }]
+        })
+    }).toThrow(Error)
+    expect(netV.$_id2node.size).toBe(1)
+    expect(netV.$_ends2link.size).toBe(0)
+
+    // with two duplicate links
+    netV = new NetV(document.createElement('div'))
+    expect(() => {
+        netV.data({
+            nodes: [{ id: '1' }],
+            links: [
+                { source: '1', target: '2' },
+                { source: '2', target: '1' }
+            ]
+        })
+    }).toThrow(Error)
+    expect(netV.$_id2node.size).toBe(1)
+    expect(netV.$_ends2link.size).toBe(0)
 })
 
 test('error cases: method addNode', () => {
