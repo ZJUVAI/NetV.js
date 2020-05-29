@@ -45,4 +45,7 @@ export interface Core {
     addNode: Function
     addLink: Function
     getNodeById: Function
+    addNodes: Function
+    addLinks: Function
+    wipe: Function
 }
