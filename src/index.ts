@@ -9,6 +9,7 @@ import Map2 from './utils/map2'
 import Node from './node'
 import Link from './link'
 import { defaultConfigs } from './utils/configs'
+import * as dataset from './dataset'
 
 class NetV implements interfaces.Core {
     public $_id2node = new Map()
@@ -102,6 +103,17 @@ class NetV implements interfaces.Core {
      */
     public getLinkByEnds(endId1: string, endId2: string) {
         return this.$_ends2link.get([endId1, endId2])
+    }
+
+    /**
+     * @description return build-in dataset according to name
+     * @param name dataset name
+     */
+    public loadDataset(name: string) {
+        if (name in dataset) return dataset[name]
+
+        console.error(`NetV does not have build-in dataset: ${name}`)
+        return { nodes: [], links: [] }
     }
 }
 
