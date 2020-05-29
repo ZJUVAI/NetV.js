@@ -9,11 +9,12 @@ import Map2 from './utils/map2'
 import Node from './node'
 import Link from './link'
 import { defaultConfigs } from './utils/configs'
+import * as dataset from './dataset'
 
 class NetV implements interfaces.Core {
     public $_id2node = new Map()
     public $_ends2link = new Map2()
-    public $_container = null
+    public $_container = undefined
     public $_configs = defaultConfigs
 
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
@@ -37,7 +38,11 @@ class NetV implements interfaces.Core {
         if (nodeLinkData === undefined) {
             return this.$_data
         } else {
+            // delete old data
             this.$_data = nodeLinkData
+            this.$_id2node = new Map()
+            this.$_ends2link = new Map2()
+
             this.addNodes(nodeLinkData.nodes)
             this.addLinks(nodeLinkData.links)
         }
@@ -108,6 +113,17 @@ class NetV implements interfaces.Core {
         this.$_data = undefined
         this.$_id2node = new Map()
         this.$_ends2link = new Map2()
+    }
+
+    /**
+     * @description return build-in dataset according to name
+     * @param name dataset name
+     */
+    public loadDataset(name: string) {
+        if (name in dataset) return dataset[name]
+
+        console.error(`NetV does not have build-in dataset: ${name}`)
+        return { nodes: [], links: [] }
     }
 }
 
