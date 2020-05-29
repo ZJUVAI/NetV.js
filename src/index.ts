@@ -13,7 +13,7 @@ import { defaultConfigs } from './utils/configs'
 class NetV implements interfaces.Core {
     public $_id2node = new Map()
     public $_ends2link = new Map2()
-    public $_container = null
+    public $_container = undefined
     public $_configs = defaultConfigs
 
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
@@ -37,7 +37,11 @@ class NetV implements interfaces.Core {
         if (nodeLinkData === undefined) {
             return this.$_data
         } else {
+            // delete old data
             this.$_data = nodeLinkData
+            this.$_id2node = new Map()
+            this.$_ends2link = new Map2()
+
             this.addNodes(nodeLinkData.nodes)
             this.addLinks(nodeLinkData.links)
         }
