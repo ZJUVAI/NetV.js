@@ -6,6 +6,7 @@
 export class RNode {
     // program
     private gl: WebGL2RenderingContext
+    private limit: number
     private program: WebGLProgram
 
     // attributes
@@ -35,7 +36,10 @@ export class RNode {
     private sizeArr: Float32Array
     private colorArr: Float32Array
 
-    public constructor(limit: number) {}
+    public constructor(gl: WebGL2RenderingContext, limit: number) {
+        this.gl = gl
+        this.limit = limit
+    }
 
     public draw() {}
 }

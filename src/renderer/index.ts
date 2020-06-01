@@ -7,17 +7,17 @@ import { defaultConfigs } from '../utils/configs'
 import { RNode } from './elements/node'
 
 class Renderer {
-    private GL: WebGL2RenderingContext
+    private gl: WebGL2RenderingContext
     private nodeManager: RNode
 
     public constructor(canvas: HTMLCanvasElement) {
         try {
-            this.GL = canvas.getContext('webgl2')
+            this.gl = canvas.getContext('webgl2')
         } catch {
             throw new Error('NetV requires WebGL2 supported by your browser')
         }
 
-        this.nodeManager = new RNode(defaultConfigs.nodeLimit)
+        this.nodeManager = new RNode(this.gl, defaultConfigs.nodeLimit)
     }
 
     public draw() {
