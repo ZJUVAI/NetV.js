@@ -3,7 +3,7 @@
  * @description Node using in Renderer
  */
 
-class RNode {
+export class RNode {
     // program
     private gl: WebGL2RenderingContext
     private program: WebGLProgram
@@ -35,7 +35,7 @@ class RNode {
     private sizeArr: Float32Array
     private colorArr: Float32Array
 
-    constructor(limit: number) {
-        
-    }
+    public constructor(limit: number) {}
+
+    public draw() {}
 }
