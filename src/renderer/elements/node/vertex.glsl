@@ -18,7 +18,7 @@ uniform vec2 viewport;
 void main(void) {
     size = inSize;
     color = inColor;
-    float vertexSize = dotSize * (2. * sqrt(2.));
+    float vertexSize = size * (2. * sqrt(2.));
     pos = scale * inPos + translate;
     mat3 transform = mat3(
         vertexSize, 0, 0,
@@ -26,5 +26,5 @@ void main(void) {
         pos.x, pos.y, 1
     );
 
-    gl_Position = vec4(projection * translate * inVertexPos, 1.);
+    gl_Position = vec4(projection * transform * inVertexPos, 1.);
 }

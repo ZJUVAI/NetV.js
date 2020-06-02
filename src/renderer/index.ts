@@ -6,7 +6,7 @@
 import { defaultConfigs } from '../utils/configs'
 import { RNode } from './elements/node'
 
-class Renderer {
+export class Renderer {
     private gl: WebGL2RenderingContext
     private nodeManager: RNode
 

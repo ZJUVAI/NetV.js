@@ -4,7 +4,7 @@
  */
 
 import { vertShaderStr, fragShaderStr } from './shader'
-import { createProgram, createArrayBuffer } from '../utils'
+import { createProgram, createArrayBuffer } from '../../utils'
 
 export class RNode {
     // program
@@ -59,7 +59,8 @@ export class RNode {
                 index: this.colorAttr
             }
         ]
-        const program = createProgram(this.gl, vertShaderStr, fragShaderStr, attributes)
+
+        this.program = createProgram(this.gl, vertShaderStr, fragShaderStr, attributes)
 
         // init arrays
         // prettier-ignore
@@ -86,7 +87,17 @@ export class RNode {
         const translateLoc = this.gl.getUniformLocation(this.program, 'projection')
         const viewportLoc = this.gl.getUniformLocation(this.program, 'projection')
 
-        const projection = new Float32Array([2 / this.width, 0, 0, 0, -2 / this.height, 0, -1, 1, 1])
+        const projection = new Float32Array([
+            2 / this.width,
+            0,
+            0,
+            0,
+            -2 / this.height,
+            0,
+            -1,
+            1,
+            1
+        ])
         this.gl.uniformMatrix3fv(projectionLoc, false, projection)
     }
 

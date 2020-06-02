@@ -16,9 +16,9 @@ export function compileShader(
 ): WebGLShader {
     const shader = gl.createShader(shaderType)
     gl.shaderSource(shader, shaderStr)
-    gl.compileShader(shaderStr)
-    if (!gl.getShaderParameter(shaderStr, gl.COMPILE_STATUS)) {
-        throw new Error('Shader compile failed')
+    gl.compileShader(shader)
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        throw new Error('Shader compile failed: ' + gl.getShaderInfoLog(shader))
     }
 
     return shader
@@ -39,7 +39,7 @@ export function createProgram(
     attributes: { name: string; index: number }[]
 ): WebGLProgram {
     const vertShader = compileShader(gl, vertShaderStr, gl.VERTEX_SHADER)
-    const fragShader = compileShader(gl, fragShaderStr, gl.VERTEX_SHADER)
+    const fragShader = compileShader(gl, fragShaderStr, gl.FRAGMENT_SHADER)
 
     const program = gl.createProgram()
 
