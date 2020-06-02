@@ -3,6 +3,9 @@
  * @description Node using in Renderer
  */
 
+import { vertShaderStr, fragShaderStr } from './shader'
+import { createProgram } from '../utils'
+
 export class RNode {
     // program
     private gl: WebGL2RenderingContext
@@ -39,6 +42,26 @@ export class RNode {
     public constructor(gl: WebGL2RenderingContext, limit: number) {
         this.gl = gl
         this.limit = limit
+
+        const attributes = [
+            {
+                name: 'inVertexPos',
+                index: 0
+            },
+            {
+                name: 'inPos',
+                index: 1
+            },
+            {
+                name: 'inSize',
+                index: 2
+            },
+            {
+                name: 'inColor',
+                index: 3
+            }
+        ]
+        const program = createProgram(gl, vertShaderStr, fragShaderStr, attributes)
     }
 
     public draw() {}

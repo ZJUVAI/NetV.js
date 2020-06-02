@@ -20,7 +20,11 @@ void main(void) {
     color = inColor;
     float vertexSize = dotSize * (2. * sqrt(2.));
     pos = scale * inPos + translate;
-    mat3 transform = mat3(vertexSize, 0, 0, 0, vertexSize, 0, pos.x, pos.y, 1);
+    mat3 transform = mat3(
+        vertexSize, 0, 0,
+        0, vertexSize, 0,
+        pos.x, pos.y, 1
+    );
 
     gl_Position = vec4(projection * translate * inVertexPos, 1.);
 }
