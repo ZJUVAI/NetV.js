@@ -10,14 +10,14 @@ class Renderer {
     private gl: WebGL2RenderingContext
     private nodeManager: RNode
 
-    public constructor(canvas: HTMLCanvasElement) {
+    public constructor(canvas: HTMLCanvasElement, width: number, height: number) {
         try {
             this.gl = canvas.getContext('webgl2')
         } catch {
             throw new Error('NetV requires WebGL2 supported by your browser')
         }
 
-        this.nodeManager = new RNode(this.gl, defaultConfigs.nodeLimit)
+        this.nodeManager = new RNode(this.gl, width, height, defaultConfigs.nodeLimit)
     }
 
     public draw() {

@@ -15,7 +15,6 @@ module.exports = (env, argv) => {
         output: {
             filename: 'NetV.js',
             libraryTarget: 'umd',
-            library: 'netv',
             path: path.resolve(__dirname, 'build')
         },
         resolve: {

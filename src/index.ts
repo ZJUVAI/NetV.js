@@ -127,4 +127,4 @@ class NetV implements interfaces.Core {
     }
 }
 
-export default NetV
+export { NetV }

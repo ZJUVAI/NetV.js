@@ -4,12 +4,14 @@
  */
 
 import { vertShaderStr, fragShaderStr } from './shader'
-import { createProgram } from '../utils'
+import { createProgram, createArrayBuffer } from '../utils'
 
 export class RNode {
     // program
     private gl: WebGL2RenderingContext
     private limit: number
+    private width: number
+    private height: number
     private program: WebGLProgram
 
     // attributes
@@ -23,45 +25,69 @@ export class RNode {
 
     // buffers
     private templateBuffer: WebGLBuffer
-    private dotPosBuffer: WebGLBuffer
-    private dotSizeBuffer: WebGLBuffer
-    private dotColor: WebGLBuffer
+    private posBuffer: WebGLBuffer
+    private sizeBuffer: WebGLBuffer
+    private colorBuffer: WebGLBuffer
 
     // arrays
-    // prettier-ignore
-    private templateArr = new Float32Array([
-        -0.5, 0.0, 1.0, 0.0, 0.0,
-        0.0, -0.5, 1.0, 1.0, 0.0,
-        0.0, 0.5, 1.0, 0.0, 1.0,
-        0.5, 0.0, 1.0, 1.0, 1.0
-    ])
+    private templateArr: Float32Array
     private posArr: Float32Array
     private sizeArr: Float32Array
     private colorArr: Float32Array
 
-    public constructor(gl: WebGL2RenderingContext, limit: number) {
+    public constructor(gl: WebGL2RenderingContext, width: number, height: number, limit: number) {
         this.gl = gl
         this.limit = limit
+        this.width = width
+        this.height = height
 
         const attributes = [
             {
                 name: 'inVertexPos',
-                index: 0
+                index: this.templateAttr
             },
             {
                 name: 'inPos',
-                index: 1
+                index: this.posAttr
             },
             {
                 name: 'inSize',
-                index: 2
+                index: this.sizeAttr
             },
             {
                 name: 'inColor',
-                index: 3
+                index: this.colorAttr
             }
         ]
-        const program = createProgram(gl, vertShaderStr, fragShaderStr, attributes)
+        const program = createProgram(this.gl, vertShaderStr, fragShaderStr, attributes)
+
+        // init arrays
+        // prettier-ignore
+        this.templateArr = new Float32Array([
+            -0.5, 0.0, 1.0, 0.0, 0.0,
+            0.0, -0.5, 1.0, 1.0, 0.0,
+            0.0, 0.5, 1.0, 0.0, 1.0,
+            0.5, 0.0, 1.0, 1.0, 1.0
+        ])
+        this.posArr = new Float32Array(2 * limit)
+        this.sizeArr = new Float32Array(1 * limit)
+        this.colorArr = new Float32Array(4 * limit)
+
+        // init buffers
+        this.templateBuffer = createArrayBuffer(this.gl, this.templateArr)
+        this.posBuffer = createArrayBuffer(this.gl, this.posArr)
+        this.sizeBuffer = createArrayBuffer(this.gl, this.sizeArr)
+        this.colorBuffer = createArrayBuffer(this.gl, this.colorArr)
+
+        // init uniforms
+        this.gl.useProgram(this.program)
+        const projectionLoc = this.gl.getUniformLocation(this.program, 'projection')
+        const scaleLoc = this.gl.getUniformLocation(this.program, 'projection')
+        const translateLoc = this.gl.getUniformLocation(this.program, 'projection')
+        const viewportLoc = this.gl.getUniformLocation(this.program, 'projection')
+
+        const projection = new Float32Array([2 / this.width, 0, 0, 0, -2 / this.height, 0, -1, 1, 1])
+        this.gl.uniformMatrix3fv(projectionLoc, false, projection)
     }
 
     public draw() {}

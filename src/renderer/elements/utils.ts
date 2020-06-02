@@ -57,3 +57,16 @@ export function createProgram(
 
     return program
 }
+
+/**
+ *
+ * @param gl WebGL context
+ * @param data data to store in buffer
+ * @returns WebGL buffer store given data
+ */
+export function createArrayBuffer(gl: WebGL2RenderingContext, data: Float32Array): WebGLBuffer {
+    const buffer = gl.createBuffer()
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer)
+    gl.bufferData(gl.ARRAY_BUFFER, data, gl.DYNAMIC_DRAW)
+    return buffer
+}
