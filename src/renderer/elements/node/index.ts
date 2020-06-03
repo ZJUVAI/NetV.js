@@ -3,6 +3,7 @@
  * @description Node using in Renderer
  */
 
+import { Node } from '../../../interfaces'
 import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
 import { createProgram, createArrayBuffer } from '../../utils'
@@ -11,6 +12,7 @@ export class RNode {
     // program
     private gl: WebGL2RenderingContext
     private limit: number
+    private count = 0
     private width: number
     private height: number
     private program: WebGLProgram
@@ -88,18 +90,66 @@ export class RNode {
         const translateLoc = this.gl.getUniformLocation(this.program, 'projection')
         const viewportLoc = this.gl.getUniformLocation(this.program, 'projection')
 
+        // prettier-ignore
         const projection = new Float32Array([
-            2 / this.width,
-            0,
-            0,
-            0,
-            -2 / this.height,
-            0,
-            -1,
-            1,
-            1
+            2 / this.width, 0, 0,
+            0, -2 / this.height, 0,
+            -1, 1, 1
         ])
         this.gl.uniformMatrix3fv(projectionLoc, false, projection)
+
+        const scale = new Float32Array([1, 1])
+        this.gl.uniform2fv(scaleLoc, scale)
+
+        const translate = new Float32Array([0, 0])
+        this.gl.uniform2fv(translateLoc, translate)
+
+        const viewport = new Float32Array([this.width, this.height])
+        this.gl.uniform2fv(viewportLoc, viewport)
+    }
+
+    public addData(nodes: Node[]) {
+        // set array
+        nodes.forEach((node, i) => {
+            this.posArr[2 * this.count] = node.x
+            this.posArr[2 * this.count + 1] = node.y
+
+            this.sizeArr[this.count] = node.r
+
+            this.colorArr[this.count] = node.fill.r
+            this.colorArr[this.count + 1] = node.fill.g
+            this.colorArr[this.count + 2] = node.fill.b
+            this.colorArr[this.count + 3] = node.fill.a
+        })
+
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.posBuffer)
+        this.gl.bufferSubData(
+            this.gl.ARRAY_BUFFER,
+            2 * this.count * this.posArr.BYTES_PER_ELEMENT,
+            this.posArr,
+            2 * this.count,
+            2 * nodes.length
+        )
+
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.sizeBuffer)
+        this.gl.bufferSubData(
+            this.gl.ARRAY_BUFFER,
+            this.count * this.posArr.BYTES_PER_ELEMENT,
+            this.sizeArr,
+            this.count,
+            nodes.length
+        )
+
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorBuffer)
+        this.gl.bufferSubData(
+            this.gl.ARRAY_BUFFER,
+            4 * this.count * this.posArr.BYTES_PER_ELEMENT,
+            this.colorArr,
+            4 * this.count,
+            4 * nodes.length
+        )
+
+        this.count += nodes.length
     }
 
     public draw() {}
