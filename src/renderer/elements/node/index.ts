@@ -86,9 +86,9 @@ export class RNode {
         // init uniforms
         this.gl.useProgram(this.program)
         const projectionLoc = this.gl.getUniformLocation(this.program, 'projection')
-        const scaleLoc = this.gl.getUniformLocation(this.program, 'projection')
-        const translateLoc = this.gl.getUniformLocation(this.program, 'projection')
-        const viewportLoc = this.gl.getUniformLocation(this.program, 'projection')
+        const scaleLoc = this.gl.getUniformLocation(this.program, 'scale')
+        const translateLoc = this.gl.getUniformLocation(this.program, 'translate')
+        const viewportLoc = this.gl.getUniformLocation(this.program, 'viewport')
 
         // prettier-ignore
         const projection = new Float32Array([
@@ -98,10 +98,10 @@ export class RNode {
         ])
         this.gl.uniformMatrix3fv(projectionLoc, false, projection)
 
-        const scale = new Float32Array([1, 1])
+        const scale = new Float32Array([1., 1.])
         this.gl.uniform2fv(scaleLoc, scale)
 
-        const translate = new Float32Array([0, 0])
+        const translate = new Float32Array([0., 0.])
         this.gl.uniform2fv(translateLoc, translate)
 
         const viewport = new Float32Array([this.width, this.height])
