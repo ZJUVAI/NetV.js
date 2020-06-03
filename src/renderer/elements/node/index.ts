@@ -90,6 +90,8 @@ export class RNode {
         const translateLoc = this.gl.getUniformLocation(this.program, 'translate')
         const viewportLoc = this.gl.getUniformLocation(this.program, 'viewport')
 
+        this.gl.viewport(0, 0, this.width, this.height) // TODO: viewport set
+
         // prettier-ignore
         const projection = new Float32Array([
             2 / this.width, 0, 0,
@@ -168,7 +170,7 @@ export class RNode {
                 3,
                 this.gl.FLOAT,
                 false,
-                3 * this.templateArr.BYTES_PER_ELEMENT,
+                5 * this.templateArr.BYTES_PER_ELEMENT,
                 0
             )
 
@@ -200,7 +202,7 @@ export class RNode {
                 4,
                 this.gl.FLOAT,
                 false,
-                4 * this.templateArr.BYTES_PER_ELEMENT,
+                4 * this.colorAttr.BYTES_PER_ELEMENT,
                 0
             )
             this.gl.vertexAttribDivisor(this.colorAttr, 1)
