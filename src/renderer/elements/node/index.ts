@@ -216,7 +216,7 @@ export class RNode {
                 4,
                 this.gl.FLOAT,
                 false,
-                4 * this.colorAttr.BYTES_PER_ELEMENT,
+                4 * this.colorArr.BYTES_PER_ELEMENT,
                 0
             )
             this.gl.vertexAttribDivisor(this.colorAttr, 1)
