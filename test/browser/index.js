@@ -2,8 +2,8 @@ const netv = new NetV(document.getElementById('main'))
 const testData = [
     {
         id: '0',
-        x: 10,
-        y: 10,
+        x: 400,
+        y: 100,
         r: 10,
         fill: {
             r: 1,
@@ -14,8 +14,8 @@ const testData = [
     },
     {
         id: '1',
-        x: 30,
-        y: 50,
+        x: 100,
+        y: 500,
         r: 5,
         fill: {
             r: 0,

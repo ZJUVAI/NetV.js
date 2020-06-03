@@ -152,5 +152,60 @@ export class RNode {
         this.count += nodes.length
     }
 
-    public draw() {}
+    public draw() {
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT)
+        if (this.count > 0) {
+            this.gl.useProgram(this.program)
+
+            this.gl.enableVertexAttribArray(this.templateAttr)
+            this.gl.enableVertexAttribArray(this.posAttr)
+            this.gl.enableVertexAttribArray(this.sizeAttr)
+            this.gl.enableVertexAttribArray(this.colorAttr)
+
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.templateBuffer)
+            this.gl.vertexAttribPointer(
+                this.templateAttr,
+                3,
+                this.gl.FLOAT,
+                false,
+                3 * this.templateArr.BYTES_PER_ELEMENT,
+                0
+            )
+
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.posBuffer)
+            this.gl.vertexAttribPointer(
+                this.posAttr,
+                2,
+                this.gl.FLOAT,
+                false,
+                2 * this.posArr.BYTES_PER_ELEMENT,
+                0
+            )
+            this.gl.vertexAttribDivisor(this.posAttr, 1) // TODO: attribDivisor's usage
+
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.sizeBuffer)
+            this.gl.vertexAttribPointer(
+                this.sizeAttr,
+                1,
+                this.gl.FLOAT,
+                false,
+                1 * this.sizeArr.BYTES_PER_ELEMENT,
+                0
+            )
+            this.gl.vertexAttribDivisor(this.sizeAttr, 1)
+
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.colorBuffer)
+            this.gl.vertexAttribPointer(
+                this.colorAttr,
+                4,
+                this.gl.FLOAT,
+                false,
+                4 * this.templateArr.BYTES_PER_ELEMENT,
+                0
+            )
+            this.gl.vertexAttribDivisor(this.colorAttr, 1)
+        }
+
+        this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
+    }
 }

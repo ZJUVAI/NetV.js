@@ -31,6 +31,8 @@ class NetV implements interfaces.Core {
         }
         this.$_container = container
         const canvas = document.createElement('canvas') // TODO: consider node enviroment, document not defined
+        canvas.setAttribute('width', String(this.$_configs.width))
+        canvas.setAttribute('height', String(this.$_configs.width))
         this.$_container.appendChild(canvas)
 
         this.$_renderer = new Renderer(canvas, this.$_configs.width, this.$_configs.height)
