@@ -1,3 +1,9 @@
+/**
+ * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
+ * @description Basic test for render node
+ * 
+ * expected: 4 square draw on screen
+ */
 const netv = new NetV(document.getElementById('main'))
 const testData = [
     {
