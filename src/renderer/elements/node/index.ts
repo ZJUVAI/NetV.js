@@ -38,6 +38,13 @@ export class RNode {
     private sizeArr: Float32Array
     private colorArr: Float32Array
 
+    /**
+     * create render node manager
+     * @param gl WebGL context
+     * @param width canvas width
+     * @param height canvas height
+     * @param limit max nodes number
+     */
     public constructor(gl: WebGL2RenderingContext, width: number, height: number, limit: number) {
         this.gl = gl
         this.limit = limit
@@ -110,6 +117,10 @@ export class RNode {
         this.gl.uniform2fv(viewportLoc, viewport)
     }
 
+    /**
+     * add nodes data to engine
+     * @param nodes nodes data
+     */
     public addData(nodes: Node[]) {
         // set array
         nodes.forEach((node, i) => {
@@ -154,6 +165,9 @@ export class RNode {
         this.count += nodes.length
     }
 
+    /**
+     * draw nodes
+     */
     public draw() {
         this.gl.clear(this.gl.COLOR_BUFFER_BIT)
         if (this.count > 0) {

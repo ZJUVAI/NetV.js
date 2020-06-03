@@ -59,7 +59,7 @@ export function createProgram(
 }
 
 /**
- *
+ * create WebGL array buffer given data array
  * @param gl WebGL context
  * @param data data to store in buffer
  * @returns WebGL buffer store given data
