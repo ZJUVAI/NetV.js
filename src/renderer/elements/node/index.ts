@@ -98,10 +98,10 @@ export class RNode {
         ])
         this.gl.uniformMatrix3fv(projectionLoc, false, projection)
 
-        const scale = new Float32Array([1., 1.])
+        const scale = new Float32Array([1, 1])
         this.gl.uniform2fv(scaleLoc, scale)
 
-        const translate = new Float32Array([0., 0.])
+        const translate = new Float32Array([0, 0])
         this.gl.uniform2fv(translateLoc, translate)
 
         const viewport = new Float32Array([this.width, this.height])
@@ -111,15 +111,15 @@ export class RNode {
     public addData(nodes: Node[]) {
         // set array
         nodes.forEach((node, i) => {
-            this.posArr[2 * this.count] = node.x
-            this.posArr[2 * this.count + 1] = node.y
+            this.posArr[2 * (this.count + i)] = node.x
+            this.posArr[2 * (this.count + i) + 1] = node.y
 
-            this.sizeArr[this.count] = node.r
+            this.sizeArr[this.count + i] = node.r
 
-            this.colorArr[this.count] = node.fill.r
-            this.colorArr[this.count + 1] = node.fill.g
-            this.colorArr[this.count + 2] = node.fill.b
-            this.colorArr[this.count + 3] = node.fill.a
+            this.colorArr[4 * (this.count + i)] = node.fill.r
+            this.colorArr[4 * (this.count + i) + 1] = node.fill.g
+            this.colorArr[4 * (this.count + i) + 2] = node.fill.b
+            this.colorArr[4 * (this.count + i) + 3] = node.fill.a
         })
 
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.posBuffer)
