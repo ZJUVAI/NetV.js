@@ -20,13 +20,16 @@ module.exports = {
     },
     overrides: [
         {
-            files: ['*.ts', '*.tsx'],
+            files: ['**/*.ts', '**/*.tsx'],
             extends: ['alloy', 'alloy/typescript'],
             parser: '@typescript-eslint/parser',
-            plugins: ['@typescript-eslint/eslint-plugin']
+            plugins: ['@typescript-eslint/eslint-plugin'],
+            rules: {
+                'max-params': ['error', 4]
+            }
         },
         {
-            files: ['*.js'],
+            files: ['**/*.js'],
             extends: ['alloy'],
             parser: 'babel-eslint'
         }
