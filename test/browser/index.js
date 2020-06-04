@@ -56,5 +56,6 @@ const testData = [
     }
 ]
 
-netv.$_renderer.nodeManager.addData(testData)
+netv.data({nodes: testData})
+// netv.$_renderer.nodeManager.addData(testData)
 netv.$_renderer.nodeManager.draw()

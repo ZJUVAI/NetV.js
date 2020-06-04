@@ -28,12 +28,3 @@ export interface NodeLinkData {
     nodes: NodeData[]
     links: LinkData[]
 }
-
-export interface Node {
-    id: Function
-}
-
-export interface Link {
-    source: Function
-    target: Function
-}

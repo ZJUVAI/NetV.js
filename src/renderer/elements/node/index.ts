@@ -3,10 +3,10 @@
  * @description Node using in Renderer
  */
 
-import Node from '../../../node'
 import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
 import { createProgram, createArrayBuffer } from '../../utils'
+import Node from '../../../node'
 
 enum NodeAttrKey {
     Template,
