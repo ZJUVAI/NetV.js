@@ -4,43 +4,66 @@
  * @dependences interfaces.ts, utils/is.ts
  */
 
+import Node from './node'
 import * as interfaces from './interfaces'
 import { NetV } from './index'
+import * as configs from './configs'
 
 class Link {
-    private $_source: interfaces.Node = undefined
-    private $_target: interfaces.Node = undefined
-    private $_core: NetV = undefined
+    private $_core: NetV
+    private $_source: Node
+    private $_target: Node
+    private $_strokeWidth = configs.link.storkeWidth
+    private $_strokeColor = configs.link.strokeColor
 
     public constructor(core, linkData: interfaces.LinkData) {
         this.$_core = core
-        this.sourceTarget(linkData)
+        const data = {
+            ...{
+                strokeWidth: this.$_strokeWidth,
+                strokeColor: this.$_strokeColor
+            },
+            ...linkData
+        }
+
+        this.sourceTarget(data)
+
+        this.strokeWidth(data.strokeWidth)
+        this.strokeColor(data.strokeColor)
     }
 
+    /**
+     * getter/setter of the source
+     * @param {string} [nodeId]
+     * @returns {Node} a source Node Object
+     * @memberof Link
+     */
     public source(nodeId?: string) {
-        if (arguments.length === 0) {
-            // getter
-            return this.$_source
-        } else {
+        if (arguments.length === 1) {
             // setter
-            return this.sourceTarget({
+            this.sourceTarget({
                 source: nodeId,
                 target: this.$_target.id()
             })
         }
+        return this.$_source
     }
 
+    /**
+     * getter/setter of the target
+     * @param {string} [nodeId]
+     * @returns {Node} a target Node Object
+     * @memberof Link
+     */
     public target(nodeId?: string) {
-        if (arguments.length === 0) {
-            // getter
-            return this.$_target
-        } else {
+        if (arguments.length === 1) {
             // setter
-            return this.sourceTarget({
+            this.sourceTarget({
                 source: this.$_source.id(),
                 target: nodeId
             })
         }
+        return this.$_target
     }
 
     /**
@@ -54,27 +77,29 @@ class Link {
         if (arguments.length > 0) {
             linkData.source = linkData.source.toString()
             linkData.target = linkData.target.toString()
-            const oldSource = this.$_source
-            const oldTarget = this.$_target
+            const oldSource: Node = this.$_source
+            const oldTarget: Node = this.$_target
             const newSource = this.$_core.$_id2node.get(linkData.source)
             const newTarget = this.$_core.$_id2node.get(linkData.target)
 
             if (newSource === undefined) {
-                throw new Error(`Source ${linkData.source} does not exist.`)
+                // error: undefined source
+                throw new Error(`Input source (${linkData.source}) does not exist.`)
             }
-            if (newTarget === undefined) {
-                throw new Error(`Target ${linkData.target} does not exist.`)
+            if (newSource === undefined) {
+                // error: undefined target
+                throw new Error(`Input target (${linkData.target}) does not exist.`)
             }
 
             if (newSource === newTarget) {
-                // self loop
+                // error: self loop
                 throw new Error(
-                    `Self loop (${this.$_target.id()} <=> ${this.$_source.id()}) is not allowed.`
+                    `Self loop (${linkData.source} <=> ${linkData.target}) is not allowed.`
                 )
             }
 
             if (this.$_core.$_ends2link.has([linkData.source, linkData.target])) {
-                // multiple link is not allowed
+                // error: multiple link
                 throw new Error(
                     `Multiple link (${linkData.source} <=> ${linkData.target}) is not allowd.`
                 )
@@ -93,6 +118,29 @@ class Link {
             source: this.$_source,
             target: this.$_target
         }
+    }
+
+    /**
+     * set/get stroke width of a node
+     * @param {number} [value]
+     * @memberof Node
+     */
+    public strokeWidth(value?: number) {
+        if (arguments.length === 1) {
+            this.$_strokeWidth = value
+        }
+        return this.$_strokeWidth
+    }
+
+    /**
+     * set/get stroke color of a node
+     * @param {Color} [value]
+     */
+    public strokeColor(value?: interfaces.Color) {
+        if (arguments.length === 1) {
+            this.$_strokeColor = value
+        }
+        return this.$_strokeColor
     }
 }
 

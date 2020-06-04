@@ -10,8 +10,8 @@ import { NetV } from './index'
 import * as configs from './configs'
 
 class Node {
-    private $_id = ''
-    private $_core: NetV = undefined
+    private $_core: NetV
+    private $_id: string
     private $_position = {
         x: 0,
         y: 0
@@ -23,31 +23,31 @@ class Node {
 
     public constructor(core, nodeData: interfaces.NodeData) {
         this.$_core = core
-        this.$_setId(nodeData.id) // set id
-
-        const position = {
-            x: 'x' in nodeData ? nodeData.x : 0,
-            y: 'y' in nodeData ? nodeData.y : 0
+        const data = {
+            ...{
+                x: this.$_position.x,
+                y: this.$_position.y,
+                strokeWidth: this.$_strokeWidth,
+                strokeColor: this.$_strokeColor,
+                r: this.$_r,
+                fill: this.$_fill
+            },
+            ...nodeData
         }
-        const strokeWidth =
-            'strokeWidth' in nodeData ? nodeData.strokeWidth : configs.node.storkeWidth
-        const strokeColor =
-            'strokeColor' in nodeData ? nodeData.strokeColor : configs.node.strokeColor
-        const fill = 'fill' in nodeData ? nodeData.fill : configs.node.fill
-        const radius = 'r' in nodeData ? nodeData.r : configs.node.r
 
-        this.position(position.x, position.y)
-        this.strokeWidth(strokeWidth)
-        this.strokeColor(strokeColor)
-        this.fill(fill)
-        this.r(radius)
+        this.$_setId(data.id)
+        this.position(data.x, data.y)
+        this.strokeWidth(data.strokeWidth)
+        this.strokeColor(data.strokeColor)
+        this.fill(data.fill)
+        this.r(data.r)
     }
 
     /**
      * getter of private property $_id
      * @memberof Node
      */
-    public get id() {
+    public id() {
         return this.$_id
     }
 
