@@ -10,11 +10,13 @@ import Node from './node'
 import Link from './link'
 import { defaultConfigs } from './utils/configs'
 import * as dataset from './dataset'
+import { Renderer } from './renderer'
 
 class NetV {
     public $_id2node = new Map()
     public $_ends2link = new Map2()
-    public $_container = undefined
+    public $_container: HTMLDivElement
+    public $_renderer: Renderer
     public $_configs = defaultConfigs
 
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
@@ -28,6 +30,12 @@ class NetV {
             throw Error('Container should be specified as a div element!')
         }
         this.$_container = container
+        const canvas = document.createElement('canvas') // TODO: consider node enviroment, document not defined
+        canvas.setAttribute('width', String(this.$_configs.width))
+        canvas.setAttribute('height', String(this.$_configs.height))
+        this.$_container.appendChild(canvas)
+
+        this.$_renderer = new Renderer(canvas, this.$_configs.width, this.$_configs.height)
     }
 
     /**
@@ -127,4 +135,4 @@ class NetV {
     }
 }
 
-export default NetV
+export { NetV }

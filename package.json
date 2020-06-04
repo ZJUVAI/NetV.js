@@ -2,7 +2,7 @@
     "name": "netv",
     "version": "1.0.0",
     "description": "A network visualization library based on WebGL",
-    "main": "build/G.js",
+    "main": "build/NetV.js",
     "scripts": {
         "build": "webpack --env.watch=false",
         "watch": "webpack --env.watch=true",
@@ -25,6 +25,7 @@
         "eslint-plugin-jest": "^23.13.1",
         "jest": "^26.0.1",
         "jsdom": "^16.2.2",
+        "raw-loader": "^4.0.1",
         "ts-jest": "^26.0.0",
         "ts-loader": "^7.0.4",
         "typescript": "^3.9.3",

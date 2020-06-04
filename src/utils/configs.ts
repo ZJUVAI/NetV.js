@@ -20,5 +20,7 @@ export const defaultConfigs = {
             strokeColor: { r: 0.5, g: 0.5, b: 0.5, a: 0.5 } as Color,
             storkeWidth: 2
         }
-    }
+    },
+    nodeLimit: 100,
+    linkLimit: 1000
 }
