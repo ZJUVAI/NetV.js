@@ -27,6 +27,10 @@ export class Renderer {
         this.nodeManager = new RNode(this.gl, width, height, defaultConfigs.nodeLimit)
     }
 
+    /**
+     * add nodes to node manager
+     * @param nodes node data in NetV
+     */
     public addNodes(nodes: Node[]) {
         this.nodeManager.addData(nodes)
     }
