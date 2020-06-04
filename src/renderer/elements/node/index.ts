@@ -34,27 +34,6 @@ export class RNode {
     private program: WebGLProgram
     private attributes: NodeAttributes
 
-    // attributes
-    // TODO: consider export from shader
-    private templateAttr = 0
-    private posAttr = 1
-    private sizeAttr = 2
-    private colorAttr = 3
-
-    // uniforms
-
-    // buffers
-    private templateBuffer: WebGLBuffer
-    private posBuffer: WebGLBuffer
-    private sizeBuffer: WebGLBuffer
-    private colorBuffer: WebGLBuffer
-
-    // arrays
-    private templateArr: Float32Array
-    private posArr: Float32Array
-    private sizeArr: Float32Array
-    private colorArr: Float32Array
-
     /**
      * create render node manager
      * @param gl WebGL context
