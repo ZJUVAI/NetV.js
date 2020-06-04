@@ -3,7 +3,7 @@
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
  */
 
-import { defaultConfigs } from '../utils/configs'
+import * as defaultConfigs from '../configs'
 import { RNode } from './elements/node'
 
 export class Renderer {
@@ -11,7 +11,7 @@ export class Renderer {
     private nodeManager: RNode
 
     /**
-     * create renderer object 
+     * create renderer object
      * @param canvas where all elements are draw
      * @param width canvas width
      * @param height canvas height

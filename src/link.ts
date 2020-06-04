@@ -5,7 +5,7 @@
  */
 
 import * as interfaces from './interfaces'
-import NetV from './index'
+import { NetV } from './index'
 
 class Link {
     private $_source: interfaces.Node = undefined

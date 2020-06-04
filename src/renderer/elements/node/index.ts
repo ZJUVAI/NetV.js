@@ -3,7 +3,7 @@
  * @description Node using in Renderer
  */
 
-import { Node } from '../../../interfaces'
+import Node from '../../../node'
 import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
 import { createProgram, createArrayBuffer } from '../../utils'
@@ -81,7 +81,7 @@ export class RNode {
             0.5, 0.0, 1.0, 1.0, 1.0
         ])
         this.posArr = new Float32Array(2 * limit)
-        this.sizeArr = new Float32Array(1 * limit)
+        this.sizeArr = new Float32Array(limit)
         this.colorArr = new Float32Array(4 * limit)
 
         // init buffers
@@ -123,16 +123,16 @@ export class RNode {
      */
     public addData(nodes: Node[]) {
         // set array
-        nodes.forEach((node, i) => {
-            this.posArr[2 * (this.count + i)] = node.x
-            this.posArr[2 * (this.count + i) + 1] = node.y
+        nodes.forEach((node: Node, i) => {
+            this.posArr[2 * (this.count + i)] = node.x()
+            this.posArr[2 * (this.count + i) + 1] = node.y()
 
-            this.sizeArr[this.count + i] = node.r
+            this.sizeArr[this.count + i] = node.r()
 
-            this.colorArr[4 * (this.count + i)] = node.fill.r
-            this.colorArr[4 * (this.count + i) + 1] = node.fill.g
-            this.colorArr[4 * (this.count + i) + 2] = node.fill.b
-            this.colorArr[4 * (this.count + i) + 3] = node.fill.a
+            this.colorArr[4 * (this.count + i)] = node.fill().r
+            this.colorArr[4 * (this.count + i) + 1] = node.fill().g
+            this.colorArr[4 * (this.count + i) + 2] = node.fill().b
+            this.colorArr[4 * (this.count + i) + 3] = node.fill().a
         })
 
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, this.posBuffer)
@@ -205,7 +205,7 @@ export class RNode {
                 1,
                 this.gl.FLOAT,
                 false,
-                1 * this.sizeArr.BYTES_PER_ELEMENT,
+                this.sizeArr.BYTES_PER_ELEMENT,
                 0
             )
             this.gl.vertexAttribDivisor(this.sizeAttr, 1)
@@ -216,7 +216,7 @@ export class RNode {
                 4,
                 this.gl.FLOAT,
                 false,
-                4 * this.colorAttr.BYTES_PER_ELEMENT,
+                4 * this.sizeArr.BYTES_PER_ELEMENT,
                 0
             )
             this.gl.vertexAttribDivisor(this.colorAttr, 1)
