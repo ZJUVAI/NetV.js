@@ -147,7 +147,6 @@ export class RenderLink {
      * draw links
      */
     public draw() {
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT)
         if (this.count > 0) {
             this.gl.useProgram(this.program)
             this.attributes.forEach((attr) => {
