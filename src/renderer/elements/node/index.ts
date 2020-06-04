@@ -54,19 +54,23 @@ export class RNode {
         const attributes = [
             {
                 name: 'inVertexPos',
-                index: this.templateAttr
+                index: this.templateAttr,
+                size: 3,
             },
             {
                 name: 'inPos',
-                index: this.posAttr
+                index: this.posAttr,
+                size: 2,
             },
             {
                 name: 'inSize',
-                index: this.sizeAttr
+                index: this.sizeAttr,
+                size: 1,
             },
             {
                 name: 'inColor',
-                index: this.colorAttr
+                index: this.colorAttr,
+                size: 4,
             }
         ]
 
@@ -75,10 +79,10 @@ export class RNode {
         // init arrays
         // prettier-ignore
         this.templateArr = new Float32Array([
-            -0.5, 0.0, 1.0, 0.0, 0.0,
-            0.0, -0.5, 1.0, 1.0, 0.0,
-            0.0, 0.5, 1.0, 0.0, 1.0,
-            0.5, 0.0, 1.0, 1.0, 1.0
+            -0.5, 0.0, 1.0,
+            0.0, -0.5, 1.0,
+            0.0, 0.5, 1.0,
+            0.5, 0.0, 1.0,
         ])
         this.posArr = new Float32Array(2 * limit)
         this.sizeArr = new Float32Array(1 * limit)
@@ -184,7 +188,7 @@ export class RNode {
                 3,
                 this.gl.FLOAT,
                 false,
-                5 * this.templateArr.BYTES_PER_ELEMENT,
+                3 * this.templateArr.BYTES_PER_ELEMENT,
                 0
             )
 
