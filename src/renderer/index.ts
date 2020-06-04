@@ -5,6 +5,7 @@
 
 import * as defaultConfigs from '../configs'
 import { RNode } from './elements/node'
+import Node from '../node'
 
 export class Renderer {
     private gl: WebGL2RenderingContext
@@ -24,6 +25,14 @@ export class Renderer {
         }
 
         this.nodeManager = new RNode(this.gl, width, height, defaultConfigs.nodeLimit)
+    }
+
+    /**
+     * add nodes to node manager
+     * @param nodes node data in NetV
+     */
+    public addNodes(nodes: Node[]) {
+        this.nodeManager.addData(nodes)
     }
 
     /**

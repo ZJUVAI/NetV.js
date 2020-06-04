@@ -51,12 +51,12 @@ class NetV {
             return this.$_data
         } else {
             // delete old data
-            this.$_data = nodeLinkData
+            this.$_data = { ...this.$_data, ...nodeLinkData }
             this.$_id2node = new Map()
             this.$_ends2link = new Map2()
 
-            this.addNodes(nodeLinkData.nodes)
-            this.addLinks(nodeLinkData.links)
+            this.addNodes(this.$_data.nodes)
+            this.addLinks(this.$_data.links)
         }
     }
 
@@ -89,6 +89,7 @@ class NetV {
      */
     public addNodes(nodesData: interfaces.NodeData[]) {
         nodesData.forEach((nodeData) => this.addNode(nodeData))
+        this.$_renderer.addNodes([...this.$_id2node.values()])
     }
 
     /**
