@@ -3,6 +3,8 @@
  * @description utility functions for renderer
  */
 
+import { Color } from 'src/interfaces'
+
 /**
  * attribute used in render node and render link
  * contains attribute index, array and buffer
@@ -14,6 +16,21 @@ export type RenderAttribute = {
     isBuildIn?: boolean
     array?: Float32Array
     buffer?: WebGLBuffer
+}[]
+
+export type RenderNodeData = {
+    id: string
+    x: number
+    y: number
+    r: number
+    fill: Color
+}[]
+
+export type RenderLinkData = {
+    source: { x: number; y: number }
+    target: { x: number; y: number }
+    width: number
+    fill: Color
 }[]
 
 /**
