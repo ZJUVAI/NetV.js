@@ -5,7 +5,7 @@
 
 import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
-import { createProgram, createArrayBuffer } from '../../utils'
+import { createProgram, createArrayBuffer, RenderAttribute } from '../../utils'
 import Node from '../../../node'
 
 enum NodeAttrKey {
@@ -15,15 +15,6 @@ enum NodeAttrKey {
     Color
 }
 
-type NodeAttributes = {
-    name: string
-    index: number
-    size: number
-    isBuildIn?: boolean
-    array?: Float32Array
-    buffer?: WebGLBuffer
-}[]
-
 export class RNode {
     // program
     private gl: WebGL2RenderingContext
@@ -32,7 +23,7 @@ export class RNode {
     private width: number
     private height: number
     private program: WebGLProgram
-    private attributes: NodeAttributes
+    private attributes: RenderAttribute
 
     /**
      * create render node manager

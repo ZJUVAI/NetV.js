@@ -18,21 +18,6 @@ export type RenderAttribute = {
     buffer?: WebGLBuffer
 }[]
 
-export type RenderNodeData = {
-    id: string
-    x: number
-    y: number
-    r: number
-    fill: Color
-}[]
-
-export type RenderLinkData = {
-    source: { x: number; y: number }
-    target: { x: number; y: number }
-    width: number
-    fill: Color
-}[]
-
 /**
  * compile webgl shader
  * @param gl WebGL instance
