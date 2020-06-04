@@ -28,7 +28,7 @@ export class Renderer {
         }
 
         this.nodeManager = new RNode(this.gl, width, height, defaultConfigs.nodeLimit)
-        this.linkManager = new RenderLink(this.gl, width, height, defaultConfigs.nodeLimit)
+        this.linkManager = new RenderLink(this.gl, width, height, defaultConfigs.linkLimit)
     }
 
     /**
@@ -51,6 +51,7 @@ export class Renderer {
      * draw all elements
      */
     public draw() {
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT)
         this.linkManager.draw()
         this.nodeManager.draw()
     }

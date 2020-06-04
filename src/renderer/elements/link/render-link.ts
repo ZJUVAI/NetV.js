@@ -65,10 +65,10 @@ export class RenderLink {
         // init arrays
         // prettier-ignore
         this.attributes[LinkAttrKey.TEMPLATE].array = new Float32Array([
-            -0.5, 0.0, 1.0,
-            0.0, -0.5, 1.0,
-            0.0, 0.5, 1.0,
-            0.5, 0.0, 1.0,
+            -0.5, 0.5, 1.0,
+            -0.5, -0.5, 1.0,
+            0.5, 0.5, 1.0,
+            0.5, -0.5, 1.0,
         ])
         this.attributes.forEach((attr) => {
             if (!attr.isBuildIn) attr.array = new Float32Array(attr.size * this.limit)
@@ -161,7 +161,7 @@ export class RenderLink {
                     attr.size,
                     this.gl.FLOAT,
                     false,
-                    attr.size * attr.array.BYTES_PER_ELEMENT,
+                    attr.isBuildIn ? 0 : attr.size * attr.array.BYTES_PER_ELEMENT,
                     0
                 )
                 if (!attr.isBuildIn) this.gl.vertexAttribDivisor(attr.index, 1)

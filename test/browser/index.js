@@ -60,18 +60,35 @@ const testData = {
         {
             source: '0',
             target: '1',
+            strokeColor: {
+                r: 1,
+                g: 0,
+                b: 0,
+                a: 1
+            }
         },
         {
             source: '0',
             target: '2',
+            strokeColor: {
+                r: 0,
+                g: 1,
+                b: 0,
+                a: 1
+            }
         },
         {
             source: '1',
             target: '2',
+            strokeColor: {
+                r: 0,
+                g: 0,
+                b: 1,
+                a: 1
+            }
         },
     ]
 }
 
 netv.data(testData)
-// netv.$_renderer.nodeManager.addData(testData)
-netv.$_renderer.nodeManager.draw()
+netv.draw()

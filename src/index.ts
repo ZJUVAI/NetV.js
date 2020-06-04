@@ -99,8 +99,7 @@ class NetV {
      */
     public addLinks(linksData: interfaces.LinkData[]) {
         linksData.forEach((linkData) => this.addLink(linkData))
-        // TODO: set in renderer
-        console.warn('not implemented: add link')
+        this.$_renderer.addLinks([...this.$_ends2link.values()])
     }
 
     /**
@@ -139,6 +138,13 @@ class NetV {
 
         console.error(`NetV does not have build-in dataset: ${name}`)
         return { nodes: [], links: [] }
+    }
+
+    /**
+     * @description draw elements
+     */
+    public draw() {
+        this.$_renderer.draw()
     }
 }
 
