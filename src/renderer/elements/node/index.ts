@@ -3,7 +3,7 @@
  * @description Node using in Renderer
  */
 
-import { Node } from '../../../interfaces'
+import Node from '../../../node'
 import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
 import { createProgram, createArrayBuffer } from '../../utils'
@@ -125,15 +125,15 @@ export class RNode {
         // set array
         nodes.forEach((node, i) => {
             // TODO: consider node and render node attribute mapping
-            this.attributes[NodeAttrKey.Position].array[2 * (this.count + i)] = node.x
-            this.attributes[NodeAttrKey.Position].array[2 * (this.count + i) + 1] = node.y
+            this.attributes[NodeAttrKey.Position].array[2 * (this.count + i)] = node.x()
+            this.attributes[NodeAttrKey.Position].array[2 * (this.count + i) + 1] = node.y()
 
-            this.attributes[NodeAttrKey.Size].array[this.count + i] = node.r
+            this.attributes[NodeAttrKey.Size].array[this.count + i] = node.r()
 
-            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i)] = node.fill.r
-            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 1] = node.fill.g
-            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 2] = node.fill.b
-            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 3] = node.fill.a
+            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i)] = node.fill().r
+            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 1] = node.fill().g
+            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 2] = node.fill().b
+            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 3] = node.fill().a
         })
 
         this.attributes.forEach((attr) => {

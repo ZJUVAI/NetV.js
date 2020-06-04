@@ -5,11 +5,12 @@
  */
 
 import * as interfaces from './interfaces'
+import { NetV } from './index'
 
 class Link {
     private $_source: interfaces.Node = undefined
     private $_target: interfaces.Node = undefined
-    private $_core: interfaces.Core = undefined
+    private $_core: NetV = undefined
 
     public constructor(core, linkData: interfaces.LinkData) {
         this.$_core = core
