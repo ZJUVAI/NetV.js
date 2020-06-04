@@ -11,20 +11,18 @@ import * as configs from './configs'
 
 class Node {
     private $_core: NetV
-    private $_id = ''
+    private $_id
     private $_position = {
         x: 0,
         y: 0
     }
-    private $_strokeWidth
-    private $_strokeColor
-    private $_fill
-    private $_r
+    private $_strokeWidth = configs.node.storkeWidth
+    private $_strokeColor = configs.node.strokeColor
+    private $_fill = configs.node.fill
+    private $_r = configs.node.r
 
     public constructor(core, nodeData: interfaces.NodeData) {
         this.$_core = core
-        this.$_setId(nodeData.id) // set id
-
         const data = {
             ...{
                 x: this.$_position.x,
@@ -36,17 +34,8 @@ class Node {
             },
             ...nodeData
         }
-        // const position = {
-        //     x: 'x' in nodeData ? nodeData.x : 0,
-        //     y: 'y' in nodeData ? nodeData.y : 0
-        // }
-        // const strokeWidth =
-        //     'strokeWidth' in nodeData ? nodeData.strokeWidth : configs.node.storkeWidth
-        // const strokeColor =
-        //     'strokeColor' in nodeData ? nodeData.strokeColor : configs.node.strokeColor
-        // const fill = 'fill' in nodeData ? nodeData.fill : configs.node.fill
-        // const radius = 'r' in nodeData ? nodeData.r : configs.node.r
 
+        this.$_setId(data.id)
         this.position(data.x, data.y)
         this.strokeWidth(data.strokeWidth)
         this.strokeColor(data.strokeColor)

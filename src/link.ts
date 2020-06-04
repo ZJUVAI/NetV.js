@@ -13,20 +13,23 @@ class Link {
     private $_core: NetV
     private $_source: Node
     private $_target: Node
-    private $_strokeWidth
-    private $_strokeColor
+    private $_strokeWidth = configs.link.storkeWidth
+    private $_strokeColor = configs.link.strokeColor
 
     public constructor(core, linkData: interfaces.LinkData) {
         this.$_core = core
-        this.sourceTarget(linkData)
+        const data = {
+            ...{
+                strokeWidth: this.$_strokeWidth,
+                strokeColor: this.$_strokeColor
+            },
+            ...linkData
+        }
 
-        const strokeWidth =
-            'strokeWidth' in linkData ? linkData.strokeWidth : configs.link.storkeWidth
-        const strokeColor =
-            'strokeColor' in linkData ? linkData.strokeColor : configs.link.strokeColor
+        this.sourceTarget(data)
 
-        this.strokeWidth(strokeWidth)
-        this.strokeColor(strokeColor)
+        this.strokeWidth(data.strokeWidth)
+        this.strokeColor(data.strokeColor)
     }
 
     public source(nodeId?: string) {
