@@ -4,6 +4,19 @@
  */
 
 /**
+ * attribute used in render node and render link
+ * contains attribute index, array and buffer
+ */
+export type RenderAttribute = {
+    name: string
+    index: number
+    size: number
+    isBuildIn?: boolean
+    array?: Float32Array
+    buffer?: WebGLBuffer
+}[]
+
+/**
  * compile webgl shader
  * @param gl WebGL instance
  * @param shaderStr shader file in string

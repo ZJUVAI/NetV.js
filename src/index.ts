@@ -99,6 +99,8 @@ class NetV {
      */
     public addLinks(linksData: interfaces.LinkData[]) {
         linksData.forEach((linkData) => this.addLink(linkData))
+        // TODO: set in renderer
+        console.warn('not implemented: add link')
     }
 
     /**
