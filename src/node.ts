@@ -11,7 +11,7 @@ import * as configs from './configs'
 
 class Node {
     private $_core: NetV
-    private $_id
+    private $_id: string
     private $_position = {
         x: 0,
         y: 0
