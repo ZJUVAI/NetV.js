@@ -8,7 +8,7 @@ import * as interfaces from './interfaces'
 import Map2 from './utils/map2'
 import Node from './node'
 import Link from './link'
-import { defaultConfigs } from './utils/configs'
+import * as defaultConfigs from './configs'
 import * as dataset from './dataset'
 import { Renderer } from './renderer'
 
@@ -31,11 +31,15 @@ class NetV {
         }
         this.$_container = container
         const canvas = document.createElement('canvas') // TODO: consider node enviroment, document not defined
-        canvas.setAttribute('width', String(this.$_configs.width))
-        canvas.setAttribute('height', String(this.$_configs.height))
+        canvas.setAttribute('width', String(this.$_configs.container.width))
+        canvas.setAttribute('height', String(this.$_configs.container.height))
         this.$_container.appendChild(canvas)
 
-        this.$_renderer = new Renderer(canvas, this.$_configs.width, this.$_configs.height)
+        this.$_renderer = new Renderer(
+            canvas,
+            this.$_configs.container.width,
+            this.$_configs.container.height
+        )
     }
 
     /**
