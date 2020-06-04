@@ -4,17 +4,29 @@
  * @dependences interfaces.ts, utils/is.ts
  */
 
+import Node from './node'
 import * as interfaces from './interfaces'
 import { NetV } from './index'
+import * as configs from './configs'
 
 class Link {
-    private $_source: interfaces.Node = undefined
-    private $_target: interfaces.Node = undefined
-    private $_core: NetV = undefined
+    private $_core: NetV
+    private $_source: Node
+    private $_target: Node
+    private $_strokeWidth
+    private $_strokeColor
 
     public constructor(core, linkData: interfaces.LinkData) {
         this.$_core = core
         this.sourceTarget(linkData)
+
+        const strokeWidth =
+            'strokeWidth' in linkData ? linkData.strokeWidth : configs.link.storkeWidth
+        const strokeColor =
+            'strokeColor' in linkData ? linkData.strokeColor : configs.link.strokeColor
+
+        this.strokeWidth(strokeWidth)
+        this.strokeColor(strokeColor)
     }
 
     public source(nodeId?: string) {
@@ -54,8 +66,8 @@ class Link {
         if (arguments.length > 0) {
             linkData.source = linkData.source.toString()
             linkData.target = linkData.target.toString()
-            const oldSource = this.$_source
-            const oldTarget = this.$_target
+            const oldSource: Node = this.$_source
+            const oldTarget: Node = this.$_target
             const newSource = this.$_core.$_id2node.get(linkData.source)
             const newTarget = this.$_core.$_id2node.get(linkData.target)
 
@@ -69,7 +81,7 @@ class Link {
             if (newSource === newTarget) {
                 // self loop
                 throw new Error(
-                    `Self loop (${this.$_target.id()} <=> ${this.$_source.id()}) is not allowed.`
+                    `Self loop (${linkData.source} <=> ${linkData.target}) is not allowed.`
                 )
             }
 
@@ -93,6 +105,29 @@ class Link {
             source: this.$_source,
             target: this.$_target
         }
+    }
+
+    /**
+     * set/get stroke width of a node
+     * @param {number} [value]
+     * @memberof Node
+     */
+    public strokeWidth(value?: number) {
+        if (arguments.length === 1) {
+            this.$_strokeWidth = value
+        }
+        return this.$_strokeWidth
+    }
+
+    /**
+     * set/get stroke color of a node
+     * @param {Color} [value]
+     */
+    public strokeColor(value?: interfaces.Color) {
+        if (arguments.length === 1) {
+            this.$_strokeColor = value
+        }
+        return this.$_strokeColor
     }
 }
 
