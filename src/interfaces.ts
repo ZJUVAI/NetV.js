@@ -1,4 +1,8 @@
-import Map2 from './utils/map2.js'
+/**
+ * @author Jiacheng Pan <jackieanxis@gmail.com>
+ * @description Provide interfaces.
+ * @dependences None
+ */
 
 export interface Color {
     r: number

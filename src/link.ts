@@ -32,30 +32,38 @@ class Link {
         this.strokeColor(data.strokeColor)
     }
 
+    /**
+     * getter/setter of the source
+     * @param {string} [nodeId]
+     * @returns {Node} a source Node Object
+     * @memberof Link
+     */
     public source(nodeId?: string) {
-        if (arguments.length === 0) {
-            // getter
-            return this.$_source
-        } else {
+        if (arguments.length === 1) {
             // setter
-            return this.sourceTarget({
+            this.sourceTarget({
                 source: nodeId,
                 target: this.$_target.id()
             })
         }
+        return this.$_source
     }
 
+    /**
+     * getter/setter of the target
+     * @param {string} [nodeId]
+     * @returns {Node} a target Node Object
+     * @memberof Link
+     */
     public target(nodeId?: string) {
-        if (arguments.length === 0) {
-            // getter
-            return this.$_target
-        } else {
+        if (arguments.length === 1) {
             // setter
-            return this.sourceTarget({
+            this.sourceTarget({
                 source: this.$_source.id(),
                 target: nodeId
             })
         }
+        return this.$_target
     }
 
     /**
@@ -74,22 +82,20 @@ class Link {
             const newSource = this.$_core.$_id2node.get(linkData.source)
             const newTarget = this.$_core.$_id2node.get(linkData.target)
 
-            if (newSource === undefined) {
-                throw new Error(`Source ${linkData.source} does not exist.`)
-            }
-            if (newTarget === undefined) {
-                throw new Error(`Target ${linkData.target} does not exist.`)
+            if (newSource === undefined || newTarget === undefined) {
+                // error: undefined end
+                throw new Error(`One end (${linkData.source}) of the link does not exist.`)
             }
 
             if (newSource === newTarget) {
-                // self loop
+                // error: self loop
                 throw new Error(
                     `Self loop (${linkData.source} <=> ${linkData.target}) is not allowed.`
                 )
             }
 
             if (this.$_core.$_ends2link.has([linkData.source, linkData.target])) {
-                // multiple link is not allowed
+                // error: multiple link
                 throw new Error(
                     `Multiple link (${linkData.source} <=> ${linkData.target}) is not allowd.`
                 )
