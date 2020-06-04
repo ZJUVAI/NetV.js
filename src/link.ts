@@ -82,9 +82,13 @@ class Link {
             const newSource = this.$_core.$_id2node.get(linkData.source)
             const newTarget = this.$_core.$_id2node.get(linkData.target)
 
-            if (newSource === undefined || newTarget === undefined) {
-                // error: undefined end
-                throw new Error(`One end (${linkData.source}) of the link does not exist.`)
+            if (newSource === undefined) {
+                // error: undefined source
+                throw new Error(`Input source (${linkData.source}) does not exist.`)
+            }
+            if (newSource === undefined) {
+                // error: undefined target
+                throw new Error(`Input target (${linkData.target}) does not exist.`)
             }
 
             if (newSource === newTarget) {
