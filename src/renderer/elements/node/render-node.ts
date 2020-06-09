@@ -108,6 +108,10 @@ export class RNode {
         this.gl.uniform2fv(viewportLoc, viewport)
     }
 
+    /**
+     * set Transform in Render Node
+     * @param transform current transform(pan&zoom condition)
+     */
     public setTransform(transform: Transform) {
         this.gl.useProgram(this.program)
         const scaleLoc = this.gl.getUniformLocation(this.program, 'scale')

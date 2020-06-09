@@ -51,6 +51,7 @@ export class Renderer {
     public setTransform(transform: Transform) {
         console.log(transform)
         this.nodeManager.setTransform(transform)
+        this.linkManager.setTransform(transform)
         this.draw()
     }
 
