@@ -5,7 +5,7 @@
 
 import { NetV } from 'src'
 
-class InteractionManager {
+export class InteractionManager {
     private netv: NetV
     private transform = {
         x: 0,
@@ -22,12 +22,10 @@ class InteractionManager {
      */
     public initZoom() {
         const canvas = this.netv.$_container.querySelector('canvas')
-        const handleScroll = (evt: MouseEvent) => {
+        const handleScroll = (evt: MouseWheelEvent) => {
             const x = evt.offsetX || evt.pageX - canvas.offsetLeft
             const y = evt.offsetY || evt.pageY - canvas.offsetTop
-            // TODO: evt.wheelDelta
-            // const delta = evt.wheelDelta ? evt.wheelDelta / 40 : evt.detail ? -evt.detail : 0
-            const delta = evt.detail ? -evt.detail : 0
+            const delta = evt.deltaY ? evt.deltaY / 40 : evt.detail ? -evt.detail : 0
             if (delta) {
                 const k = Math.pow(1.1, delta)
                 this.transform.x = (1 - k) * x + k * this.transform.x
