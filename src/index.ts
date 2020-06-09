@@ -11,6 +11,7 @@ import Link from './link'
 import * as defaultConfigs from './configs'
 import * as dataset from './dataset'
 import { Renderer } from './renderer'
+import { InteractionManager } from './interaction/interaction'
 
 class NetV {
     public $_id2node = new Map()
@@ -18,6 +19,7 @@ class NetV {
     public $_container: HTMLDivElement
     public $_renderer: Renderer
     public $_configs = defaultConfigs
+    public $_interaction: InteractionManager
 
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
 
@@ -40,6 +42,11 @@ class NetV {
             this.$_configs.container.width,
             this.$_configs.container.height
         )
+
+        this.$_interaction = new InteractionManager(this)
+        if (this.$_configs.container.enablePanZoom) {
+            this.$_interaction.initZoom()
+        }
     }
 
     /**

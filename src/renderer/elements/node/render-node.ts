@@ -5,7 +5,7 @@
 
 import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
-import { createProgram, createArrayBuffer, RenderAttribute } from '../../utils'
+import { createProgram, createArrayBuffer, RenderAttribute, Transform } from '../../utils'
 import Node from '../../../node'
 
 enum NodeAttrKey {
@@ -106,6 +106,22 @@ export class RNode {
 
         const viewport = new Float32Array([this.width, this.height])
         this.gl.uniform2fv(viewportLoc, viewport)
+    }
+
+    /**
+     * set Transform in Render Node
+     * @param transform current transform(pan&zoom condition)
+     */
+    public setTransform(transform: Transform) {
+        this.gl.useProgram(this.program)
+        const scaleLoc = this.gl.getUniformLocation(this.program, 'scale')
+        const translateLoc = this.gl.getUniformLocation(this.program, 'translate')
+
+        const scale = new Float32Array([transform.k, transform.k])
+        this.gl.uniform2fv(scaleLoc, scale)
+
+        const translate = new Float32Array([transform.x, transform.y])
+        this.gl.uniform2fv(translateLoc, translate)
     }
 
     /**

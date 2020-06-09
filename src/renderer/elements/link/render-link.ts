@@ -5,7 +5,7 @@
 
 import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
-import { RenderAttribute, createProgram, createArrayBuffer } from '../../utils'
+import { RenderAttribute, createProgram, createArrayBuffer, Transform } from '../../utils'
 import Link from '../../../link'
 
 enum LinkAttrKey {
@@ -141,6 +141,22 @@ export class RenderLink {
         })
 
         this.count += links.length
+    }
+
+    /**
+     * set Transform in Render Link
+     * @param transform current transform(pan&zoom condition)
+     */
+    public setTransform(transform: Transform) {
+        this.gl.useProgram(this.program)
+        const scaleLoc = this.gl.getUniformLocation(this.program, 'scale')
+        const translateLoc = this.gl.getUniformLocation(this.program, 'translate')
+
+        const scale = new Float32Array([transform.k, transform.k])
+        this.gl.uniform2fv(scaleLoc, scale)
+
+        const translate = new Float32Array([transform.x, transform.y])
+        this.gl.uniform2fv(translateLoc, translate)
     }
 
     /**

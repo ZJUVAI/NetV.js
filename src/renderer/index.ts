@@ -8,6 +8,7 @@ import { RNode } from './elements/node/render-node'
 import Node from '../node'
 import Link from 'src/link'
 import { RenderLink } from './elements/link/render-link'
+import { Transform } from './utils'
 
 export class Renderer {
     private gl: WebGL2RenderingContext
@@ -45,6 +46,12 @@ export class Renderer {
      */
     public addLinks(links: Link[]) {
         this.linkManager.addData(links)
+    }
+
+    public setTransform(transform: Transform) {
+        this.nodeManager.setTransform(transform)
+        this.linkManager.setTransform(transform)
+        this.draw()
     }
 
     /**
