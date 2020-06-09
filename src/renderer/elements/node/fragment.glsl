@@ -17,7 +17,7 @@ float inCircle() {
 }
 
 void main(void) {
-    if (inCircle() == 0.) {
+    if (inCircle() < 0.5) {
         discard;
     }
     fragmentColor = inCircle() * color;
