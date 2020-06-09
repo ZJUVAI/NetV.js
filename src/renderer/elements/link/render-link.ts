@@ -144,7 +144,7 @@ export class RenderLink {
     }
 
     /**
-     * set Transform in Render Node
+     * set Transform in Render Link
      * @param transform current transform(pan&zoom condition)
      */
     public setTransform(transform: Transform) {
