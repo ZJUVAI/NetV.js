@@ -32,13 +32,11 @@ export class InteractionManager {
                 this.transform.y = (1 - k) * y + k * this.transform.y
 
                 this.transform.k *= k
-                // TODO: not finished in renderer
+                
                 this.netv.$_renderer.setTransform(this.transform)
                 this.netv.draw()
             }
 
-            // TODO: return?
-            // return evt.preventDefault() && false
             evt.preventDefault()
         }
 
