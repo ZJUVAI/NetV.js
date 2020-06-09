@@ -17,6 +17,7 @@ float inCircle() {
 }
 
 void main(void) {
+    // border check, using 0.5(center of smoothstep)
     if (inCircle() < 0.5) {
         discard;
     }
