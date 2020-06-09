@@ -39,6 +39,12 @@ const testData = {
         {
             source: '0',
             target: '1',
+            strokeColor: {
+                r: 0.5,
+                g: 0.5,
+                b: 0.5,
+                a: 0.5
+            }
         },
         {
             source: '0',
