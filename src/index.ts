@@ -26,12 +26,22 @@ class NetV {
     /**
      * @description create NetV object.
      * @param container where you draw your graph, neccesary for NetV.
+     * @param configs Optional, override default config
      */
-    public constructor(container: HTMLDivElement) {
+    public constructor(container: HTMLDivElement, configs?: {}) {
         if (!container || container.tagName !== 'DIV') {
             throw Error('Container should be specified as a div element!')
         }
         this.$_container = container
+        // override configs
+        for (const key in configs) {
+            if (configs[key] === Object(configs[key])) {
+                this.$_configs[key] = { ...this.$_configs[key], ...configs[key] }
+            } else {
+                this.$_configs[key] = configs[key]
+            }
+        }
+
         const canvas = document.createElement('canvas') // TODO: consider node enviroment, document not defined
         canvas.setAttribute('width', String(this.$_configs.container.width))
         canvas.setAttribute('height', String(this.$_configs.container.height))
