@@ -44,7 +44,9 @@ class NetV {
         )
 
         this.$_interaction = new InteractionManager(this)
-        this.$_interaction.initZoom()
+        if (this.$_configs.container.enablePanZoom) {
+            this.$_interaction.initZoom()
+        }
     }
 
     /**
