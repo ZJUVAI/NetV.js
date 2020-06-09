@@ -1,46 +1,30 @@
 /**
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
- * @description Node using in Renderer
+ * @description Link used in renderer
  */
 
 import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
-import { createProgram, createArrayBuffer } from '../../utils'
-import Node from '../../../node'
+import { RenderAttribute, createProgram, createArrayBuffer } from '../../utils'
+import Link from '../../../link'
 
-enum NodeAttrKey {
-    Template,
-    Position,
-    Size,
-    Color
+enum LinkAttrKey {
+    TEMPLATE,
+    SOURCE,
+    TARGET,
+    WIDTH,
+    COLOR
 }
 
-type NodeAttributes = {
-    name: string
-    index: number
-    size: number
-    isBuildIn?: boolean
-    array?: Float32Array
-    buffer?: WebGLBuffer
-}[]
-
-export class RNode {
-    // program
+export class RenderLink {
     private gl: WebGL2RenderingContext
     private limit: number
     private count = 0
     private width: number
     private height: number
     private program: WebGLProgram
-    private attributes: NodeAttributes
+    private attributes: RenderAttribute
 
-    /**
-     * create render node manager
-     * @param gl WebGL context
-     * @param width canvas width
-     * @param height canvas height
-     * @param limit max nodes number
-     */
     public constructor(gl: WebGL2RenderingContext, width: number, height: number, limit: number) {
         this.gl = gl
         this.limit = limit
@@ -55,18 +39,23 @@ export class RNode {
                 isBuildIn: true
             },
             {
-                name: 'inPos',
+                name: 'inSource',
                 index: 1,
                 size: 2
             },
             {
-                name: 'inSize',
+                name: 'inTarget',
                 index: 2,
+                size: 2
+            },
+            {
+                name: 'inWidth',
+                index: 3,
                 size: 1
             },
             {
                 name: 'inColor',
-                index: 3,
+                index: 4,
                 size: 4
             }
         ]
@@ -75,11 +64,11 @@ export class RNode {
 
         // init arrays
         // prettier-ignore
-        this.attributes[NodeAttrKey.Template].array = new Float32Array([
-            -0.5, 0.0, 1.0,
-            0.0, -0.5, 1.0,
-            0.0, 0.5, 1.0,
-            0.5, 0.0, 1.0,
+        this.attributes[LinkAttrKey.TEMPLATE].array = new Float32Array([
+            -0.5, 0.5, 1.0,
+            -0.5, -0.5, 1.0,
+            0.5, 0.5, 1.0,
+            0.5, -0.5, 1.0,
         ])
         this.attributes.forEach((attr) => {
             if (!attr.isBuildIn) attr.array = new Float32Array(attr.size * this.limit)
@@ -95,7 +84,6 @@ export class RNode {
         const projectionLoc = this.gl.getUniformLocation(this.program, 'projection')
         const scaleLoc = this.gl.getUniformLocation(this.program, 'scale')
         const translateLoc = this.gl.getUniformLocation(this.program, 'translate')
-        const viewportLoc = this.gl.getUniformLocation(this.program, 'viewport')
 
         // this.gl.viewport(0, 0, this.width, this.height) // TODO: viewport set, not needed? put here in case bug appear
 
@@ -112,28 +100,31 @@ export class RNode {
 
         const translate = new Float32Array([0, 0])
         this.gl.uniform2fv(translateLoc, translate)
-
-        const viewport = new Float32Array([this.width, this.height])
-        this.gl.uniform2fv(viewportLoc, viewport)
     }
 
     /**
-     * add nodes data to engine
-     * @param nodes nodes data
+     * add links data to engine
+     * @param links links data
      */
-    public addData(nodes: Node[]) {
+    public addData(links: Link[]) {
         // set array
-        nodes.forEach((node, i) => {
-            // TODO: consider node and render node attribute mapping
-            this.attributes[NodeAttrKey.Position].array[2 * (this.count + i)] = node.x()
-            this.attributes[NodeAttrKey.Position].array[2 * (this.count + i) + 1] = node.y()
+        links.forEach((link, i) => {
+            // TODO: consider link and render link attribute mapping
+            const source = link.source()
+            this.attributes[LinkAttrKey.SOURCE].array[2 * (this.count + i)] = source.x()
+            this.attributes[LinkAttrKey.SOURCE].array[2 * (this.count + i) + 1] = source.y()
 
-            this.attributes[NodeAttrKey.Size].array[this.count + i] = node.r()
+            const target = link.target()
+            this.attributes[LinkAttrKey.TARGET].array[2 * (this.count + i)] = target.x()
+            this.attributes[LinkAttrKey.TARGET].array[2 * (this.count + i) + 1] = target.y()
 
-            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i)] = node.fill().r
-            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 1] = node.fill().g
-            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 2] = node.fill().b
-            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 3] = node.fill().a
+            this.attributes[LinkAttrKey.WIDTH].array[this.count + i] = link.strokeWidth()
+
+            const color = link.strokeColor()
+            this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i)] = color.r
+            this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 1] = color.g
+            this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 2] = color.b
+            this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 3] = color.a
         })
 
         this.attributes.forEach((attr) => {
@@ -144,19 +135,18 @@ export class RNode {
                     attr.size * this.count * attr.array.BYTES_PER_ELEMENT,
                     attr.array,
                     attr.size * this.count,
-                    attr.size * nodes.length
+                    attr.size * links.length
                 )
             }
         })
 
-        this.count += nodes.length
+        this.count += links.length
     }
 
     /**
-     * draw nodes
+     * draw links
      */
     public draw() {
-        this.gl.clear(this.gl.COLOR_BUFFER_BIT)
         if (this.count > 0) {
             this.gl.useProgram(this.program)
             this.attributes.forEach((attr) => {
@@ -170,7 +160,7 @@ export class RNode {
                     attr.size,
                     this.gl.FLOAT,
                     false,
-                    attr.size * attr.array.BYTES_PER_ELEMENT,
+                    attr.isBuildIn ? 0 : attr.size * attr.array.BYTES_PER_ELEMENT,
                     0
                 )
                 if (!attr.isBuildIn) this.gl.vertexAttribDivisor(attr.index, 1)
