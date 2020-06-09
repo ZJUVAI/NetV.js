@@ -1,8 +1,6 @@
 /**
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
- * @description Basic test for render node
- *
- * expected: 4 square draw on screen
+ * @description test for global and individual configs set
  */
 const configs = {
     node: {
