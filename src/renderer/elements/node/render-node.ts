@@ -12,7 +12,9 @@ enum NodeAttrKey {
     Template,
     Position,
     Size,
-    Color
+    Color,
+    StrokeWidth,
+    StrokeColor
 }
 
 export class RNode {
@@ -58,6 +60,16 @@ export class RNode {
             {
                 name: 'inColor',
                 index: 3,
+                size: 4
+            },
+            {
+                name: 'inStrokeWidth',
+                index: 4,
+                size: 1
+            },
+            {
+                name: 'inStrokeColor',
+                index: 5,
                 size: 4
             }
         ]
@@ -141,6 +153,14 @@ export class RNode {
             this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 1] = node.fill().g
             this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 2] = node.fill().b
             this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 3] = node.fill().a
+
+            this.attributes[NodeAttrKey.StrokeWidth].array[this.count + i] = node.strokeWidth()
+
+            const strokeColor = node.strokeColor()
+            this.attributes[NodeAttrKey.StrokeColor].array[4 * (this.count + i)] = strokeColor.r
+            this.attributes[NodeAttrKey.StrokeColor].array[4 * (this.count + i) + 1] = strokeColor.g
+            this.attributes[NodeAttrKey.StrokeColor].array[4 * (this.count + i) + 2] = strokeColor.b
+            this.attributes[NodeAttrKey.StrokeColor].array[4 * (this.count + i) + 3] = strokeColor.a
         })
 
         this.attributes.forEach((attr) => {
