@@ -4,7 +4,9 @@
  *
  * expected: 4 square draw on screen
  */
-const netv = new NetV(document.getElementById('main'))
+const netv = new NetV({
+    container: document.getElementById('main')
+})
 const testData = {
     nodes: [
         {
@@ -86,7 +88,7 @@ const testData = {
                 b: 1,
                 a: 1
             }
-        },
+        }
     ]
 }
 

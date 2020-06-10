@@ -19,16 +19,15 @@ export class Renderer {
 
     /**
      * create renderer object
-     * @param canvas where all elements are draw
-     * @param configs {width: number, height: number, backgroundColor: Color} configs passed to renderer
+     * @param configs {canvas: HTMLCanvasElement, width: number, height: number, backgroundColor: Color} configs passed to renderer
      */
-    public constructor(canvas: HTMLCanvasElement, configs: RendererConfigs) {
+    public constructor(configs: RendererConfigs) {
+        const { canvas, width, height, backgroundColor } = configs
         try {
             this.gl = canvas.getContext('webgl2')
         } catch {
             throw new Error('NetV requires WebGL2 supported by your browser')
         }
-        const { width, height, backgroundColor } = configs
         this.backgroundColor = backgroundColor
 
         this.nodeManager = new RNode(this.gl, width, height, defaultConfigs.nodeLimit)
