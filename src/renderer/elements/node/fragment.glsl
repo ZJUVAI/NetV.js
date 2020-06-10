@@ -21,5 +21,5 @@ void main(void) {
     if (inCircle() < 0.5) {
         discard;
     }
-    fragmentColor = inCircle() * color;
+    fragmentColor = inCircle() * vec4(color.rgb * color.a, color.a);
 }

@@ -11,6 +11,13 @@ export interface Transform {
     k: number
 }
 
+export interface RendererConfigs {
+    canvas: HTMLCanvasElement
+    width: number
+    height: number
+    backgroundColor: Color
+}
+
 /**
  * attribute used in render node and render link
  * contains attribute index, array and buffer

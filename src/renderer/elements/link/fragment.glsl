@@ -5,5 +5,5 @@ in vec4 color;
 out vec4 fragmentColor;
 
 void main(void) {
-    fragmentColor = color;
+    fragmentColor = vec4(color.rgb * color.a, color.a);
 }

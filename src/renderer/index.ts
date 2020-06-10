@@ -8,25 +8,27 @@ import { RNode } from './elements/node/render-node'
 import Node from '../node'
 import Link from 'src/link'
 import { RenderLink } from './elements/link/render-link'
-import { Transform } from './utils'
+import { Transform, RendererConfigs } from './utils'
+import { Color } from 'src/interfaces'
 
 export class Renderer {
     private gl: WebGL2RenderingContext
     private nodeManager: RNode
     private linkManager: RenderLink
+    private backgroundColor: Color
 
     /**
      * create renderer object
-     * @param canvas where all elements are draw
-     * @param width canvas width
-     * @param height canvas height
+     * @param configs {canvas: HTMLCanvasElement, width: number, height: number, backgroundColor: Color} configs passed to renderer
      */
-    public constructor(canvas: HTMLCanvasElement, width: number, height: number) {
+    public constructor(configs: RendererConfigs) {
+        const { canvas, width, height, backgroundColor } = configs
         try {
             this.gl = canvas.getContext('webgl2')
         } catch {
             throw new Error('NetV requires WebGL2 supported by your browser')
         }
+        this.backgroundColor = backgroundColor
 
         this.nodeManager = new RNode(this.gl, width, height, defaultConfigs.nodeLimit)
         this.linkManager = new RenderLink(this.gl, width, height, defaultConfigs.linkLimit)
@@ -58,6 +60,12 @@ export class Renderer {
      * draw all elements
      */
     public draw() {
+        this.gl.clearColor(
+            this.backgroundColor.r,
+            this.backgroundColor.g,
+            this.backgroundColor.b,
+            this.backgroundColor.a
+        )
         this.gl.clear(this.gl.COLOR_BUFFER_BIT)
         this.linkManager.draw()
         this.nodeManager.draw()
