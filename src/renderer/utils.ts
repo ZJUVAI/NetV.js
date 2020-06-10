@@ -12,6 +12,7 @@ export interface Transform {
 }
 
 export interface RendererConfigs {
+    canvas: HTMLCanvasElement
     width: number
     height: number
     backgroundColor: Color
