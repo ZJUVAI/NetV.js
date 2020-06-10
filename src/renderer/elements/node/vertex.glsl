@@ -4,6 +4,8 @@ in vec3 inVertexPos;
 in vec2 inPos;
 in float inSize;
 in vec4 inColor;
+in float inStrokeWidth;
+in float inStrokeColor;
 
 out vec2 pos;
 out float size;
@@ -16,9 +18,10 @@ uniform vec2 translate;
 uniform vec2 viewport;
 
 void main(void) {
-    size = inSize;
+    // size = inSize + inStrokeWidth / 2.;
+    size = inSize + 2. / 2.; // TODO: given stroke color
     color = inColor;
-    float vertexSize = size * (2. * sqrt(2.));
+    float vertexSize = size * (2. * sqrt(2.)) * 1.5; // NOTE: x 1.5 to prevent border factor
     pos = scale * inPos + translate;
     mat3 transform = mat3(
         vertexSize, 0, 0,
