@@ -9,10 +9,10 @@ const configs = {
     },
     container: {
         width: 1000,
-        height: 1000
+        height: 1000,
+        backgroundColor: { r: 0.9, g: 0.9, b: 0.9, a: 1 }
     },
-    nodeLimit: 1000,
-    backgroundColor: { r: 0.3, g: 0.3, b: 0.3, a: 0.3 }
+    nodeLimit: 1000
 }
 const netv = new NetV(document.getElementById('main'), configs)
 const testData = {

@@ -47,11 +47,11 @@ class NetV {
         canvas.setAttribute('height', String(this.$_configs.container.height))
         this.$_container.appendChild(canvas)
 
-        this.$_renderer = new Renderer(
-            canvas,
-            this.$_configs.container.width,
-            this.$_configs.container.height
-        )
+        this.$_renderer = new Renderer(canvas, {
+            width: this.$_configs.container.width,
+            height: this.$_configs.container.height,
+            backgroundColor: this.$_configs.container.backgroundColor
+        })
 
         this.$_interaction = new InteractionManager(this)
         if (this.$_configs.container.enablePanZoom) {
