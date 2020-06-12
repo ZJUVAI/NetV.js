@@ -5,7 +5,8 @@
 
 import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
-import { RenderAttribute, createProgram, createArrayBuffer, Transform } from '../../utils'
+import { createProgram, createArrayBuffer } from '../../utils'
+import { RenderAttribute, Transform } from '../../interfaces'
 import Link from '../../../link'
 
 enum LinkAttrKey {
@@ -16,7 +17,7 @@ enum LinkAttrKey {
     COLOR
 }
 
-export class RenderLink {
+export class RenderLinkManager {
     private gl: WebGL2RenderingContext
     private limit: number
     private count = 0

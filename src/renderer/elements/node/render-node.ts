@@ -5,7 +5,8 @@
 
 import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
-import { createProgram, createArrayBuffer, RenderAttribute, Transform } from '../../utils'
+import { createProgram, createArrayBuffer } from '../../utils'
+import { RenderAttribute, Transform } from '../../interfaces'
 import Node from '../../../node'
 
 enum NodeAttrKey {
@@ -17,7 +18,7 @@ enum NodeAttrKey {
     StrokeColor
 }
 
-export class RNode {
+export class RenderNodeManager {
     // program
     private gl: WebGL2RenderingContext
     private limit: number
@@ -48,17 +49,17 @@ export class RNode {
                 isBuildIn: true
             },
             {
-                name: 'inPos',
+                name: 'inPosition',
                 index: 1,
                 size: 2
             },
             {
-                name: 'inSize',
+                name: 'inRadius',
                 index: 2,
                 size: 1
             },
             {
-                name: 'inColor',
+                name: 'inFill',
                 index: 3,
                 size: 4
             },
