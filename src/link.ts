@@ -13,7 +13,7 @@ class Link {
     private $_core: NetV
     private $_source: Node
     private $_target: Node
-    private $_strokeWidth = configs.link.storkeWidth
+    private $_strokeWidth = configs.link.strokeWidth
     private $_strokeColor = configs.link.strokeColor
 
     public constructor(core, linkData: interfaces.LinkData) {
