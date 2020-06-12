@@ -40,12 +40,12 @@ export class RenderLinkManager {
                 isBuildIn: true
             },
             {
-                name: 'inSource',
+                name: 'inSourcePosition',
                 index: 1,
                 size: 2
             },
             {
-                name: 'inTarget',
+                name: 'inTargetPosition',
                 index: 2,
                 size: 2
             },
