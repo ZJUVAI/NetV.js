@@ -5,7 +5,7 @@
 
 import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
-import { createProgram, createArrayBuffer } from '../../utils'
+import { createProgram, createArrayBuffer, extractAttributesFromShader } from '../../utils'
 import { RenderAttribute, Transform } from '../../interfaces'
 import Link from '../../../link'
 
@@ -32,35 +32,7 @@ export class RenderLinkManager {
         this.width = width
         this.height = height
 
-        this.attributes = [
-            {
-                name: 'inVertexPos',
-                index: 0,
-                size: 3,
-                isBuildIn: true
-            },
-            {
-                name: 'inSourcePosition',
-                index: 1,
-                size: 2
-            },
-            {
-                name: 'inTargetPosition',
-                index: 2,
-                size: 2
-            },
-            {
-                name: 'inStrokeWidth',
-                index: 3,
-                size: 1
-            },
-            {
-                name: 'inStrokeColor',
-                index: 4,
-                size: 4
-            }
-        ]
-
+        this.attributes = extractAttributesFromShader(vertShaderStr)
         this.program = createProgram(this.gl, vertShaderStr, fragShaderStr, this.attributes)
 
         // init arrays

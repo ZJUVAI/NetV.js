@@ -5,7 +5,7 @@
 
 import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
-import { createProgram, createArrayBuffer } from '../../utils'
+import { createProgram, createArrayBuffer, extractAttributesFromShader } from '../../utils'
 import { RenderAttribute, Transform } from '../../interfaces'
 import Node from '../../../node'
 
@@ -41,40 +41,7 @@ export class RenderNodeManager {
         this.width = width
         this.height = height
 
-        this.attributes = [
-            {
-                name: 'inVertexPos',
-                index: 0,
-                size: 3,
-                isBuildIn: true
-            },
-            {
-                name: 'inPosition',
-                index: 1,
-                size: 2
-            },
-            {
-                name: 'inRadius',
-                index: 2,
-                size: 1
-            },
-            {
-                name: 'inFill',
-                index: 3,
-                size: 4
-            },
-            {
-                name: 'inStrokeWidth',
-                index: 4,
-                size: 1
-            },
-            {
-                name: 'inStrokeColor',
-                index: 5,
-                size: 4
-            }
-        ]
-
+        this.attributes = extractAttributesFromShader(vertShaderStr)
         this.program = createProgram(this.gl, vertShaderStr, fragShaderStr, this.attributes)
 
         // init arrays
