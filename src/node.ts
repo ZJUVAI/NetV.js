@@ -16,7 +16,7 @@ class Node {
         x: 0,
         y: 0
     }
-    private $_strokeWidth = configs.node.storkeWidth
+    private $_strokeWidth = configs.node.strokeWidth
     private $_strokeColor = configs.node.strokeColor
     private $_fill = configs.node.fill
     private $_r = configs.node.r
