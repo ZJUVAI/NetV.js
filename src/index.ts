@@ -28,16 +28,16 @@ class NetV {
 
     /**
      * @description create NetV object.
-     * @param container where you draw your graph, neccesary for NetV.
-     * @param configs Optional, override default config
+     * @param configs configurations of NetV, must include a `container: HTMLDivElement` term
      */
-    public constructor(container: HTMLDivElement, configs?: {}) {
-        if (!container || container.tagName !== 'DIV') {
+    public constructor(configs: any) {
+        if (!('container' in configs) || configs.container.tagName !== 'DIV') {
             throw Error('Container should be specified as a div element!')
         }
-        this.$_container = container
+        this.$_container = configs.container
         // override configs
         for (const key in configs) {
+            if (key === 'container') continue // NOTE: exclude container in configs
             if (configs[key] === Object(configs[key])) {
                 this.$_configs[key] = { ...this.$_configs[key], ...configs[key] }
             } else {
@@ -46,18 +46,19 @@ class NetV {
         }
 
         const canvas = document.createElement('canvas') // TODO: consider node enviroment, document not defined
-        canvas.setAttribute('width', String(this.$_configs.container.width))
-        canvas.setAttribute('height', String(this.$_configs.container.height))
+        canvas.setAttribute('width', String(this.$_configs.width))
+        canvas.setAttribute('height', String(this.$_configs.height))
         this.$_container.appendChild(canvas)
 
-        this.$_renderer = new Renderer(canvas, {
-            width: this.$_configs.container.width,
-            height: this.$_configs.container.height,
-            backgroundColor: this.$_configs.container.backgroundColor
+        this.$_renderer = new Renderer({
+            canvas,
+            width: this.$_configs.width,
+            height: this.$_configs.height,
+            backgroundColor: this.$_configs.backgroundColor
         })
 
         this.$_interaction = new InteractionManager(this)
-        if (this.$_configs.container.enablePanZoom) {
+        if (this.$_configs.enablePanZoom) {
             this.$_interaction.initZoom()
         }
     }
