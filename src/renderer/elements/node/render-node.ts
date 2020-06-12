@@ -145,15 +145,17 @@ export class RenderNodeManager {
         // set array
         nodes.forEach((node, i) => {
             // TODO: consider node and render node attribute mapping
-            this.attributes[NodeAttrKey.Position].array[2 * (this.count + i)] = node.x()
-            this.attributes[NodeAttrKey.Position].array[2 * (this.count + i) + 1] = node.y()
+            const position = node.position()
+            this.attributes[NodeAttrKey.Position].array[2 * (this.count + i)] = position.x
+            this.attributes[NodeAttrKey.Position].array[2 * (this.count + i) + 1] = position.y
 
             this.attributes[NodeAttrKey.Size].array[this.count + i] = node.r()
 
-            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i)] = node.fill().r
-            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 1] = node.fill().g
-            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 2] = node.fill().b
-            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 3] = node.fill().a
+            const fill = node.fill()
+            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i)] = fill.r
+            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 1] = fill.g
+            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 2] = fill.b
+            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 3] = fill.a
 
             this.attributes[NodeAttrKey.StrokeWidth].array[this.count + i] = node.strokeWidth()
 

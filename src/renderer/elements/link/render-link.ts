@@ -50,12 +50,12 @@ export class RenderLinkManager {
                 size: 2
             },
             {
-                name: 'inWidth',
+                name: 'inStrokeWidth',
                 index: 3,
                 size: 1
             },
             {
-                name: 'inColor',
+                name: 'inStrokeColor',
                 index: 4,
                 size: 4
             }
@@ -112,12 +112,14 @@ export class RenderLinkManager {
         links.forEach((link, i) => {
             // TODO: consider link and render link attribute mapping
             const source = link.source()
-            this.attributes[LinkAttrKey.SOURCE].array[2 * (this.count + i)] = source.x()
-            this.attributes[LinkAttrKey.SOURCE].array[2 * (this.count + i) + 1] = source.y()
+            const sourcePosition = source.position()
+            this.attributes[LinkAttrKey.SOURCE].array[2 * (this.count + i)] = sourcePosition.x
+            this.attributes[LinkAttrKey.SOURCE].array[2 * (this.count + i) + 1] = sourcePosition.y
 
             const target = link.target()
-            this.attributes[LinkAttrKey.TARGET].array[2 * (this.count + i)] = target.x()
-            this.attributes[LinkAttrKey.TARGET].array[2 * (this.count + i) + 1] = target.y()
+            const targetPosition = target.position()
+            this.attributes[LinkAttrKey.TARGET].array[2 * (this.count + i)] = targetPosition.x
+            this.attributes[LinkAttrKey.TARGET].array[2 * (this.count + i) + 1] = targetPosition.y
 
             this.attributes[LinkAttrKey.WIDTH].array[this.count + i] = link.strokeWidth()
 
