@@ -1,10 +1,10 @@
 #version 300 es
 precision highp float;
 in vec3 inVertexPos;
-in vec2 inSource;
-in vec2 inTarget;
-in float inWidth;
-in vec4 inColor;
+in vec2 inSourcePosition;
+in vec2 inTargetPosition;
+in float inStrokeWidth;
+in vec4 inStrokeColor;
 
 out vec4 color;
 
@@ -14,10 +14,10 @@ uniform vec2 scale;
 uniform vec2 translate;
 
 void main(void) {
-    color = inColor;
+    color = inStrokeColor;
 
-    vec2 source = inSource * scale + translate;
-    vec2 target = inTarget * scale + translate;
+    vec2 source = inSourcePosition * scale + translate;
+    vec2 target = inTargetPosition * scale + translate;
     vec2 delta = source - target;
     vec2 center = 0.5 * (source + target);
     float len = length(delta);
@@ -25,7 +25,7 @@ void main(void) {
 
     mat3 line_scale = mat3(
         len, 0, 0,
-        0, inWidth, 0,
+        0, inStrokeWidth, 0,
         0, 0, 1
     );
     mat3 line_rotate = mat3(

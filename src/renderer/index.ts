@@ -4,17 +4,17 @@
  */
 
 import * as defaultConfigs from '../configs'
-import { RNode } from './elements/node/render-node'
+import { RenderNodeManager } from './elements/node/render-node'
 import Node from '../node'
 import Link from 'src/link'
-import { RenderLink } from './elements/link/render-link'
-import { Transform, RendererConfigs } from './utils'
+import { RenderLinkManager } from './elements/link/render-link'
+import { Transform, RendererConfigs } from './interfaces'
 import { Color } from 'src/interfaces'
 
 export class Renderer {
     private gl: WebGL2RenderingContext
-    private nodeManager: RNode
-    private linkManager: RenderLink
+    private nodeManager: RenderNodeManager
+    private linkManager: RenderLinkManager
     private backgroundColor: Color
 
     /**
@@ -30,8 +30,8 @@ export class Renderer {
         }
         this.backgroundColor = backgroundColor
 
-        this.nodeManager = new RNode(this.gl, width, height, defaultConfigs.nodeLimit)
-        this.linkManager = new RenderLink(this.gl, width, height, defaultConfigs.linkLimit)
+        this.nodeManager = new RenderNodeManager(this.gl, width, height, defaultConfigs.nodeLimit)
+        this.linkManager = new RenderLinkManager(this.gl, width, height, defaultConfigs.linkLimit)
     }
 
     /**
