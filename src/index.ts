@@ -12,8 +12,11 @@ import * as defaultConfigs from './configs'
 import * as dataset from './dataset'
 import { Renderer } from './renderer'
 import { InteractionManager } from './interaction/interaction'
+import * as Utils from './utils/utils'
 
 class NetV {
+    public Utils = Utils
+
     public $_id2node = new Map()
     public $_ends2link = new Map2()
     public $_container: HTMLDivElement
