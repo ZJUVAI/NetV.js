@@ -70,3 +70,30 @@ export function createArrayBuffer(gl: WebGL2RenderingContext, data: Float32Array
     gl.bufferData(gl.ARRAY_BUFFER, data, gl.DYNAMIC_DRAW)
     return buffer
 }
+
+/**
+ * extract attributes from a shader sring
+ * @param {string} shaderStr
+ * @returns {RenderAttribute[]} attributes array
+ */
+export function extractAttributesFromShader(shaderStr: string) {
+    const matchings = shaderStr.match(/in\s.*;/g)
+    return matchings.map((match, index) => {
+        const name = match.split(' ')[2].slice(0, -1)
+        const type = match.split(' ')[1]
+        let size = 1
+        if (type.slice(0, 3) === 'vec') {
+            size = Number(type.slice(-1))
+        }
+        let isBuildIn = false
+        if (name === 'inVertexPos') {
+            isBuildIn = true
+        }
+        return {
+            name,
+            size,
+            index,
+            isBuildIn
+        }
+    })
+}
