@@ -74,6 +74,11 @@ export class Renderer {
      * draw all elements
      */
     public draw() {
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.idTexture)
+        this.gl.clearColor(1, 1, 1, 1)
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT)
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null)
+
         this.gl.clearColor(
             this.backgroundColor.r,
             this.backgroundColor.g,

@@ -153,6 +153,15 @@ export class RenderNodeManager {
 
         const translate = new Float32Array([transform.x, transform.y])
         this.gl.uniform2fv(translateLoc, translate)
+
+        // id uniforms, identical to node
+        // TODO: need refactor too
+        this.gl.useProgram(this.idProgram)
+        const idScaleLoc = this.gl.getUniformLocation(this.idProgram, 'scale')
+        const idTranslateLoc = this.gl.getUniformLocation(this.idProgram, 'translate')
+
+        this.gl.uniform2fv(idScaleLoc, scale)
+        this.gl.uniform2fv(idTranslateLoc, translate)
     }
 
     /**
@@ -225,5 +234,32 @@ export class RenderNodeManager {
         }
 
         this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
+
+        // draw id
+        this.gl.blendFunc(this.gl.ONE, this.gl.ZERO)
+        this.gl.useProgram(this.idProgram)
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.idTexture)
+
+        this.idAttributes.forEach((attr) => {
+            this.gl.enableVertexAttribArray(attr.index)
+        })
+
+        const attr = this.idAttributes[NodeIdAttrKey.Id]
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+        this.gl.vertexAttribPointer(
+            attr.index,
+            attr.size,
+            this.gl.FLOAT,
+            false,
+            attr.size * attr.array.BYTES_PER_ELEMENT,
+            0
+        )
+        this.gl.vertexAttribDivisor(attr.index, 1)
+
+        this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null)
+
+        this.gl.enable(this.gl.BLEND)
+        this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
     }
 }
