@@ -6,6 +6,8 @@ in vec4 color;
 in float strokeWidth;
 in vec4 strokeColor;
 
+in vec4 id;
+
 out vec4 fragmentColor;
 
 uniform vec2 viewport;
