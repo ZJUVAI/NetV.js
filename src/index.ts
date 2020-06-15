@@ -162,6 +162,26 @@ class NetV {
     }
 
     /**
+     * given position, return element on this pixel if exists
+     * @param x x pos
+     * @param y y pos
+     */
+    public getElementByPosition(
+        x: number,
+        y: number
+    ): { type: 'node' | 'link'; element: Node | Link } | undefined {
+        const id = this.$_renderer.getIdByPosition(x, y)
+        if (id) {
+            const node = this.getNodeById(id)
+            return {
+                type: 'node',
+                element: node
+            }
+            // TODO: link element, current only consider node
+        }
+    }
+
+    /**
      * @description draw elements
      */
     public draw() {

@@ -32,7 +32,7 @@ export class InteractionManager {
                 this.transform.y = (1 - k) * y + k * this.transform.y
 
                 this.transform.k *= k
-                
+
                 this.netv.$_renderer.setTransform(this.transform)
                 this.netv.draw()
             }
@@ -43,5 +43,24 @@ export class InteractionManager {
         // TODO: maybe can handle on div instead of canvas
         canvas.addEventListener('DOMMouseScroll', handleScroll, false)
         canvas.addEventListener('mousewheel', handleScroll, false)
+    }
+
+    /**
+     * setup click utility
+     */
+    public initClick() {
+        const canvas = this.netv.$_container.querySelector('canvas')
+        const handleMouseDown = (evt: MouseEvent) => {
+            const x = evt.offsetX || evt.pageX - canvas.offsetLeft
+            const y = evt.offsetY || evt.pageY - canvas.offsetTop
+
+            const element = this.netv.getElementByPosition(x, y)
+            if (element) {
+                // TODO: follow up operations
+                console.log(element)
+            }
+        }
+
+        canvas.addEventListener('mousedown', handleMouseDown)
     }
 }
