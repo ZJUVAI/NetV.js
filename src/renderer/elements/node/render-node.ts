@@ -5,6 +5,8 @@
 
 import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
+import idVertShaderStr from './id-vertex.glsl'
+import idFragShaderStr from './id-fragment.glsl'
 import { createProgram, createArrayBuffer, extractAttributesFromShader } from '../../utils'
 import { RenderAttribute, Transform } from '../../interfaces'
 import Node from '../../../node'
@@ -18,6 +20,16 @@ enum NodeAttrKey {
     StrokeColor
 }
 
+enum NodeIdAttrKey {
+    Template,
+    Position,
+    Size,
+    Color,
+    StrokeWidth,
+    StrokeColor,
+    Id
+}
+
 export class RenderNodeManager {
     // program
     private gl: WebGL2RenderingContext
@@ -27,6 +39,9 @@ export class RenderNodeManager {
     private height: number
     private program: WebGLProgram
     private attributes: RenderAttribute
+    private idProgram: WebGLProgram
+    private idAttributes: RenderAttribute
+    private idTexture: WebGLTexture
 
     /**
      * create render node manager
@@ -34,8 +49,15 @@ export class RenderNodeManager {
      * @param width canvas width
      * @param height canvas height
      * @param limit max nodes number
+     * @param idTexture texture store elements id of each pixel
      */
-    public constructor(gl: WebGL2RenderingContext, width: number, height: number, limit: number) {
+    public constructor(
+        gl: WebGL2RenderingContext,
+        width: number,
+        height: number,
+        limit: number,
+        idTexture: WebGLTexture
+    ) {
         this.gl = gl
         this.limit = limit
         this.width = width
@@ -43,6 +65,10 @@ export class RenderNodeManager {
 
         this.attributes = extractAttributesFromShader(vertShaderStr)
         this.program = createProgram(this.gl, vertShaderStr, fragShaderStr, this.attributes)
+
+        this.idAttributes = extractAttributesFromShader(idVertShaderStr)
+        this.idProgram = createProgram(this.gl, idVertShaderStr, idFragShaderStr, this.idAttributes)
+        this.idTexture = idTexture
 
         // init arrays
         // prettier-ignore
@@ -52,6 +78,7 @@ export class RenderNodeManager {
             0.0, 0.5, 1.0,
             0.5, 0.0, 1.0,
         ])
+        // TODO: combine the following two loop?
         this.attributes.forEach((attr) => {
             if (!attr.isBuildIn) attr.array = new Float32Array(attr.size * this.limit)
         })
@@ -59,6 +86,17 @@ export class RenderNodeManager {
         // init buffers
         this.attributes.forEach((attr) => {
             attr.buffer = createArrayBuffer(this.gl, attr.array)
+        })
+
+        // init id attributes and buffers
+        // TODO: hardcode check, need refactor
+        this.idAttributes.forEach((attr, idx) => {
+            if (idx < this.attributes.length) {
+                this.idAttributes[idx] = this.attributes[idx]
+            } else {
+                if (!attr.isBuildIn) attr.array = new Float32Array(attr.size * this.limit)
+                attr.buffer = createArrayBuffer(this.gl, attr.array)
+            }
         })
 
         // init uniforms
@@ -86,6 +124,19 @@ export class RenderNodeManager {
 
         const viewport = new Float32Array([this.width, this.height])
         this.gl.uniform2fv(viewportLoc, viewport)
+
+        // id uniforms, identical to node
+        // TODO: need refactor too
+        this.gl.useProgram(this.idProgram)
+        const idProjectionLoc = this.gl.getUniformLocation(this.idProgram, 'projection')
+        const idScaleLoc = this.gl.getUniformLocation(this.idProgram, 'scale')
+        const idTranslateLoc = this.gl.getUniformLocation(this.idProgram, 'translate')
+        const idViewportLoc = this.gl.getUniformLocation(this.idProgram, 'viewport')
+
+        this.gl.uniformMatrix3fv(idProjectionLoc, false, projection)
+        this.gl.uniform2fv(idScaleLoc, scale)
+        this.gl.uniform2fv(idTranslateLoc, translate)
+        this.gl.uniform2fv(idViewportLoc, viewport)
     }
 
     /**
