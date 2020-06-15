@@ -3,6 +3,8 @@
  * @description utility functions for renderer
  */
 
+import { Color } from '../interfaces'
+
 /**
  * compile webgl shader
  * @param gl WebGL instance
@@ -96,4 +98,16 @@ export function extractAttributesFromShader(shaderStr: string) {
             isBuildIn
         }
     })
+}
+
+/**
+ * encode a render id as color to pass in texture
+ * @param id render id
+ */
+export function encodeRenderId(id: number): Color {
+    const r = (id & 255) / 255.0
+    const g = ((id >> 8) & 255) / 255.0
+    const b = ((id >> 16) & 255) / 255.0
+    const a = ((id >> 24) & 255) / 255.0
+    return { r, g, b, a }
 }

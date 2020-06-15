@@ -7,7 +7,12 @@ import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
 import idVertShaderStr from './id-vertex.glsl'
 import idFragShaderStr from './id-fragment.glsl'
-import { createProgram, createArrayBuffer, extractAttributesFromShader } from '../../utils'
+import {
+    createProgram,
+    createArrayBuffer,
+    extractAttributesFromShader,
+    encodeRenderId
+} from '../../utils'
 import { RenderAttribute, Transform } from '../../interfaces'
 import Node from '../../../node'
 
@@ -42,6 +47,7 @@ export class RenderNodeManager {
     private idProgram: WebGLProgram
     private idAttributes: RenderAttribute
     private idTexture: WebGLTexture
+    private renderIdToId: string[]
 
     /**
      * create render node manager
@@ -191,6 +197,12 @@ export class RenderNodeManager {
             this.attributes[NodeAttrKey.StrokeColor].array[4 * (this.count + i) + 1] = strokeColor.g
             this.attributes[NodeAttrKey.StrokeColor].array[4 * (this.count + i) + 2] = strokeColor.b
             this.attributes[NodeAttrKey.StrokeColor].array[4 * (this.count + i) + 3] = strokeColor.a
+
+            const renderIdColor = encodeRenderId(this.count + i)
+            this.idAttributes[NodeIdAttrKey.Id].array[4 * (this.count + i)] = renderIdColor.r
+            this.idAttributes[NodeIdAttrKey.Id].array[4 * (this.count + i) + 1] = renderIdColor.g
+            this.idAttributes[NodeIdAttrKey.Id].array[4 * (this.count + i) + 2] = renderIdColor.b
+            this.idAttributes[NodeIdAttrKey.Id].array[4 * (this.count + i) + 3] = renderIdColor.a
         })
 
         this.attributes.forEach((attr) => {
