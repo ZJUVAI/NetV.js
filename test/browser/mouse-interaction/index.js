@@ -7,8 +7,16 @@
 
 const netv = new NetV({
     container: document.getElementById('main'),
+    node: {
+        clickCallback: (node) => {
+            console.log(node)
+        }
+    },
     link: {
-        strokeWidth: 10
+        strokeWidth: 10,
+        clickCallback: (link) => {
+            console.log(link)
+        }
     }
 })
 const testData = {

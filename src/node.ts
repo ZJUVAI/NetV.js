@@ -10,6 +10,8 @@ import { NetV } from './index'
 import * as configs from './configs'
 
 class Node {
+    public $_clickCallback = configs.node.clickCallback
+
     private $_core: NetV
     private $_id: string
     private $_position = {
@@ -30,7 +32,8 @@ class Node {
                 strokeWidth: this.$_strokeWidth,
                 strokeColor: this.$_strokeColor,
                 r: this.$_r,
-                fill: this.$_fill
+                fill: this.$_fill,
+                clickCallback: this.$_clickCallback
             },
             ...nodeData
         }
@@ -41,6 +44,7 @@ class Node {
         this.strokeColor(data.strokeColor)
         this.fill(data.fill)
         this.r(data.r)
+        this.setClickCallback(data.clickCallback)
     }
 
     /**
@@ -157,6 +161,14 @@ class Node {
         } else {
             throw new Error(`Invalid ID ${value}`)
         }
+    }
+
+    /**
+     * set click callback function
+     * @param callback click callback function
+     */
+    private setClickCallback(callback: (node: Node) => void) {
+        this.$_clickCallback = callback
     }
 }
 

@@ -10,6 +10,8 @@ import { NetV } from './index'
 import * as configs from './configs'
 
 class Link {
+    public $_clickCallback = configs.link.clickCallback
+
     private $_core: NetV
     private $_source: Node
     private $_target: Node
@@ -21,7 +23,8 @@ class Link {
         const data = {
             ...{
                 strokeWidth: this.$_strokeWidth,
-                strokeColor: this.$_strokeColor
+                strokeColor: this.$_strokeColor,
+                clickCallback: this.$_clickCallback
             },
             ...linkData
         }
@@ -30,6 +33,8 @@ class Link {
 
         this.strokeWidth(data.strokeWidth)
         this.strokeColor(data.strokeColor)
+
+        this.setClickCallback(data.clickCallback)
     }
 
     /**
@@ -141,6 +146,14 @@ class Link {
             this.$_strokeColor = value
         }
         return this.$_strokeColor
+    }
+
+    /**
+     * set click callback function
+     * @param callback click callback function
+     */
+    private setClickCallback(callback: (link: Link) => void) {
+        this.$_clickCallback = callback
     }
 }
 

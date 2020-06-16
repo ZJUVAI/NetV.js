@@ -56,8 +56,7 @@ export class InteractionManager {
 
             const element = this.netv.getElementByPosition(x, y)
             if (element) {
-                // TODO: follow up operations
-                console.log(element)
+                element.element.$_clickCallback(element.element as any) // TODO: not elegant
             }
         }
 
