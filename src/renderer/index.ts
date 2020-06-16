@@ -46,7 +46,13 @@ export class Renderer {
             defaultConfigs.nodeLimit,
             this.idTexture
         )
-        this.linkManager = new RenderLinkManager(this.gl, width, height, defaultConfigs.linkLimit)
+        this.linkManager = new RenderLinkManager(
+            this.gl,
+            width,
+            height,
+            defaultConfigs.linkLimit,
+            this.idTexture
+        )
     }
 
     /**
@@ -96,15 +102,14 @@ export class Renderer {
      * @param x x pos
      * @param y y pos
      */
-    public getIdByPosition(x: number, y: number): string {
+    public getIdByPosition(x: number, y: number): string | [string, string] {
         const renderId = this.readIdTexture(x, y)
         if (renderId >= 0) {
             const nodeId = this.nodeManager.getIdByRenderId(renderId)
             if (nodeId) return nodeId
 
-            // TODO: link related logic
-            // const linkId = this.linkManager.getIdByRenderId(renderId)
-            // if (linkId) return linkId
+            const linkIds = this.linkManager.getIdsByRenderId(renderId)
+            if (linkIds) return linkIds
         }
     }
 

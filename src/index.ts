@@ -174,10 +174,19 @@ class NetV {
     ): { type: 'node' | 'link'; element: Node | Link } | undefined {
         const id = this.$_renderer.getIdByPosition(x, y)
         if (id) {
-            const node = this.getNodeById(id)
-            return {
-                type: 'node',
-                element: node
+            if (typeof id === 'string') {
+                const node = this.getNodeById(id)
+                return {
+                    type: 'node',
+                    element: node
+                }
+            }
+            if (Array.isArray(id)) {
+                const link = this.getLinkByEnds(id[0], id[1])
+                return {
+                    type: 'link',
+                    element: link
+                }
             }
             // TODO: link element, current only consider node
         }

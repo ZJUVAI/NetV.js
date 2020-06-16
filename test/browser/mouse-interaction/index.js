@@ -6,7 +6,10 @@
  */
 
 const netv = new NetV({
-    container: document.getElementById('main')
+    container: document.getElementById('main'),
+    link: {
+        strokeWidth: 10
+    }
 })
 const testData = {
     nodes: [
