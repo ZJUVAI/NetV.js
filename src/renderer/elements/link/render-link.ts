@@ -44,7 +44,7 @@ export class RenderLinkManager {
     private idProgram: WebGLProgram
     private idAttributes: RenderAttribute
     private idTexture: WebGLTexture
-    private renderIdToIds: [string, string][]
+    private renderIdToIds: { [key: number]: [string, string] }
 
     public constructor(
         gl: WebGL2RenderingContext,
@@ -64,7 +64,7 @@ export class RenderLinkManager {
         this.idAttributes = extractAttributesFromShader(idVertShaderStr)
         this.idProgram = createProgram(this.gl, idVertShaderStr, idFragShaderStr, this.idAttributes)
         this.idTexture = idTexture
-        this.renderIdToIds = new Array(limit)
+        this.renderIdToIds = {}
 
         // init arrays
         // prettier-ignore
@@ -154,14 +154,14 @@ export class RenderLinkManager {
             this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 2] = color.b
             this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 3] = color.a
 
-            const renderIdColor = encodeRenderId(this.count + i)
+            const renderIdColor = encodeRenderId(2 * (this.count + i) + 1) // NOTE: link render id, use odd integer
             this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i)] = renderIdColor.r
             this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i) + 1] = renderIdColor.g
             this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i) + 2] = renderIdColor.b
             this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i) + 3] = renderIdColor.a
 
             const sourceTarget = link.sourceTarget()
-            this.renderIdToIds[this.count + i] = [
+            this.renderIdToIds[2 * (this.count + i) + 1] = [
                 sourceTarget.source.id(),
                 sourceTarget.target.id()
             ]

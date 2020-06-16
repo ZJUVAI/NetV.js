@@ -47,7 +47,7 @@ export class RenderNodeManager {
     private idProgram: WebGLProgram
     private idAttributes: RenderAttribute
     private idTexture: WebGLTexture
-    private renderIdToId: string[]
+    private renderIdToId: { [key: number]: string }
 
     /**
      * create render node manager
@@ -75,7 +75,7 @@ export class RenderNodeManager {
         this.idAttributes = extractAttributesFromShader(idVertShaderStr)
         this.idProgram = createProgram(this.gl, idVertShaderStr, idFragShaderStr, this.idAttributes)
         this.idTexture = idTexture
-        this.renderIdToId = new Array(limit)
+        this.renderIdToId = {}
 
         // init arrays
         // prettier-ignore
@@ -199,13 +199,13 @@ export class RenderNodeManager {
             this.attributes[NodeAttrKey.StrokeColor].array[4 * (this.count + i) + 2] = strokeColor.b
             this.attributes[NodeAttrKey.StrokeColor].array[4 * (this.count + i) + 3] = strokeColor.a
 
-            const renderIdColor = encodeRenderId(this.count + i)
+            const renderIdColor = encodeRenderId(2 * (this.count + i)) // NOTE: node render id, use even integer
             this.idAttributes[NodeIdAttrKey.Id].array[4 * (this.count + i)] = renderIdColor.r
             this.idAttributes[NodeIdAttrKey.Id].array[4 * (this.count + i) + 1] = renderIdColor.g
             this.idAttributes[NodeIdAttrKey.Id].array[4 * (this.count + i) + 2] = renderIdColor.b
             this.idAttributes[NodeIdAttrKey.Id].array[4 * (this.count + i) + 3] = renderIdColor.a
 
-            this.renderIdToId[this.count + i] = node.id()
+            this.renderIdToId[2 * (this.count + i)] = node.id()
         })
 
         this.attributes.forEach((attr) => {
