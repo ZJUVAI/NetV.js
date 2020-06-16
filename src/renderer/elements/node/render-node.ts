@@ -75,6 +75,7 @@ export class RenderNodeManager {
         this.idAttributes = extractAttributesFromShader(idVertShaderStr)
         this.idProgram = createProgram(this.gl, idVertShaderStr, idFragShaderStr, this.idAttributes)
         this.idTexture = idTexture
+        this.renderIdToId = new Array(limit)
 
         // init arrays
         // prettier-ignore
@@ -203,6 +204,8 @@ export class RenderNodeManager {
             this.idAttributes[NodeIdAttrKey.Id].array[4 * (this.count + i) + 1] = renderIdColor.g
             this.idAttributes[NodeIdAttrKey.Id].array[4 * (this.count + i) + 2] = renderIdColor.b
             this.idAttributes[NodeIdAttrKey.Id].array[4 * (this.count + i) + 3] = renderIdColor.a
+
+            this.renderIdToId[this.count + i] = node.id()
         })
 
         this.attributes.forEach((attr) => {
@@ -218,7 +221,26 @@ export class RenderNodeManager {
             }
         })
 
+        // id buffer data
+        const attr = this.idAttributes[NodeIdAttrKey.Id]
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+        this.gl.bufferSubData(
+            this.gl.ARRAY_BUFFER,
+            attr.size * this.count * attr.array.BYTES_PER_ELEMENT,
+            attr.array,
+            attr.size * this.count,
+            attr.size * nodes.length
+        )
+
         this.count += nodes.length
+    }
+
+    /**
+     * render id to id
+     * @param renderId render id in number
+     */
+    public getIdByRenderId(renderId: number): string {
+        return this.renderIdToId[renderId]
     }
 
     /**

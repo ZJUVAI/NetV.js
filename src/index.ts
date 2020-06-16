@@ -61,6 +61,8 @@ class NetV {
         if (this.$_configs.enablePanZoom) {
             this.$_interaction.initZoom()
         }
+
+        this.$_interaction.initClick()
     }
 
     /**

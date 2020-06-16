@@ -10,6 +10,7 @@ import Link from 'src/link'
 import { RenderLinkManager } from './elements/link/render-link'
 import { Transform, RendererConfigs } from './interfaces'
 import { Color } from 'src/interfaces'
+import { decodeRenderId } from './utils'
 
 export class Renderer {
     private gl: WebGL2RenderingContext
@@ -88,6 +89,37 @@ export class Renderer {
         this.gl.clear(this.gl.COLOR_BUFFER_BIT)
         this.linkManager.draw()
         this.nodeManager.draw()
+    }
+
+    /**
+     * get element's id at (x, y) of canvas if exists
+     * @param x x pos
+     * @param y y pos
+     */
+    public getIdByPosition(x: number, y: number): string {
+        const renderId = this.readIdTexture(x, y)
+        if (renderId >= 0) {
+            const nodeId = this.nodeManager.getIdByRenderId(renderId)
+            if (nodeId) return nodeId
+
+            // TODO: link related logic
+            // const linkId = this.linkManager.getIdByRenderId(renderId)
+            // if (linkId) return linkId
+        }
+    }
+
+    /**
+     * read pixel value at (x, y) of texture
+     * @param x x pos
+     * @param y y pos
+     */
+    public readIdTexture(x: number, y: number): number {
+        this.gl.bindFramebuffer(this.gl.READ_FRAMEBUFFER, this.idTexture)
+        const readPixelBuffer = new Uint8Array([255, 255, 255, 255]) // -1
+        this.gl.readPixels(x, y, 1, 1, this.gl.RGBA, this.gl.UNSIGNED_BYTE, readPixelBuffer)
+        const objectID = decodeRenderId(readPixelBuffer)
+
+        return objectID
     }
 
     /**

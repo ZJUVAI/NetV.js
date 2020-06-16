@@ -52,7 +52,7 @@ export class InteractionManager {
         const canvas = this.netv.$_container.querySelector('canvas')
         const handleMouseDown = (evt: MouseEvent) => {
             const x = evt.offsetX || evt.pageX - canvas.offsetLeft
-            const y = evt.offsetY || evt.pageY - canvas.offsetTop
+            const y = this.netv.$_configs.height - (evt.offsetY || evt.pageY - canvas.offsetTop)
 
             const element = this.netv.getElementByPosition(x, y)
             if (element) {

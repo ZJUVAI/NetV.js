@@ -111,3 +111,12 @@ export function encodeRenderId(id: number): Color {
     const a = ((id >> 24) & 255) / 255.0
     return { r, g, b, a }
 }
+
+/**
+ * decode pixel value to number
+ * @param pixelVal a pixel's value on texture
+ */
+export function decodeRenderId(pixelVal: Uint8Array): number {
+    const renderId = pixelVal[0] | (pixelVal[1] << 8) | (pixelVal[2] << 16) | (pixelVal[3] << 24)
+    return renderId
+}
