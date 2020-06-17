@@ -121,9 +121,18 @@ export class Renderer {
      * @param y y pos
      */
     public readIdTexture(x: number, y: number): number {
+        const ratio = window.devicePixelRatio || 1
         this.gl.bindFramebuffer(this.gl.READ_FRAMEBUFFER, this.idTexture)
         const readPixelBuffer = new Uint8Array([255, 255, 255, 255]) // -1
-        this.gl.readPixels(x, y, 1, 1, this.gl.RGBA, this.gl.UNSIGNED_BYTE, readPixelBuffer)
+        this.gl.readPixels(
+            x * ratio,
+            y * ratio,
+            1,
+            1,
+            this.gl.RGBA,
+            this.gl.UNSIGNED_BYTE,
+            readPixelBuffer
+        )
         const objectID = decodeRenderId(readPixelBuffer)
 
         return objectID

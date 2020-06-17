@@ -112,6 +112,7 @@ export class RenderNodeManager {
         const scaleLoc = this.gl.getUniformLocation(this.program, 'scale')
         const translateLoc = this.gl.getUniformLocation(this.program, 'translate')
         const viewportLoc = this.gl.getUniformLocation(this.program, 'viewport')
+        const pixelRatioLoc = this.gl.getUniformLocation(this.program, 'pixelRatio')
 
         // this.gl.viewport(0, 0, this.width, this.height) // TODO: viewport set, not needed? put here in case bug appear
 
@@ -132,6 +133,9 @@ export class RenderNodeManager {
         const viewport = new Float32Array([this.width, this.height])
         this.gl.uniform2fv(viewportLoc, viewport)
 
+        const pixelRatio = window.devicePixelRatio || 1
+        this.gl.uniform1f(pixelRatioLoc, pixelRatio)
+
         // id uniforms, identical to node
         // TODO: need refactor too
         this.gl.useProgram(this.idProgram)
@@ -139,11 +143,13 @@ export class RenderNodeManager {
         const idScaleLoc = this.gl.getUniformLocation(this.idProgram, 'scale')
         const idTranslateLoc = this.gl.getUniformLocation(this.idProgram, 'translate')
         const idViewportLoc = this.gl.getUniformLocation(this.idProgram, 'viewport')
+        const idPixelRatioLoc = this.gl.getUniformLocation(this.idProgram, 'pixelRatio')
 
         this.gl.uniformMatrix3fv(idProjectionLoc, false, projection)
         this.gl.uniform2fv(idScaleLoc, scale)
         this.gl.uniform2fv(idTranslateLoc, translate)
         this.gl.uniform2fv(idViewportLoc, viewport)
+        this.gl.uniform1f(idPixelRatioLoc, pixelRatio)
     }
 
     /**
