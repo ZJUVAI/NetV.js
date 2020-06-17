@@ -248,6 +248,9 @@ export class RenderNodeManager {
      */
     public draw() {
         if (this.count > 0) {
+            this.gl.enable(this.gl.BLEND)
+            this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
+
             this.gl.useProgram(this.program)
             this.attributes.forEach((attr) => {
                 this.gl.enableVertexAttribArray(attr.index)
