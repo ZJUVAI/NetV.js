@@ -143,8 +143,9 @@ export class Renderer {
      */
     private initIdTexture() {
         const gl = this.gl
-        const screenWidth = this.width
-        const screenHeight = this.height
+        const pixelRatio = window.devicePixelRatio || 1
+        const screenWidth = this.width * pixelRatio
+        const screenHeight = this.height * pixelRatio
 
         const fbo = gl.createFramebuffer()
         gl.bindFramebuffer(gl.FRAMEBUFFER, fbo)
