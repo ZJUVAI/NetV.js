@@ -12,7 +12,6 @@ out vec4 color;
 
 out vec4 id;
 
-// TODO: need review
 uniform mat3 projection;
 uniform vec2 scale;
 uniform vec2 translate;

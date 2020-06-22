@@ -37,7 +37,6 @@ export function createProgram(
     gl: WebGL2RenderingContext,
     vertShaderStr: string,
     fragShaderStr: string,
-    // TODO: consider generate from shader file
     attributes: { name: string; index: number }[]
 ): WebGLProgram {
     const vertShader = compileShader(gl, vertShaderStr, gl.VERTEX_SHADER)

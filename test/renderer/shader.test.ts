@@ -22,7 +22,6 @@ out vec2 pos;
 out float size;
 out vec4 color;
 
-// TODO: need review
 uniform mat3 projection;
 uniform vec2 scale;
 uniform vec2 translate;

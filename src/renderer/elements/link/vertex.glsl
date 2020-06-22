@@ -8,7 +8,6 @@ in vec4 inStrokeColor;
 
 out vec4 color;
 
-// TODO: need review
 uniform mat3 projection;
 uniform vec2 scale;
 uniform vec2 translate;
