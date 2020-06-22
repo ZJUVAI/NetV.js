@@ -191,7 +191,6 @@ class NetV {
                     element: link
                 }
             }
-            // TODO: link element, current only consider node
         }
     }
 

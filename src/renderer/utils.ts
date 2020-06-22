@@ -105,6 +105,7 @@ export function extractAttributesFromShader(shaderStr: string) {
  * @param id render id
  */
 export function encodeRenderId(id: number): Color {
+    // split a large number by 8-bit: id = concat(a, b, g, r), and normalize them into (0, 1)
     const r = (id & 255) / 255.0
     const g = ((id >> 8) & 255) / 255.0
     const b = ((id >> 16) & 255) / 255.0
@@ -117,6 +118,7 @@ export function encodeRenderId(id: number): Color {
  * @param pixelVal a pixel's value on texture
  */
 export function decodeRenderId(pixelVal: Uint8Array): number {
+    // parse normalized parts of id number, bit shift to origin position and concat
     const renderId = pixelVal[0] | (pixelVal[1] << 8) | (pixelVal[2] << 16) | (pixelVal[3] << 24)
     return renderId
 }

@@ -2,8 +2,6 @@
 precision highp float;
 in vec4 color;
 
-in vec4 id;
-
 out vec4 fragmentColor;
 
 void main(void) {

@@ -12,6 +12,17 @@ export class InteractionManager {
         y: 0,
         k: 1
     }
+    private isDragging = false
+    private dragStartPos: {
+        x: number
+        y: number
+    }
+    private dragStartTransform: {
+        x: number
+        y: number
+        k: number
+    }
+
     public constructor(netv: NetV) {
         this.netv = netv
     }
@@ -48,18 +59,45 @@ export class InteractionManager {
     /**
      * setup click utility
      */
+    // TODO: need rename
     public initClick() {
         const canvas = this.netv.$_container.querySelector('canvas')
         const handleMouseDown = (evt: MouseEvent) => {
             const x = evt.offsetX || evt.pageX - canvas.offsetLeft
-            const y = this.netv.$_configs.height - (evt.offsetY || evt.pageY - canvas.offsetTop)
+            const y = evt.offsetY || evt.pageY - canvas.offsetTop
+            const yInv = this.netv.$_configs.height - y
 
-            const element = this.netv.getElementByPosition(x, y)
+            const element = this.netv.getElementByPosition(x, yInv)
             if (element) {
                 element.element.$_clickCallback(element.element as any) // TODO: not elegant
+            } else {
+                this.isDragging = true
+                this.dragStartPos = { x, y }
+                this.dragStartTransform = JSON.parse(JSON.stringify(this.transform))
+            }
+        }
+
+        const handleMouseMove = (evt: MouseEvent) => {
+            if (!this.isDragging) return
+
+            const x = evt.offsetX || evt.pageX - canvas.offsetLeft
+            const y = evt.offsetY || evt.pageY - canvas.offsetTop
+
+            this.transform.x = this.dragStartTransform.x + x - this.dragStartPos.x
+            this.transform.y = this.dragStartTransform.y + y - this.dragStartPos.y
+
+            this.netv.$_renderer.setTransform(this.transform)
+            this.netv.draw()
+        }
+
+        const handleMouseUp = (evt: MouseEvent) => {
+            if (this.isDragging) {
+                this.isDragging = false
             }
         }
 
         canvas.addEventListener('mousedown', handleMouseDown)
+        canvas.addEventListener('mousemove', handleMouseMove)
+        canvas.addEventListener('mouseup', handleMouseUp)
     }
 }
