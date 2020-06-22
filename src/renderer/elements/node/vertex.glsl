@@ -13,7 +13,6 @@ out vec4 color;
 out float strokeWidth;
 out vec4 strokeColor;
 
-// TODO: need review
 uniform mat3 projection;
 uniform vec2 scale;
 uniform vec2 translate;

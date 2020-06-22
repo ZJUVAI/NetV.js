@@ -17,7 +17,6 @@ out vec4 strokeColor;
 
 out vec4 id;
 
-// TODO: need review
 uniform mat3 projection;
 uniform vec2 scale;
 uniform vec2 translate;

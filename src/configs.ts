@@ -15,14 +15,16 @@ export const linkLimit = 1000
 
 export const node = {
     r: 5,
-    fill: { r: 0.3, g: 0.5, b: 0.5, a: 0.5 },
-    strokeColor: { r: 0.6, g: 0.6, b: 0.6, a: 0.5 },
-    strokeWidth: 1,
+    fill: { r: 0.2, g: 0.6, b: 0.2, a: 0.8 },
+    // strokeColor: { r: 0.6, g: 0.6, b: 0.6, a: 0.5 },
+    strokeColor: { r: 0.9, g: 0.9, b: 0.9, a: 0.6 },
+    strokeWidth: 2,
     clickCallback: (node: Node) => {}
 }
 
 export const link = {
-    strokeColor: { r: 0.5, g: 0.5, b: 0.5, a: 0.5 },
-    strokeWidth: 2,
+    // strokeColor: { r: 0.5, g: 0.5, b: 0.5, a: 0.2 },
+    strokeColor: { r: 0.4, g: 0.6, b: 0.8, a: 0.2 },
+    strokeWidth: 0.5,
     clickCallback: (link: Link) => {}
 }
