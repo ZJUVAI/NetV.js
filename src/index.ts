@@ -61,6 +61,8 @@ class NetV {
         if (this.$_configs.enablePanZoom) {
             this.$_interaction.initZoom()
         }
+
+        this.$_interaction.initClick()
     }
 
     /**
@@ -159,6 +161,34 @@ class NetV {
 
         console.error(`NetV does not have build-in dataset: ${name}`)
         return { nodes: [], links: [] }
+    }
+
+    /**
+     * given position, return element on this pixel if exists
+     * @param x x pos
+     * @param y y pos
+     */
+    public getElementByPosition(
+        x: number,
+        y: number
+    ): { type: 'node' | 'link'; element: Node | Link } | undefined {
+        const id = this.$_renderer.getIdByPosition(x, y)
+        if (id) {
+            if (typeof id === 'string') {
+                const node = this.getNodeById(id)
+                return {
+                    type: 'node',
+                    element: node
+                }
+            }
+            if (Array.isArray(id)) {
+                const link = this.getLinkByEnds(id[0], id[1])
+                return {
+                    type: 'link',
+                    element: link
+                }
+            }
+        }
     }
 
     /**

@@ -5,7 +5,14 @@
 
 import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
-import { createProgram, createArrayBuffer, extractAttributesFromShader } from '../../utils'
+import idVertShaderStr from './id-vertex.glsl'
+import idFragShaderStr from './id-fragment.glsl'
+import {
+    createProgram,
+    createArrayBuffer,
+    extractAttributesFromShader,
+    encodeRenderId
+} from '../../utils'
 import { RenderAttribute, Transform } from '../../interfaces'
 import Link from '../../../link'
 
@@ -17,6 +24,15 @@ enum LinkAttrKey {
     COLOR
 }
 
+enum LinkIdAttrKey {
+    TEMPLATE,
+    SOURCE,
+    TARGET,
+    WIDTH,
+    COLOR,
+    ID
+}
+
 export class RenderLinkManager {
     private gl: WebGL2RenderingContext
     private limit: number
@@ -25,8 +41,18 @@ export class RenderLinkManager {
     private height: number
     private program: WebGLProgram
     private attributes: RenderAttribute
+    private idProgram: WebGLProgram
+    private idAttributes: RenderAttribute
+    private idTexture: WebGLTexture
+    private renderIdToIds: { [key: number]: [string, string] }
 
-    public constructor(gl: WebGL2RenderingContext, width: number, height: number, limit: number) {
+    public constructor(
+        gl: WebGL2RenderingContext,
+        width: number,
+        height: number,
+        limit: number,
+        idTexture: WebGLTexture
+    ) {
         this.gl = gl
         this.limit = limit
         this.width = width
@@ -34,6 +60,11 @@ export class RenderLinkManager {
 
         this.attributes = extractAttributesFromShader(vertShaderStr)
         this.program = createProgram(this.gl, vertShaderStr, fragShaderStr, this.attributes)
+
+        this.idAttributes = extractAttributesFromShader(idVertShaderStr)
+        this.idProgram = createProgram(this.gl, idVertShaderStr, idFragShaderStr, this.idAttributes)
+        this.idTexture = idTexture
+        this.renderIdToIds = {}
 
         // init arrays
         // prettier-ignore
@@ -50,6 +81,17 @@ export class RenderLinkManager {
         // init buffers
         this.attributes.forEach((attr) => {
             attr.buffer = createArrayBuffer(this.gl, attr.array)
+        })
+
+        // init id attributes and buffers
+        // TODO: hardcode check, need refactor
+        this.idAttributes.forEach((attr, idx) => {
+            if (idx < this.attributes.length) {
+                this.idAttributes[idx] = this.attributes[idx]
+            } else {
+                if (!attr.isBuildIn) attr.array = new Float32Array(attr.size * this.limit)
+                attr.buffer = createArrayBuffer(this.gl, attr.array)
+            }
         })
 
         // init uniforms
@@ -73,6 +115,17 @@ export class RenderLinkManager {
 
         const translate = new Float32Array([0, 0])
         this.gl.uniform2fv(translateLoc, translate)
+
+        // id uniforms, identical to link
+        // TODO: need refactor too
+        this.gl.useProgram(this.idProgram)
+        const idProjectionLoc = this.gl.getUniformLocation(this.idProgram, 'projection')
+        const idScaleLoc = this.gl.getUniformLocation(this.idProgram, 'scale')
+        const idTranslateLoc = this.gl.getUniformLocation(this.idProgram, 'translate')
+
+        this.gl.uniformMatrix3fv(idProjectionLoc, false, projection)
+        this.gl.uniform2fv(idScaleLoc, scale)
+        this.gl.uniform2fv(idTranslateLoc, translate)
     }
 
     /**
@@ -100,6 +153,18 @@ export class RenderLinkManager {
             this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 1] = color.g
             this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 2] = color.b
             this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 3] = color.a
+
+            const renderIdColor = encodeRenderId(2 * (this.count + i) + 1) // NOTE: link render id, use odd integer
+            this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i)] = renderIdColor.r
+            this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i) + 1] = renderIdColor.g
+            this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i) + 2] = renderIdColor.b
+            this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i) + 3] = renderIdColor.a
+
+            const sourceTarget = link.sourceTarget()
+            this.renderIdToIds[2 * (this.count + i) + 1] = [
+                sourceTarget.source.id(),
+                sourceTarget.target.id()
+            ]
         })
 
         this.attributes.forEach((attr) => {
@@ -114,6 +179,17 @@ export class RenderLinkManager {
                 )
             }
         })
+
+        // id buffer data
+        const attr = this.idAttributes[LinkIdAttrKey.ID]
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+        this.gl.bufferSubData(
+            this.gl.ARRAY_BUFFER,
+            attr.size * this.count * attr.array.BYTES_PER_ELEMENT,
+            attr.array,
+            attr.size * this.count,
+            attr.size * links.length
+        )
 
         this.count += links.length
     }
@@ -132,6 +208,23 @@ export class RenderLinkManager {
 
         const translate = new Float32Array([transform.x, transform.y])
         this.gl.uniform2fv(translateLoc, translate)
+
+        // id uniforms, identical to link
+        // TODO: need refactor too
+        this.gl.useProgram(this.idProgram)
+        const idScaleLoc = this.gl.getUniformLocation(this.idProgram, 'scale')
+        const idTranslateLoc = this.gl.getUniformLocation(this.idProgram, 'translate')
+
+        this.gl.uniform2fv(idScaleLoc, scale)
+        this.gl.uniform2fv(idTranslateLoc, translate)
+    }
+
+    /**
+     * render id to link ids(source and target)
+     * @param renderId
+     */
+    public getIdsByRenderId(renderId: number): [string, string] {
+        return this.renderIdToIds[renderId]
     }
 
     /**
@@ -159,5 +252,32 @@ export class RenderLinkManager {
         }
 
         this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
+
+        // draw id
+        this.gl.blendFunc(this.gl.ONE, this.gl.ZERO)
+        this.gl.useProgram(this.idProgram)
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.idTexture)
+
+        this.idAttributes.forEach((attr) => {
+            this.gl.enableVertexAttribArray(attr.index)
+        })
+
+        const attr = this.idAttributes[LinkIdAttrKey.ID]
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+        this.gl.vertexAttribPointer(
+            attr.index,
+            attr.size,
+            this.gl.FLOAT,
+            false,
+            attr.size * attr.array.BYTES_PER_ELEMENT,
+            0
+        )
+        this.gl.vertexAttribDivisor(attr.index, 1)
+
+        this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null)
+
+        this.gl.enable(this.gl.BLEND)
+        this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
     }
 }

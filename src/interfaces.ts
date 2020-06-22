@@ -4,6 +4,9 @@
  * @dependences None
  */
 
+import Node from './node'
+import Link from './link'
+
 export interface Color {
     r: number
     g: number
@@ -19,6 +22,7 @@ export interface NodeData {
     fill?: Color
     strokeWidth?: number
     strokeColor?: Color
+    clickCallback?: (node: Node) => void
 }
 
 export interface LinkData {
@@ -26,6 +30,7 @@ export interface LinkData {
     target: string
     strokeColor?: Color
     strokeWidth?: number
+    clickCallback?: (link: Link) => void
 }
 
 export interface NodeLinkData {
