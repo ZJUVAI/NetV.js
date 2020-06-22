@@ -105,7 +105,7 @@ export class Renderer {
     public getIdByPosition(x: number, y: number): string | [string, string] {
         const renderId = this.readIdTexture(x, y)
         if (renderId >= 0) {
-            if (renderId % 2 === 0) {
+            if (renderId % 2 === 0) { // NOTE: node has even render id, link has odd render id
                 const nodeId = this.nodeManager.getIdByRenderId(renderId)
                 return nodeId
             } else {

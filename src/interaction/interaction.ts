@@ -4,7 +4,6 @@
  */
 
 import { NetV } from 'src'
-import { JSDOM } from 'jsdom'
 
 export class InteractionManager {
     private netv: NetV
