@@ -13,7 +13,7 @@ import {
     extractAttributesFromShader,
     encodeRenderId
 } from '../../utils'
-import { RenderAttribute, Transform } from '../../interfaces'
+import { RenderAttribute, Transform, LinkAttr } from '../../interfaces'
 import Link from '../../../link'
 
 enum LinkAttrKey {
@@ -33,7 +33,7 @@ enum LinkIdAttrKey {
     ID
 }
 
-const NodeAttrMap = {
+const LinkAttrMap = {
     source: LinkAttrKey.SOURCE,
     target: LinkAttrKey.TARGET,
     width: LinkAttrKey.WIDTH,
@@ -133,6 +133,26 @@ export class RenderLinkManager {
         this.gl.uniformMatrix3fv(idProjectionLoc, false, projection)
         this.gl.uniform2fv(idScaleLoc, scale)
         this.gl.uniform2fv(idTranslateLoc, translate)
+    }
+
+    /**
+     * change link's attribute
+     * @param attribute attribute key to change
+     * @param index position in buffer
+     * @param data new data to change, in array format
+     */
+    public changeAttribute(attribute: LinkAttr, index: number, data: number[]) {
+        const key = LinkAttrMap[attribute]
+        const attr = this.attributes[key]
+        attr.array.set(data, attr.size * index)
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+        this.gl.bufferSubData(
+            this.gl.ARRAY_BUFFER,
+            attr.size * index * attr.array.BYTES_PER_ELEMENT,
+            attr.array,
+            attr.size * index,
+            attr.size
+        )
     }
 
     /**

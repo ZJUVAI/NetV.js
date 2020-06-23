@@ -13,7 +13,7 @@ import {
     extractAttributesFromShader,
     encodeRenderId
 } from '../../utils'
-import { RenderAttribute, Transform } from '../../interfaces'
+import { RenderAttribute, Transform, NodeAttr } from '../../interfaces'
 import Node from '../../../node'
 
 enum NodeAttrKey {
@@ -183,6 +183,26 @@ export class RenderNodeManager {
 
         this.gl.uniform2fv(idScaleLoc, scale)
         this.gl.uniform2fv(idTranslateLoc, translate)
+    }
+
+    /**
+     * change node's attribute
+     * @param attribute attribute key to change
+     * @param index position in buffer
+     * @param data new data to change, in array format
+     */
+    public changeAttribute(attribute: NodeAttr, index: number, data: number[]) {
+        const key = NodeAttrMap[attribute]
+        const attr = this.attributes[key]
+        attr.array.set(data, attr.size * index)
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+        this.gl.bufferSubData(
+            this.gl.ARRAY_BUFFER,
+            attr.size * index * attr.array.BYTES_PER_ELEMENT,
+            attr.array,
+            attr.size * index,
+            attr.size
+        )
     }
 
     /**
