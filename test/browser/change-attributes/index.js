@@ -1,8 +1,8 @@
 /**
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
- * @description test mouse click, drag interaction
+ * @description test change attributes
  *
- * expected: click nodes, change color, drag nodes, change position
+ * expected: when execute following change functions, the graph is changed respectively
  */
 
 const netv = new NetV({
