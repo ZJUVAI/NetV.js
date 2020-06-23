@@ -38,7 +38,7 @@ enum NodeIdAttrKey {
 const NodeAttrMap = {
     position: NodeAttrKey.POSITION,
     radius: NodeAttrKey.RADIUS,
-    color: NodeAttrKey.COLOR,
+    fill: NodeAttrKey.COLOR,
     strokeWidth: NodeAttrKey.STROKE_WIDTH,
     strokeColor: NodeAttrKey.STROKE_COLOR
 }

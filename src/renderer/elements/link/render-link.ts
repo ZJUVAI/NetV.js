@@ -15,6 +15,7 @@ import {
 } from '../../utils'
 import { RenderAttribute, Transform, LinkAttr } from '../../interfaces'
 import Link from '../../../link'
+import Map2 from '../../../utils/map2'
 
 enum LinkAttrKey {
     TEMPLATE,
@@ -36,8 +37,8 @@ enum LinkIdAttrKey {
 const LinkAttrMap = {
     source: LinkAttrKey.SOURCE,
     target: LinkAttrKey.TARGET,
-    width: LinkAttrKey.WIDTH,
-    color: LinkAttrKey.COLOR
+    strokeWidth: LinkAttrKey.WIDTH,
+    strokeColor: LinkAttrKey.COLOR
 }
 
 export class RenderLinkManager {
@@ -52,6 +53,8 @@ export class RenderLinkManager {
     private idAttributes: RenderAttribute
     private idTexture: WebGLTexture
     private renderIdToIds: { [key: number]: [string, string] }
+
+    private idsToIndex = new Map2()
 
     public constructor(
         gl: WebGL2RenderingContext,
@@ -137,13 +140,29 @@ export class RenderLinkManager {
 
     /**
      * change link's attribute
+     * @param link link data
      * @param attribute attribute key to change
-     * @param index position in buffer
-     * @param data new data to change, in array format
      */
-    public changeAttribute(attribute: LinkAttr, index: number, data: number[]) {
+    public changeAttribute(link: Link, attribute: LinkAttr) {
         const key = LinkAttrMap[attribute]
         const attr = this.attributes[key]
+        const nodes = link.sourceTarget()
+        const index = this.idsToIndex.get([nodes.source.id(), nodes.target.id()])
+        let data = null
+        if (attribute === 'source') {
+            const pos = nodes.source.position()
+            data = [pos.x, pos.y]
+        } else if (attribute === 'target') {
+            const pos = nodes.target.position()
+            data = [pos.x, pos.y]
+        } else if (attribute === 'strokeWidth') {
+            data = [link.strokeWidth()]
+        } else if (attribute === 'strokeColor') {
+            data = [link.strokeColor()]
+        } else {
+            console.error('Not supported Node attribute.')
+            return
+        }
         attr.array.set(data, attr.size * index)
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
         this.gl.bufferSubData(
