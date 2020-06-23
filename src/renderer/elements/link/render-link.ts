@@ -158,9 +158,10 @@ export class RenderLinkManager {
         } else if (attribute === 'strokeWidth') {
             data = [link.strokeWidth()]
         } else if (attribute === 'strokeColor') {
-            data = [link.strokeColor()]
+            const col = link.strokeColor()
+            data = [col.r, col.g, col.b, col.a]
         } else {
-            console.error('Not supported Node attribute.')
+            console.error('Not supported Link attribute.')
             return
         }
         attr.array.set(data, attr.size * index)
@@ -211,6 +212,10 @@ export class RenderLinkManager {
                 sourceTarget.source.id(),
                 sourceTarget.target.id()
             ]
+            this.idsToIndex.set(
+                [sourceTarget.source.id(), sourceTarget.target.id()],
+                this.count + i
+            )
         })
 
         this.attributes.forEach((attr) => {

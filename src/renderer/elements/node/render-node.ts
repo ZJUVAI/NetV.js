@@ -210,7 +210,8 @@ export class RenderNodeManager {
         } else if (attribute === 'strokeWidth') {
             data = [node.strokeWidth()]
         } else if (attribute === 'strokeColor') {
-            data = [node.strokeColor()]
+            const col = node.strokeColor()
+            data = [col.r, col.g, col.b, col.a]
         } else {
             console.error('Not supported Node attribute.')
             return
