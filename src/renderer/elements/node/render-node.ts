@@ -57,6 +57,8 @@ export class RenderNodeManager {
     private idTexture: WebGLTexture
     private renderIdToId: { [key: number]: string }
 
+    private idToIndex: { [key: string]: number }
+
     /**
      * create render node manager
      * @param gl WebGL context
@@ -84,6 +86,8 @@ export class RenderNodeManager {
         this.idProgram = createProgram(this.gl, idVertShaderStr, idFragShaderStr, this.idAttributes)
         this.idTexture = idTexture
         this.renderIdToId = {}
+
+        this.idToIndex = {}
 
         // init arrays
         // prettier-ignore
@@ -187,13 +191,30 @@ export class RenderNodeManager {
 
     /**
      * change node's attribute
+     * @param node node data
      * @param attribute attribute key to change
-     * @param index position in buffer
-     * @param data new data to change, in array format
      */
-    public changeAttribute(attribute: NodeAttr, index: number, data: number[]) {
+    public changeAttribute(node: Node, attribute: NodeAttr) {
         const key = NodeAttrMap[attribute]
         const attr = this.attributes[key]
+        const index = this.idToIndex[node.id()]
+        let data = null
+        if (attribute === 'position') {
+            const pos = node.position()
+            data = [pos.x, pos.y]
+        } else if (attribute === 'fill') {
+            const col = node.fill()
+            data = [col.r, col.g, col.b, col.a]
+        } else if (attribute === 'radius') {
+            data = [node.r()]
+        } else if (attribute === 'strokeWidth') {
+            data = [node.strokeWidth()]
+        } else if (attribute === 'strokeColor') {
+            data = [node.strokeColor()]
+        } else {
+            console.error('Not supported Node attribute.')
+            return
+        }
         attr.array.set(data, attr.size * index)
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
         this.gl.bufferSubData(
@@ -243,6 +264,7 @@ export class RenderNodeManager {
             this.idAttributes[NodeIdAttrKey.ID].array[4 * (this.count + i) + 3] = renderIdColor.a
 
             this.renderIdToId[2 * (this.count + i)] = node.id()
+            this.idToIndex[node.id()] = this.count + i
         })
 
         this.attributes.forEach((attr) => {

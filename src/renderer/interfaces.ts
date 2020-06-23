@@ -31,5 +31,5 @@ export type RenderAttribute = {
     buffer?: WebGLBuffer
 }[]
 
-export type NodeAttr = 'position' | 'radius' | 'color' | 'strokeWidth' | 'strokeColor'
-export type LinkAttr = 'source' | 'target' | 'width' | 'color'
+export type NodeAttr = 'position' | 'radius' | 'fill' | 'strokeWidth' | 'strokeColor'
+export type LinkAttr = 'source' | 'target' | 'strokeWidth' | 'strokeColor'
