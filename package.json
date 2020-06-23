@@ -1,0 +1,23 @@
+{
+	"name": "netv",
+	"version": "1.0.0",
+	"description": "A network visualization library based on WebGL",
+	"main": "build/NetV.js",
+	"scripts": {
+		"docs": "vuepress dev docs --no-cache -p 6001",
+		"docs:build": "vuepress build docs"
+	},
+	"author": "",
+	"license": "MIT",
+	"devDependencies": {
+		"@vuepress/plugin-active-header-links": "^1.5.1",
+		"vuepress": "^1.5.1",
+		"vuepress-plugin-smooth-scroll": "0.0.9"
+	},
+	"dependencies": {
+		"@vuepress/plugin-nprogress": "^1.5.2",
+		"highlight.js": "^10.1.1",
+		"node-sass": "^4.14.1",
+		"sass-loader": "^8.0.2"
+	}
+}
