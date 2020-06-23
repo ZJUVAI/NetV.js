@@ -63,6 +63,7 @@ class Node {
     public x(value?: number) {
         if (arguments.length !== 0) {
             this.$_position.x = value
+            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
         }
         return this.$_position.x
     }
@@ -75,6 +76,7 @@ class Node {
     public y(value?: number) {
         if (arguments.length !== 0) {
             this.$_position.y = value
+            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
         }
         return this.$_position.y
     }
@@ -88,6 +90,7 @@ class Node {
         if (arguments.length === 2) {
             this.$_position.x = x
             this.$_position.y = y
+            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
         } else if (arguments.length !== 0 && arguments.length !== 2) {
             throw Error(`Node.position() method can not deal with ${arguments.length} parameters.`)
         }
@@ -102,6 +105,7 @@ class Node {
     public strokeWidth(value?: number) {
         if (arguments.length === 1) {
             this.$_strokeWidth = value
+            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'strokeWidth')
         }
         return this.$_strokeWidth
     }
@@ -113,6 +117,7 @@ class Node {
     public strokeColor(value?: interfaces.Color) {
         if (arguments.length === 1) {
             this.$_strokeColor = value
+            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'strokeColor')
         }
         return this.$_strokeColor
     }
@@ -124,6 +129,7 @@ class Node {
     public fill(value?: interfaces.Color) {
         if (arguments.length === 1) {
             this.$_fill = value
+            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'fill')
         }
         return this.$_fill
     }
@@ -135,6 +141,7 @@ class Node {
     public r(value?: number) {
         if (arguments.length === 1) {
             this.$_r = value
+            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'radius')
         }
         return this.$_r
     }

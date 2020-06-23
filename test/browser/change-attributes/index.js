@@ -117,14 +117,14 @@ function changeFill(i) {
         b: 0,
         a: 1
     })
-    netv.$_renderer.nodeManager.changeAttribute(node, 'fill')
+    // netv.$_renderer.nodeManager.changeAttribute(node, 'fill')
     netv.draw()
 }
 
 function changeRadius(i) {
     const node = netv.getNodeById(String(i))
     node.r(30)
-    netv.$_renderer.nodeManager.changeAttribute(node, 'radius')
+    // netv.$_renderer.nodeManager.changeAttribute(node, 'radius')
     netv.draw()
 }
 
@@ -132,14 +132,14 @@ function changePosition(i) {
     const node = netv.getNodeById(String(i))
     node.x(400)
     node.y(300)
-    netv.$_renderer.nodeManager.changeAttribute(node, 'position')
+    // netv.$_renderer.nodeManager.changeAttribute(node, 'position')
     netv.draw()
 }
 
 function changeStrokeWidth(i) {
     const node = netv.getNodeById(String(i))
     node.strokeWidth(5)
-    netv.$_renderer.nodeManager.changeAttribute(node, 'strokeWidth')
+    // netv.$_renderer.nodeManager.changeAttribute(node, 'strokeWidth')
     netv.draw()
 }
 
@@ -151,7 +151,7 @@ function changeStrokeColor(i) {
         b: 0,
         a: 1
     })
-    netv.$_renderer.nodeManager.changeAttribute(node, 'strokeColor')
+    // netv.$_renderer.nodeManager.changeAttribute(node, 'strokeColor')
     netv.draw()
 }
 
@@ -170,7 +170,7 @@ function changeLinkPosition(s, t) {
 function changeLinkStrokeWidth(s, t) {
     const link = netv.getLinkByEnds(String(s), String(t))
     link.strokeWidth(3)
-    netv.$_renderer.linkManager.changeAttribute(link, 'strokeWidth')
+    // netv.$_renderer.linkManager.changeAttribute(link, 'strokeWidth')
     netv.draw()
 }
 
@@ -182,6 +182,6 @@ function changeLinkStrokeColor(s, t) {
         b: 0,
         a: 1
     })
-    netv.$_renderer.linkManager.changeAttribute(link, 'strokeColor')
+    // netv.$_renderer.linkManager.changeAttribute(link, 'strokeColor')
     netv.draw()
 }
