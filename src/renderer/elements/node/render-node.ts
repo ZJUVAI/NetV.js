@@ -17,22 +17,30 @@ import { RenderAttribute, Transform } from '../../interfaces'
 import Node from '../../../node'
 
 enum NodeAttrKey {
-    Template,
-    Position,
-    Size,
-    Color,
-    StrokeWidth,
-    StrokeColor
+    TEMPLATE,
+    POSITION,
+    RADIUS,
+    COLOR,
+    STROKE_WIDTH,
+    STROKE_COLOR
 }
 
 enum NodeIdAttrKey {
-    Template,
-    Position,
-    Size,
-    Color,
-    StrokeWidth,
-    StrokeColor,
-    Id
+    TEMPLATE,
+    POSITION,
+    RADIUS,
+    COLOR,
+    STROKE_WIDTH,
+    STROKE_COLOR,
+    ID
+}
+
+const NodeAttrMap = {
+    position: NodeAttrKey.POSITION,
+    radius: NodeAttrKey.RADIUS,
+    color: NodeAttrKey.COLOR,
+    strokeWidth: NodeAttrKey.STROKE_WIDTH,
+    strokeColor: NodeAttrKey.STROKE_COLOR
 }
 
 export class RenderNodeManager {
@@ -79,7 +87,7 @@ export class RenderNodeManager {
 
         // init arrays
         // prettier-ignore
-        this.attributes[NodeAttrKey.Template].array = new Float32Array([
+        this.attributes[NodeAttrKey.TEMPLATE].array = new Float32Array([
             -0.5, 0.0, 1.0,
             0.0, -0.5, 1.0,
             0.0, 0.5, 1.0,
@@ -186,30 +194,33 @@ export class RenderNodeManager {
         nodes.forEach((node, i) => {
             // TODO: consider node and render node attribute mapping
             const position = node.position()
-            this.attributes[NodeAttrKey.Position].array[2 * (this.count + i)] = position.x
-            this.attributes[NodeAttrKey.Position].array[2 * (this.count + i) + 1] = position.y
+            this.attributes[NodeAttrKey.POSITION].array[2 * (this.count + i)] = position.x
+            this.attributes[NodeAttrKey.POSITION].array[2 * (this.count + i) + 1] = position.y
 
-            this.attributes[NodeAttrKey.Size].array[this.count + i] = node.r()
+            this.attributes[NodeAttrKey.RADIUS].array[this.count + i] = node.r()
 
             const fill = node.fill()
-            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i)] = fill.r
-            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 1] = fill.g
-            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 2] = fill.b
-            this.attributes[NodeAttrKey.Color].array[4 * (this.count + i) + 3] = fill.a
+            this.attributes[NodeAttrKey.COLOR].array[4 * (this.count + i)] = fill.r
+            this.attributes[NodeAttrKey.COLOR].array[4 * (this.count + i) + 1] = fill.g
+            this.attributes[NodeAttrKey.COLOR].array[4 * (this.count + i) + 2] = fill.b
+            this.attributes[NodeAttrKey.COLOR].array[4 * (this.count + i) + 3] = fill.a
 
-            this.attributes[NodeAttrKey.StrokeWidth].array[this.count + i] = node.strokeWidth()
+            this.attributes[NodeAttrKey.STROKE_WIDTH].array[this.count + i] = node.strokeWidth()
 
             const strokeColor = node.strokeColor()
-            this.attributes[NodeAttrKey.StrokeColor].array[4 * (this.count + i)] = strokeColor.r
-            this.attributes[NodeAttrKey.StrokeColor].array[4 * (this.count + i) + 1] = strokeColor.g
-            this.attributes[NodeAttrKey.StrokeColor].array[4 * (this.count + i) + 2] = strokeColor.b
-            this.attributes[NodeAttrKey.StrokeColor].array[4 * (this.count + i) + 3] = strokeColor.a
+            this.attributes[NodeAttrKey.STROKE_COLOR].array[4 * (this.count + i)] = strokeColor.r
+            this.attributes[NodeAttrKey.STROKE_COLOR].array[4 * (this.count + i) + 1] =
+                strokeColor.g
+            this.attributes[NodeAttrKey.STROKE_COLOR].array[4 * (this.count + i) + 2] =
+                strokeColor.b
+            this.attributes[NodeAttrKey.STROKE_COLOR].array[4 * (this.count + i) + 3] =
+                strokeColor.a
 
             const renderIdColor = encodeRenderId(2 * (this.count + i)) // NOTE: node render id, use even integer
-            this.idAttributes[NodeIdAttrKey.Id].array[4 * (this.count + i)] = renderIdColor.r
-            this.idAttributes[NodeIdAttrKey.Id].array[4 * (this.count + i) + 1] = renderIdColor.g
-            this.idAttributes[NodeIdAttrKey.Id].array[4 * (this.count + i) + 2] = renderIdColor.b
-            this.idAttributes[NodeIdAttrKey.Id].array[4 * (this.count + i) + 3] = renderIdColor.a
+            this.idAttributes[NodeIdAttrKey.ID].array[4 * (this.count + i)] = renderIdColor.r
+            this.idAttributes[NodeIdAttrKey.ID].array[4 * (this.count + i) + 1] = renderIdColor.g
+            this.idAttributes[NodeIdAttrKey.ID].array[4 * (this.count + i) + 2] = renderIdColor.b
+            this.idAttributes[NodeIdAttrKey.ID].array[4 * (this.count + i) + 3] = renderIdColor.a
 
             this.renderIdToId[2 * (this.count + i)] = node.id()
         })
@@ -228,7 +239,7 @@ export class RenderNodeManager {
         })
 
         // id buffer data
-        const attr = this.idAttributes[NodeIdAttrKey.Id]
+        const attr = this.idAttributes[NodeIdAttrKey.ID]
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
         this.gl.bufferSubData(
             this.gl.ARRAY_BUFFER,
@@ -287,7 +298,7 @@ export class RenderNodeManager {
             this.gl.enableVertexAttribArray(attr.index)
         })
 
-        const attr = this.idAttributes[NodeIdAttrKey.Id]
+        const attr = this.idAttributes[NodeIdAttrKey.ID]
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
         this.gl.vertexAttribPointer(
             attr.index,

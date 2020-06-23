@@ -33,6 +33,13 @@ enum LinkIdAttrKey {
     ID
 }
 
+const NodeAttrMap = {
+    source: LinkAttrKey.SOURCE,
+    target: LinkAttrKey.TARGET,
+    width: LinkAttrKey.WIDTH,
+    color: LinkAttrKey.COLOR
+}
+
 export class RenderLinkManager {
     private gl: WebGL2RenderingContext
     private limit: number
