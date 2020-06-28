@@ -3,7 +3,6 @@
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
  */
 
-import * as defaultConfigs from '../configs'
 import { RenderNodeManager } from './elements/node/render-node'
 import Node from '../node'
 import Link from 'src/link'
@@ -24,10 +23,10 @@ export class Renderer {
 
     /**
      * create renderer object
-     * @param configs {canvas: HTMLCanvasElement, width: number, height: number, backgroundColor: Color} configs passed to renderer
+     * @param configs {canvas: HTMLCanvasElement, width: number, height: number, backgroundColor: Color, defaultConfigs: Object} configs passed to renderer
      */
     public constructor(configs: RendererConfigs) {
-        const { canvas, width, height, backgroundColor } = configs
+        const { canvas, width, height, backgroundColor, nodeLimit, linkLimit } = configs
         try {
             this.gl = canvas.getContext('webgl2')
         } catch {
@@ -40,20 +39,8 @@ export class Renderer {
         this.initIdTexture()
 
         // TODO: parameters too many
-        this.nodeManager = new RenderNodeManager(
-            this.gl,
-            width,
-            height,
-            defaultConfigs.nodeLimit,
-            this.idTexture
-        )
-        this.linkManager = new RenderLinkManager(
-            this.gl,
-            width,
-            height,
-            defaultConfigs.linkLimit,
-            this.idTexture
-        )
+        this.nodeManager = new RenderNodeManager(this.gl, width, height, nodeLimit, this.idTexture)
+        this.linkManager = new RenderLinkManager(this.gl, width, height, linkLimit, this.idTexture)
     }
 
     /**

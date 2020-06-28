@@ -57,7 +57,9 @@ class NetV {
             canvas,
             width: this.$_configs.width,
             height: this.$_configs.height,
-            backgroundColor: this.$_configs.backgroundColor
+            backgroundColor: this.$_configs.backgroundColor,
+            nodeLimit: this.$_configs.nodeLimit,
+            linkLimit: this.$_configs.linkLimit
         })
 
         this.$_interaction = new InteractionManager(this)

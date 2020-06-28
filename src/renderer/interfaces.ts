@@ -16,6 +16,8 @@ export interface RendererConfigs {
     width: number
     height: number
     backgroundColor: Color
+    nodeLimit: number
+    linkLimit: number
 }
 
 /**
