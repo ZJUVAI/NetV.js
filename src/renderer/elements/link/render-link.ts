@@ -158,7 +158,7 @@ export class RenderLinkManager {
             const pos = nodes.target.position()
             data = [pos.x, pos.y]
         } else if (attribute === 'strokeWidth') {
-            data = [link.strokeWidth()]
+            data = [link.strokeWidth() * this.pixelRatio]
         } else if (attribute === 'strokeColor') {
             const col = link.strokeColor()
             data = [col.r, col.g, col.b, col.a]
@@ -195,7 +195,8 @@ export class RenderLinkManager {
             this.attributes[LinkAttrKey.TARGET].array[2 * (this.count + i)] = targetPosition.x
             this.attributes[LinkAttrKey.TARGET].array[2 * (this.count + i) + 1] = targetPosition.y
 
-            this.attributes[LinkAttrKey.WIDTH].array[this.count + i] = link.strokeWidth()
+            this.attributes[LinkAttrKey.WIDTH].array[this.count + i] =
+                link.strokeWidth() * this.pixelRatio
 
             const color = link.strokeColor()
             this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i)] = color.r
