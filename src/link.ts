@@ -7,24 +7,24 @@
 import Node from './node'
 import * as interfaces from './interfaces'
 import { NetV } from './index'
-import * as configs from './configs'
 
 class Link {
-    public $_clickCallback = configs.link.clickCallback
+    public $_clickCallback: (link: Link) => void
 
     private $_core: NetV
     private $_source: Node
     private $_target: Node
-    private $_strokeWidth = configs.link.strokeWidth
-    private $_strokeColor = configs.link.strokeColor
+    private $_strokeWidth: number
+    private $_strokeColor: interfaces.Color
 
     public constructor(core, linkData: interfaces.LinkData) {
         this.$_core = core
+        const defaultConfigs = this.$_core.$_configs
         const data = {
             ...{
-                strokeWidth: this.$_strokeWidth,
-                strokeColor: this.$_strokeColor,
-                clickCallback: this.$_clickCallback
+                strokeWidth: defaultConfigs.link.strokeWidth,
+                strokeColor: defaultConfigs.link.strokeColor,
+                clickCallback: defaultConfigs.link.clickCallback
             },
             ...linkData
         }
