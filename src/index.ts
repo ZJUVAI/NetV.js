@@ -21,7 +21,7 @@ class NetV {
     public $_ends2link = new Map2()
     public $_container: HTMLDivElement
     public $_renderer: Renderer
-    public $_configs = defaultConfigs
+    public $_configs = JSON.parse(JSON.stringify(defaultConfigs)) // NOTE: deep copy configs
     public $_interaction: InteractionManager
 
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
