@@ -47,6 +47,7 @@ export class RenderLinkManager {
     private count = 0
     private width: number
     private height: number
+    private pixelRatio: number
     private program: WebGLProgram
     private attributes: RenderAttribute
     private idProgram: WebGLProgram
@@ -67,6 +68,7 @@ export class RenderLinkManager {
         this.limit = limit
         this.width = width
         this.height = height
+        this.pixelRatio = window.devicePixelRatio || 1
 
         this.attributes = extractAttributesFromShader(vertShaderStr)
         this.program = createProgram(this.gl, vertShaderStr, fragShaderStr, this.attributes)

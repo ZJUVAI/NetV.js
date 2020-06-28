@@ -50,6 +50,7 @@ export class RenderNodeManager {
     private count = 0
     private width: number
     private height: number
+    private pixelRatio: number
     private program: WebGLProgram
     private attributes: RenderAttribute
     private idProgram: WebGLProgram
@@ -78,6 +79,7 @@ export class RenderNodeManager {
         this.limit = limit
         this.width = width
         this.height = height
+        this.pixelRatio = window.devicePixelRatio || 1
 
         this.attributes = extractAttributesFromShader(vertShaderStr)
         this.program = createProgram(this.gl, vertShaderStr, fragShaderStr, this.attributes)
@@ -145,8 +147,7 @@ export class RenderNodeManager {
         const viewport = new Float32Array([this.width, this.height])
         this.gl.uniform2fv(viewportLoc, viewport)
 
-        const pixelRatio = window.devicePixelRatio || 1
-        this.gl.uniform1f(pixelRatioLoc, pixelRatio)
+        this.gl.uniform1f(pixelRatioLoc, this.pixelRatio)
 
         // id uniforms, identical to node
         // TODO: need refactor too
@@ -161,7 +162,7 @@ export class RenderNodeManager {
         this.gl.uniform2fv(idScaleLoc, scale)
         this.gl.uniform2fv(idTranslateLoc, translate)
         this.gl.uniform2fv(idViewportLoc, viewport)
-        this.gl.uniform1f(idPixelRatioLoc, pixelRatio)
+        this.gl.uniform1f(idPixelRatioLoc, this.pixelRatio)
     }
 
     /**
