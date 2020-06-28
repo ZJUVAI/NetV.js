@@ -161,8 +161,8 @@ export class RenderLinkManager {
             const col = link.strokeColor()
             data = [col.r, col.g, col.b, col.a]
         } else {
-            console.error('Not supported Link attribute.')
-            return
+            console.error('Link attribute not supported.')
+            return // early return, skip following buffer change
         }
         attr.array.set(data, attr.size * index)
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
