@@ -133,6 +133,7 @@ class Link {
     public strokeWidth(value?: number) {
         if (arguments.length === 1) {
             this.$_strokeWidth = value
+            this.$_core.$_renderer.linkManager.changeAttribute(this, 'strokeWidth')
         }
         return this.$_strokeWidth
     }
@@ -144,6 +145,7 @@ class Link {
     public strokeColor(value?: interfaces.Color) {
         if (arguments.length === 1) {
             this.$_strokeColor = value
+            this.$_core.$_renderer.linkManager.changeAttribute(this, 'strokeColor')
         }
         return this.$_strokeColor
     }

@@ -13,9 +13,10 @@ import { Color } from 'src/interfaces'
 import { decodeRenderId } from './utils'
 
 export class Renderer {
+    public nodeManager: RenderNodeManager
+    public linkManager: RenderLinkManager
+
     private gl: WebGL2RenderingContext
-    private nodeManager: RenderNodeManager
-    private linkManager: RenderLinkManager
     private backgroundColor: Color
     private width: number
     private height: number
@@ -105,7 +106,8 @@ export class Renderer {
     public getIdByPosition(x: number, y: number): string | [string, string] {
         const renderId = this.readIdTexture(x, y)
         if (renderId >= 0) {
-            if (renderId % 2 === 0) { // NOTE: node has even render id, link has odd render id
+            if (renderId % 2 === 0) {
+                // NOTE: node has even render id, link has odd render id
                 const nodeId = this.nodeManager.getIdByRenderId(renderId)
                 return nodeId
             } else {
