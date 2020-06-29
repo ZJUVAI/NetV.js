@@ -13,7 +13,7 @@ import {
     extractAttributesFromShader,
     encodeRenderId
 } from '../../utils'
-import { RenderAttribute, Transform, LinkAttr } from '../../interfaces'
+import { RenderAttribute, Transform, LinkAttr, LinkManagerConfigs } from '../../interfaces'
 import Link from '../../../link'
 import Map2 from '../../../utils/map2'
 
@@ -57,13 +57,18 @@ export class RenderLinkManager {
 
     private idsToIndex = new Map2()
 
+    /**
+     * create render link manager
+     * @param gl WebGL context
+     * @param params nessesary configs for link manager
+     * @param idTexture texture store elements id of each pixel
+     */
     public constructor(
         gl: WebGL2RenderingContext,
-        width: number,
-        height: number,
-        limit: number,
+        params: LinkManagerConfigs,
         idTexture: WebGLTexture
     ) {
+        const { limit, width, height } = params
         this.gl = gl
         this.limit = limit
         this.width = width

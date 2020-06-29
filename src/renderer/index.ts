@@ -38,9 +38,16 @@ export class Renderer {
 
         this.initIdTexture()
 
-        // TODO: parameters too many
-        this.nodeManager = new RenderNodeManager(this.gl, width, height, nodeLimit, this.idTexture)
-        this.linkManager = new RenderLinkManager(this.gl, width, height, linkLimit, this.idTexture)
+        this.nodeManager = new RenderNodeManager(
+            this.gl,
+            { width, height, limit: nodeLimit },
+            this.idTexture
+        )
+        this.linkManager = new RenderLinkManager(
+            this.gl,
+            { width, height, limit: linkLimit },
+            this.idTexture
+        )
     }
 
     /**

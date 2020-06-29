@@ -13,7 +13,7 @@ import {
     extractAttributesFromShader,
     encodeRenderId
 } from '../../utils'
-import { RenderAttribute, Transform, NodeAttr } from '../../interfaces'
+import { RenderAttribute, Transform, NodeAttr, NodeManagerConfigs } from '../../interfaces'
 import Node from '../../../node'
 
 enum NodeAttrKey {
@@ -63,18 +63,15 @@ export class RenderNodeManager {
     /**
      * create render node manager
      * @param gl WebGL context
-     * @param width canvas width
-     * @param height canvas height
-     * @param limit max nodes number
+     * @param params nessesary configs for node manager
      * @param idTexture texture store elements id of each pixel
      */
     public constructor(
         gl: WebGL2RenderingContext,
-        width: number,
-        height: number,
-        limit: number,
+        params: NodeManagerConfigs,
         idTexture: WebGLTexture
     ) {
+        const { limit, width, height } = params
         this.gl = gl
         this.limit = limit
         this.width = width
