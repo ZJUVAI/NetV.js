@@ -2,9 +2,6 @@
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
  * @description basic example, draw a simple graph given data, it has least configuration
  */
-const netv = new NetV({
-    container: document.getElementById('main')
-})
 const testData = {
     nodes: [
         {
@@ -35,5 +32,8 @@ const testData = {
     ]
 }
 
+const netv = new NetV({
+    container: document.getElementById('main')
+})
 netv.data(testData)
 netv.draw()
