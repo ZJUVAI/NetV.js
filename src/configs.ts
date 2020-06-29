@@ -24,7 +24,7 @@ export const node = {
 
 export const link = {
     // strokeColor: { r: 0.5, g: 0.5, b: 0.5, a: 0.2 },
-    strokeColor: { r: 0.4, g: 0.6, b: 0.8, a: 0.2 },
-    strokeWidth: 0.5,
+    strokeColor: { r: 0.4, g: 0.6, b: 0.8, a: 0.5 },
+    strokeWidth: 2,
     clickCallback: (link: Link) => {}
 }

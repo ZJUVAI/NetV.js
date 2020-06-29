@@ -68,7 +68,7 @@ export class InteractionManager {
             const yInv = this.netv.$_configs.height - y
 
             const element = this.netv.getElementByPosition(x, yInv)
-            if (element) {
+            if (element?.element.$_clickCallback) {
                 element.element.$_clickCallback(element.element as any) // TODO: not elegant
             } else {
                 this.isDragging = true

@@ -13,7 +13,7 @@ import {
     extractAttributesFromShader,
     encodeRenderId
 } from '../../utils'
-import { RenderAttribute, Transform, LinkAttr } from '../../interfaces'
+import { RenderAttribute, Transform, LinkAttr, LinkManagerConfigs } from '../../interfaces'
 import Link from '../../../link'
 import Map2 from '../../../utils/map2'
 
@@ -47,6 +47,7 @@ export class RenderLinkManager {
     private count = 0
     private width: number
     private height: number
+    private pixelRatio: number
     private program: WebGLProgram
     private attributes: RenderAttribute
     private idProgram: WebGLProgram
@@ -56,17 +57,23 @@ export class RenderLinkManager {
 
     private idsToIndex = new Map2()
 
+    /**
+     * create render link manager
+     * @param gl WebGL context
+     * @param params nessesary configs for link manager
+     * @param idTexture texture store elements id of each pixel
+     */
     public constructor(
         gl: WebGL2RenderingContext,
-        width: number,
-        height: number,
-        limit: number,
+        params: LinkManagerConfigs,
         idTexture: WebGLTexture
     ) {
+        const { limit, width, height } = params
         this.gl = gl
         this.limit = limit
         this.width = width
         this.height = height
+        this.pixelRatio = window.devicePixelRatio || 1
 
         this.attributes = extractAttributesFromShader(vertShaderStr)
         this.program = createProgram(this.gl, vertShaderStr, fragShaderStr, this.attributes)
@@ -156,7 +163,7 @@ export class RenderLinkManager {
             const pos = nodes.target.position()
             data = [pos.x, pos.y]
         } else if (attribute === 'strokeWidth') {
-            data = [link.strokeWidth()]
+            data = [link.strokeWidth() * this.pixelRatio]
         } else if (attribute === 'strokeColor') {
             const col = link.strokeColor()
             data = [col.r, col.g, col.b, col.a]
@@ -193,7 +200,8 @@ export class RenderLinkManager {
             this.attributes[LinkAttrKey.TARGET].array[2 * (this.count + i)] = targetPosition.x
             this.attributes[LinkAttrKey.TARGET].array[2 * (this.count + i) + 1] = targetPosition.y
 
-            this.attributes[LinkAttrKey.WIDTH].array[this.count + i] = link.strokeWidth()
+            this.attributes[LinkAttrKey.WIDTH].array[this.count + i] =
+                link.strokeWidth() * this.pixelRatio
 
             const color = link.strokeColor()
             this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i)] = color.r

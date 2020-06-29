@@ -7,10 +7,9 @@
 import * as interfaces from './interfaces'
 import { isValidId } from './utils/is'
 import { NetV } from './index'
-import * as configs from './configs'
 
 class Node {
-    public $_clickCallback = configs.node.clickCallback
+    public $_clickCallback: (node: Node) => void
 
     private $_core: NetV
     private $_id: string
@@ -18,22 +17,23 @@ class Node {
         x: 0,
         y: 0
     }
-    private $_strokeWidth = configs.node.strokeWidth
-    private $_strokeColor = configs.node.strokeColor
-    private $_fill = configs.node.fill
-    private $_r = configs.node.r
+    private $_strokeWidth: number
+    private $_strokeColor: interfaces.Color
+    private $_fill: interfaces.Color
+    private $_r: number
 
     public constructor(core, nodeData: interfaces.NodeData) {
         this.$_core = core
+        const defaultConfigs = this.$_core.$_configs
         const data = {
             ...{
                 x: this.$_position.x,
                 y: this.$_position.y,
-                strokeWidth: this.$_strokeWidth,
-                strokeColor: this.$_strokeColor,
-                r: this.$_r,
-                fill: this.$_fill,
-                clickCallback: this.$_clickCallback
+                strokeWidth: defaultConfigs.node.strokeWidth,
+                strokeColor: defaultConfigs.node.strokeColor,
+                r: defaultConfigs.node.r,
+                fill: defaultConfigs.node.fill,
+                clickCallback: defaultConfigs.node.clickCallback
             },
             ...nodeData
         }

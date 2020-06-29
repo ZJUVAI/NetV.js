@@ -16,6 +16,8 @@ export interface RendererConfigs {
     width: number
     height: number
     backgroundColor: Color
+    nodeLimit: number
+    linkLimit: number
 }
 
 /**
@@ -33,3 +35,12 @@ export type RenderAttribute = {
 
 export type NodeAttr = 'position' | 'radius' | 'fill' | 'strokeWidth' | 'strokeColor'
 export type LinkAttr = 'source' | 'target' | 'strokeWidth' | 'strokeColor'
+
+interface ElementManagerConfigs {
+    width: number
+    height: number
+    limit: number
+}
+
+export type NodeManagerConfigs = ElementManagerConfigs
+export type LinkManagerConfigs = ElementManagerConfigs

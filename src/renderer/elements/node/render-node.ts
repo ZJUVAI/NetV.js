@@ -13,7 +13,7 @@ import {
     extractAttributesFromShader,
     encodeRenderId
 } from '../../utils'
-import { RenderAttribute, Transform, NodeAttr } from '../../interfaces'
+import { RenderAttribute, Transform, NodeAttr, NodeManagerConfigs } from '../../interfaces'
 import Node from '../../../node'
 
 enum NodeAttrKey {
@@ -50,6 +50,7 @@ export class RenderNodeManager {
     private count = 0
     private width: number
     private height: number
+    private pixelRatio: number
     private program: WebGLProgram
     private attributes: RenderAttribute
     private idProgram: WebGLProgram
@@ -62,22 +63,20 @@ export class RenderNodeManager {
     /**
      * create render node manager
      * @param gl WebGL context
-     * @param width canvas width
-     * @param height canvas height
-     * @param limit max nodes number
+     * @param params nessesary configs for node manager
      * @param idTexture texture store elements id of each pixel
      */
     public constructor(
         gl: WebGL2RenderingContext,
-        width: number,
-        height: number,
-        limit: number,
+        params: NodeManagerConfigs,
         idTexture: WebGLTexture
     ) {
+        const { limit, width, height } = params
         this.gl = gl
         this.limit = limit
         this.width = width
         this.height = height
+        this.pixelRatio = window.devicePixelRatio || 1
 
         this.attributes = extractAttributesFromShader(vertShaderStr)
         this.program = createProgram(this.gl, vertShaderStr, fragShaderStr, this.attributes)
@@ -145,8 +144,7 @@ export class RenderNodeManager {
         const viewport = new Float32Array([this.width, this.height])
         this.gl.uniform2fv(viewportLoc, viewport)
 
-        const pixelRatio = window.devicePixelRatio || 1
-        this.gl.uniform1f(pixelRatioLoc, pixelRatio)
+        this.gl.uniform1f(pixelRatioLoc, this.pixelRatio)
 
         // id uniforms, identical to node
         // TODO: need refactor too
@@ -161,7 +159,7 @@ export class RenderNodeManager {
         this.gl.uniform2fv(idScaleLoc, scale)
         this.gl.uniform2fv(idTranslateLoc, translate)
         this.gl.uniform2fv(idViewportLoc, viewport)
-        this.gl.uniform1f(idPixelRatioLoc, pixelRatio)
+        this.gl.uniform1f(idPixelRatioLoc, this.pixelRatio)
     }
 
     /**
@@ -206,9 +204,9 @@ export class RenderNodeManager {
             const col = node.fill()
             data = [col.r, col.g, col.b, col.a]
         } else if (attribute === 'radius') {
-            data = [node.r()]
+            data = [node.r() * this.pixelRatio]
         } else if (attribute === 'strokeWidth') {
-            data = [node.strokeWidth()]
+            data = [node.strokeWidth() * this.pixelRatio]
         } else if (attribute === 'strokeColor') {
             const col = node.strokeColor()
             data = [col.r, col.g, col.b, col.a]
@@ -239,7 +237,7 @@ export class RenderNodeManager {
             this.attributes[NodeAttrKey.POSITION].array[2 * (this.count + i)] = position.x
             this.attributes[NodeAttrKey.POSITION].array[2 * (this.count + i) + 1] = position.y
 
-            this.attributes[NodeAttrKey.RADIUS].array[this.count + i] = node.r()
+            this.attributes[NodeAttrKey.RADIUS].array[this.count + i] = node.r() * this.pixelRatio
 
             const fill = node.fill()
             this.attributes[NodeAttrKey.COLOR].array[4 * (this.count + i)] = fill.r
@@ -247,7 +245,8 @@ export class RenderNodeManager {
             this.attributes[NodeAttrKey.COLOR].array[4 * (this.count + i) + 2] = fill.b
             this.attributes[NodeAttrKey.COLOR].array[4 * (this.count + i) + 3] = fill.a
 
-            this.attributes[NodeAttrKey.STROKE_WIDTH].array[this.count + i] = node.strokeWidth()
+            this.attributes[NodeAttrKey.STROKE_WIDTH].array[this.count + i] =
+                node.strokeWidth() * this.pixelRatio
 
             const strokeColor = node.strokeColor()
             this.attributes[NodeAttrKey.STROKE_COLOR].array[4 * (this.count + i)] = strokeColor.r
