@@ -1,470 +1,266 @@
----
-title: API
-sidebar: auto
----
+# API
 
-## 主体
+## Core
 
-### NetV
+### Initialization
 
-NetV 可以通过多种方式引入，主体是`Class`，通过`new`的方式来生成实例
+`NetV` is a class, an instance of `NetV` can be created as follows:
 
--   **参数**: `{container: HTMLDivElement, configs?: Configs}`
-    -   `container`: `dom`元素
-    -   [configs](#configs): 配置项
-        -   [默认值](#configs-default)
--   **示例**
+```typescript
+const netV = new NetV({
+  /* Configurations */
+});
+```
 
-```js
-const netv = new NetV({
-    container: document.getElementById('main')
+A `NetV` instance can be initialized without any configuration except `container`. `Container` must be a `div` element. For example:
+
+```typescript
+const netV = new NetV({
+  container: document.createElement("div"),
+});
+```
+
+The entire initialization configuration interface can be referred in: [InitializationConfigurations](#InitializationConfigurations)
+
+### Manipulation
+
+#### `NetV.data( NodeLinkData? )`
+
+Insert data into the `NetV` instance or return the data inserted.
+
+- `NetV.data()`: return the data.
+
+- `NetV.data(`[`NodeLinkData`](#NodeLinkData)`)`: insert data into the `NetV` instance, no return.
+
+  ```typescript
+  netV.data({
+    nodes: [
+      { id: "0", x: 300, y: 100 },
+      { id: "1", x: 500, y: 100 },
+      { id: "2", x: 400, y: 400 },
+    ],
+    links: [
+      { source: "0", target: "2" },
+      { source: "1", target: "2" },
+    ],
+  });
+  ```
+
+#### `NetV.addNode( NodeData )`
+
+Add a new node with its data (Interface: [`NodeData`](#NodeData)), return the added [`Node`](#Node) object.
+
+```typescript
+const newNode = netV.addNode({
+    id: "3", x: 100, y: 100, fill: {r: 1, g: 0, b: 1, a: 0}, r: 10
 })
 ```
 
-## 接口
+#### `NetV.addLink( LinkData )`
 
-### Configs
+Add a new link with its data (Interface: [`LinkData`](#LinkData)), return the added [`Link`](#Link) object.
 
-`NetV`实例化配置项格式
+```typescript
+const newLink = netV.addLink({
+    source: "0", target: "3", strokeColor: {r: 1, g: 0, b: 1, a: 0}
+})
+```
 
--   **接口**
+#### `NetV.addNodes( NodeData[] )`
 
-```ts
-interface Configs {
-    node: {
-        r: number
-        fill: Color
-    }
-    link: {
-        strokeWidth: number
-        strokeColor: Color
-    }
-    nodeLimit: number
-    linkLimit: number
-    container: {
-        width: number
-        height: number
-        backgroundColor: Color
-        enablePanZoom: boolean
-    }
+Add a list of new nodes with their data, no return.
+
+```typescript
+netV.addNodes([
+    { id: "4", x: 300, y: 100 },
+    { id: "5", x: 500, y: 100 },
+    { id: "6", x: 400, y: 400 },
+])
+```
+
+#### `NetV.addLinks( LinkData[] )`
+
+Add a list of new links with their data, no return.
+
+```typescript
+netV.addLinks([
+    { source: "4", target: "5" },
+    { source: "4", target: "6" },
+])
+```
+
+#### `NetV.getNodeById( string )`
+
+Get a node from its ID, return a [`Node`](#Node) element.
+
+```typescript
+const nodeOne = netV.getNodeById('1')
+```
+
+#### `NetV.getLinkByEnds( string[] )`
+
+Get a link from its source node's id and target node's id, return a [`Link`](#Link) element. The parameter is an array with two node id, their order is no matter.
+
+```typescript
+const linkOneTwo = netV.getLinkByEnds(['1', '2']) // it is same to getLinkByEnds(['2', '1'])
+```
+
+#### `NetV.wipe()`
+
+Empty all the data in the `NetV` instance, no return.
+
+#### `NetV.loadDataset( string )`
+
+Get an integrated dataset in *NetV.js*, return a [`NodeLinkData`](#NodeLinkData) object. Several datasets are supported:
+
+- `'miserables'`: it contains co-occurances of characters in Victor Hugo's novel 'Les Misérables'. There are 77 nodes and 254 links.
+
+```typescript
+const miserables = netV.loadDataset('miserables')
+netV.data(miserables)
+```
+
+#### `NetV.getElementByPosition( number, number )`
+
+Get an element (node/link) by a 2D position. Two numerical parameters are the 2D position (x and y). Return an object looks like: `{type: string, element: Node/Link}`
+
+```typescript
+const obj = netV.getElementByPosition(100, 200) // return {type: 'node', element: Node}
+if (!obj) { // no node/link on this position
+    console.log('Empyt canvas on this position')
+} else {
+	if (obj.type === 'node') {
+		const node = obj.element
+    } else {
+        const link = obj.element
+    }   
 }
 ```
 
--   **包含接口**
-    -   [Color](#color)
+#### `NetV.draw()`
 
-### NodeLinkData
+Draw/refresh all the graph on the canvas.
 
-图数据格式
+## Node
 
--   **接口**
+## Link
 
-```ts
-export interface NodeLinkData {
-    nodes: NodeData[] // 点数据、数组形式
-    links: LinkData[] // 边数据、数组形式
+## Events
+
+## Interfaces
+
+### `InitializationConfigurations`
+
+```typescript
+interface InitializationConfigurations {
+  container: HTMLDivElement;
+  node: {
+    r: number;
+    fill: Color;
+    strokeWidth: number;
+    strokeColor: Color;
+    clickCallback: (node: Node) => {};
+  };
+  link: {
+    strokeWidth: number;
+    strokeColor: Color;
+    clickCallback: (link: Link) => {};
+  };
+  width: number;
+  height: number;
+  backgroundColor: Color;
+  nodeLimit: number;
+  linkLimit: number;
 }
 ```
 
--   **包含接口**
-    -   **[NodeData](#nodedata)**
-    -   **[LinkData](#linkdata)**
--   **示例**
+The [initializationConfigurations](#initializationConfigurations) is the interface of the `NetV` initialization configurations.
 
-```js
-const testData = {
-    nodes: [
-        {
-            id: '0',
-            x: 0,
-            y: 0,
-            r: 10,
-            fill: {
-                r: 1,
-                g: 0,
-                b: 0,
-                a: 1
-            }
-        },
-        {
-            id: '1',
-            x: 100,
-            y: 500,
-            r: 5,
-            fill: {
-                r: 0,
-                g: 1,
-                b: 0,
-                a: 1
-            }
-        }
-    ],
-    links: [
-        {
-            source: '0',
-            target: '1',
-            strokeColor: {
-                r: 1,
-                g: 0,
-                b: 0,
-                a: 1
-            }
-    ]
+- `container` configures the container of the visualization. It is a `<div>` element. Visualizations and interactions are supported within the container. It is **required**.
+- `node` configures the default node appearance and behaviors. The node is visualized as a circle in _NetV.js_.
+  - `r` is a number. It configures the radius of a node. Its default value is `5`.
+  - `fill` is a [Color](#Color) object. It configures the fill color of a node. Its default value is `{r: 0.2, g: 0.6, b: 0.2, a: 0.8}`.
+  - `strokeWidth` is a number. It configures the border width of a node. Its default value is `2`.
+  - `strokeColor` is a [Color](#Color) object. It configures the border color of a node. Its default value is `{ r: 0.9, g: 0.9, b: 0.9, a: 0.6 }`.
+  - `clickCallback` is a function. It is the call back function while the cursor clicks on a node. Its default value is a void function: `(node: Node)=>{}`.
+- `link` configures the default link appearance and behaviors. The link is visualized as a straight line in _NetV.js_.
+  - `strokeWidth` is a number. It configures the width of a link. Its default value is `2`.
+  - `strokeColor` is a [Color](#Color) object. It configures the color of a link. Its default value is `{ r: 0.4, g: 0.6, b: 0.8, a: 0.5 }`.
+  - `clickCallback` is a function. It is the call back function while the cursor clicks on a link. Its default value is a void function: `(link: Link)=>{}`.
+- `width` is a number. It configures the default container width. Its default value is `800`.
+- `height` is a number. It configures the default container height. Its default value is `600`.
+- `backgroundColor` is a [Color](#Color) object. It configures the default container background color. Its default value is `{ r: 1, g: 1, b: 1, a: 1 }` (white).
+- `nodeLimit` is a number. It is used to allocate a fixed space in WebGL for rendering nodes. It is recommended to set to be the upper limit of the number of nodes you need to load. Its default value is `100`. **Note that** you need to reset it if you want to load more than 100 nodes.
+- `linkLimit` is a number. It is used to allocate a fixed space in WebGL for rendering links. It is recommended to set to be the upper limit of the number of links you need to load. Its default value is `1000`. **Note that** you need to reset it if you want to load more than 100 links.
+
+### `Color`
+
+```typescript
+interface Color {
+  r: number;
+  g: number;
+  b: number;
+  a: number;
 }
 ```
 
-### NodeData
+- `r`, `g`, `b` ,`a` are four channels of the RGBA color model. Their range are `[0, 1]`.
 
-点数据的格式
+### `NodeData`
 
--   **接口**
-
-```ts
-export interface NodeData {
-    id: string // id唯一标识符，必须输入
-    x?: number // 点的x坐标位置，可缺省
-    y?: number // 点的y坐标位置，可缺省
-    r?: number // 点的半径，可缺省
-    fill?: Color // 点的颜色，可缺省
-    strokeWidth?: number // 点的边宽度，可缺省
-    strokeColor?: Color // 点的边颜色，可缺省
+```typescript
+interface NodeData {
+  id: string;
+  x?: number;
+  y?: number;
+  r?: number;
+  fill?: Color;
+  strokeWidth?: number;
+  strokeColor?: Color;
+  clickCallback?: (node: Node) => void;
 }
 ```
 
--   **包含接口**
-    -   **[Color](#color)**
--   **示例**
+The [`NodeData`](#NodeData) interface specifies the data format of the input node.
 
-```js
-const nodeData = {
-    id: '0',
-    x: 400,
-    y: 400,
-    r: 20,
-    fill: {
-        r: 0,
-        g: 0,
-        b: 1,
-        a: 1
-    }
+- `id` is a string. It is the unique identifier of a node. It is required.
+- `x` and `y` are numbers. They specify the position of a node. They are optional.
+- `fill` is a [Color](#Color) object. It configures the fill color of a node. It is optional.
+- `strokeWidth` is a number. It configures the border width of a node. It is optional.
+- `strokeColor` is a [Color](#Color) object. It configures the border color of a node. It is optional.
+- ~~`clickCallback` is a function. It is the call back function while the cursor clicks on a node. It is optional.~~
+
+### `LinkData`
+
+```typescript
+interface LinkData {
+  source: string;
+  target: string;
+  strokeColor?: Color;
+  strokeWidth?: number;
+  clickCallback?: (link: Link) => void;
 }
 ```
 
-### LinkData
+The [`LinkData`](#LinkData) interface specifies the data format of the input link.
 
-边数据的格式
+- `source` and `target` are strings. They are the `id` of the source node and the target node of a link. They form the unique identifier of the link. They are both required.
+- `strokeWidth` is a number. It configures the width of a link. It is optional.
+- `strokeColor` is a [Color](#Color) object. It configures the color of a link. It is optional.
+- `clickCallback` is a function. It is the call back function while the cursor clicks on a link. It is optional.
 
--   **接口**
+### `NodeLinkData`
 
-```ts
-export interface LinkData {
-    source: string // 边的起点的id
-    target: string // 边的终点的id
-    strokeWidth?: number //边的颜色，可缺省
-    strokeColor?: Color //边的宽度，可缺省
+```typescript
+interface NodeLinkData {
+  nodes: NodeData[];
+  links: LinkData[];
 }
 ```
 
-::: danger
-:warning: 目前图数据为有向无环图
-:::
+The [NodeLinkData](#NodeLinkData) interface specifies the data format of the input data. It includes:
 
--   **包含接口**
-    -   **[Color](#color)**
--   **示例**
+- `nodes` is a list of [`NodeData`](#NodeData) objects.
 
-```js
-const linkData = {
-    source: '0',
-    target: '1',
-    strokeColor: {
-        r: 1,
-        g: 0,
-        b: 0,
-        a: 1
-    }
-}
-```
+- `links` is a list of [`LinkData`](#LinkData) objects. The `links` can be an empty array so that only nodes will be rendered.
 
-### Color
-
-点边颜色的格式
-
--   **接口**
-
-```ts
-export interface Color {
-    r: number
-    g: number
-    b: number
-    a: number
-}
-```
-
--   **示例**
-
-```js
-const fill = {
-    r: 1,
-    g: 0,
-    b: 0,
-    a: 1
-}
-```
-
-## 默认值
-
-### configs-default
-
-```js
-configs = {
-    container = {
-        width = 800
-        height = 600
-        backgroundColor = { r: 1, g: 1, b: 1, a: 1 }
-        enablePanZoom = true
-    }
-    nodeLimit = 100
-    linkLimit = 1000
-}
-```
-
-### node-default
-
-```js
-node = {
-    r: 5,
-    fill: { r: 0.3, g: 0.5, b: 0.5, a: 0.5 },
-    strokeColor: { r: 0.6, g: 0.6, b: 0.6, a: 0.5 },
-    strokeWidth: 1
-}
-```
-
-### link-default
-
-```js
-link = {
-    strokeColor: { r: 0.5, g: 0.5, b: 0.5, a: 0.5 },
-    strokeWidth: 2
-}
-```
-
-## 函数
-
-### Data
-
-输入图数据进行构建，无输入时调用返回已构建的图数据
-
--   **参数**:`{ nodeLinkData?: NodeLinkData }`
-    -   [nodeLinkData](#nodelinkdata): 输入图数据
-        -   默认值: `undefined`
--   **返回值**: `{nodeLinkData: NodeLinkData}`
-    -   [nodeLinkData](#nodelinkdata)
-        -   默认值: `{nodes:[], links:[]}`
--   **示例**
-
-```js
-const testData = {
-    nodes: [
-        {
-            id: '0',
-            x: 0,
-            y: 0,
-            r: 10,
-            fill: {
-                r: 1,
-                g: 0,
-                b: 0,
-                a: 1
-            }
-        },
-        {
-            id: '1',
-            x: 100,
-            y: 500,
-            r: 5,
-            fill: {
-                r: 0,
-                g: 1,
-                b: 0,
-                a: 1
-            }
-        }
-    ],
-    links: [
-        {
-            source: '0',
-            target: '1',
-            strokeColor: {
-                r: 1,
-                g: 0,
-                b: 0,
-                a: 1
-            }
-    ]
-}
-netv.data(testData)
-```
-
-### addNodes
-
-添加多个节点
-
--   **参数**: `{nodesDataArr: NodeData[]}`
-    -   [nodesDataArr](#nodedata): 节点数组
--   **返回值**: `{nodeLinkData: NodeLinkData}`
-    -   [nodeLinkData](#nodelinkdata): 整个图数据
--   **示例**
-    ```js
-    const nodesDataArr = [
-        {
-            id: '0',
-            x: 0,
-            y: 0,
-            r: 10,
-            fill: {
-                r: 1,
-                g: 0,
-                b: 0,
-                a: 1
-            }
-        },
-        {
-            id: '1',
-            x: 100,
-            y: 500,
-            r: 5,
-            fill: {
-                r: 0,
-                g: 1,
-                b: 0,
-                a: 1
-            }
-        }
-    ]
-    netv.addnodes(nodesDataArr)
-    ```
-
-### addLinks
-
-添加多条边
-添加多个节点
-
--   **参数**: `{linksDataArr: LinkData[]}`
-    -   [linksDataArr](#linkData): 边数组
--   **返回值**: `{nodeLinkData: NodeLinkData}`
-    -   [nodeLinkData](#nodelinkdata): 整个图数据
--   **示例**
-    ```js
-    const linksDataArr = [
-        {
-            source: '0',
-            target: '1',
-            strokeColor: {
-                r: 1,
-                g: 0,
-                b: 0,
-                a: 1
-            }
-        },
-        {
-            source: '0',
-            target: '2',
-            strokeColor: {
-                r: 0,
-                g: 1,
-                b: 0,
-                a: 1
-            }
-        }
-    ]
-    netv.addlinks(linksDataArr)
-    ```
-
-### addNode
-
-添加单个节点
-
--   **参数**: `{nodeData: NodeData}`
-    -   [nodeData](#nodedata): 单个节点
--   **返回值**: `{nodeLinkData: NodeLinkData}`
-    -   [nodeLinkData](#nodelinkdata): 整个图数据
--   **示例**
-    ```js
-    const nodeData = {
-        id: '0',
-        x: 0,
-        y: 0,
-        r: 10,
-        fill: {
-            r: 1,
-            g: 0,
-            b: 0,
-            a: 1
-        }
-    }
-    netv.addnode(nodeData)
-    ```
-
-### addLink
-
-添加单条边
-
--   **参数**: `{linkData: LinkData}`
-    -   [linkData](#linkData): 单条边
--   **返回值**: `{nodeLinkData: NodeLinkData}`
-    -   [nodeLinkData](#nodelinkdata): 整个图数据
--   **示例**
-    ```js
-    const linkData = {
-        source: '0',
-        target: '1',
-        strokeColor: {
-            r: 1,
-            g: 0,
-            b: 0,
-            a: 1
-        }
-    }
-    netv.addlink(linkData)
-    ```
-
-### getNodeById
-
-通过`id`获取节点 Node
-
--   **参数**: `{id: string}`
-    -   `id`: 节点 Node 的`id`
--   **返回值**: `{node: NodeData}`
-    -   [node](#nodedata): 节点
--   **示例**
-
-```js
-let node = netv.getNodeById('0')
-```
-
-### getLinksByEnds
-
-通过点的 id 获取连接的 links
-
--   **参数**: `{id: string}`
-    -   `id`: 节点 Node 的`id`
--   **返回值**: `{linksArr: LinkData[]}`
-    -   [linksArr](#linkdata): 边数组
--   **示例**
-
-```js
-let links = netv.getLinksByEnds('0')
-```
-
-### draw
-
-绘制图数据
-
--   **参数**: 无
--   **返回值**:
--   **示例**
-
-```js
-netv.draw()
-```
