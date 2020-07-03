@@ -1,28 +1,36 @@
-# 快速上手
+# Get Start
 
-## 安装
+## Installation
 
-### 兼容性
-NetV 不支持IE？但支持所有[兼容 ECMAScript 5 的浏览器](https://app.grammarly.com/docs/356175252)
+### Compatibility Note
 
-### 更新日志
-最新稳定版本：1.0
-每个版本的更新日志见[GitHub]()
+NetV does not support IE However it supports all [ECMAScript 5 compliant browsers](https://app.grammarly.com/docs/356175252)
+
+### Release Notes
+
+Latest stable version: 2.6.11
+Detailed release notes for each version are available on [GitHub]()
 
 :::danger
-当前的版本只有开发版本，并没有屏蔽所有的错误和警告，后续我们会开发生成版本删除警告，减小体积。
+There is only development version. All error messages will be shown in the console.
+The production version will come soon. Error messages will be masked.
 :::
 
 ### `<script>`
-直接下载并用`<scipt>` 标签引用, `NetV`会注册为一个全局`Class`
+
+Simply download and include with a `<script>`, `NetV` will be registered as a global `Class`
 
 ### CDN
+
 ```html
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 ```
 
 ### NPM
-在用`NetV`构建大型应用时推荐使用 NPM 安装。NPM 能很好地和诸如 webpack 或 Browserify 模块打包器配合使用。
+
+NPM is the recommended installation method when building large scale applications with `NetV`
+It pairs nicely with module bundlers such as Webpack or Browserify.
+
 ```shell
 $ npm install netv
 ```

@@ -1,8 +1,8 @@
-# Guide
+# 指南
 
-## Introduction
+## 介绍
 
-### What is NetV.js
+### NetV,js 是什么
 
 NetV.js: A Network Visualization & Visual Analysis Library.
 是一个面向**图可视化、图可视分**领域的**专业的、深入的**渲染、布局、交互、可视化、可视分析 JavaScript 库。
