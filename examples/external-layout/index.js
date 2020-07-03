@@ -1,6 +1,6 @@
 /**
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
- * @description build-in miserables dataset load and draw
+ * @description using d3-force to layout and using NetV to draw
  */
 const netv = new NetV({
     container: document.getElementById('main'),
@@ -26,6 +26,31 @@ const colorMap = [
 data.nodes.forEach((node) => {
     const { r, g, b, a } = colorMap[node.group]
     node.fill = { r: r / 255, g: g / 255, b: b / 255, a }
+    // NOTE: build-in dataset contains position, random it
+    node.x = Math.random() * 500 + 150 // scale and offset to center
+    node.y = Math.random() * 500
 })
 netv.data(data)
-netv.draw()
+
+const width = 800
+const height = 600
+
+const simulation = d3
+    .forceSimulation(data.nodes)
+    .force(
+        'link',
+        d3.forceLink(data.links).id((d) => d.id)
+    )
+    .force('charge', d3.forceManyBody())
+    .force('center', d3.forceCenter(width / 2, height / 2))
+
+
+simulation.on('tick', () => {
+    data.nodes.forEach((n) => {
+        const node = netv.getNodeById(n.id)
+        node.x(n.x)
+        node.y(n.y)
+    })
+
+    netv.draw()
+})

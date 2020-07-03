@@ -105,11 +105,19 @@ class Link {
             if (oldSource && oldTarget) {
                 // delete old Map
                 this.$_core.$_ends2link.delete([oldSource.id(), oldTarget.id()])
+
+                this.$_core.$_id2links.get(oldSource.id())?.delete(this)
             }
 
             this.$_source = newSource
             this.$_target = newTarget
             this.$_core.$_ends2link.set([newSourceId, newTargetId], this)
+
+            if (!(this.$_core.$_id2links.has(newSourceId))) {
+                this.$_core.$_id2links.set(newSourceId, new Set([this]))
+            } else {
+                this.$_core.$_id2links.get(newSourceId).add(this)
+            }
         }
         return {
             source: this.$_source,
