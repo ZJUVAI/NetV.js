@@ -1,3 +1,8 @@
+---
+title: API
+sidebar: auto
+---
+
 # API
 
 ## Core
@@ -24,11 +29,11 @@ The entire initialization configuration interface can be referred in: [Initializ
 
 ### Manipulation
 
-#### `NetV.data( NodeLinkData? )`
+#### `NetV.data()`
 
 Insert data into the `NetV` instance or return the data inserted.
 
-- `NetV.data()`: return the data.
+- `NetV.data()`: return the data (a [`NodeLinkData`](#NodeLinkData) object).
 
 - `NetV.data(`[`NodeLinkData`](#NodeLinkData)`)`: insert data into the `NetV` instance, no return.
 
@@ -46,9 +51,9 @@ Insert data into the `NetV` instance or return the data inserted.
   });
   ```
 
-#### `NetV.addNode( NodeData )`
+#### `NetV.addNode()`
 
-Add a new node with its data (Interface: [`NodeData`](#NodeData)), return the added [`Node`](#Node) object.
+`NetV.addNode( NodeData )`: Add a new node with its data (Interface: [`NodeData`](#NodeData)), return the added [`Node`](#Node) object.
 
 ```typescript
 const newNode = netV.addNode({
@@ -56,9 +61,9 @@ const newNode = netV.addNode({
 })
 ```
 
-#### `NetV.addLink( LinkData )`
+#### `NetV.addLink()`
 
-Add a new link with its data (Interface: [`LinkData`](#LinkData)), return the added [`Link`](#Link) object.
+`NetV.addLink( LinkData )`: Add a new link with its data (Interface: [`LinkData`](#LinkData)), return the added [`Link`](#Link) object.
 
 ```typescript
 const newLink = netV.addLink({
@@ -66,9 +71,9 @@ const newLink = netV.addLink({
 })
 ```
 
-#### `NetV.addNodes( NodeData[] )`
+#### `NetV.addNodes()`
 
-Add a list of new nodes with their data, no return.
+`NetV.addNodes( NodeData[] )`: Add a list of new nodes with their data, no return.
 
 ```typescript
 netV.addNodes([
@@ -78,9 +83,9 @@ netV.addNodes([
 ])
 ```
 
-#### `NetV.addLinks( LinkData[] )`
+#### `NetV.addLinks()`
 
-Add a list of new links with their data, no return.
+`NetV.addLinks( LinkData[] )`: Add a list of new links with their data, no return.
 
 ```typescript
 netV.addLinks([
@@ -89,43 +94,30 @@ netV.addLinks([
 ])
 ```
 
-#### `NetV.getNodeById( string )`
+#### `NetV.getNodeById()`
 
-Get a node from its ID, return a [`Node`](#Node) element.
+`NetV.getNodeById( string )`: Get a node from its ID, return a [`Node`](#Node) element.
 
 ```typescript
 const nodeOne = netV.getNodeById('1')
 ```
 
-#### `NetV.getLinkByEnds( string[] )`
+#### `NetV.getLinkByEnds()`
 
-Get a link from its source node's id and target node's id, return a [`Link`](#Link) element. The parameter is an array with two node id, their order is no matter.
+`NetV.getLinkByEnds( string[] )`: Get a link from its source node's id and target node's id, return a [`Link`](#Link) element. The parameter is an array with two node id, their order is no matter.
 
 ```typescript
 const linkOneTwo = netV.getLinkByEnds(['1', '2']) // it is same to getLinkByEnds(['2', '1'])
 ```
 
-#### `NetV.wipe()`
+#### `NetV.getElementByPosition()`
 
-Empty all the data in the `NetV` instance, no return.
-
-#### `NetV.loadDataset( string )`
-
-Get an integrated dataset in *NetV.js*, return a [`NodeLinkData`](#NodeLinkData) object. Several datasets are supported:
-
-- `'miserables'`: it contains co-occurances of characters in Victor Hugo's novel 'Les Misérables'. There are 77 nodes and 254 links.
+`NetV.getElementByPosition( number, number )`: Get an element (node/link) by a 2D position. Two numerical parameters are the 2D position (x and y). Return an object looks like: `{type: string, element: Node/Link}`
 
 ```typescript
-const miserables = netV.loadDataset('miserables')
-netV.data(miserables)
-```
+const obj = netV.getElementByPosition(/* x= */100, /* y= */200)
+// example return: {type: 'node', element: Node}
 
-#### `NetV.getElementByPosition( number, number )`
-
-Get an element (node/link) by a 2D position. Two numerical parameters are the 2D position (x and y). Return an object looks like: `{type: string, element: Node/Link}`
-
-```typescript
-const obj = netV.getElementByPosition(100, 200) // return {type: 'node', element: Node}
 if (!obj) { // no node/link on this position
     console.log('Empyt canvas on this position')
 } else {
@@ -137,15 +129,148 @@ if (!obj) { // no node/link on this position
 }
 ```
 
+#### `NetV.wipe()`
+
+`NetV.wipe()`: Empty all the data in the `NetV` instance, no return.
+
+#### `NetV.loadDataset()`
+
+`NetV.loadDataset( string )`: Get an integrated dataset in *NetV.js*, return a [`NodeLinkData`](#NodeLinkData) object. Several datasets are supported:
+
+- `'miserables'`: it contains co-occurrences of characters in Victor Hugo's novel 'Les Misérables'. There are 77 nodes and 254 links.
+
+```typescript
+const miserables = netV.loadDataset('miserables')
+netV.data(miserables)
+```
+
+### Render
+
 #### `NetV.draw()`
 
-Draw/refresh all the graph on the canvas.
+`NetV.draw()`: Draw/refresh all the graph on the canvas. **Note that** the visualization result will only be refreshed after calling `NetV.draw()`
 
 ## Node
 
+[`Node`](#Node) is a basic element in *NetV.js*. It is visualized as a circle in default.
+
+### Manipulation
+
+#### `Node.id()`
+
+`Node.id()`: return the id of the node (a string).
+
+#### `Node.x()`
+
+Get the x position of the node or set it.
+
+- `Node.x()`: return the x position (a number) of the node;
+- `Node.x( number )`: set the x position of the node;
+
+#### `Node.y()`
+
+Same to `Node.x()`
+
+#### `Node.position()`
+
+Get the position (x and y) of the node or set it.
+
+- `Node.position()`: return an object (`{x: number, y: number}`)
+
+- `Node.position( number, number )`: set the position of the node. Two numerical parameters are the 2D position (x and y). Return the position (`{x: number, y: number}`).
+
+  ```typescript
+  const nodeOne = netV.getNodeById('1')
+  nodeOne.position() // example return: {x: 100, y: 200}
+  nodeOne.position( {x: 100, y: 100} )
+  netV.draw() // note that only after calling draw, the visualization will be refreshed
+  ```
+
+  
+
+### Style
+
+![node-style](/node-style.svg)
+
+```typescript
+const node = netV.getNodeById('1')
+node.r(10)
+node.strokeWidth(2)
+node.fill({r: 0.98, g: 0.69, b: 0.23, a: 1})
+node.strokeColor({r: 0, g: 0.44, b: 0.74, a: 1})
+netV.draw()
+```
+
+
+
+#### `Node.r()`
+
+Get or set the radius of the node.
+
+- `Node.r()`: return the radius of the node (a number).
+- `Node.r( number )`: set the radius of the node.
+
+#### `Node.fiil()`
+
+Get or set the fill color of the node.
+
+- `Node.fill()`: return the fill color of the node (a [`Color`](#Color) object)
+- `Node.fill( `[`Color`](#Color)` )`: set the  the fill color of the node.
+
+#### `Node.strokeColor()`
+
+Get or set the border color of the node.
+
+- `Node.strokeColor()`: return the border color of the node (a [`Color`](#Color) object)
+- `Node.strokeColor( `[`Color`](#Color)` )`: set the  the border color of the node.
+
+#### `Node.strokeWidth()`
+
+Get or set the border width of the node.
+
+- `Node.strokeWidth()`: return the border width of the node (a number).
+- `Node.strokeWidth( number )`: set the border width of the node.
+
 ## Link
 
+### Manipulation
+
+#### `Link.source()`
+
+Get or set the source node of the link.
+
+- `Link.source()`: return the source node (a [`Node`](#Node) object).
+- `Link.source( `[`Node`](#Node)` )`:  set the source node of the link.
+
+#### `Link.target()`
+
+Same to `Link.source()`
+
+#### `Link.sourceTarget()`
+
+Get or set both the source and the target nodes of the link.
+
+- `Link.sourceTarget()`: return an object (`{source: Node, target: Node}`).
+
+- `Link.sourceTarget( {source: Node, target: Node} )`: set the source and the target nodes of the link.
+
+  ```typescript
+  
+  ```
+
+  
+
+### Style
+
+#### `Link.strokeColor()`
+
+#### `Link.strokeWidth()`
+
+
+
 ## Events
+
+
 
 ## Interfaces
 
@@ -204,7 +329,7 @@ interface Color {
 }
 ```
 
-- `r`, `g`, `b` ,`a` are four channels of the RGBA color model. Their range are `[0, 1]`.
+- `r`, `g`, `b`, and `a` are four channels of the RGBA color model. Their range are `[0, 1]`.
 
 ### `NodeData`
 
