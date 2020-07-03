@@ -46,8 +46,8 @@ NetV.js: A Network Visualization & Visual Analysis Library.
 
 ### FPS 测试
 
-![avatar](/fps-table.jpg)
-![avatar](/fps-line.jpg)
+<img :src="$withBase('/fps-table.jpg')" alt="fps-table">
+<img :src="$withBase('/fps-line.jpg')" alt="fps-line">
 
 ### Sigma.js
 
