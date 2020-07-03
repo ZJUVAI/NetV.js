@@ -36,8 +36,8 @@ class Link {
             target: targetNode
         })
 
-        this.strokeWidth(data.strokeWidth)
-        this.strokeColor(data.strokeColor)
+        this.$_strokeWidth = data.strokeWidth
+        this.$_strokeColor = data.strokeColor
 
         this.setClickCallback(data.clickCallback)
     }
@@ -113,7 +113,7 @@ class Link {
             this.$_target = newTarget
             this.$_core.$_ends2link.set([newSourceId, newTargetId], this)
 
-            if (!(this.$_core.$_id2links.has(newSourceId))) {
+            if (!this.$_core.$_id2links.has(newSourceId)) {
                 this.$_core.$_id2links.set(newSourceId, new Set([this]))
             } else {
                 this.$_core.$_id2links.get(newSourceId).add(this)

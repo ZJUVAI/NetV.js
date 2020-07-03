@@ -20,7 +20,7 @@ class Node {
     private $_strokeWidth: number
     private $_strokeColor: interfaces.Color
     private $_fill: interfaces.Color
-    private $_r: number
+    private $_r: number // radius
 
     public constructor(core, nodeData: interfaces.NodeData) {
         this.$_core = core
@@ -39,11 +39,15 @@ class Node {
         }
 
         this.$_setId(data.id)
-        this.position(data.x, data.y)
-        this.strokeWidth(data.strokeWidth)
-        this.strokeColor(data.strokeColor)
-        this.fill(data.fill)
-        this.r(data.r)
+        this.$_position = {
+            x: data.x,
+            y: data.y
+        }
+        this.$_strokeWidth = data.strokeWidth
+        this.$_strokeColor = data.strokeColor
+        this.$_fill = data.fill
+        this.$_r = data.r
+
         this.setClickCallback(data.clickCallback)
     }
 

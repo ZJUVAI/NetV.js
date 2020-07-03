@@ -13,6 +13,7 @@ import * as dataset from './dataset'
 import { Renderer } from './renderer'
 import { InteractionManager } from './interaction/interaction'
 import * as Utils from './utils/utils'
+import { link } from 'build/NetV'
 
 class NetV {
     public Utils = Utils
@@ -95,9 +96,7 @@ class NetV {
      * @param nodeData the data of a node, include id, styles...
      */
     public addNode(nodeData: interfaces.NodeData) {
-        nodeData.id = nodeData.id.toString()
-        const node = new Node(this, nodeData)
-        return node
+        return this.addNodes([nodeData])[0]
     }
 
     /**
@@ -105,11 +104,7 @@ class NetV {
      * @param linkData the data of a link, include source, target, and styles...
      */
     public addLink(linkData: interfaces.LinkData) {
-        linkData.source = linkData.source.toString()
-        linkData.target = linkData.target.toString()
-
-        const link = new Link(this, linkData)
-        return link
+        return this.addLinks([linkData])[0]
     }
 
     /**
@@ -118,8 +113,14 @@ class NetV {
      * @memberof NetV
      */
     public addNodes(nodesData: interfaces.NodeData[]) {
-        nodesData.forEach((nodeData) => this.addNode(nodeData))
-        this.$_renderer.addNodes([...this.$_id2node.values()])
+        const newNodes = nodesData.map((nodeData) => {
+            nodeData.id = nodeData.id.toString()
+            const node = new Node(this, nodeData)
+
+            return node
+        })
+        this.$_renderer.addNodes(newNodes)
+        return newNodes
     }
 
     /**
@@ -128,8 +129,15 @@ class NetV {
      * @memberof NetV
      */
     public addLinks(linksData: interfaces.LinkData[]) {
-        linksData.forEach((linkData) => this.addLink(linkData))
-        this.$_renderer.addLinks([...this.$_ends2link.values()])
+        const newLinks = linksData.map((linkData) => {
+            linkData.source = linkData.source.toString()
+            linkData.target = linkData.target.toString()
+
+            const link = new Link(this, linkData)
+            return link
+        })
+        this.$_renderer.addLinks(newLinks)
+        return newLinks
     }
 
     /**
@@ -147,6 +155,20 @@ class NetV {
      */
     public getLinkByEnds(endId1: string, endId2: string) {
         return this.$_ends2link.get([endId1, endId2])
+    }
+
+    /**
+     * @description get all nodes
+     */
+    public nodes() {
+        return [...this.$_id2node.values()]
+    }
+
+    /**
+     * @description get all links
+     */
+    public links() {
+        return [...this.$_ends2link.values()]
     }
 
     /**
