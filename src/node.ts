@@ -47,9 +47,7 @@ class Node {
         this.$_strokeColor = data.strokeColor
         this.$_fill = data.fill
         this.$_r = data.r
-        // this.strokeColor(data.strokeColor)
-        // this.fill(data.fill)
-        // this.r(data.r)
+
         this.setClickCallback(data.clickCallback)
     }
 
