@@ -14,3 +14,5 @@ features:
       details: Multiple graph visualization components and graph visual analysis techniques
 footer: MIT Licensed
 ---
+
+<demo-table/>
