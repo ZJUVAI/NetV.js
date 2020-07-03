@@ -44,7 +44,6 @@ const simulation = d3
     .force('charge', d3.forceManyBody())
     .force('center', d3.forceCenter(width / 2, height / 2))
 
-netv.draw()
 
 simulation.on('tick', () => {
     data.nodes.forEach((n) => {
