@@ -29,7 +29,12 @@ class Link {
             ...linkData
         }
 
-        this.sourceTarget(data)
+        const sourceNode = this.$_core.getNodeById(data.source)
+        const targetNode = this.$_core.getNodeById(data.target)
+        this.sourceTarget({
+            source: sourceNode,
+            target: targetNode
+        })
 
         this.strokeWidth(data.strokeWidth)
         this.strokeColor(data.strokeColor)
@@ -39,16 +44,16 @@ class Link {
 
     /**
      * getter/setter of the source
-     * @param {string} [nodeId]
+     * @param {Node} [node]
      * @returns {Node} a source Node Object
      * @memberof Link
      */
-    public source(nodeId?: string) {
+    public source(node?: Node) {
         if (arguments.length === 1) {
             // setter
             this.sourceTarget({
-                source: nodeId,
-                target: this.$_target.id()
+                source: node,
+                target: this.$_target
             })
         }
         return this.$_source
@@ -56,16 +61,16 @@ class Link {
 
     /**
      * getter/setter of the target
-     * @param {string} [nodeId]
+     * @param {Node} [node]
      * @returns {Node} a target Node Object
      * @memberof Link
      */
-    public target(nodeId?: string) {
+    public target(node?: Node) {
         if (arguments.length === 1) {
             // setter
             this.sourceTarget({
-                source: this.$_source.id(),
-                target: nodeId
+                source: this.$_source,
+                target: node
             })
         }
         return this.$_target
@@ -74,40 +79,27 @@ class Link {
     /**
      * getter/setter of source and target
      *
-     * @param {interfaces.LinkData} [linkData]
+     * @param {sourceTargetObj} [{source: Node, target: Node}]
      * @returns Object {source: Node, target: Node}
      * @memberof Link
      */
-    public sourceTarget(linkData?: interfaces.LinkData) {
+    public sourceTarget(sourceTargetObj?: { source: Node; target: Node }) {
         if (arguments.length > 0) {
-            linkData.source = linkData.source.toString()
-            linkData.target = linkData.target.toString()
             const oldSource: Node = this.$_source
             const oldTarget: Node = this.$_target
-            const newSource = this.$_core.$_id2node.get(linkData.source)
-            const newTarget = this.$_core.$_id2node.get(linkData.target)
-
-            if (newSource === undefined) {
-                // error: undefined source
-                throw new Error(`Input source (${linkData.source}) does not exist.`)
-            }
-            if (newSource === undefined) {
-                // error: undefined target
-                throw new Error(`Input target (${linkData.target}) does not exist.`)
-            }
+            const newSource = sourceTargetObj.source
+            const newTarget = sourceTargetObj.target
+            const newSourceId = newSource.id()
+            const newTargetId = newTarget.id()
 
             if (newSource === newTarget) {
                 // error: self loop
-                throw new Error(
-                    `Self loop (${linkData.source} <=> ${linkData.target}) is not allowed.`
-                )
+                throw new Error(`Self loop (${newSourceId} <=> ${newTargetId}) is not allowed.`)
             }
 
-            if (this.$_core.$_ends2link.has([linkData.source, linkData.target])) {
+            if (this.$_core.$_ends2link.has([newSourceId, newTargetId])) {
                 // error: multiple link
-                throw new Error(
-                    `Multiple link (${linkData.source} <=> ${linkData.target}) is not allowd.`
-                )
+                throw new Error(`Multiple link (${newSourceId} <=> ${newTargetId}) is not allowd.`)
             }
 
             if (oldSource && oldTarget) {
@@ -117,7 +109,7 @@ class Link {
 
             this.$_source = newSource
             this.$_target = newTarget
-            this.$_core.$_ends2link.set([linkData.source, linkData.target], this)
+            this.$_core.$_ends2link.set([newSourceId, newTargetId], this)
         }
         return {
             source: this.$_source,

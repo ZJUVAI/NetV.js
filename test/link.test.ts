@@ -30,8 +30,8 @@ describe('normal cases', () => {
     test('setter: sourceTarget', () => {
         expect(
             link12.sourceTarget({
-                source: '1',
-                target: '3'
+                source: netV1.getNodeById('1'),
+                target: netV1.getNodeById('3')
             })
         ).toEqual({
             source: netV1.getNodeById('1'),
@@ -57,8 +57,8 @@ describe('error cases', () => {
     test('setter: sourceTarget', () => {
         expect(
             link23.sourceTarget({
-                source: '3',
-                target: '1'
+                source: netV2.getNodeById('3'),
+                target: netV2.getNodeById('1')
             })
         ).toEqual({
             source: netV2.getNodeById('3'),
