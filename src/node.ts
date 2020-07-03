@@ -64,6 +64,12 @@ class Node {
         if (arguments.length !== 0) {
             this.$_position.x = value
             this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
+            // NOTE: update related link position
+            if (this.$_core.$_id2links.get(this.id())) {
+                for (const link of this.$_core.$_id2links.get(this.id())) {
+                    this.$_core.$_renderer.linkManager.changeAttribute(link, 'source')
+                }
+            }
         }
         return this.$_position.x
     }
@@ -77,6 +83,13 @@ class Node {
         if (arguments.length !== 0) {
             this.$_position.y = value
             this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
+            // NOTE: update related link position
+            if (this.$_core.$_id2links.get(this.id())) {
+                for (const link of this.$_core.$_id2links.get(this.id())) {
+                    this.$_core.$_renderer.linkManager.changeAttribute(link, 'source')
+                    this.$_core.$_renderer.linkManager.changeAttribute(link, 'target')
+                }
+            }
         }
         return this.$_position.y
     }
@@ -91,6 +104,12 @@ class Node {
             this.$_position.x = x
             this.$_position.y = y
             this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
+            // NOTE: update related link position
+            if (this.$_core.$_id2links.get(this.id())) {
+                for (const link of this.$_core.$_id2links.get(this.id())) {
+                    this.$_core.$_renderer.linkManager.changeAttribute(link, 'source')
+                }
+            }
         } else if (arguments.length !== 0 && arguments.length !== 2) {
             throw Error(`Node.position() method can not deal with ${arguments.length} parameters.`)
         }

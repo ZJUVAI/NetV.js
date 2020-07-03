@@ -107,22 +107,16 @@ class Link {
                 this.$_core.$_ends2link.delete([oldSource.id(), oldTarget.id()])
 
                 this.$_core.$_id2links.get(oldSource.id())?.delete(this)
-                this.$_core.$_id2links.get(oldTarget.id())?.delete(this)
             }
 
             this.$_source = newSource
             this.$_target = newTarget
             this.$_core.$_ends2link.set([newSourceId, newTargetId], this)
 
-            if (!(newSourceId in this.$_core.$_id2links)) {
+            if (!(this.$_core.$_id2links.has(newSourceId))) {
                 this.$_core.$_id2links.set(newSourceId, new Set([this]))
             } else {
                 this.$_core.$_id2links.get(newSourceId).add(this)
-            }
-            if (!(newTargetId in this.$_core.$_id2links)) {
-                this.$_core.$_id2links.set(newTargetId, new Set([this]))
-            } else {
-                this.$_core.$_id2links.get(newTargetId).add(this)
             }
         }
         return {
