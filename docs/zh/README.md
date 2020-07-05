@@ -14,3 +14,5 @@ features:
       details: 提供多种图可视化组件、图可视分析技术
 footer: MIT Licensed
 ---
+
+<demo-table/>
