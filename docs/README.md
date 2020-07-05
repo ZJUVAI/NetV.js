@@ -1,8 +1,8 @@
 ---
 home: true
 heroImage: /logo.png
-heroText: A Network Visualization & Visual Analysis Library
-tagline: Large-scaled network visualization & visual analysis engine based on WebGL
+heroText: A Network Visualization Library
+tagline: Large-scaled network visualization engine based on WebGL
 ctionText: Get Start →
 actionLink: /guide/
 features:

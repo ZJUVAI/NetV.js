@@ -1,8 +1,8 @@
 ---
 home: true
 heroImage: /logo.png
-heroText: A Network Visualization & Visual Analysis Library
-tagline: 基于WebGL的大规模图可视化、可视分析引擎
+heroText: A Network Visualization Library
+tagline: 基于WebGL的大规模图可视化引擎
 actionText: 快速上手 →
 actionLink: /guide/
 features:
