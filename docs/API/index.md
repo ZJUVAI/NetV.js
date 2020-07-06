@@ -308,7 +308,7 @@ Some utilities are provided in *NetV.js*.
 
 #### `Utils.transformGraphPosition()`
 
-`Utils.transformGraphPosition(`[`NodeLinkData`](#nodelinkdata), number, number, number`)`: transform the nodes' positions into a given square area. The first parameter is the data which will be imported into a `NetV` instance. The second parameter defines the length of the square's side. The third and forth parameters define the center position of the square.
+`Utils.transformGraphPosition(`[`NodeLinkData`](#nodelinkdata)`, number, number, number)`: transform the nodes' positions into a given square area. The first parameter is the data which will be imported into a `NetV` instance. The second parameter defines the length of the square's side. The third and forth parameters define the center position of the square.
 
 ```typescript
 const data = {
