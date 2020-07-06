@@ -35,7 +35,7 @@ const data = {
 
 // random generate nodes
 
-data.nodes = Array(2000)
+data.nodes = Array(5000)
     .fill()
     .map((_, i) => {
         const x = Math.random() * configs.width
@@ -46,7 +46,7 @@ data.nodes = Array(2000)
             y: y,
             originX: x,
             originY: y,
-            r: Math.random() * 3
+            r: Math.random() * 2
         }
     })
 
@@ -56,9 +56,10 @@ netv.data(data)
 const rate = 5
 const forceRate = 20
 const margin = 20
-const forceRange = 100
+const forceRange = 200
 
-const mouseMass = 10000000
+const mouseMass = 5000000
+const forceMouseMax = 1000
 const originK = 10
 const deltaTime = 100
 
@@ -68,9 +69,9 @@ function render() {
 
         // calculate movement direction
         const lenMouse = Math.sqrt((n.x - mousePos.x) ** 2 + (n.y - mousePos.y) ** 2)
-        let forceMouse = mouseMass / lenMouse ** 2
+        let forceMouse = Math.min(forceMouseMax, mouseMass / lenMouse ** 2)
         const lenOrigin = Math.sqrt((n.x - n.originX) ** 2 + (n.y - n.originY) ** 2)
-        let forceOrigin = originK * Math.sqrt((n.x - n.originX) ** 2 + (n.y - n.originY) ** 2)
+        let forceOrigin = originK * lenOrigin
         if (isNaN(forceOrigin)) {
             forceOrigin = 0
         }
@@ -84,18 +85,13 @@ function render() {
         }
 
         const movement = {
-            x: force.x * 0.01,
-            y: force.y * 0.01
+            x: force.x * 0.001,
+            y: force.y * 0.001
         }
 
         n.x += movement.x
         n.y += movement.y
 
-        /*
-        if ((n.x - mousePos.x) ** 2 + (n.y - mousePos.y) ** 2 < forceRange ** 2) {
-            n.x += ((mousePos.x - n.x) / forceRange) * forceRate
-            n.y += ((mousePos.y - n.y) / forceRange) * forceRate
-        }
         if (n.x < -margin) {
             n.x = -margin
         }
@@ -108,16 +104,11 @@ function render() {
         if (n.y > configs.height + margin) {
             n.y = configs.height + margin
         }
-        */
-        // node.position(n.x + rate * (Math.random() - 0.5), n.y + rate * (Math.random() - 0.5))
+
         node.position(n.x, n.y)
-        // if n.x
     })
     netv.draw()
-    // requestAnimationFrame(render)
+    requestAnimationFrame(render)
 }
 
-// render()
-setInterval(() => {
-    render()
-}, deltaTime)
+render()
