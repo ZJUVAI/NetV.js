@@ -53,15 +53,9 @@ data.nodes = Array(5000)
 const netv = new NetV(configs)
 netv.data(data)
 
-const rate = 5
-const forceRate = 20
-const margin = 20
-const forceRange = 200
-
 const mouseMass = 5000000
 const forceMouseMax = 1000
 const originK = 10
-const deltaTime = 100
 
 function render() {
     data.nodes.forEach((n) => {
@@ -91,19 +85,6 @@ function render() {
 
         n.x += movement.x
         n.y += movement.y
-
-        if (n.x < -margin) {
-            n.x = -margin
-        }
-        if (n.x > configs.width + margin) {
-            n.x = configs.width + margin
-        }
-        if (n.y < -margin) {
-            n.y = -margin
-        }
-        if (n.y > configs.height + margin) {
-            n.y = configs.height + margin
-        }
 
         node.position(n.x, n.y)
     })
