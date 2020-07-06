@@ -119,7 +119,8 @@ const nodeOne = netV.getNodeById("1");
 `NetV.getLinkByEnds( string[] )`: get a link from its source node's id and target node's id, return a [`Link`](#link) element. The parameter is an array with two node id, their order is no matter.
 
 ```typescript
-const linkOneTwo = netV.getLinkByEnds(["1", "2"]); // it is same to getLinkByEnds(['2', '1'])
+// it is same to getLinkByEnds(['2', '1'])
+const linkOneTwo = netV.getLinkByEnds(["1", "2"]);
 ```
 
 #### `NetV.getElementByPosition()`
@@ -196,7 +197,8 @@ Get the position (x and y) of the node or set it.
   const nodeOne = netV.getNodeById("1");
   nodeOne.position(); // example return: {x: 100, y: 200}
   nodeOne.position({ x: 100, y: 100 });
-  netV.draw(); // note that only after calling draw, the visualization will be refreshed
+  netV.draw(); 
+  // note that only after netV.draw(), the visualization will be refreshed
   ```
 
 ### Style
@@ -242,6 +244,8 @@ Get or set the border width of the node.
 
 ## Link
 
+[`Link`](#link) is a basic element in _NetV.js_. It is visualized as a straight line (without arrow) in default.
+
 ### Manipulation
 
 #### `Link.source()`
@@ -275,16 +279,55 @@ Get or set both the source and the target nodes of the link.
 
 ### Style
 
+<img :src="$withBase('/link-style.svg')" alt="link-style">
+
+```typescript
+const linkOneTwo = netV.getLinkByEnds(["1", "2"]);
+link.strokeWidth(4);
+link.strokeColor({ r: 0, g: 0.44, b: 0.74, a: 1 });
+netV.draw();
+```
+
 #### `Link.strokeColor()`
 
 Get or set the color of the link.
 
-- `Link.strokeColor()`: return the color of the link (a [`Color`](#color) object )
-- `Link.strokeColor(`[`Color`](#color)`)`:
+- `Link.strokeColor()`: return the color of the link (a [`Color`](#color) object ).
+- `Link.strokeColor(`[`Color`](#color)`)`: set the color of the link.
 
 #### `Link.strokeWidth()`
 
-## Events
+Get or set the width of the link
+
+- `Link.strokeWidth()`: return the width of the link (a number).
+- `Link.strokeWidth( number )`: set the width of the link.
+
+## Utils
+
+Some utilities are provided in *NetV.js*.
+
+#### `Utils.transformGraphPosition()`
+
+`Utils.transformGraphPosition(`[`NodeLinkData`](#nodelinkdata)`, number, number, number)`: transform the nodes' positions into a given square area. The first parameter is the data which will be imported into a `NetV` instance. The second parameter defines the length of the square's side. The third and forth parameters define the center position of the square.
+
+```typescript
+const data = {
+    nodes: [{
+        id: '1', x: 1, y: 1,
+    }, {
+        id: '2', x: 2, y: 3
+    }],
+    links: [{source: '1', target: '2'}]
+}
+// transform the data into a square from (0, 0) to (1, 1)
+const dataAfterTransform = netV.Utils.transformGraphPosition(data, 1, 0.5, 0.5)
+// node with id '1' will be located on (0.25, 0)
+// node with id '2' will be located on (0.75, 1)
+```
+
+
+
+
 
 ## Interfaces
 
