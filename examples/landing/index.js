@@ -36,4 +36,17 @@ data.nodes = Array(1000)
 
 const netv = new NetV(configs)
 netv.data(data)
-netv.draw()
+
+const rate = 10
+function render() {
+    data.nodes.forEach((n) => {
+        const node = netv.getNodeById(n.id)
+        node.position(n.x + rate * (Math.random() - 0.5), n.y + rate * (Math.random() - 0.5))
+    })
+    netv.draw()
+    // requestAnimationFrame(render)
+}
+
+setInterval(() => {
+    render()
+}, 100)

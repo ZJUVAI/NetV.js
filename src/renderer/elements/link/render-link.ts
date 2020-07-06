@@ -290,28 +290,27 @@ export class RenderLinkManager {
      * draw links
      */
     public draw() {
-        if (this.count > 0) {
-            this.gl.enable(this.gl.BLEND)
-            this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
+        if (this.count === 0) return
+        this.gl.enable(this.gl.BLEND)
+        this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
 
-            this.gl.useProgram(this.program)
-            this.attributes.forEach((attr) => {
-                this.gl.enableVertexAttribArray(attr.index)
-            })
+        this.gl.useProgram(this.program)
+        this.attributes.forEach((attr) => {
+            this.gl.enableVertexAttribArray(attr.index)
+        })
 
-            this.attributes.forEach((attr, i) => {
-                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
-                this.gl.vertexAttribPointer(
-                    attr.index,
-                    attr.size,
-                    this.gl.FLOAT,
-                    false,
-                    attr.isBuildIn ? 0 : attr.size * attr.array.BYTES_PER_ELEMENT,
-                    0
-                )
-                if (!attr.isBuildIn) this.gl.vertexAttribDivisor(attr.index, 1)
-            })
-        }
+        this.attributes.forEach((attr, i) => {
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+            this.gl.vertexAttribPointer(
+                attr.index,
+                attr.size,
+                this.gl.FLOAT,
+                false,
+                attr.isBuildIn ? 0 : attr.size * attr.array.BYTES_PER_ELEMENT,
+                0
+            )
+            if (!attr.isBuildIn) this.gl.vertexAttribDivisor(attr.index, 1)
+        })
 
         this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
 
