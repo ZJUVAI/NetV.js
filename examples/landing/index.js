@@ -79,8 +79,8 @@ function render() {
         }
 
         const movement = {
-            x: force.x * 0.001,
-            y: force.y * 0.001
+            x: force.x * 0.01,
+            y: force.y * 0.01
         }
 
         n.x += movement.x
