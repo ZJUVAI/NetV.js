@@ -55,7 +55,7 @@
 
 -   示例
 
-<demo-3/>
+<!-- <demo-3/>
 ::: details 点击查看代码
 <<< @/docs/.vuepress/components/demo-3-snippet.js#snippet
-:::
+::: -->

@@ -9,7 +9,7 @@ export default {
 				'build-in-dataset',
 				'configs',
 				'external-layout',
-				'mouse-interaction',
+				'interaction',
 				'large-graph',
 			],
 		}
@@ -25,7 +25,7 @@ export default {
 			]"
 		>
 			<a-col :span="8" v-for="example in exampleArr" :key="example">
-				<a-card hoverable style="width: 300px">
+				<a-card hoverable>
 					<img
 						slot="cover"
 						alt="example"
@@ -41,7 +41,7 @@ export default {
 					<template slot="actions" class="ant-card-actions">
 						<a-button
 							type="primary"
-							href="https://codesandbox.io/s/upbeat-gould-gtz10"
+							:href="`https://codesandbox.io/s/github/ZJUVAG/testDemo/tree/master/examples/${example}?file=/index.html`"
 						>
 							Try it!
 						</a-button>

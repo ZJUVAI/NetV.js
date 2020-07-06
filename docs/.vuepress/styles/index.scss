@@ -3,7 +3,27 @@
 	border: 0;
 }
 .demo div.theme-default-content {
-	max-width: 60%;
+	max-width: 40%;
+}
+.theme-default-content #demo-background{
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top:0;
+}
+.homeOverwrite {
+    user-select:none;
+}
+.homeOverwrite .hero{
+    z-index: 2;
+    position: relative;
+    pointer-events:none;
+}
+.homeOverwrite .hero .action{
+    pointer-events: all;
+}
+.homeOverwrite .home .features{
+    margin-top:10rem;
 }
 .sidebar,
 .navbar {

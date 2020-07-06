@@ -1,6 +1,6 @@
 <script>
-const id = 'demo-3'
-import demo from './demo-3-snippet'
+const id = 'demo-background'
+import demo from './demo-background-js.js'
 export default {
 	name: id,
 	data() {

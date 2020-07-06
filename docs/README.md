@@ -1,9 +1,10 @@
 ---
+pageClass: homeOverwrite
 home: true
 heroImage: /logo.png
 heroText: A Network Visualization Library
 tagline: Large-scaled network visualization engine based on WebGL
-ctionText: Get Start →
+actionText: Get Start →
 actionLink: /guide/
 features:
     - title: Large-scaled
@@ -14,5 +15,5 @@ features:
       details: Multiple graph visualization components and graph visual analysis techniques
 footer: MIT Licensed
 ---
-
+<demo-background/>
 <demo-table/>
