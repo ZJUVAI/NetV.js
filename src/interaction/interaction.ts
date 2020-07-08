@@ -71,6 +71,7 @@ export class InteractionManager {
             if (element?.element.$_clickCallback) {
                 element.element.$_clickCallback(element.element as any) // TODO: not elegant
             } else {
+                if (!this.netv.$_configs.enablePanZoom) return
                 this.isDragging = true
                 this.dragStartPos = { x, y }
                 this.dragStartTransform = JSON.parse(JSON.stringify(this.transform))
