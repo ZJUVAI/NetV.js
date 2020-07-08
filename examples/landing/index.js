@@ -25,7 +25,8 @@ const configs = {
     node: {
         strokeWidth: 0,
         fill: { r: 0, g: 0.3, b: 0.7, a: 1 }
-    }
+    },
+    enablePanZoom: false
 }
 
 const data = {
@@ -53,9 +54,49 @@ data.nodes = Array(5000)
 const netv = new NetV(configs)
 netv.data(data)
 
-const mouseMass = 5000000
+const mouseMass = 10000000
 const forceMouseMax = 1000
 const originK = 10
+const randomNodeMass = 100000
+const forceRandomNodeMax = 1000
+
+let randomNodes = Array(1)
+    .fill()
+    .map((_, i) => {
+        return {
+            x: Math.random() * configs.width,
+            y: Math.random() * configs.height
+        }
+    })
+
+setInterval(() => {
+    randomNodes = Array(1)
+        .fill()
+        .map((_, i) => {
+            return {
+                x: Math.random() * configs.width,
+                y: Math.random() * configs.height
+            }
+        })
+}, 2000)
+
+function calculateRandomNodeForce(node) {
+    const totalForce = { x: 0, y: 0 }
+
+    randomNodes.forEach((n) => {
+        const len = Math.sqrt((n.x - node.x) ** 2 + (n.y - node.y) ** 2)
+        let force = Math.min(forceRandomNodeMax, randomNodeMass / len ** 2)
+        // let force = len < 500 ? 0.5 * len : 0
+        // let force = 0.5 * len
+        if (isNaN(force)) {
+            force = 0
+        }
+        totalForce.x -= ((node.x - n.x) / len) * force
+        totalForce.y -= ((node.y - n.y) / len) * force
+    })
+
+    return totalForce
+}
 
 function render() {
     data.nodes.forEach((n) => {
@@ -66,6 +107,7 @@ function render() {
         let forceMouse = Math.min(forceMouseMax, mouseMass / lenMouse ** 2)
         const lenOrigin = Math.sqrt((n.x - n.originX) ** 2 + (n.y - n.originY) ** 2)
         let forceOrigin = originK * lenOrigin
+
         if (isNaN(forceOrigin)) {
             forceOrigin = 0
         }
@@ -74,9 +116,14 @@ function render() {
         }
 
         const force = {
-            x: (n.originX - n.x) * originK + ((mousePos.x - n.x) / lenMouse) * forceMouse,
-            y: (n.originY - n.y) * originK + ((mousePos.y - n.y) / lenMouse) * forceMouse
+            x: (n.originX - n.x) * originK - ((mousePos.x - n.x) / lenMouse) * forceMouse,
+            y: (n.originY - n.y) * originK - ((mousePos.y - n.y) / lenMouse) * forceMouse
         }
+
+        // NOTE: random force has a bad effect
+        // randomForce = calculateRandomNodeForce(n)
+        // force.x += randomForce.x
+        // force.y += randomForce.y
 
         const movement = {
             x: force.x * 0.01,
