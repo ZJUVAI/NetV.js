@@ -11,123 +11,41 @@
     left: 0;
     top:0;
 }
+
 .homeOverwrite {
     user-select:none;
 }
 .homeOverwrite .hero{
     z-index: 2;
+    height: 690px;
     position: relative;
     pointer-events:none;
 }
 .homeOverwrite .hero .action{
     pointer-events: all;
 }
-.homeOverwrite .home .features{
-    margin-top:10rem;
+.homeOverwrite .hero #main-title{
+    color: white;
+}
+.homeOverwrite .home .hero .description{
+    color: white;
+}
+.homeOverwrite .home .hero .action-button{
+    background-color:#c2185b;
+    border-bottom:1px solid #c2185b;
+}
+// .homeOverwrite a{
+//     color:#e61c58
+
+// }
+.homeOverwrite .home .hero .action-button:hover{
+    background-color:#e61c58
 }
 .sidebar,
 .navbar {
 	z-index: 10000;
 }
 
-.component-wrapper {
-	border: 1px solid #ebebeb;
-	border-radius: 3px;
-	transition: 0.2s;
-
-	.component-wrapper-demo {
-		padding: 24px 24px 15px 24px;
-	}
-
-	h4 {
-		margin: 55px 0 20px;
-	}
-
-	&:hover {
-		.lock-code .lock-code-word {
-			font-size: 14px;
-			transform: translateX(-40px);
-			opacity: 1;
-		}
-
-		.lock-code .icon-down {
-			transform: translateX(-40px);
-		}
-
-		box-shadow: 0 0 8px 0 rgba(232, 237, 250, 0.6),
-			0 2px 4px 0 rgba(232, 237, 250, 0.5);
-	}
-
-	.code-content {
-		background-color: #fafafa;
-		border-top: 1px solid #eaeefb;
-		overflow: hidden;
-		transition: height 0.2s;
-
-		.code-content-height {
-			.code-user-desc {
-				background: #ffffff;
-				margin: 10px 10px 0 10px;
-				padding: 5px 10px;
-				font-size: 14px;
-				line-height: 26px;
-				border: 1px solid #ebebeb;
-				border-radius: 3px;
-			}
-
-			> pre {
-				background: none;
-
-				> code {
-					color: #3182bd;
-				}
-			}
-		}
-	}
-
-	.lock-code {
-		border-top: 1px solid #eaeefb;
-		height: 44px;
-		box-sizing: border-box;
-		background-color: #fff;
-		border-bottom-left-radius: 4px;
-		border-bottom-right-radius: 4px;
-		text-align: center;
-		margin-top: -1px;
-		color: #d3dce6;
-		cursor: pointer;
-		position: relative;
-		line-height: 44px;
-		color: #d3dce6;
-
-		&:hover {
-			background-color: #f9fafc;
-
-			.lock-code-word {
-				color: #409eff;
-			}
-
-			.icon-down {
-				fill: #409eff;
-			}
-		}
-
-		.icon-down {
-			transform: translateX(0px);
-			transition: all 0.1s;
-		}
-
-		text-align: center;
-
-		.lock-code-word {
-			font-size: 0px;
-			margin-left: 15px;
-			display: inline-block;
-			transition: all 0.1s;
-			opacity: 0;
-		}
-	}
-}
 
 ::-webkit-scrollbar {
 	width: 8px;

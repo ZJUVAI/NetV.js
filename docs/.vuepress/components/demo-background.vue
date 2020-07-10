@@ -14,5 +14,5 @@ export default {
 }
 </script>
 <template>
-	<div v-bind:id="id" class="demo"></div>
+	<div v-bind:id="id"></div>
 </template>

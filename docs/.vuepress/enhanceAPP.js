@@ -22,14 +22,15 @@ export default ({
   // router, // 当前应用的路由实例
   // siteData // 站点元数据
 }) => {
+    Vue.use(Antd);
 //   Vue.mixin({
 //     mounted() {
+//         console.log('123')
 //       import("./NetV.js").then((m) => {
 //         window.NetV = m.NetV;
 //       });
 //     },
 //   });
-  Vue.use(Antd);
 
   // ...做一些其他的应用级别的优化
 };

@@ -1,5 +1,4 @@
-import {NetV} from './NetV'
-import data from './background'
+// import data from './background'
 export default function demo(id) {
 /**
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
@@ -18,9 +17,11 @@ div.addEventListener('mousemove', (ev) => {
     mousePos.y = ev.offsetY
 })
 const width = document.getElementById(id).clientWidth
-const titleHeight = document.getElementsByClassName('hero')[0].clientHeight
-const featuresHeight = document.getElementsByClassName('features')[0].clientHeight
-const height = titleHeight+featuresHeight+280+50//280是图片class的max-height
+// const titleHeight = document.getElementsByClassName('hero')[0].clientHeight
+const featuresHeight = document.getElementsByClassName('features')[0].offsetTop
+const height = featuresHeight
+// const height = titleHeight+featuresHeight+280+50//280是图片class的max-height
+console.log(height,width)
 const configs = {
     container: div,
     width,
@@ -31,21 +32,22 @@ const configs = {
     node: {
         strokeWidth: 0,
         fill: { r: 0, g: 0.3, b: 0.7, a: 1 }
-    }
+    },
+    enablePanZoom: false
 }
 
-// const data = {
-//     nodes: [],
-//     links: []
-// }
+const data = {
+    nodes: [],
+    links: []
+}
 
 // random generate nodes
 
-// data.nodes = Array(5000)
-//     .fill()
-data.nodes.map((d, i) => {
-        const x = d.x<0 ? -d.x*configs.width: (d.x+0.5)*configs.width
-        const y = d.y<0 ? -d.y*configs.height: (d.y+0.5)*configs.height
+data.nodes = Array(5000)
+    .fill()
+.map((d, i) => {
+    const x = Math.random() * configs.width
+    const y = Math.random() * configs.height
         return {
             id: String(i),
             x: x,
@@ -59,7 +61,7 @@ data.nodes.map((d, i) => {
 const netv = new NetV(configs)
 netv.data(data)
 
-const mouseMass = 5000000
+const mouseMass = 50000000
 const forceMouseMax = 1000
 const originK = 10
 
@@ -80,8 +82,8 @@ function render() {
         }
 
         const force = {
-            x: (n.originX - n.x) * originK + ((mousePos.x - n.x) / lenMouse) * forceMouse,
-            y: (n.originY - n.y) * originK + ((mousePos.y - n.y) / lenMouse) * forceMouse
+            x: (n.originX - n.x) * originK - ((mousePos.x - n.x) / lenMouse) * forceMouse,
+            y: (n.originY - n.y) * originK - ((mousePos.y - n.y) / lenMouse) * forceMouse
         }
 
         const movement = {
