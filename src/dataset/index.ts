@@ -4,5 +4,6 @@
  */
 
 import { miserables } from './miserables'
+import { patents } from './patents'
 
-export { miserables }
+export { miserables, patents }
