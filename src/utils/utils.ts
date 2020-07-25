@@ -27,8 +27,8 @@ export function transformGraphPosition(
     const yMax = Math.max(...ys)
 
     const sum = (acc: number, x: number) => acc + x
-    const xMid = xs.reduce(sum) / xs.length
-    const yMid = ys.reduce(sum) / ys.length
+    const xMid = (xMax + xMin) / 2
+    const yMid = (yMax + yMin) / 2
 
     targetGraph.nodes.forEach((node) => {
         node.x = ((node.x - xMid) / (xMax - xMin)) * size + centerX
