@@ -13,6 +13,7 @@ Website: https://zjuvag.org/NetV.js/
 ## Usage
 
 Download NetV.js here.
+
 Or import from CDN:
 **TODO: 需要两个链接**
 
