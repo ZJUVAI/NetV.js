@@ -51,7 +51,7 @@ module.exports = {
 						items: [
 							{
 								text: 'GitHub',
-								link: 'https://github.com/OBKoro1',
+								link: 'https://github.com/ZJUVAG/NetV.js',
 							},
 							{
 								text: 'ZJU-VAG-Lab',
