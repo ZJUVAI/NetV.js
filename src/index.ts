@@ -13,7 +13,6 @@ import * as dataset from './dataset'
 import { Renderer } from './renderer'
 import { InteractionManager } from './interaction/interaction'
 import * as Utils from './utils/utils'
-import { link } from 'build/NetV'
 
 class NetV {
     public Utils = Utils

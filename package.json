@@ -5,6 +5,7 @@
     "main": "build/NetV.js",
     "scripts": {
         "build": "webpack --env.watch=false",
+        "build-production": "webpack --env.watch=false --env.mode=production",
         "watch": "webpack --env.watch=true",
         "eslint": "eslint src/index.ts",
         "test": "jest"

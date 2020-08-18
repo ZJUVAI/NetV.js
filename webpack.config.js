@@ -13,7 +13,7 @@ module.exports = (env, argv) => {
         mode: 'development',
         devtool: 'inline-source-map',
         output: {
-            filename: 'NetV.js',
+            filename: env['mode'] === 'production' ? 'NetV.min.js' : 'NetV.js',
             libraryTarget: 'umd',
             path: path.resolve(__dirname, 'build')
         },
@@ -51,6 +51,9 @@ module.exports = (env, argv) => {
             })
         ],
         watch: watch,
+        optimization: {
+            minimize: env['mode'] === 'production'
+        },
         watchOptions: {
             ignored: /node_modules/,
             aggregateTimeout: 300,
