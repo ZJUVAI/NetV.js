@@ -3,6 +3,10 @@
     "version": "1.0.0",
     "description": "A network visualization library based on WebGL",
     "main": "build/NetV.js",
+    "files": [
+        "src",
+        "build/*.js"
+    ],
     "scripts": {
         "build": "webpack --env.watch=false",
         "build-production": "webpack --env.watch=false --env.mode=production",
