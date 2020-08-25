@@ -1,6 +1,6 @@
 # NetV.js
 
-Large-scaled network visualization engine based on WebGL.
+A large scale network visualization engine based on WebGL.
 
 Website: https://zjuvag.org/NetV.js/
 
