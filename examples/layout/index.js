@@ -57,12 +57,21 @@ simulation.on('tick', () => {
 
 simulation.on('end', () => {
     console.log('force layout done')
-    console.log('random layout begin')
-    //  TODO: layout code
+
     const layout = new netv.Layouts.RandomLayout(netv)
     layout.time(1000)
+    layout.onStart(() => {
+        console.log('random layout start')
+    })
+    layout.onTick(() => {
+        console.log('iteration...')
+    })
+    layout.onStop(() => {
+        console.log('random layout done')
+    })
     layout.start()
-    // layout.finish()
 
-    console.log('random layout done')
+    // direct get final result
+    // layout.finish()
+    // console.log('random layout done')
 })

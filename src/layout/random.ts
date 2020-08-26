@@ -15,7 +15,6 @@ function lerpPosition(source: Positions, target: Positions, ratio: number) {
 
 class RandomLayout extends Layout {
     private _time: number
-    private _interval: number
     private sourcePositions: Positions
     private currentPositions: Positions
     private targetPositions: Positions
@@ -28,10 +27,6 @@ class RandomLayout extends Layout {
         this._time = _time
     }
 
-    public interval(_interval: number) {
-        this._interval = _interval
-    }
-
     public start() {
         this.computePosition()
 
@@ -39,6 +34,7 @@ class RandomLayout extends Layout {
         const step = (timestamp: number) => {
             if (start === undefined) {
                 start = timestamp
+                this.startCallback && this.startCallback()
             }
             const elapsed = timestamp - start
 
@@ -50,8 +46,12 @@ class RandomLayout extends Layout {
 
             this.applyPosition()
 
+            this.tickCallback && this.tickCallback()
+
             if (elapsed < this._time) {
                 requestAnimationFrame(step)
+            } else {
+                this.stopCallback && this.stopCallback()
             }
         }
 
@@ -63,10 +63,6 @@ class RandomLayout extends Layout {
         this.currentPositions = this.targetPositions
         this.applyPosition()
     }
-
-    public onStart() {}
-    public onTick() {}
-    public onStop() {}
 
     private computePosition() {
         if (this.targetPositions) {
