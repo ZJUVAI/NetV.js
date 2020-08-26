@@ -13,9 +13,11 @@ import * as dataset from './dataset'
 import { Renderer } from './renderer'
 import { InteractionManager } from './interaction/interaction'
 import * as Utils from './utils/utils'
+import * as Layouts from './layout/index'
 
 class NetV {
     public Utils = Utils
+    public Layouts = Layouts
 
     public $_id2node = new Map()
     public $_ends2link = new Map2()
