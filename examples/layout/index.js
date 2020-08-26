@@ -58,7 +58,7 @@ simulation.on('tick', () => {
 simulation.on('end', () => {
     console.log('force layout done')
 
-    const layout = new netv.Layouts.RandomLayout(netv)
+    const layout = new NetV.Layouts.RandomLayout(netv)
     layout.time(1000)
     layout.onStart(() => {
         console.log('random layout start')

@@ -16,8 +16,9 @@ import * as Utils from './utils/utils'
 import * as Layouts from './layout/index'
 
 class NetV {
-    public Utils = Utils
-    public Layouts = Layouts
+    public static Layouts = Layouts
+
+    public Utils = Utils // TODO: need refactor to static?
 
     public $_id2node = new Map()
     public $_ends2link = new Map2()
