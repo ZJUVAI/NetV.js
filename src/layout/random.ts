@@ -1,21 +1,62 @@
 import { Layout } from './layout'
 import { NetV } from '../index'
 
+type Positions = { x: number; y: number }[]
+
+function lerpPosition(source: Positions, target: Positions, ratio: number) {
+    return Array(source.length)
+        .fill(undefined)
+        .map((_, i) => {
+            const x = source[i].x + (target[i].x - source[i].x) * ratio
+            const y = source[i].y + (target[i].y - source[i].y) * ratio
+            return { x, y }
+        })
+}
+
 class RandomLayout extends Layout {
-    private interval: number
-    private sourcePositions: { x: number; y: number }[]
-    private currentPositions: { x: number; y: number }[]
-    private targetPositions: { x: number; y: number }[]
+    private _time: number
+    private _interval: number
+    private sourcePositions: Positions
+    private currentPositions: Positions
+    private targetPositions: Positions
 
     public constructor(netv: NetV) {
         super(netv)
     }
 
-    public time(interval: number) {
-        this.interval = interval
+    public time(_time: number) {
+        this._time = _time
     }
 
-    public start() {}
+    public interval(_interval: number) {
+        this._interval = _interval
+    }
+
+    public start() {
+        this.computePosition()
+
+        let start: number
+        const step = (timestamp: number) => {
+            if (start === undefined) {
+                start = timestamp
+            }
+            const elapsed = timestamp - start
+
+            this.currentPositions = lerpPosition(
+                this.sourcePositions,
+                this.targetPositions,
+                elapsed / this._time
+            )
+
+            this.applyPosition()
+
+            if (elapsed < this._time) {
+                requestAnimationFrame(step)
+            }
+        }
+
+        requestAnimationFrame(step)
+    }
     public stop() {}
     public finish() {
         this.computePosition()

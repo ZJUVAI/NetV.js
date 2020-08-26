@@ -61,8 +61,8 @@ simulation.on('end', () => {
     //  TODO: layout code
     const layout = new netv.Layouts.RandomLayout(netv)
     layout.time(1000)
-    // layout.start()
-    layout.finish()
+    layout.start()
+    // layout.finish()
 
     console.log('random layout done')
 })
