@@ -1,5 +1,9 @@
+/**
+ * @author Xiaodong Zhao
+ * @description Base class of layout
+ */
+
 import { NetV } from '../index'
-import { RandomLayout } from './random'
 class Layout {
     protected netv: NetV
     protected startCallback: () => {}
@@ -12,6 +16,10 @@ class Layout {
 
     public start() {}
     public stop() {}
+
+    /**
+     * call finish to direct get layout result, without transition animation
+     */
     public finish() {}
 
     public onStart(cb: () => {}) {
@@ -25,4 +33,4 @@ class Layout {
     }
 }
 
-export { Layout, RandomLayout }
+export { Layout }

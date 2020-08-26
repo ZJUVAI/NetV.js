@@ -1,8 +1,19 @@
+/**
+ * @author Xiaodong Zhao
+ * @description random layout class
+ */
+
 import { Layout } from './layout'
 import { NetV } from '../index'
 
 type Positions = { x: number; y: number }[]
 
+/**
+ * linear interpolation from source positions to target positions
+ * @param source source positions
+ * @param target target positions
+ * @param ratio lerp ratio, (0, 1)
+ */
 function lerpPosition(source: Positions, target: Positions, ratio: number) {
     return Array(source.length)
         .fill(undefined)
@@ -23,6 +34,10 @@ class RandomLayout extends Layout {
         super(netv)
     }
 
+    /**
+     * set total animation time
+     * @param _time 
+     */
     public time(_time: number) {
         this._time = _time
     }
@@ -31,6 +46,11 @@ class RandomLayout extends Layout {
         this.computePosition()
 
         let start: number
+
+        /**
+         * animation step
+         * @param timestamp 
+         */
         const step = (timestamp: number) => {
             if (start === undefined) {
                 start = timestamp
@@ -64,6 +84,9 @@ class RandomLayout extends Layout {
         this.applyPosition()
     }
 
+    /**
+     * for random layout, can directly compute target position
+     */
     private computePosition() {
         if (this.targetPositions) {
             return
@@ -83,6 +106,9 @@ class RandomLayout extends Layout {
             })
     }
 
+    /**
+     * apply new position to canvas
+     */
     private applyPosition() {
         const nodes = this.netv.nodes()
         nodes.forEach((n, i) => {
