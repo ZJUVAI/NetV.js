@@ -29,11 +29,11 @@ The entire initialization configuration interface can be referred in: [Initializ
 
 #### `NetV.data()`
 
-Insert data into the `NetV` instance or return the data inserted.
+Add data into the `NetV` instance or return added data.
 
-- `NetV.data()`: return the data (a [`NodeLinkData`](#nodelinkdata) object).
+- `NetV.data()`: return added data (a [`NodeLinkData`](#nodelinkdata) object).
 
-- `NetV.data(`[`NodeLinkData`](#nodelinkdata)`)`: insert data into the `NetV` instance, no return.
+- `NetV.data(`[`NodeLinkData`](#nodelinkdata)`)`: add data into the `NetV` instance, no return value value.
 
   ```typescript
   netV.data({
@@ -85,7 +85,7 @@ const newLink = netV.addLink({
 
 #### `NetV.addNodes()`
 
-`NetV.addNodes(`[`NodeData`](#nodedata)`[] )`: add a list of new nodes with their data, no return.
+`NetV.addNodes(`[`NodeData`](#nodedata)`[] )`: add a list of new nodes with their data, no return value.
 
 ```typescript
 netV.addNodes([
@@ -97,7 +97,7 @@ netV.addNodes([
 
 #### `NetV.addLinks()`
 
-`NetV.addLinks(`[`LinkData`](#linkdata)`[] )`: add a list of new links with their data, no return.
+`NetV.addLinks(`[`LinkData`](#linkdata)`[] )`: add a list of new links with their data, no return value.
 
 ```typescript
 netV.addLinks([
@@ -108,7 +108,7 @@ netV.addLinks([
 
 #### `NetV.getNodeById()`
 
-`NetV.getNodeById( string )`: get a node from its ID, return a [`Node`](#node) element.
+`NetV.getNodeById( string )`: get a node from its ID, return a [`Node`](#node) object.
 
 ```typescript
 const nodeOne = netV.getNodeById("1");
@@ -116,7 +116,7 @@ const nodeOne = netV.getNodeById("1");
 
 #### `NetV.getLinkByEnds()`
 
-`NetV.getLinkByEnds( string[] )`: get a link from its source node's id and target node's id, return a [`Link`](#link) element. The parameter is an array with two node id, their order is no matter.
+`NetV.getLinkByEnds( string[] )`: get a link from its source node's ID and target node's ID, return a [`Link`](#link) object. The parameter is an array with two nodes' ID, and their order is no matter.
 
 ```typescript
 // it is same to getLinkByEnds(['2', '1'])
@@ -125,7 +125,8 @@ const linkOneTwo = netV.getLinkByEnds(["1", "2"]);
 
 #### `NetV.getElementByPosition()`
 
-`NetV.getElementByPosition( number, number )`: get an element (node/link) by a 2D position. Two numerical parameters are the 2D position (x and y). Return an object looks like: `{type: string, element: Node/Link}`
+`NetV.getElementByPosition( number, number )`: get an element (node/link) by a 2D position. Two numerical parameters are the 2D position (x and y). Return an object includes the Id
+ and the object of the element : `{type: string, element: Node/Link}`
 
 ```typescript
 const obj = netV.getElementByPosition(/* x= */ 100, /* y= */ 200);
@@ -145,7 +146,7 @@ if (!obj) {
 
 #### `NetV.wipe()`
 
-`NetV.wipe()`: empty all the data in the `NetV` instance, no return.
+`NetV.wipe()`: empty all the data in the `NetV` instance, no return value.
 
 #### `NetV.loadDataset()`
 
@@ -162,7 +163,7 @@ netV.data(miserables);
 
 #### `NetV.draw()`
 
-`NetV.draw()`: draw/refresh all the graph on the canvas. **Note that** the visualization result will only be refreshed after calling `NetV.draw()`
+`NetV.draw()`: draw/refresh all graphs on the canvas. **Note that** the visualization result will only be refreshed after calling `NetV.draw()`
 
 ## Node
 
@@ -172,7 +173,7 @@ netV.data(miserables);
 
 #### `Node.id()`
 
-`Node.id()`: return the id of the node (a string).
+`Node.id()`: return the ID of the node (a string).
 
 #### `Node.x()`
 
@@ -244,7 +245,7 @@ Get or set the border width of the node.
 
 ## Link
 
-[`Link`](#link) is a basic element in _NetV.js_. It is visualized as a straight line (without arrow) in default.
+[`Link`](#link) is a basic element in _NetV.js_. It is visualized as a straight line (without an arrow) in default.
 
 ### Manipulation
 
@@ -263,7 +264,7 @@ Same to `Link.source()`
 
 Get or set both the source and the target nodes of the link.
 
-- `Link.sourceTarget()`: return an object (`{source: Node, target: Node}`).
+- `Link.sourceTarget()`: return an object with the source and the target nodes (`{source: Node, target: Node}`).
 
 - `Link.sourceTarget( {source: Node, target: Node} )`: set the source and the target nodes of the link.
 
@@ -306,9 +307,9 @@ Get or set the width of the link
 
 Some utilities are provided in *NetV.js*.
 
-#### `Utils.transformGraphPosition()`
+### `Utils.transformGraphPosition()`
 
-`Utils.transformGraphPosition(`[`NodeLinkData`](#nodelinkdata)`, number, number, number)`: transform the nodes' positions into a given square area. The first parameter is the data which will be imported into a `NetV` instance. The second parameter defines the length of the square's side. The third and forth parameters define the center position of the square.
+`Utils.transformGraphPosition(`[`NodeLinkData`](#nodelinkdata)`, number, number, number)`: transform the nodes' positions into a given square area. The first parameter is the data that will be imported into a `NetV` instance. The second parameter defines the length of the square's side. The third and fourth parameters define the center position of the square.
 
 ```typescript
 const data = {
@@ -364,16 +365,16 @@ The [initializationConfigurations](#initializationconfigurations) is the interfa
   - `fill` is a [Color](#color) object. It configures the fill color of a node. Its default value is `{r: 0.2, g: 0.6, b: 0.2, a: 0.8}`.
   - `strokeWidth` is a number. It configures the border width of a node. Its default value is `2`.
   - `strokeColor` is a [Color](#color) object. It configures the border color of a node. Its default value is `{ r: 0.9, g: 0.9, b: 0.9, a: 0.6 }`.
-  - `clickCallback` is a function. It is the call back function while the cursor clicks on a node. Its default value is a void function: `(node: Node)=>{}`.
+  - `clickCallback` is a function. It is the callback function while the cursor clicks on a node. Its default value is a void function: `(node: Node)=>{}`.
 - `link` configures the default link appearance and behaviors. The link is visualized as a straight line in _NetV.js_.
   - `strokeWidth` is a number. It configures the width of a link. Its default value is `2`.
   - `strokeColor` is a [Color](#color) object. It configures the color of a link. Its default value is `{ r: 0.4, g: 0.6, b: 0.8, a: 0.5 }`.
-  - `clickCallback` is a function. It is the call back function while the cursor clicks on a link. Its default value is a void function: `(link: Link)=>{}`.
+  - `clickCallback` is a function. It is the callback function while the cursor clicks on a link. Its default value is a void function: `(link: Link)=>{}`.
 - `width` is a number. It configures the default container width. Its default value is `800`.
 - `height` is a number. It configures the default container height. Its default value is `600`.
 - `backgroundColor` is a [Color](#color) object. It configures the default container background color. Its default value is `{ r: 1, g: 1, b: 1, a: 1 }` (white).
 - `nodeLimit` is a number. It is used to allocate a fixed space in WebGL for rendering nodes. It is recommended to set to be the upper limit of the number of nodes you need to load. Its default value is `100`. **Note that** you need to reset it if you want to load more than 100 nodes.
-- `linkLimit` is a number. It is used to allocate a fixed space in WebGL for rendering links. It is recommended to set to be the upper limit of the number of links you need to load. Its default value is `1000`. **Note that** you need to reset it if you want to load more than 100 links.
+- `linkLimit` is a number. It is used to allocate a fixed space in WebGL for rendering links. It is recommended to set to be the upper limit of the number of links you need to load. Its default value is `1000`. **Note that** you need to reset it if you want to load more than 1000 links.
 
 ### `Color`
 
@@ -386,7 +387,7 @@ interface Color {
 }
 ```
 
-- `r`, `g`, `b`, and `a` are four channels of the RGBA color model. Their range are `[0, 1]`.
+- `r`, `g`, `b`, and `a` are four channels of the RGBA color model. Their range is `[0, 1]`.
 
 ### `NodeData`
 
@@ -410,7 +411,7 @@ The [`NodeData`](#nodedata) interface specifies the data format of the input nod
 - `fill` is a [Color](#color) object. It configures the fill color of a node. It is optional.
 - `strokeWidth` is a number. It configures the border width of a node. It is optional.
 - `strokeColor` is a [Color](#color) object. It configures the border color of a node. It is optional.
-- ~~`clickCallback` is a function. It is the call back function while the cursor clicks on a node. It is optional.~~
+- `clickCallback` is a function. It is the callback function while the cursor clicks on a node. It is optional.
 
 ### `LinkData`
 
@@ -429,7 +430,7 @@ The [`LinkData`](#linkdata) interface specifies the data format of the input lin
 - `source` and `target` are strings. They are the `id` of the source node and the target node of a link. They form the unique identifier of the link. They are both required.
 - `strokeWidth` is a number. It configures the width of a link. It is optional.
 - `strokeColor` is a [Color](#color) object. It configures the color of a link. It is optional.
-- `clickCallback` is a function. It is the call back function while the cursor clicks on a link. It is optional.
+- `clickCallback` is a function. It is the callback function while the cursor clicks on a link. It is optional.
 
 ### `NodeLinkData`
 
