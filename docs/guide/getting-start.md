@@ -18,8 +18,8 @@ The production version will come soon. Error messages will be masked.
 
 ### `<script>`
 
-Simply download and include with a `<script>`, `NetV` will be registered as a global `Class`
-Download NetV.js from releases: https://github.com/ZJUVAG/NetV.js/releases
+Simply download and include with a `<script>`, `NetV` will be registered as a global `Class`.
+You can download NetV.js from releases: [GitHub Releases](https://github.com/ZJUVAG/NetV.js/releases).
 
 ### CDN
 

@@ -21,14 +21,13 @@ NetV.js: A Network Visualization Library.
 
 -   基于 WebGL
 -   高效 FPS
-    <!--
 
 ### 交互
 
 -   Click
 -   Hover
 -   Drag
--   Lasso -->
+-   Lasso
 
 <!-- ### 布局
 
