@@ -38,9 +38,41 @@
 //     color:#e61c58
 
 // }
+.homeOverwriteZh .home .hero .action-button:hover{
+    background-color:#e61c58
+}
+
+.homeOverwriteZh {
+    user-select:none;
+}
+.homeOverwriteZh .hero{
+    z-index: 2;
+    height: 690px;
+    position: relative;
+    pointer-events:none;
+}
+.homeOverwriteZh .hero .action{
+    pointer-events: all;
+}
+.homeOverwriteZh .hero #main-title{
+    color: white;
+}
+.homeOverwriteZh .home .hero .description{
+    color: white;
+}
+.homeOverwriteZh .home .hero .action-button{
+    background-color:#c2185b;
+    border-bottom:1px solid #c2185b;
+}
+// .homeOverwriteZh a{
+//     color:#e61c58
+
+// }
 .homeOverwrite .home .hero .action-button:hover{
     background-color:#e61c58
 }
+
+
 .sidebar,
 .navbar {
 	z-index: 10000;

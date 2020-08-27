@@ -19,11 +19,12 @@ The production version will come soon. Error messages will be masked.
 ### `<script>`
 
 Simply download and include with a `<script>`, `NetV` will be registered as a global `Class`
+Download NetV.js from releases: https://github.com/ZJUVAG/NetV.js/releases
 
 ### CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/netv@1.0.1/build/NetV.js"></script>
 ```
 
 ### NPM

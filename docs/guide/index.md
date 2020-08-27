@@ -5,8 +5,8 @@
 ### What Is NetV.js
 
 NetV.js: A Network Visualization Library.
-It is a `professional` JavaScript Library for rendering, interaction and visualization in the filed of `Graph Visualization`.
-It uses `WebGL` as underlying rendering, and support tens of millions of levels of node and edge rendering, interaction and visualization.
+It is a `professional` JavaScript Library for rendering, interaction, and visualization in the field of `Graph Visualization`.
+It uses `WebGL` as underlying rendering and supports tens of millions of levels of node and edge rendering, interaction, and visualization.
 NetV.js is a `Powerful` engine driven by graph visualization and graph visual analysis.
 
 ## How It Works
@@ -21,7 +21,7 @@ NetV.js is a `Powerful` engine driven by graph visualization and graph visual an
 ### Rendering
 
 -   WebGL-based
--   High-performanes FPS
+-   High-performance FPS
 
 ### Interactions
 
@@ -58,7 +58,7 @@ It is almost [Stopped Maintenance](https://github.com/jacomyal/sigma.js/releases
 ### Stardust
 
 [Stardust.js](https://stardustjs.github.io/)Stardust is a JavaScript library for rendering information visualizations with GPU (WebGL).
-It only supports rendering, and is not a development driven library for graph data and graph visualization.
+It only supports rendering and is not a development driven library for graph data and graph visualization.
 It is almost [Stopped Maintenance](https://github.com/stardustjs/)。
 
 ### D3.js
@@ -69,5 +69,5 @@ However, it is the most widely used visualization tool. We will support the appl
 
 ### Cytoscape.js
 
-[Cytoscape.js](https://js.cytoscape.org/) is a graph theory (network) library for visualisation and analysis.
+[Cytoscape.js](https://js.cytoscape.org/) is a graph theory (network) library for visualization and analysis.
 It does not support the rendering of large-scaled Graph data.

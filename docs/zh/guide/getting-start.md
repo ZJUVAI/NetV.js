@@ -19,10 +19,11 @@ NetV 不支持 IE，但支持所有[兼容 ECMAScript 5 的浏览器](https://ap
 
 直接下载并用`<scipt>` 标签引用, `NetV`会注册为一个全局`Class`
 
+
 ### CDN
 
 ```html
-<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="https://unpkg.com/netv@1.0.1/build/NetV.js"></script>
 ```
 
 ### NPM

@@ -11,7 +11,10 @@ export default {
 				'external-layout',
 				'interaction',
 				'large-graph',
-			],
+            ],
+            DisArr:[
+                'Basic Usage'
+            ]
 		}
 	},
 }
@@ -47,8 +50,8 @@ export default {
 						</a-button>
 					</template>
 					<a-card-meta
+                        v-bind:style="{textTransform: capitalize}"
 						:title="example"
-						description="This is the description"
 					>
 						<!-- <a-avatar
 				slot="avatar"
