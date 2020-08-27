@@ -17,7 +17,7 @@ NetV 不支持 IE，但支持所有[兼容 ECMAScript 5 的浏览器](https://ap
 
 ### `<script>`
 
-直接下载并用`<scipt>` 标签引用, `NetV`会注册为一个全局`Class`.
+直接下载并用`<script>` 标签引用, `NetV`会注册为一个全局`Class`.
 可以从GitHub中下载: [GitHub Releases](https://github.com/ZJUVAG/NetV.js/releases).
 
 
