@@ -98,7 +98,7 @@ module.exports = {
 						items: [
 							{
 								text: 'GitHub',
-								link: 'https://github.com/OBKoro1',
+								link: 'https://github.com/ZJUVAG/NetV.js',
 							},
 							{
 								text: '浙江大学可视分析小组',
