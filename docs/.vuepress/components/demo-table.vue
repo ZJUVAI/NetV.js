@@ -33,13 +33,13 @@ export default {
 						slot="cover"
 						alt="example"
 						v-if="example != 'external-layout'"
-						:src="`/NetV.js/${example}.jpg`"
+						:src="`/netv.js/${example}.jpg`"
 					/>
 					<img
 						slot="cover"
 						alt="example"
 						v-else
-						:src="`/NetV.js/${example}.gif`"
+						:src="`/netv.js/${example}.gif`"
 					/>
 					<template slot="actions" class="ant-card-actions">
 						<a-button

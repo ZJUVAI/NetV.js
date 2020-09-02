@@ -45,7 +45,7 @@ NetV.js is a `Powerful` engine driven by graph visualization and graph visual an
 
 ## Why Not
 
-### FPS 测试
+### FPS Test
 
 <img :src="$withBase('/fps-table.jpg')" alt="fps-table">
 <img :src="$withBase('/fps-line.jpg')" alt="fps-line">
@@ -53,7 +53,7 @@ NetV.js is a `Powerful` engine driven by graph visualization and graph visual an
 ### Sigma.js
 
 [Sigma.js](http://sigmajs.org/) is a JavaScript library dedicated to graph drawing
-It is almost [Stopped Maintenance](https://github.com/jacomyal/sigma.js/releases/). It does not support the rendering of large-scaled graph data.
+It is almost [Stopped Maintenance](https://github.com/jacomyal/sigma.js/releases/). It does not support the rendering of large-scale graph data.
 
 ### Stardust
 
@@ -64,10 +64,10 @@ It is almost [Stopped Maintenance](https://github.com/stardustjs/)。
 ### D3.js
 
 [D3.js](https://d3js.org/) is a JavaScript library for manipulating documents based on data. D3 helps you bring data to life using HTML, SVG, and CSS.
-It does not support the rendering of large-scaled data, and it is not a development driven library for graph data and graph visualization.
+It does not support the rendering of large-scale data, and it is not a development driven library for graph data and graph visualization.
 However, it is the most widely used visualization tool. We will support the application of our NetV.js engine based on d3.js in the future.
 
 ### Cytoscape.js
 
 [Cytoscape.js](https://js.cytoscape.org/) is a graph theory (network) library for visualization and analysis.
-It does not support the rendering of large-scaled Graph data.
+It does not support the rendering of large-scale Graph data.

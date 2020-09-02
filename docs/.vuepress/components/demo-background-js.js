@@ -19,7 +19,7 @@ div.addEventListener('mousemove', (ev) => {
 const width = document.getElementById(id).clientWidth
 // const titleHeight = document.getElementsByClassName('hero')[0].clientHeight
 const featuresHeight = document.getElementsByClassName('features')[0].offsetTop
-const height = featuresHeight
+const height = featuresHeight-100
 // const height = titleHeight+featuresHeight+280+50//280是图片class的max-height
 console.log(height,width)
 const configs = {

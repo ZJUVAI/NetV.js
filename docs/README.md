@@ -2,12 +2,12 @@
 pageClass: homeOverwrite
 home: true
 heroImage: /logo.png
-heroText: A Network Visualization Library
-tagline: Large-scaled network visualization engine based on WebGL
+heroText: A Large-scale Network Visualization Library
+tagline: Large-scale network visualization engine based on WebGL
 actionText: Get Start →
 actionLink: /guide/
 features:
-    - title: Large-scaled
+    - title: large-scale
       details: WebGL-based; 10 million level node & edge drawing
     - title: Rich interactions
       details: Rich built-in interactions

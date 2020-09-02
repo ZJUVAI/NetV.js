@@ -2,14 +2,14 @@
 module.exports = {
 	title: 'NetV.js',
 	description:
-		'A High Performance Network Visualization JavaScript Library based on WebGL',
+		'A High Performance large-scale Network Visualization JavaScript Library based on WebGL',
 	// 注入到当前页面的 HTML <head> 中的标签
 	head: [
         ['script',{src:'/NetV.js'}],
 		['link', { rel: 'icon', href: '/logo.png' }], // 增加一个自定义的 favicon(网页标签的图标)
 	],
 	// cache: false,
-	base: '/NetV.js/', // 这是部署到github相关的配置 下面会讲
+	base: '/netv.js/', // 这是部署到github相关的配置 下面会讲
 	markdown: {
 		lineNumbers: true, // 代码块显示行号
 	},

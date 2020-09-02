@@ -2,7 +2,7 @@
 pageClass: homeOverwriteZh
 home: true
 heroImage: /logo.png
-heroText: A Network Visualization Library
+heroText: A Large-scale Network Visualization Library
 tagline: 基于WebGL的大规模图可视化引擎
 actionText: 快速上手 →
 actionLink: /guide/
