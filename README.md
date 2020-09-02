@@ -2,7 +2,7 @@
 
 A large scale network visualization engine based on WebGL.
 
-Website: https://zjuvag.org/NetV.js/
+Website: https://zjuvag.org/netv.js/
 
 ## Features
 
