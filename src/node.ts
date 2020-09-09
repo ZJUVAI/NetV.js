@@ -21,6 +21,9 @@ class Node {
     private $_strokeColor: interfaces.Color
     private $_fill: interfaces.Color
     private $_r: number // radius
+    private $_showLabel: boolean
+    private $_text: string
+    private $_textOffset: { x: number; y: number }
 
     public constructor(core, nodeData: interfaces.NodeData) {
         this.$_core = core
@@ -33,6 +36,8 @@ class Node {
                 strokeColor: defaultConfigs.node.strokeColor,
                 r: defaultConfigs.node.r,
                 fill: defaultConfigs.node.fill,
+                showLabel: defaultConfigs.node.showLabel,
+                textOffset: defaultConfigs.node.offset,
                 clickCallback: defaultConfigs.node.clickCallback
             },
             ...nodeData
@@ -47,6 +52,8 @@ class Node {
         this.$_strokeColor = data.strokeColor
         this.$_fill = data.fill
         this.$_r = data.r
+        this.$_showLabel = data.showLabel
+        this.$_textOffset = data.textOffset
 
         this.setClickCallback(data.clickCallback)
     }
@@ -167,6 +174,41 @@ class Node {
             this.$_core.$_renderer.nodeManager.changeAttribute(this, 'radius')
         }
         return this.$_r
+    }
+
+    /**
+     * control label show or not
+     * @param value
+     */
+    public showLabel(value: boolean) {
+        this.$_showLabel = value
+        if (value) {
+            this.$_core.labelManager.drawLabel(this)
+        } else {
+            this.$_core.labelManager.removeLabel(this)
+        }
+    }
+
+    /**
+     * get/set node's label
+     * @param value label text
+     */
+    public text(value?: string) {
+        if (value) {
+            this.$_text = value
+        }
+        return this.text
+    }
+
+    /**
+     * get/set offset value
+     * @param value offset value
+     */
+    public textOffset(value?: { x: number; y: number }) {
+        if (value) {
+            this.$_textOffset = value
+        }
+        return this.text
     }
 
     /**

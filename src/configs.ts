@@ -19,6 +19,8 @@ export const node = {
     // strokeColor: { r: 0.6, g: 0.6, b: 0.6, a: 0.5 },
     strokeColor: { r: 0.9, g: 0.9, b: 0.9, a: 0.6 },
     strokeWidth: 2,
+    showLabel: false,
+    textOffset: { x: 8, y: 0 },
     clickCallback: (node: Node) => {}
 }
 
