@@ -1,3 +1,8 @@
+/**
+ * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
+ * @description graph label related class or method
+ */
+
 import { NetV } from 'src'
 import Node from 'src/node'
 
@@ -14,6 +19,11 @@ export class LabelManager {
         this.$_svg.style.position = 'absolute'
         this.$_svg.style.pointerEvents = 'none'
     }
+
+    /**
+     * draw node's label
+     * @param node node to add label
+     */
     public drawLabel(node: Node) {
         const pos = node.position()
         const offset = node.textOffset()
@@ -25,8 +35,13 @@ export class LabelManager {
         textElement.setAttribute('text-anchor', 'start')
         textElement.setAttribute('alignment-baseline', 'middle')
         textElement.innerHTML = text
+
         this.$_svg.appendChild(textElement)
     }
 
+    /**
+     * remove node's label
+     * @param node node to delete label
+     */
     public removeLabel(node: Node) {}
 }
