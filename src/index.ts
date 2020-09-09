@@ -13,9 +13,12 @@ import * as dataset from './dataset'
 import { Renderer } from './renderer'
 import { InteractionManager } from './interaction/interaction'
 import * as Utils from './utils/utils'
+import { LabelManager } from './label/label'
 
 class NetV {
     public Utils = Utils
+
+    public labelManager: LabelManager
 
     public $_id2node = new Map()
     public $_ends2link = new Map2()
@@ -69,6 +72,8 @@ class NetV {
         }
 
         this.$_interaction.initClick()
+
+        this.labelManager = new LabelManager(this)
     }
 
     /**

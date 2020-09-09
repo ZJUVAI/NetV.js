@@ -37,7 +37,7 @@ class Node {
                 r: defaultConfigs.node.r,
                 fill: defaultConfigs.node.fill,
                 showLabel: defaultConfigs.node.showLabel,
-                textOffset: defaultConfigs.node.offset,
+                textOffset: defaultConfigs.node.textOffset,
                 clickCallback: defaultConfigs.node.clickCallback
             },
             ...nodeData
@@ -197,7 +197,7 @@ class Node {
         if (value) {
             this.$_text = value
         }
-        return this.text
+        return this.$_text
     }
 
     /**
@@ -208,7 +208,7 @@ class Node {
         if (value) {
             this.$_textOffset = value
         }
-        return this.text
+        return this.$_textOffset
     }
 
     /**
