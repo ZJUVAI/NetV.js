@@ -5,10 +5,12 @@
 
 import { NetV } from 'src'
 import Node from 'src/node'
+import { Transform } from '../interfaces'
 
 export class LabelManager {
     private $_core: NetV
     private $_svg: SVGElement
+    private $_transform: Transform
     public constructor(core: NetV) {
         this.$_core = core
         this.$_svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg') as SVGElement

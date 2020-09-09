@@ -13,7 +13,8 @@ import {
     extractAttributesFromShader,
     encodeRenderId
 } from '../../utils'
-import { RenderAttribute, Transform, LinkAttr, LinkManagerConfigs } from '../../interfaces'
+import { Transform } from '../../../interfaces'
+import { RenderAttribute, LinkAttr, LinkManagerConfigs } from '../../interfaces'
 import Link from '../../../link'
 import Map2 from '../../../utils/map2'
 
