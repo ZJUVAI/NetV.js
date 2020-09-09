@@ -30,6 +30,7 @@ export class LabelManager {
         const text = node.text()
 
         const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text')
+        textElement.setAttribute('id', node.id())
         textElement.setAttribute('x', String(pos.x + offset.x))
         textElement.setAttribute('y', String(pos.y + offset.y))
         textElement.setAttribute('text-anchor', 'start')
@@ -43,5 +44,8 @@ export class LabelManager {
      * remove node's label
      * @param node node to delete label
      */
-    public removeLabel(node: Node) {}
+    public removeLabel(node: Node) {
+        // @ts-ignore
+        this.$_svg.getElementById(node.id())?.remove()
+    }
 }
