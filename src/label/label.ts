@@ -12,6 +12,8 @@ export class LabelManager {
     private $_core: NetV
     private $_svg: SVGElement
     private $_offset: { x: number; y: number }
+    private $_fontSize: number
+    private $_strokeWidth: number
     public constructor(core: NetV) {
         this.$_core = core
 
@@ -26,7 +28,12 @@ export class LabelManager {
         this.$_svg.style.pointerEvents = 'none'
 
         this.$_offset = this.$_core.$_configs.label.offset
+        this.$_fontSize = this.$_core.$_configs.label.fontSize
+        this.$_strokeWidth = this.$_core.$_configs.label.strokeWidth
         this.$_svg.setAttribute('transform', `translate(${this.$_offset.x} ${this.$_offset.y})`)
+        this.$_svg.setAttribute('font-size', `${this.$_fontSize}px`)
+        this.$_svg.setAttribute('stroke', `white`)
+        this.$_svg.setAttribute('stroke-width', `${this.$_strokeWidth}px`)
     }
 
     /**
@@ -68,6 +75,7 @@ export class LabelManager {
              ${this.$_offset.y + (1 - transform.k) * -300 + transform.y})
              scale(${transform.k})`
         )
-        this.$_svg.setAttribute('font-size', `${1 / transform.k}em`) // TODO: not consider font size
+        this.$_svg.setAttribute('font-size', `${this.$_fontSize / transform.k}px`)
+        this.$_svg.setAttribute('stroke-width', `${this.$_strokeWidth / transform.k}px`)
     }
 }

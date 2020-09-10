@@ -32,5 +32,7 @@ export const link = {
 }
 
 export const label = {
-    offset: { x: 8, y: 0 }
+    offset: { x: 8, y: 0 },
+    fontSize: 18,
+    strokeWidth: 0.5
 }

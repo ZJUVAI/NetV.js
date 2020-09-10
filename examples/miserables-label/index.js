@@ -9,6 +9,12 @@ const netv = new NetV({
     },
     link: {
         strokeWidth: 1
+    },
+    label: {
+        offset: {
+            x: 10,
+            y: 0
+        }
     }
 })
 const data = netv.Utils.transformGraphPosition(netv.loadDataset('miserables'), 500, 400, 300)
