@@ -6,7 +6,6 @@
 import { NetV } from 'src'
 import Node from 'src/node'
 import { Transform } from '../interfaces'
-import { transform } from '@babel/core'
 
 export class LabelManager {
     private $_core: NetV
@@ -14,6 +13,7 @@ export class LabelManager {
     private $_offset: { x: number; y: number }
     private $_fontSize: number
     private $_strokeWidth: number
+    
     public constructor(core: NetV) {
         this.$_core = core
 
