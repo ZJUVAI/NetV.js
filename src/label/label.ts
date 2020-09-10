@@ -21,6 +21,7 @@ export class LabelManager {
         core.$_container.style.position = 'relative'
         core.$_container.style.overflow = 'hidden'
         this.$_svg.style.position = 'absolute'
+        this.$_svg.style.overflow = 'visible'
         this.$_svg.style.pointerEvents = 'none'
     }
 
