@@ -4,6 +4,9 @@
  */
 const netv = new NetV({
     container: document.getElementById('main'),
+    node: {
+        showLabel: true,
+    },
     link: {
         strokeWidth: 1
     }

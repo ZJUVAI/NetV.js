@@ -66,14 +66,14 @@ class NetV {
             linkLimit: this.$_configs.linkLimit
         })
 
+        this.labelManager = new LabelManager(this)
+
         this.$_interaction = new InteractionManager(this)
         if (this.$_configs.enablePanZoom) {
             this.$_interaction.initZoom()
         }
 
         this.$_interaction.initClick()
-
-        this.labelManager = new LabelManager(this)
     }
 
     /**

@@ -37,6 +37,7 @@ class Node {
                 r: defaultConfigs.node.r,
                 fill: defaultConfigs.node.fill,
                 showLabel: defaultConfigs.node.showLabel,
+                text: defaultConfigs.node.text,
                 textOffset: defaultConfigs.node.textOffset,
                 clickCallback: defaultConfigs.node.clickCallback
             },
@@ -53,7 +54,12 @@ class Node {
         this.$_fill = data.fill
         this.$_r = data.r
         this.$_showLabel = data.showLabel
+        this.$_text = data.text
         this.$_textOffset = data.textOffset
+
+        if (this.$_showLabel) {
+            this.showLabel(true)
+        }
 
         this.setClickCallback(data.clickCallback)
     }
