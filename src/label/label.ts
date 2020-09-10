@@ -50,4 +50,12 @@ export class LabelManager {
         // @ts-ignore
         this.$_svg.getElementById(node.id())?.remove()
     }
+
+    /**
+     * set viewport transform
+     * @param transform 
+     */
+    public setTransform(transform: Transform) {
+        this.$_transform = transform
+    }
 }
