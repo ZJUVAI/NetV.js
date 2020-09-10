@@ -12,7 +12,6 @@ export class LabelManager {
     private $_core: NetV
     private $_svg: SVGElement
     private $_offset: { x: number; y: number }
-    private $_transform: Transform
     public constructor(core: NetV) {
         this.$_core = core
 
@@ -36,15 +35,12 @@ export class LabelManager {
      */
     public drawLabel(node: Node) {
         const pos = node.position()
-        const offset = node.textOffset()
         const text = node.text()
 
         const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text')
         textElement.setAttribute('id', node.id())
         textElement.setAttribute('x', String(pos.x))
         textElement.setAttribute('y', String(pos.y))
-        // textElement.setAttribute('x', String(pos.x + offset.x))
-        // textElement.setAttribute('y', String(pos.y + offset.y))
         textElement.setAttribute('text-anchor', 'start')
         textElement.setAttribute('alignment-baseline', 'middle')
         textElement.innerHTML = text
@@ -66,7 +62,6 @@ export class LabelManager {
      * @param transform
      */
     public setTransform(transform: Transform) {
-        this.$_transform = transform
         this.$_svg.setAttribute(
             'transform',
             `translate(${this.$_offset.x + (1 - transform.k) * -400 + transform.x}

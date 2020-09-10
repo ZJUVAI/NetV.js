@@ -23,7 +23,7 @@ class Node {
     private $_r: number // radius
     private $_showLabel: boolean
     private $_text: string
-    private $_textOffset: { x: number; y: number }
+    private $_textOffset: { x: number; y: number } // NOTE: deprecated, current not used
 
     public constructor(core, nodeData: interfaces.NodeData) {
         this.$_core = core
@@ -38,7 +38,6 @@ class Node {
                 fill: defaultConfigs.node.fill,
                 showLabel: defaultConfigs.node.showLabel,
                 text: defaultConfigs.node.text,
-                textOffset: defaultConfigs.node.textOffset,
                 clickCallback: defaultConfigs.node.clickCallback
             },
             ...nodeData
@@ -55,7 +54,6 @@ class Node {
         this.$_r = data.r
         this.$_showLabel = data.showLabel
         this.$_text = data.text
-        this.$_textOffset = data.textOffset
 
         if (this.$_showLabel) {
             this.showLabel(true)
@@ -209,6 +207,7 @@ class Node {
     /**
      * get/set offset value
      * @param value offset value
+     * @deprecated not used currently, not support set node's label offset individually
      */
     public textOffset(value?: { x: number; y: number }) {
         if (value) {

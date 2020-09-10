@@ -20,7 +20,7 @@ export const node = {
     strokeColor: { r: 0.9, g: 0.9, b: 0.9, a: 0.6 },
     strokeWidth: 2,
     showLabel: false,
-    textOffset: { x: 8, y: 0 },
+    // textOffset: { x: 8, y: 0 }, put in label config instead of each node
     clickCallback: (node: Node) => {}
 }
 
