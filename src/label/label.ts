@@ -11,9 +11,11 @@ import { transform } from '@babel/core'
 export class LabelManager {
     private $_core: NetV
     private $_svg: SVGElement
+    private $_offset: { x: number; y: number }
     private $_transform: Transform
     public constructor(core: NetV) {
         this.$_core = core
+
         this.$_svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg') as SVGElement
         core.$_container.prepend(this.$_svg)
         this.$_svg.setAttribute('width', core.$_configs.width)
@@ -23,6 +25,9 @@ export class LabelManager {
         this.$_svg.style.position = 'absolute'
         this.$_svg.style.overflow = 'visible'
         this.$_svg.style.pointerEvents = 'none'
+
+        this.$_offset = this.$_core.$_configs.label.offset
+        this.$_svg.setAttribute('transform', `translate(${this.$_offset.x} ${this.$_offset.y})`)
     }
 
     /**
@@ -36,8 +41,10 @@ export class LabelManager {
 
         const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text')
         textElement.setAttribute('id', node.id())
-        textElement.setAttribute('x', String(pos.x + offset.x))
-        textElement.setAttribute('y', String(pos.y + offset.y))
+        textElement.setAttribute('x', String(pos.x))
+        textElement.setAttribute('y', String(pos.y))
+        // textElement.setAttribute('x', String(pos.x + offset.x))
+        // textElement.setAttribute('y', String(pos.y + offset.y))
         textElement.setAttribute('text-anchor', 'start')
         textElement.setAttribute('alignment-baseline', 'middle')
         textElement.innerHTML = text
@@ -62,8 +69,8 @@ export class LabelManager {
         this.$_transform = transform
         this.$_svg.setAttribute(
             'transform',
-            `translate(${(1 - transform.k) * -400 + transform.x}
-             ${(1 - transform.k) * -300 + transform.y})
+            `translate(${this.$_offset.x + (1 - transform.k) * -400 + transform.x}
+             ${this.$_offset.y + (1 - transform.k) * -300 + transform.y})
              scale(${transform.k})`
         )
         this.$_svg.setAttribute('font-size', `${1 / transform.k}em`) // TODO: not consider font size

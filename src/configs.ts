@@ -30,3 +30,7 @@ export const link = {
     strokeWidth: 2,
     clickCallback: (link: Link) => {}
 }
+
+export const label = {
+    offset: { x: 8, y: 0 }
+}
