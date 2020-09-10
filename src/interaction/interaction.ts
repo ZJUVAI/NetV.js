@@ -45,6 +45,7 @@ export class InteractionManager {
                 this.transform.k *= k
 
                 this.netv.$_renderer.setTransform(this.transform)
+                this.netv.labelManager.setTransform(this.transform)
                 this.netv.draw()
             }
 
@@ -88,6 +89,7 @@ export class InteractionManager {
             this.transform.y = this.dragStartTransform.y + y - this.dragStartPos.y
 
             this.netv.$_renderer.setTransform(this.transform)
+            this.netv.labelManager.setTransform(this.transform)
             this.netv.draw()
         }
 

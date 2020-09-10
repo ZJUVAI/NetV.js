@@ -6,6 +6,7 @@
 import { NetV } from 'src'
 import Node from 'src/node'
 import { Transform } from '../interfaces'
+import { transform } from '@babel/core'
 
 export class LabelManager {
     private $_core: NetV
@@ -18,6 +19,7 @@ export class LabelManager {
         this.$_svg.setAttribute('width', core.$_configs.width)
         this.$_svg.setAttribute('height', core.$_configs.height)
         core.$_container.style.position = 'relative'
+        core.$_container.style.overflow = 'hidden'
         this.$_svg.style.position = 'absolute'
         this.$_svg.style.pointerEvents = 'none'
     }
@@ -53,9 +55,16 @@ export class LabelManager {
 
     /**
      * set viewport transform
-     * @param transform 
+     * @param transform
      */
     public setTransform(transform: Transform) {
         this.$_transform = transform
+        this.$_svg.setAttribute(
+            'transform',
+            `translate(${(1 - transform.k) * -400 + transform.x}
+             ${(1 - transform.k) * -300 + transform.y})
+             scale(${transform.k})`
+        )
+        this.$_svg.setAttribute('font-size', `${1 / transform.k}em`) // TODO: not consider font size
     }
 }
