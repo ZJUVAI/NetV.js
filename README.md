@@ -14,7 +14,7 @@ Homepage: https://zjuvag.org/netv.js/
 
 Download NetV.js from releases: https://github.com/ZJUVAG/NetV.js/releases
 
-Or import from CDN: https://unpkg.com/netv@1.0.1/build/NetV.js 
+Or import from CDN: https://unpkg.com/netv/build/NetV.js 
 
 If you use npm, you can also install netv:
 
@@ -66,7 +66,7 @@ Feel freely submitting issues and pull requests. You may check our [contribution
 
 下载 NetV.js 的地址: https://github.com/ZJUVAG/NetV.js/releases
 
-或者从CDN引入: https://unpkg.com/netv@1.0.1/build/NetV.js 
+或者从CDN引入: https://unpkg.com/netv/build/NetV.js 
 
 NPM安装：
 
