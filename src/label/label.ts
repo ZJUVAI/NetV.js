@@ -23,6 +23,8 @@ export class LabelManager {
         this.$_svg.setAttribute('height', core.$_configs.height)
         core.$_container.style.position = 'relative'
         core.$_container.style.overflow = 'hidden'
+        core.$_container.style.width = core.$_configs.width
+        core.$_container.style.height = core.$_configs.height
         this.$_svg.style.position = 'absolute'
         this.$_svg.style.overflow = 'visible'
         this.$_svg.style.pointerEvents = 'none'
