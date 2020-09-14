@@ -69,9 +69,14 @@ class Node {
             this.$_position.x = value
             this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
             // NOTE: update related link position
-            if (this.$_core.$_id2links.get(this.$_id)) {
-                for (const link of this.$_core.$_id2links.get(this.$_id)) {
+            if (this.$_core.$_sourceId2links.get(this.$_id)) {
+                for (const link of this.$_core.$_sourceId2links.get(this.$_id)) {
                     this.$_core.$_renderer.linkManager.changeAttribute(link, 'source')
+                }
+            }
+            if (this.$_core.$_targetId2links.get(this.$_id)) {
+                for (const link of this.$_core.$_targetId2links.get(this.$_id)) {
+                    this.$_core.$_renderer.linkManager.changeAttribute(link, 'target')
                 }
             }
         }
@@ -88,9 +93,13 @@ class Node {
             this.$_position.y = value
             this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
             // NOTE: update related link position
-            if (this.$_core.$_id2links.get(this.$_id)) {
-                for (const link of this.$_core.$_id2links.get(this.$_id)) {
+            if (this.$_core.$_sourceId2links.get(this.$_id)) {
+                for (const link of this.$_core.$_sourceId2links.get(this.$_id)) {
                     this.$_core.$_renderer.linkManager.changeAttribute(link, 'source')
+                }
+            }
+            if (this.$_core.$_targetId2links.get(this.$_id)) {
+                for (const link of this.$_core.$_targetId2links.get(this.$_id)) {
                     this.$_core.$_renderer.linkManager.changeAttribute(link, 'target')
                 }
             }
@@ -109,9 +118,14 @@ class Node {
             this.$_position.y = y
             this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
             // NOTE: update related link position
-            if (this.$_core.$_id2links.get(this.$_id)) {
-                for (const link of this.$_core.$_id2links.get(this.$_id)) {
+            if (this.$_core.$_sourceId2links.get(this.$_id)) {
+                for (const link of this.$_core.$_sourceId2links.get(this.$_id)) {
                     this.$_core.$_renderer.linkManager.changeAttribute(link, 'source')
+                }
+            }
+            if (this.$_core.$_targetId2links.get(this.$_id)) {
+                for (const link of this.$_core.$_targetId2links.get(this.$_id)) {
+                    this.$_core.$_renderer.linkManager.changeAttribute(link, 'target')
                 }
             }
         } else if (arguments.length !== 0 && arguments.length !== 2) {

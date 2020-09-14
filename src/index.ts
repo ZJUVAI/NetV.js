@@ -19,7 +19,8 @@ class NetV {
 
     public $_id2node = new Map()
     public $_ends2link = new Map2()
-    public $_id2links: Map<string, Set<Link>> = new Map()
+    public $_sourceId2links: Map<string, Set<Link>> = new Map()
+    public $_targetId2links: Map<string, Set<Link>> = new Map()
     public $_container: HTMLDivElement
     public $_renderer: Renderer
     public $_configs = JSON.parse(JSON.stringify(defaultConfigs)) // NOTE: deep copy configs
@@ -83,7 +84,8 @@ class NetV {
             this.$_data = { ...this.$_data, ...nodeLinkData }
             this.$_id2node = new Map()
             this.$_ends2link = new Map2()
-            this.$_id2links = new Map()
+            this.$_sourceId2links = new Map()
+            this.$_targetId2links = new Map()
 
             this.addNodes(this.$_data.nodes)
             this.addLinks(this.$_data.links)
@@ -178,7 +180,8 @@ class NetV {
         this.$_data = undefined
         this.$_id2node = new Map()
         this.$_ends2link = new Map2()
-        this.$_id2links = new Map()
+        this.$_sourceId2links = new Map()
+        this.$_targetId2links = new Map()
     }
 
     /**
