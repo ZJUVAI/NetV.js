@@ -68,7 +68,7 @@ class NetV {
             this.$_interaction.initZoom()
         }
 
-        this.$_interaction.initClick()
+        this.$_interaction.initMouse()
     }
 
     /**
