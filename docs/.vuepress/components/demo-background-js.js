@@ -41,9 +41,15 @@ const data = {
     links: []
 }
 
+let nodeNum = 5000
+const isMobile = /Android|webOS|iPhone|iPad|BlackBerry/i.test(navigator.userAgent)
+if (isMobile) {
+    nodeNum = 500
+}
+
 // random generate nodes
 
-data.nodes = Array(5000)
+data.nodes = Array(nodeNum)
     .fill()
 .map((d, i) => {
     const x = Math.random() * configs.width

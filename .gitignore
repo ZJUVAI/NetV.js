@@ -4,4 +4,3 @@ build
 node_modules
 npm-debug.log
 /docs/.vuepress/dist
-src

@@ -6,7 +6,7 @@ module.exports = {
 	// 注入到当前页面的 HTML <head> 中的标签
 	head: [
         ['script',{src:'/NetV.js'}],
-		['link', { rel: 'icon', href: '/logo.png' }], // 增加一个自定义的 favicon(网页标签的图标)
+		['link', { rel: 'icon', href: '/logo.svg' }], // 增加一个自定义的 favicon(网页标签的图标)
 	],
 	// cache: false,
 	base: '/netv.js/', // 这是部署到github相关的配置 下面会讲
@@ -30,7 +30,7 @@ module.exports = {
 		smoothScroll: true,
 		locales: {
 			'/': {
-				selectText: 'Languages',
+				selectText: '选择语言',
 				label: 'English',
 				ariaLabel: 'Languages',
 				editLinkText: 'Edit this page on GitHub',
@@ -74,7 +74,7 @@ module.exports = {
 			},
 			'/zh/': {
 				// 多语言下拉菜单的标题
-				selectText: '选择语言',
+				selectText: 'Languages',
 				// 该语言在下拉菜单中的标签
 				label: '简体中文',
 				// 编辑链接文字

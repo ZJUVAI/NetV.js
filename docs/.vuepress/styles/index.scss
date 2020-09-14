@@ -35,11 +35,10 @@
     background-color:#c2185b;
     border-bottom:1px solid #c2185b;
 }
-// .homeOverwrite a{
-//     color:#e61c58
-
-// }
-.homeOverwriteZh .home .hero .action-button:hover{
+.homeOverwrite .home .hero img{
+    width:40rem
+}
+.homeOverwrite .home .hero .action-button:hover{
     background-color:#e61c58
 }
 
@@ -66,14 +65,12 @@
     background-color:#c2185b;
     border-bottom:1px solid #c2185b;
 }
-// .homeOverwriteZh a{
-//     color:#e61c58
-
-// }
-.homeOverwrite .home .hero .action-button:hover{
+.homeOverwriteZh .home .hero .action-button:hover{
     background-color:#e61c58
 }
-
+.homeOverwriteZh .home .hero img{
+    width:40rem
+}
 
 .sidebar,
 .navbar {

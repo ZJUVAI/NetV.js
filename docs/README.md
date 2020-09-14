@@ -1,9 +1,9 @@
 ---
 pageClass: homeOverwrite
 home: true
-heroImage: /logo.png
+heroImage: /logo.svg
 heroText: A Large-scale Network Visualization Library
-tagline: Large-scale network visualization engine based on WebGL
+tagline: WebGL-based large-scale network visualization engine
 actionText: Get Start →
 actionLink: /guide/
 features:
@@ -13,7 +13,7 @@ features:
       details: Rich built-in interactions
     - title: Visualization & Visual analysis
       details: Multiple graph visualization components and graph visual analysis techniques
-footer: MIT Licensed
+footer: MIT License | Copyright © 2019-present VAG in Zhejiang University
 ---
 <demo-background/>
 <demo-table/>

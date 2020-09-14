@@ -45,12 +45,13 @@ export default {
 						<a-button
 							type="primary"
 							:href="`https://codesandbox.io/s/github/ZJUVAG/testDemo/tree/master/examples/${example}?file=/index.html`"
+                            :style="{backgroundColor:'#c2185b',borderColor:'#c2185b'}"
 						>
 							Try it!
 						</a-button>
 					</template>
 					<a-card-meta
-                        v-bind:style="{textTransform: capitalize}"
+                        <!-- v-bind:style="{textTransform: capitalize}" -->
 						:title="example"
 					>
 						<!-- <a-avatar

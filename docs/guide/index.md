@@ -52,10 +52,9 @@ NetV.js is a `Powerful` engine driven by graph visualization and graph visual an
 
 ### Sigma.js
 
-[Sigma.js](http://sigmajs.org/) is a JavaScript library dedicated to graph drawing
-It is almost [Stopped Maintenance](https://github.com/jacomyal/sigma.js/releases/). It does not support the rendering of large-scale graph data.
+[Sigma.js](http://sigmajs.org/) is a JavaScript library dedicated to graph drawing. It is almost [Stopped Maintenance](https://github.com/jacomyal/sigma.js/releases/). It does not support the rendering of large-scale graph data.
 
-### Stardust
+### Stardust.js
 
 [Stardust.js](https://stardustjs.github.io/)Stardust is a JavaScript library for rendering information visualizations with GPU (WebGL).
 It only supports rendering and is not a development driven library for graph data and graph visualization.
