@@ -13,7 +13,7 @@ export class LabelManager {
     private $_offset: { x: number; y: number }
     private $_fontSize: number
     private $_strokeWidth: number
-    
+
     public constructor(core: NetV) {
         this.$_core = core
 
@@ -45,6 +45,8 @@ export class LabelManager {
     public drawLabel(node: Node) {
         const pos = node.position()
         const text = node.text()
+
+        if (!text) return
 
         const textElement = document.createElementNS('http://www.w3.org/2000/svg', 'text')
         textElement.setAttribute('id', node.id())
