@@ -19,6 +19,8 @@ export const node = {
     // strokeColor: { r: 0.6, g: 0.6, b: 0.6, a: 0.5 },
     strokeColor: { r: 0.9, g: 0.9, b: 0.9, a: 0.6 },
     strokeWidth: 2,
+    showLabel: false,
+    // textOffset: { x: 8, y: 0 }, put in label config instead of each node
     clickCallback: (node: Node) => {}
 }
 
@@ -27,4 +29,10 @@ export const link = {
     strokeColor: { r: 0.4, g: 0.6, b: 0.8, a: 0.5 },
     strokeWidth: 2,
     clickCallback: (link: Link) => {}
+}
+
+export const label = {
+    offset: { x: 8, y: 0 },
+    fontSize: 18,
+    strokeWidth: 0.5
 }

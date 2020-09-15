@@ -42,6 +42,7 @@ export class InteractionManager {
                 this.transform.k *= k
 
                 this.netv.$_renderer.setTransform(this.transform)
+                this.netv.labelManager.setTransform(this.transform)
                 this.netv.draw()
             }
 
