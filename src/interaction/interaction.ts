@@ -87,6 +87,7 @@ export class InteractionManager {
                     this.transform.y = this.dragStartTransform.y + y - this.mouseDownPos.y
 
                     this.netv.$_renderer.setTransform(this.transform)
+                    this.netv.labelManager.setTransform(this.transform)
                     this.netv.draw()
                 } else {
                     // drag node
