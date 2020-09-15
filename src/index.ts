@@ -13,9 +13,12 @@ import * as dataset from './dataset'
 import { Renderer } from './renderer'
 import { InteractionManager } from './interaction/interaction'
 import * as Utils from './utils/utils'
+import { LabelManager } from './label/label'
 
 class NetV {
     public Utils = Utils
+
+    public labelManager: LabelManager
 
     public $_id2node = new Map()
     public $_ends2link = new Map2()
@@ -62,6 +65,8 @@ class NetV {
             nodeLimit: this.$_configs.nodeLimit,
             linkLimit: this.$_configs.linkLimit
         })
+
+        this.labelManager = new LabelManager(this)
 
         this.$_interaction = new InteractionManager(this)
         if (this.$_configs.enablePanZoom) {

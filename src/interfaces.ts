@@ -37,3 +37,9 @@ export interface NodeLinkData {
     nodes: NodeData[]
     links: LinkData[]
 }
+
+export interface Transform {
+    x: number
+    y: number
+    k: number
+}
