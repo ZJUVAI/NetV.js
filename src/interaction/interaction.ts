@@ -99,9 +99,8 @@ export class InteractionManager {
             } else {
                 const yInv = this.netv.$_configs.height - y
                 const element = this.netv.getElementByPosition(x, yInv)
-                if (element?.element.$_mouseoverCallback) {
-                    element.element.$_mouseoverCallback(element.element as any)
-                    console.log(element)
+                if (element?.element.$_hoverCallback) {
+                    element.element.$_hoverCallback(element.element as any)
                 }
                 return // currently not support hover
             }
