@@ -13,7 +13,8 @@ import {
     extractAttributesFromShader,
     encodeRenderId
 } from '../../utils'
-import { RenderAttribute, Transform, NodeAttr, NodeManagerConfigs } from '../../interfaces'
+import { Transform } from '../../../interfaces'
+import { RenderAttribute, NodeAttr, NodeManagerConfigs } from '../../interfaces'
 import Node from '../../../node'
 
 enum NodeAttrKey {
