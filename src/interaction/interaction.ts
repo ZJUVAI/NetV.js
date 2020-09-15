@@ -12,16 +12,13 @@ export class InteractionManager {
         y: 0,
         k: 1
     }
-    private isDragging = false
-    private dragStartPos: {
-        x: number
-        y: number
-    }
-    private dragStartTransform: {
-        x: number
-        y: number
-        k: number
-    }
+    private isMouseDown = false
+    private isMouseMove = false
+    private mouseDownElement
+    private mouseDownElementOriginPos: { x: number; y: number } // NOTE: record pos, only support node's drag
+
+    private mouseDownPos: { x: number; y: number }
+    private dragStartTransform: { x: number; y: number; k: number }
 
     public constructor(netv: NetV) {
         this.netv = netv
@@ -52,7 +49,6 @@ export class InteractionManager {
             evt.preventDefault()
         }
 
-        // TODO: maybe can handle on div instead of canvas
         canvas.addEventListener('DOMMouseScroll', handleScroll, false)
         canvas.addEventListener('mousewheel', handleScroll, false)
     }
@@ -60,43 +56,63 @@ export class InteractionManager {
     /**
      * setup click utility
      */
-    // TODO: need rename
-    public initClick() {
+    public initMouse() {
         const canvas = this.netv.$_container.querySelector('canvas')
         const handleMouseDown = (evt: MouseEvent) => {
             const x = evt.offsetX || evt.pageX - canvas.offsetLeft
             const y = evt.offsetY || evt.pageY - canvas.offsetTop
             const yInv = this.netv.$_configs.height - y
 
-            const element = this.netv.getElementByPosition(x, yInv)
-            if (element?.element.$_clickCallback) {
-                element.element.$_clickCallback(element.element as any) // TODO: not elegant
-            } else {
-                if (!this.netv.$_configs.enablePanZoom) return
-                this.isDragging = true
-                this.dragStartPos = { x, y }
-                this.dragStartTransform = JSON.parse(JSON.stringify(this.transform))
+            this.isMouseDown = true
+            this.mouseDownPos = { x, y }
+            this.dragStartTransform = JSON.parse(JSON.stringify(this.transform))
+
+            this.mouseDownElement = this.netv.getElementByPosition(x, yInv)
+            if (this.mouseDownElement?.element.position) {
+                // record orgin position for drag
+                this.mouseDownElementOriginPos = { ...this.mouseDownElement.element.position() }
             }
         }
 
         const handleMouseMove = (evt: MouseEvent) => {
-            if (!this.isDragging) return
-
             const x = evt.offsetX || evt.pageX - canvas.offsetLeft
             const y = evt.offsetY || evt.pageY - canvas.offsetTop
 
-            this.transform.x = this.dragStartTransform.x + x - this.dragStartPos.x
-            this.transform.y = this.dragStartTransform.y + y - this.dragStartPos.y
+            if (this.isMouseDown) {
+                this.isMouseMove = true
 
-            this.netv.$_renderer.setTransform(this.transform)
-            this.netv.labelManager.setTransform(this.transform)
-            this.netv.draw()
+                if (!this.mouseDownElement || !this.mouseDownElement.element.position) {
+                    // pan, when not dragging node
+                    this.transform.x = this.dragStartTransform.x + x - this.mouseDownPos.x
+                    this.transform.y = this.dragStartTransform.y + y - this.mouseDownPos.y
+
+                    this.netv.$_renderer.setTransform(this.transform)
+                    this.netv.draw()
+                } else {
+                    // drag node
+                    this.mouseDownElement.element.position(
+                        this.mouseDownElementOriginPos.x + x - this.mouseDownPos.x,
+                        this.mouseDownElementOriginPos.y + y - this.mouseDownPos.y
+                    )
+                    this.netv.draw()
+                }
+            } else {
+                return // currently not support hover
+            }
         }
 
         const handleMouseUp = (evt: MouseEvent) => {
-            if (this.isDragging) {
-                this.isDragging = false
+            if (!this.isMouseMove && this.mouseDownElement) {
+                // click
+                if (this.mouseDownElement?.element.$_clickCallback) {
+                    this.mouseDownElement.element.$_clickCallback(
+                        this.mouseDownElement.element as any
+                    ) // TODO: not elegant
+                }
             }
+            this.isMouseDown = false
+            this.isMouseMove = false
+            this.mouseDownElement = undefined
         }
 
         canvas.addEventListener('mousedown', handleMouseDown)

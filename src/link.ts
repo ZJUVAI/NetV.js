@@ -106,17 +106,23 @@ class Link {
                 // delete old Map
                 this.$_core.$_ends2link.delete([oldSource.id(), oldTarget.id()])
 
-                this.$_core.$_id2links.get(oldSource.id())?.delete(this)
+                this.$_core.$_sourceId2links.get(oldSource.id())?.delete(this)
+                this.$_core.$_targetId2links.get(oldTarget.id())?.delete(this)
             }
 
             this.$_source = newSource
             this.$_target = newTarget
             this.$_core.$_ends2link.set([newSourceId, newTargetId], this)
 
-            if (!this.$_core.$_id2links.has(newSourceId)) {
-                this.$_core.$_id2links.set(newSourceId, new Set([this]))
+            if (!this.$_core.$_sourceId2links.has(newSourceId)) {
+                this.$_core.$_sourceId2links.set(newSourceId, new Set([this]))
             } else {
-                this.$_core.$_id2links.get(newSourceId).add(this)
+                this.$_core.$_sourceId2links.get(newSourceId).add(this)
+            }
+            if (!this.$_core.$_targetId2links.has(newTargetId)) {
+                this.$_core.$_targetId2links.set(newTargetId, new Set([this]))
+            } else {
+                this.$_core.$_targetId2links.get(newTargetId).add(this)
             }
         }
         return {
