@@ -92,8 +92,10 @@ export class InteractionManager {
                 } else {
                     // drag node
                     this.mouseDownElement.element.position(
-                        this.mouseDownElementOriginPos.x + x - this.mouseDownPos.x,
-                        this.mouseDownElementOriginPos.y + y - this.mouseDownPos.y
+                        this.mouseDownElementOriginPos.x +
+                            (x - this.mouseDownPos.x) / this.transform.k,
+                        this.mouseDownElementOriginPos.y +
+                            (y - this.mouseDownPos.y) / this.transform.k
                     )
                     this.netv.draw()
                 }
