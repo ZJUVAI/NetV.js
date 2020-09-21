@@ -10,6 +10,7 @@ import { NetV } from './index'
 
 class Node {
     public $_clickCallback: (node: Node) => void
+    public $_hoverCallback: (node: Node) => void
 
     private $_core: NetV
     private $_id: string
@@ -38,7 +39,8 @@ class Node {
                 fill: defaultConfigs.node.fill,
                 showLabel: defaultConfigs.node.showLabel,
                 text: defaultConfigs.node.text,
-                clickCallback: defaultConfigs.node.clickCallback
+                clickCallback: defaultConfigs.node.clickCallback,
+                hoverCallback: defaultConfigs.node.hoverCallback
             },
             ...nodeData
         }
@@ -60,6 +62,7 @@ class Node {
         }
 
         this.setClickCallback(data.clickCallback)
+        this.setHoverCallback(data.hoverCallback)
     }
 
     /**
@@ -252,6 +255,14 @@ class Node {
         } else {
             throw new Error(`Invalid ID ${value}`)
         }
+    }
+
+    /**
+     * set hover callback function
+     * @param callback hover callback function
+     */
+    private setHoverCallback(callback: (node: Node) => void) {
+        this.$_hoverCallback = callback
     }
 
     /**

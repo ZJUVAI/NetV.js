@@ -87,16 +87,24 @@ export class InteractionManager {
                     this.transform.y = this.dragStartTransform.y + y - this.mouseDownPos.y
 
                     this.netv.$_renderer.setTransform(this.transform)
+                    this.netv.labelManager.setTransform(this.transform)
                     this.netv.draw()
                 } else {
                     // drag node
                     this.mouseDownElement.element.position(
-                        this.mouseDownElementOriginPos.x + x - this.mouseDownPos.x,
-                        this.mouseDownElementOriginPos.y + y - this.mouseDownPos.y
+                        this.mouseDownElementOriginPos.x +
+                            (x - this.mouseDownPos.x) / this.transform.k,
+                        this.mouseDownElementOriginPos.y +
+                            (y - this.mouseDownPos.y) / this.transform.k
                     )
                     this.netv.draw()
                 }
             } else {
+                const yInv = this.netv.$_configs.height - y
+                const element = this.netv.getElementByPosition(x, yInv)
+                if (element?.element.$_hoverCallback) {
+                    element.element.$_hoverCallback(element.element as any)
+                }
                 return // currently not support hover
             }
         }
