@@ -10,8 +10,8 @@ document.body.appendChild(stats.dom)
 const WIDTH = 1000;
 const HEIGHT = 1000;
 
-const NODE_NUM = 2 * 1e5;
-const LINK_NUM = NODE_NUM * 0;
+const NODE_NUM = 1e4;
+const LINK_NUM = NODE_NUM * 20;
 
 const netv = new NetV({
     container: document.getElementById('main'),
