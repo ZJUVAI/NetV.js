@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>NetV.js</title>
+    <meta name="generator" content="VuePress 1.5.0">
+    <script src="/netv.js/NetV.js"></script>
+    <link rel="icon" href="/netv.js/logo.svg">
+    <meta name="description" content="A High Performance large-scale Network Visualization JavaScript Library based on WebGL">
+    <link rel="preload" href="/netv.js/assets/css/0.styles.d370bca3.css" as="style"><link rel="preload" href="/netv.js/assets/js/app.db6df6f8.js" as="script"><link rel="preload" href="/netv.js/assets/js/3.6ff4b049.js" as="script"><link rel="preload" href="/netv.js/assets/js/19.7a0666c7.js" as="script"><link rel="preload" href="/netv.js/assets/js/5.7f876199.js" as="script"><link rel="preload" href="/netv.js/assets/js/9.a418bde8.js" as="script"><link rel="prefetch" href="/netv.js/assets/js/10.c2d700f0.js"><link rel="prefetch" href="/netv.js/assets/js/11.04178f4d.js"><link rel="prefetch" href="/netv.js/assets/js/12.75df7542.js"><link rel="prefetch" href="/netv.js/assets/js/13.af3e6207.js"><link rel="prefetch" href="/netv.js/assets/js/14.63421bf4.js"><link rel="prefetch" href="/netv.js/assets/js/15.fdb27e76.js"><link rel="prefetch" href="/netv.js/assets/js/16.a80e3730.js"><link rel="prefetch" href="/netv.js/assets/js/17.c169c6fe.js"><link rel="prefetch" href="/netv.js/assets/js/18.05c8928c.js"><link rel="prefetch" href="/netv.js/assets/js/20.93e18802.js"><link rel="prefetch" href="/netv.js/assets/js/21.5fd0e9f2.js"><link rel="prefetch" href="/netv.js/assets/js/22.67256f8b.js"><link rel="prefetch" href="/netv.js/assets/js/23.a4dd1807.js"><link rel="prefetch" href="/netv.js/assets/js/24.d5ebab17.js"><link rel="prefetch" href="/netv.js/assets/js/25.3b21e975.js"><link rel="prefetch" href="/netv.js/assets/js/4.648ce226.js"><link rel="prefetch" href="/netv.js/assets/js/6.33e2c4b7.js"><link rel="prefetch" href="/netv.js/assets/js/7.c1f70e92.js"><link rel="prefetch" href="/netv.js/assets/js/8.e183a600.js"><link rel="prefetch" href="/netv.js/assets/js/vendors~docsearch.db8d6c6f.js">
+    <link rel="stylesheet" href="/netv.js/assets/css/0.styles.d370bca3.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container no-sidebar homeOverwriteZh"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/netv.js/zh/" class="home-link router-link-exact-active router-link-active"><!----> <span class="site-name">NetV.js</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/netv.js/zh/guide/" class="nav-link">
+  指南
+</a></div><div class="nav-item"><a href="/netv.js/zh/API/" class="nav-link">
+  API
+</a></div><div class="nav-item"><a href="/netv.js/zh/component/" class="nav-link">
+  样例
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="资源链接" class="dropdown-title"><span class="title">资源链接</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://github.com/ZJUVAG/NetV.js" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li><li class="dropdown-item"><!----> <a href="https://zjuvag.org/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  浙江大学可视分析小组
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Select language" class="dropdown-title"><span class="title">Languages</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/netv.js/" class="nav-link">
+  English
+</a></li><li class="dropdown-item"><!----> <a href="/netv.js/zh/" class="nav-link router-link-exact-active router-link-active">
+  简体中文
+</a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/netv.js/zh/guide/" class="nav-link">
+  指南
+</a></div><div class="nav-item"><a href="/netv.js/zh/API/" class="nav-link">
+  API
+</a></div><div class="nav-item"><a href="/netv.js/zh/component/" class="nav-link">
+  样例
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="资源链接" class="dropdown-title"><span class="title">资源链接</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://github.com/ZJUVAG/NetV.js" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li><li class="dropdown-item"><!----> <a href="https://zjuvag.org/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  浙江大学可视分析小组
+  <svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg></a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Select language" class="dropdown-title"><span class="title">Languages</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/netv.js/" class="nav-link">
+  English
+</a></li><li class="dropdown-item"><!----> <a href="/netv.js/zh/" class="nav-link router-link-exact-active router-link-active">
+  简体中文
+</a></li></ul></div></div> <!----></nav>  <!----> </aside> <main aria-labelledby="main-title" class="home"><header class="hero"><img src="/netv.js/logo.svg" alt="hero"> <h1 id="main-title">
+      A Large-scale Network Visualization Library
+    </h1> <p class="description">
+      基于WebGL的大规模图可视化引擎
+    </p> <p class="action"><a href="/netv.js/guide/" class="nav-link action-button">
+  快速上手 →
+</a></p></header> <div class="features"><div class="feature"><h2>海量数据</h2> <p>基于WebGL；支持千万级别点边元素绘制</p></div><div class="feature"><h2>交互布局</h2> <p>内置多种交互手段</p></div><div class="feature"><h2>可视化 &amp; 可视分析</h2> <p>提供多种图可视化组件、图可视分析技术</p></div></div> <div class="theme-default-content custom content__default"><div id="demo-background"></div> <div><div class="ant-row"><div class="ant-col ant-col-8"><div class="ant-card ant-card-bordered ant-card-hoverable"><div class="ant-card-cover"><img alt="example" src="/netv.js/basic.jpg"></div><div class="ant-card-body">  
+						:title=&quot;example&quot;
+					&gt;
+						</div><ul class="ant-card-actions"><li style="width:100%;"><span><a href="https://codesandbox.io/s/github/ZJUVAG/testDemo/tree/master/examples/basic?file=/index.html" class="ant-btn ant-btn-primary" style="background-color:#c2185b;border-color:#c2185b;"><span>Try it!</span></a></span></li></ul></div></div><div class="ant-col ant-col-8"><div class="ant-card ant-card-bordered ant-card-hoverable"><div class="ant-card-cover"><img alt="example" src="/netv.js/build-in-dataset.jpg"></div><div class="ant-card-body">  
+						:title=&quot;example&quot;
+					&gt;
+						</div><ul class="ant-card-actions"><li style="width:100%;"><span><a href="https://codesandbox.io/s/github/ZJUVAG/testDemo/tree/master/examples/build-in-dataset?file=/index.html" class="ant-btn ant-btn-primary" style="background-color:#c2185b;border-color:#c2185b;"><span>Try it!</span></a></span></li></ul></div></div><div class="ant-col ant-col-8"><div class="ant-card ant-card-bordered ant-card-hoverable"><div class="ant-card-cover"><img alt="example" src="/netv.js/configs.jpg"></div><div class="ant-card-body">  
+						:title=&quot;example&quot;
+					&gt;
+						</div><ul class="ant-card-actions"><li style="width:100%;"><span><a href="https://codesandbox.io/s/github/ZJUVAG/testDemo/tree/master/examples/configs?file=/index.html" class="ant-btn ant-btn-primary" style="background-color:#c2185b;border-color:#c2185b;"><span>Try it!</span></a></span></li></ul></div></div><div class="ant-col ant-col-8"><div class="ant-card ant-card-bordered ant-card-hoverable"><div class="ant-card-cover"><img alt="example" src="/netv.js/external-layout.gif"></div><div class="ant-card-body">  
+						:title=&quot;example&quot;
+					&gt;
+						</div><ul class="ant-card-actions"><li style="width:100%;"><span><a href="https://codesandbox.io/s/github/ZJUVAG/testDemo/tree/master/examples/external-layout?file=/index.html" class="ant-btn ant-btn-primary" style="background-color:#c2185b;border-color:#c2185b;"><span>Try it!</span></a></span></li></ul></div></div><div class="ant-col ant-col-8"><div class="ant-card ant-card-bordered ant-card-hoverable"><div class="ant-card-cover"><img alt="example" src="/netv.js/interaction.jpg"></div><div class="ant-card-body">  
+						:title=&quot;example&quot;
+					&gt;
+						</div><ul class="ant-card-actions"><li style="width:100%;"><span><a href="https://codesandbox.io/s/github/ZJUVAG/testDemo/tree/master/examples/interaction?file=/index.html" class="ant-btn ant-btn-primary" style="background-color:#c2185b;border-color:#c2185b;"><span>Try it!</span></a></span></li></ul></div></div><div class="ant-col ant-col-8"><div class="ant-card ant-card-bordered ant-card-hoverable"><div class="ant-card-cover"><img alt="example" src="/netv.js/large-graph.jpg"></div><div class="ant-card-body">  
+						:title=&quot;example&quot;
+					&gt;
+						</div><ul class="ant-card-actions"><li style="width:100%;"><span><a href="https://codesandbox.io/s/github/ZJUVAG/testDemo/tree/master/examples/large-graph?file=/index.html" class="ant-btn ant-btn-primary" style="background-color:#c2185b;border-color:#c2185b;"><span>Try it!</span></a></span></li></ul></div></div></div></div></div> <div class="footer">
+    MIT License | Copyright © 2019-present VAG in Zhejiang University
+  </div></main></div><div class="global-ui"></div></div>
+    <script src="/netv.js/assets/js/app.db6df6f8.js" defer></script><script src="/netv.js/assets/js/3.6ff4b049.js" defer></script><script src="/netv.js/assets/js/19.7a0666c7.js" defer></script><script src="/netv.js/assets/js/5.7f876199.js" defer></script><script src="/netv.js/assets/js/9.a418bde8.js" defer></script>
+  </body>
+</html>

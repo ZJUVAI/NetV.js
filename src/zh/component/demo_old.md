@@ -11,7 +11,7 @@
     -   数据加载
     -   图绘制 -->
 
--   示例
+- 示例
 
 <demo-1/>
 ::: details 点击查看代码 
@@ -21,7 +21,7 @@
 </a>
 </div>
 
-<<< @/docs/.vuepress/components/demo-1-snippet.js#snippet
+<<< @/src/.vuepress/components/demo-1-snippet.js#snippet
 :::
 
 <!-- <iframe src="https://codesandbox.io/s/upbeat-gould-gtz10" width="700px" height="500px" frameborder="0" scrolling="no"> </iframe> -->
@@ -37,7 +37,7 @@
 <demo-2/>
 
 ::: details 点击查看代码
-<<< @/docs/.vuepress/components/demo-2-snippet.js#snippet
+<<< @/src/.vuepress/components/demo-2-snippet.js#snippet
 :::
 
 ## 全局配置
@@ -53,9 +53,9 @@
     -   数据加载
     -   图绘制 -->
 
--   示例
+- 示例
 
 <!-- <demo-3/>
 ::: details 点击查看代码
-<<< @/docs/.vuepress/components/demo-3-snippet.js#snippet
+<<< @/src/.vuepress/components/demo-3-snippet.js#snippet
 ::: -->
