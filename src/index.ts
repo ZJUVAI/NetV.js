@@ -247,6 +247,8 @@ class NetV {
         if (this.$_lazyLinkUpdate) {
             // TODO: maybe need more efficient and reliable way to store and get all links
             this.$_renderer.linkManager.refreshPosition([...this.$_ends2link.values()])
+            this.$_lazyLinkUpdate = false
+            this.$_modifiedLinkCount = 0
         }
         this.$_renderer.draw()
     }
