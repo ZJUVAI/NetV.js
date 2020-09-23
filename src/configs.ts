@@ -12,6 +12,7 @@ export const backgroundColor = { r: 1, g: 1, b: 1, a: 1 }
 export const enablePanZoom = true
 export const nodeLimit = 100
 export const linkLimit = 1000
+export const lazyLinkUpdateThreshold = 100
 
 export const node = {
     r: 5,
