@@ -81,7 +81,7 @@ class NetV {
         this.$_interaction.initMouse()
     }
 
-    public addModifiedLinkCount(n: number) {
+    public $_addModifiedLinkCount(n: number) {
         this.$_modifiedLinkCount += n
         if (this.$_modifiedLinkCount > this.$_configs.lazyLinkUpdateThreshold) {
             this.$_lazyLinkUpdate = true
@@ -218,10 +218,9 @@ class NetV {
      * @param y y pos
      */
     public getElementByPosition(
-        x: number,
-        y: number
+        position: interfaces.Position
     ): { type: 'node' | 'link'; element: Node | Link } | undefined {
-        const id = this.$_renderer.getIdByPosition(x, y)
+        const id = this.$_renderer.getIdByPosition(position)
         if (id) {
             if (typeof id === 'string') {
                 const node = this.getNodeById(id)

@@ -7,6 +7,8 @@
 import * as interfaces from './interfaces'
 import { isValidId } from './utils/is'
 import { NetV } from './index'
+import { LinkAttr } from './renderer/interfaces'
+import Link from './link'
 
 class Node {
     public $_clickCallback: (node: Node) => void
@@ -76,26 +78,10 @@ class Node {
      * @memberof Node
      */
     public x(value?: number) {
-        if (arguments.length !== 0) {
-            this.$_position.x = value
-            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
-            if (!this.$_core.$_lazyLinkUpdate) {
-                // NOTE: update related link position
-                let linkSet = this.$_core.$_sourceId2links.get(this.$_id)
-                if (linkSet) {
-                    this.$_core.addModifiedLinkCount(linkSet.size)
-                    for (const link of linkSet) {
-                        this.$_core.$_renderer.linkManager.changeAttribute(link, 'source')
-                    }
-                }
-                linkSet = this.$_core.$_targetId2links.get(this.$_id)
-                if (linkSet) {
-                    this.$_core.addModifiedLinkCount(linkSet.size)
-                    for (const link of linkSet) {
-                        this.$_core.$_renderer.linkManager.changeAttribute(link, 'target')
-                    }
-                }
-            }
+        if (arguments.length > 0) {
+            this.position({
+                x: value
+            })
         }
         return this.$_position.x
     }
@@ -106,60 +92,55 @@ class Node {
      * @memberof Node
      */
     public y(value?: number) {
-        if (arguments.length !== 0) {
-            this.$_position.y = value
-            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
-            if (!this.$_core.$_lazyLinkUpdate) {
-                // NOTE: update related link position
-                let linkSet = this.$_core.$_sourceId2links.get(this.$_id)
-                if (linkSet) {
-                    this.$_core.addModifiedLinkCount(linkSet.size)
-                    for (const link of linkSet) {
-                        this.$_core.$_renderer.linkManager.changeAttribute(link, 'source')
-                    }
-                }
-                linkSet = this.$_core.$_targetId2links.get(this.$_id)
-                if (linkSet) {
-                    this.$_core.addModifiedLinkCount(linkSet.size)
-                    for (const link of linkSet) {
-                        this.$_core.$_renderer.linkManager.changeAttribute(link, 'target')
-                    }
-                }
-            }
+        if (arguments.length > 0) {
+            this.position({
+                y: value
+            })
         }
         return this.$_position.y
     }
 
     /**
      * set/get postion
-     * @param {number} [value]
      * @memberof Node
      */
-    public position(x?: number, y?: number) {
-        if (arguments.length === 2) {
-            this.$_position.x = x
-            this.$_position.y = y
-            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
+    public position(position?: interfaces.Position) {
+        let linkSets = {}
+
+        // e.g. setOnePosition('x', 1) means set x position with value 1
+        const setOnePosition = (key, value) => {
+            this.$_position[key] = value // key: 'x' or 'y'
             if (!this.$_core.$_lazyLinkUpdate) {
-                // NOTE: update related link position
-                let linkSet = this.$_core.$_sourceId2links.get(this.$_id)
-                if (linkSet) {
-                    this.$_core.addModifiedLinkCount(linkSet.size)
-                    for (const link of linkSet) {
-                        this.$_core.$_renderer.linkManager.changeAttribute(link, 'source')
+                // lazeLinkUpdate means update links in batch mode
+                Object.entries(linkSets).forEach((entry) => {
+                    // entry[0]: 'source' / 'target'
+                    // entry[1]: the link set
+                    const key = entry[0] as LinkAttr
+                    const set = entry[1] as Set<Link>
+                    if (set) {
+                        this.$_core.$_addModifiedLinkCount(set.size)
+                        for (const link of set) {
+                            this.$_core.$_renderer.linkManager.changeAttribute(link, key)
+                        }
                     }
-                }
-                linkSet = this.$_core.$_targetId2links.get(this.$_id)
-                if (linkSet) {
-                    this.$_core.addModifiedLinkCount(linkSet.size)
-                    for (const link of linkSet) {
-                        this.$_core.$_renderer.linkManager.changeAttribute(link, 'target')
-                    }
-                }
+                })
             }
-        } else if (arguments.length !== 0 && arguments.length !== 2) {
-            throw Error(`Node.position() method can not deal with ${arguments.length} parameters.`)
         }
+
+        if ('x' in position || 'y' in position) {
+            linkSets = {
+                // find links from/to this node
+                source: this.$_core.$_sourceId2links.get(this.$_id),
+                target: this.$_core.$_targetId2links.get(this.$_id)
+            }
+            if ('x' in position) {
+                setOnePosition('x', position.x)
+            }
+            if ('y' in position) {
+                setOnePosition('y', position.y)
+            }
+        }
+
         return this.$_position
     }
 

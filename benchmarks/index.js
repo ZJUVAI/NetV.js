@@ -7,41 +7,42 @@ const stats = new Stats()
 stats.showPanel(0)
 document.body.appendChild(stats.dom)
 
-const WIDTH = 1000;
-const HEIGHT = 1000;
+const WIDTH = 1000
+const HEIGHT = 1000
 
-const NODE_NUM = 1e4;
-const LINK_NUM = NODE_NUM * 20;
+const NODE_NUM = 1e4
+const LINK_NUM = NODE_NUM * 20
 
 const netv = new NetV({
     container: document.getElementById('main'),
     width: WIDTH,
     height: HEIGHT,
     nodeLimit: 1e7,
-    linkLimit: 1e7,
-
+    linkLimit: 1e7
 })
 
-const testData = generateData(NODE_NUM, LINK_NUM, WIDTH, HEIGHT);
+const testData = generateData(NODE_NUM, LINK_NUM, WIDTH, HEIGHT)
 
 netv.data(testData)
 
-
-render();
+render()
 
 function render() {
-    stats.begin();
+    stats.begin()
 
-    updateData(netv);
+    updateData(netv)
     netv.draw()
 
-    stats.end();
+    stats.end()
 
-    requestAnimationFrame(render);
+    requestAnimationFrame(render)
 }
 
 function updateData(netv) {
     netv.nodes().forEach((n) => {
-        n.position(Math.random() * WIDTH, Math.random() * HEIGHT)
-    });
+        n.position({
+            x: Math.random() * WIDTH,
+            y: Math.random() * HEIGHT
+        })
+    })
 }

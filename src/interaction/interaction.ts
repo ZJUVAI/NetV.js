@@ -67,7 +67,10 @@ export class InteractionManager {
             this.mouseDownPos = { x, y }
             this.dragStartTransform = JSON.parse(JSON.stringify(this.transform))
 
-            this.mouseDownElement = this.netv.getElementByPosition(x, yInv)
+            this.mouseDownElement = this.netv.getElementByPosition({
+                x,
+                y: yInv
+            })
             if (this.mouseDownElement?.element.position) {
                 // record orgin position for drag
                 this.mouseDownElementOriginPos = { ...this.mouseDownElement.element.position() }
@@ -90,10 +93,10 @@ export class InteractionManager {
                     this.netv.draw()
                 } else {
                     // drag node
-                    this.mouseDownElement.element.position(
-                        this.mouseDownElementOriginPos.x + x - this.mouseDownPos.x,
-                        this.mouseDownElementOriginPos.y + y - this.mouseDownPos.y
-                    )
+                    this.mouseDownElement.element.position({
+                        x: this.mouseDownElementOriginPos.x + x - this.mouseDownPos.x,
+                        y: this.mouseDownElementOriginPos.y + y - this.mouseDownPos.y
+                    })
                     this.netv.draw()
                 }
             } else {
