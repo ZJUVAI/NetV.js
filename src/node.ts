@@ -127,7 +127,7 @@ class Node {
             }
         }
 
-        if ('x' in position || 'y' in position) {
+        if (arguments.length > 0 && ('x' in position || 'y' in position)) {
             linkSets = {
                 // find links from/to this node
                 source: this.$_core.$_sourceId2links.get(this.$_id),
