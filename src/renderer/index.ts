@@ -7,7 +7,7 @@ import { RenderNodeManager } from './elements/node/render-node'
 import Node from '../node'
 import Link from 'src/link'
 import { RenderLinkManager } from './elements/link/render-link'
-import { Transform } from '../interfaces'
+import { Transform, Position } from '../interfaces'
 import { RendererConfigs } from './interfaces'
 import { Color } from 'src/interfaces'
 import { decodeRenderId } from './utils'
@@ -98,8 +98,8 @@ export class Renderer {
      * @param x x pos
      * @param y y pos
      */
-    public getIdByPosition(x: number, y: number): string | [string, string] {
-        const renderId = this.readIdTexture(x, y)
+    public getIdByPosition(position: Position): string | [string, string] {
+        const renderId = this.readIdTexture(position)
         if (renderId >= 0) {
             if (renderId % 2 === 0) {
                 // NOTE: node has even render id, link has odd render id
@@ -117,13 +117,14 @@ export class Renderer {
      * @param x x pos
      * @param y y pos
      */
-    public readIdTexture(x: number, y: number): number {
+    public readIdTexture(position: Position): number {
         const ratio = window.devicePixelRatio || 1
         this.gl.bindFramebuffer(this.gl.READ_FRAMEBUFFER, this.idTexture)
         const readPixelBuffer = new Uint8Array([255, 255, 255, 255]) // -1
         this.gl.readPixels(
-            x * ratio,
-            y * ratio,
+            // !Warning: x and y are optional in Position, need to check them
+            position.x * ratio,
+            position.y * ratio,
             1,
             1,
             this.gl.RGBA,

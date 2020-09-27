@@ -14,6 +14,11 @@ export interface Color {
     a: number
 }
 
+export interface Position {
+    x?: number
+    y?: number
+}
+
 export interface NodeData {
     id: string
     x?: number

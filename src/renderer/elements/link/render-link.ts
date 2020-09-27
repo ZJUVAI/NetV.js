@@ -184,6 +184,62 @@ export class RenderLinkManager {
     }
 
     /**
+     * refresh all position of edges
+     * @param links all link data
+     */
+    public refreshPosition(links: Link[]) {
+        let count = 0
+        links.forEach((link, i) => {
+            // TODO: consider link and render link attribute mapping
+            const source = link.source()
+            const sourcePosition = source.position()
+            this.attributes[LinkAttrKey.SOURCE].array[2 * (count + i)] = sourcePosition.x
+            this.attributes[LinkAttrKey.SOURCE].array[2 * (count + i) + 1] = sourcePosition.y
+
+            const target = link.target()
+            const targetPosition = target.position()
+            this.attributes[LinkAttrKey.TARGET].array[2 * (count + i)] = targetPosition.x
+            this.attributes[LinkAttrKey.TARGET].array[2 * (count + i) + 1] = targetPosition.y
+
+            // currently no need for color&renderId change
+            /*
+            this.attributes[LinkAttrKey.WIDTH].array[this.count + i] =
+                link.strokeWidth() * this.pixelRatio
+
+            const color = link.strokeColor()
+            this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i)] = color.r
+            this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 1] = color.g
+            this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 2] = color.b
+            this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 3] = color.a
+
+            const renderIdColor = encodeRenderId(2 * (this.count + i) + 1) // NOTE: link render id, use odd integer
+            this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i)] = renderIdColor.r
+            this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i) + 1] = renderIdColor.g
+            this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i) + 2] = renderIdColor.b
+            this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i) + 3] = renderIdColor.a
+            */
+        })
+
+        const sourceAttr = this.attributes[LinkAttrKey.SOURCE]
+        const targetAttr = this.attributes[LinkAttrKey.TARGET]
+
+        const arr = [sourceAttr, targetAttr]
+
+        arr.forEach((attr) => {
+            if (!attr.isBuildIn) {
+                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+                this.gl.bufferSubData(
+                    this.gl.ARRAY_BUFFER,
+                    attr.size * count * attr.array.BYTES_PER_ELEMENT,
+                    attr.array,
+                    attr.size * count,
+                    attr.size * links.length
+                )
+            }
+        })
+    }
+
+    /**
      * add links data to engine
      * @param links links data
      */
