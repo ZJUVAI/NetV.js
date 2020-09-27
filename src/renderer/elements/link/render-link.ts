@@ -219,6 +219,24 @@ export class RenderLinkManager {
             this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i) + 3] = renderIdColor.a
             */
         })
+
+        const sourceAttr = this.attributes[LinkAttrKey.SOURCE]
+        const targetAttr = this.attributes[LinkAttrKey.TARGET]
+
+        const arr = [sourceAttr, targetAttr]
+
+        arr.forEach((attr) => {
+            if (!attr.isBuildIn) {
+                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+                this.gl.bufferSubData(
+                    this.gl.ARRAY_BUFFER,
+                    attr.size * count * attr.array.BYTES_PER_ELEMENT,
+                    attr.array,
+                    attr.size * count,
+                    attr.size * links.length
+                )
+            }
+        })
     }
 
     /**
