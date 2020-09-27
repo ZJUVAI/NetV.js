@@ -126,7 +126,7 @@ const linkOneTwo = netV.getLinkByEnds(["1", "2"]);
 #### `NetV.getElementByPosition()`
 
 `NetV.getElementByPosition( number, number )`: get an element (node/link) by a 2D position. Two numerical parameters are the 2D position (x and y). Return an object includes the Id
- and the object of the element : `{type: string, element: Node/Link}`
+and the object of the element : `{type: string, element: Node/Link}`
 
 ```typescript
 const obj = netV.getElementByPosition(/* x= */ 100, /* y= */ 200);
@@ -192,13 +192,13 @@ Get the position (x and y) of the node or set it.
 
 - `Node.position()`: return an object (`{x: number, y: number}`)
 
-- `Node.position( number, number )`: set the position of the node. Two numerical parameters are the 2D position (x and y). Return the position (`{x: number, y: number}`).
+- `Node.position( {x: number, y: number} )`: set the position of the node. Two numerical parameters are the 2D position (x and y). Return the position (`{x: number, y: number}`).
 
   ```typescript
   const nodeOne = netV.getNodeById("1");
   nodeOne.position(); // example return: {x: 100, y: 200}
   nodeOne.position({ x: 100, y: 100 });
-  netV.draw(); 
+  netV.draw();
   // note that only after netV.draw(), the visualization will be refreshed
   ```
 
@@ -305,7 +305,7 @@ Get or set the width of the link
 
 ## Utils
 
-Some utilities are provided in *NetV.js*.
+Some utilities are provided in _NetV.js_.
 
 ### `Utils.transformGraphPosition()`
 
@@ -313,22 +313,25 @@ Some utilities are provided in *NetV.js*.
 
 ```typescript
 const data = {
-    nodes: [{
-        id: '1', x: 1, y: 1,
-    }, {
-        id: '2', x: 2, y: 3
-    }],
-    links: [{source: '1', target: '2'}]
-}
+  nodes: [
+    {
+      id: "1",
+      x: 1,
+      y: 1,
+    },
+    {
+      id: "2",
+      x: 2,
+      y: 3,
+    },
+  ],
+  links: [{ source: "1", target: "2" }],
+};
 // transform the data into a square from (0, 0) to (1, 1)
-const dataAfterTransform = netV.Utils.transformGraphPosition(data, 1, 0.5, 0.5)
+const dataAfterTransform = netV.Utils.transformGraphPosition(data, 1, 0.5, 0.5);
 // node with id '1' will be located on (0.25, 0)
 // node with id '2' will be located on (0.75, 1)
 ```
-
-
-
-
 
 ## Interfaces
 

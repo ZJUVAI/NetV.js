@@ -5,7 +5,8 @@
   "main": "build/NetV.js",
   "scripts": {
     "start": "vuepress dev src --no-cache -p 6001",
-    "build": "vuepress build src"
+    "build": "vuepress build src",
+    "deploy": "git add . && git commit -m 'DeployedAutomatically' && git push origin docs"
   },
   "author": "",
   "license": "MIT",
