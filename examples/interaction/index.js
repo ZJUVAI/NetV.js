@@ -73,5 +73,15 @@ testData.nodes[0].clickCallback = (node) => {
     netv.draw()
 }
 
+
 netv.data(testData)
+
+netv.nodes()[0].setHoverCallback((node) => {
+    console.log(`${node.id()} hovered`)
+})
+
+netv.links()[1].setHoverCallback((link) => {
+    console.log(`${link.source().id()}-${link.target().id()} hovered`)
+})
+
 netv.draw()

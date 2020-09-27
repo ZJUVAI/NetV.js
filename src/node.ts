@@ -7,9 +7,12 @@
 import * as interfaces from './interfaces'
 import { isValidId } from './utils/is'
 import { NetV } from './index'
+import { LinkAttr } from './renderer/interfaces'
+import Link from './link'
 
 class Node {
     public $_clickCallback: (node: Node) => void
+    public $_hoverCallback: (node: Node) => void
 
     private $_core: NetV
     private $_id: string
@@ -38,7 +41,8 @@ class Node {
                 fill: defaultConfigs.node.fill,
                 showLabel: defaultConfigs.node.showLabel,
                 text: defaultConfigs.node.text,
-                clickCallback: defaultConfigs.node.clickCallback
+                clickCallback: defaultConfigs.node.clickCallback,
+                hoverCallback: defaultConfigs.node.hoverCallback
             },
             ...nodeData
         }
@@ -60,6 +64,7 @@ class Node {
         }
 
         this.setClickCallback(data.clickCallback)
+        this.setHoverCallback(data.hoverCallback)
     }
 
     /**
@@ -76,20 +81,10 @@ class Node {
      * @memberof Node
      */
     public x(value?: number) {
-        if (arguments.length !== 0) {
-            this.$_position.x = value
-            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
-            // NOTE: update related link position
-            if (this.$_core.$_sourceId2links.get(this.$_id)) {
-                for (const link of this.$_core.$_sourceId2links.get(this.$_id)) {
-                    this.$_core.$_renderer.linkManager.changeAttribute(link, 'source')
-                }
-            }
-            if (this.$_core.$_targetId2links.get(this.$_id)) {
-                for (const link of this.$_core.$_targetId2links.get(this.$_id)) {
-                    this.$_core.$_renderer.linkManager.changeAttribute(link, 'target')
-                }
-            }
+        if (arguments.length > 0) {
+            this.position({
+                x: value
+            })
         }
         return this.$_position.x
     }
@@ -100,48 +95,56 @@ class Node {
      * @memberof Node
      */
     public y(value?: number) {
-        if (arguments.length !== 0) {
-            this.$_position.y = value
-            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
-            // NOTE: update related link position
-            if (this.$_core.$_sourceId2links.get(this.$_id)) {
-                for (const link of this.$_core.$_sourceId2links.get(this.$_id)) {
-                    this.$_core.$_renderer.linkManager.changeAttribute(link, 'source')
-                }
-            }
-            if (this.$_core.$_targetId2links.get(this.$_id)) {
-                for (const link of this.$_core.$_targetId2links.get(this.$_id)) {
-                    this.$_core.$_renderer.linkManager.changeAttribute(link, 'target')
-                }
-            }
+        if (arguments.length > 0) {
+            this.position({
+                y: value
+            })
         }
         return this.$_position.y
     }
 
     /**
      * set/get postion
-     * @param {number} [value]
      * @memberof Node
      */
-    public position(x?: number, y?: number) {
-        if (arguments.length === 2) {
-            this.$_position.x = x
-            this.$_position.y = y
-            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
-            // NOTE: update related link position
-            if (this.$_core.$_sourceId2links.get(this.$_id)) {
-                for (const link of this.$_core.$_sourceId2links.get(this.$_id)) {
-                    this.$_core.$_renderer.linkManager.changeAttribute(link, 'source')
-                }
+    public position(position?: interfaces.Position) {
+        let linkSets = {}
+
+        // e.g. setOnePosition('x', 1) means set x position with value 1
+        const setOnePosition = (key, value) => {
+            this.$_position[key] = value // key: 'x' or 'y'
+            if (!this.$_core.$_lazyLinkUpdate) {
+                // lazeLinkUpdate means update links in batch mode
+                Object.entries(linkSets).forEach((entry) => {
+                    // entry[0]: 'source' / 'target'
+                    // entry[1]: the link set
+                    const key = entry[0] as LinkAttr
+                    const set = entry[1] as Set<Link>
+                    if (set) {
+                        this.$_core.$_addModifiedLinkCount(set.size)
+                        for (const link of set) {
+                            this.$_core.$_renderer.linkManager.changeAttribute(link, key)
+                        }
+                    }
+                })
             }
-            if (this.$_core.$_targetId2links.get(this.$_id)) {
-                for (const link of this.$_core.$_targetId2links.get(this.$_id)) {
-                    this.$_core.$_renderer.linkManager.changeAttribute(link, 'target')
-                }
-            }
-        } else if (arguments.length !== 0 && arguments.length !== 2) {
-            throw Error(`Node.position() method can not deal with ${arguments.length} parameters.`)
         }
+
+        if (arguments.length > 0 && ('x' in position || 'y' in position)) {
+            linkSets = {
+                // find links from/to this node
+                source: this.$_core.$_sourceId2links.get(this.$_id),
+                target: this.$_core.$_targetId2links.get(this.$_id)
+            }
+            if ('x' in position) {
+                setOnePosition('x', position.x)
+            }
+            if ('y' in position) {
+                setOnePosition('y', position.y)
+            }
+            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
+        }
+
         return this.$_position
     }
 
@@ -252,6 +255,14 @@ class Node {
         } else {
             throw new Error(`Invalid ID ${value}`)
         }
+    }
+
+    /**
+     * set hover callback function
+     * @param callback hover callback function
+     */
+    private setHoverCallback(callback: (node: Node) => void) {
+        this.$_hoverCallback = callback
     }
 
     /**

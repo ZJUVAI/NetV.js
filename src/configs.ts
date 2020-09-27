@@ -12,6 +12,7 @@ export const backgroundColor = { r: 1, g: 1, b: 1, a: 1 }
 export const enablePanZoom = true
 export const nodeLimit = 100
 export const linkLimit = 1000
+export const lazyLinkUpdateThreshold = 100
 
 export const node = {
     r: 5,
@@ -21,14 +22,16 @@ export const node = {
     strokeWidth: 2,
     showLabel: false,
     // textOffset: { x: 8, y: 0 }, put in label config instead of each node
-    clickCallback: (node: Node) => {}
+    clickCallback: (node: Node) => {},
+    hoverCallback: (node: Node) => {}
 }
 
 export const link = {
     // strokeColor: { r: 0.5, g: 0.5, b: 0.5, a: 0.2 },
     strokeColor: { r: 0.4, g: 0.6, b: 0.8, a: 0.5 },
     strokeWidth: 2,
-    clickCallback: (link: Link) => {}
+    clickCallback: (link: Link) => {},
+    hoverCallback: (node: Node) => {}
 }
 
 export const label = {

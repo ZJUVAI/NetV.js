@@ -67,7 +67,10 @@ export class InteractionManager {
             this.mouseDownPos = { x, y }
             this.dragStartTransform = JSON.parse(JSON.stringify(this.transform))
 
-            this.mouseDownElement = this.netv.getElementByPosition(x, yInv)
+            this.mouseDownElement = this.netv.getElementByPosition({
+                x,
+                y: yInv
+            })
             if (this.mouseDownElement?.element.position) {
                 // record orgin position for drag
                 this.mouseDownElementOriginPos = { ...this.mouseDownElement.element.position() }
@@ -87,16 +90,26 @@ export class InteractionManager {
                     this.transform.y = this.dragStartTransform.y + y - this.mouseDownPos.y
 
                     this.netv.$_renderer.setTransform(this.transform)
+                    this.netv.labelManager.setTransform(this.transform)
                     this.netv.draw()
                 } else {
                     // drag node
-                    this.mouseDownElement.element.position(
-                        this.mouseDownElementOriginPos.x + x - this.mouseDownPos.x,
-                        this.mouseDownElementOriginPos.y + y - this.mouseDownPos.y
-                    )
+                    this.mouseDownElement.element.position({
+                        x:
+                            this.mouseDownElementOriginPos.x +
+                            (x - this.mouseDownPos.x) / this.transform.k,
+                        y:
+                            this.mouseDownElementOriginPos.y +
+                            (y - this.mouseDownPos.y) / this.transform.k
+                    })
                     this.netv.draw()
                 }
             } else {
+                const yInv = this.netv.$_configs.height - y
+                const element = this.netv.getElementByPosition({ x, y: yInv })
+                if (element?.element.$_hoverCallback) {
+                    element.element.$_hoverCallback(element.element as any)
+                }
                 return // currently not support hover
             }
         }

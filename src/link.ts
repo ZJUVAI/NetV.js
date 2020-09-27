@@ -10,6 +10,7 @@ import { NetV } from './index'
 
 class Link {
     public $_clickCallback: (link: Link) => void
+    public $_hoverCallback: (link: Link) => void
 
     private $_core: NetV
     private $_source: Node
@@ -24,7 +25,8 @@ class Link {
             ...{
                 strokeWidth: defaultConfigs.link.strokeWidth,
                 strokeColor: defaultConfigs.link.strokeColor,
-                clickCallback: defaultConfigs.link.clickCallback
+                clickCallback: defaultConfigs.link.clickCallback,
+                hoverCallback: defaultConfigs.link.hoverCallback
             },
             ...linkData
         }
@@ -40,6 +42,7 @@ class Link {
         this.$_strokeColor = data.strokeColor
 
         this.setClickCallback(data.clickCallback)
+        this.setHoverCallback(data.hoverCallback)
     }
 
     /**
@@ -154,6 +157,14 @@ class Link {
             this.$_core.$_renderer.linkManager.changeAttribute(this, 'strokeColor')
         }
         return this.$_strokeColor
+    }
+
+    /**
+     * set hover callback function
+     * @param callback hover callback function
+     */
+    private setHoverCallback(callback: (link: Link) => void) {
+        this.$_hoverCallback = callback
     }
 
     /**
