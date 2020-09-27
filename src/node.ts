@@ -139,6 +139,7 @@ class Node {
             if ('y' in position) {
                 setOnePosition('y', position.y)
             }
+            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
         }
 
         return this.$_position
