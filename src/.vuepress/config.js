@@ -31,7 +31,7 @@ module.exports = {
     smoothScroll: true,
     locales: {
       "/": {
-        selectText: "选择语言",
+        selectText: "Languages",
         label: "English",
         ariaLabel: "Languages",
         editLinkText: "Edit this page on GitHub",
@@ -75,7 +75,7 @@ module.exports = {
       },
       "/zh/": {
         // 多语言下拉菜单的标题
-        selectText: "Languages",
+        selectText: "选择语言",
         // 该语言在下拉菜单中的标签
         label: "简体中文",
         // 编辑链接文字
