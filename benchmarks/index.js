@@ -9,6 +9,9 @@ const NODE_NUMs = [5e2, 1e3, 2e3, 4e3, 8e3]
 
 const container = document.getElementById('main')
 
+const title = document.createElement('h1')
+document.body.insertBefore(title, container)
+
 let step = localStorage.getItem('step')
 if (!step) {
     step = 0
@@ -24,7 +27,10 @@ function test(container, nodeNumbers, testFunc, testResultName, step = 0, densit
     stats.dom.setAttribute('class', 'status')
     document.body.appendChild(stats.dom)
 
-    document.write(`<h1>#nodes: ${nodeNumbers[step]}, #edge: ${nodeNumbers[step] * density}<h1>`)
+    title.textContent = `#nodes: ${nodeNumbers[step]}, #edge: ${nodeNumbers[step] * density}`
+
+    localStorage.setItem('killedManually', 1)
+
     const testData = generateData(nodeNumbers[step], nodeNumbers[step] * density, WIDTH, HEIGHT)
 
     testFunc(WIDTH, HEIGHT, container, testData, stats)
@@ -48,12 +54,14 @@ function test(container, nodeNumbers, testFunc, testResultName, step = 0, densit
         })
         localStorage.setItem(testResultName, JSON.stringify(testResult))
 
+        localStorage.setItem('killedManually', 0)
         localStorage.setItem('step', step + 1)
 
         if (step + 1 < nodeNumbers.length) {
             location.reload()
         } else {
             drawLineChart(testResult)
+            localStorage.clear()
         }
     })
 }
