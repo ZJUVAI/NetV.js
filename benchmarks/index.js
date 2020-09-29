@@ -5,19 +5,26 @@
 const WIDTH = 1000
 const HEIGHT = 1000
 
-const NODE_NUMs = [5e2, 1e3, 5e3, 1e4, 5e4]
+const NODE_NUMs = [5e2, 1e3, 2e3, 4e3, 8e3]
 
 const container = document.getElementById('main')
 
-test(container, NODE_NUMs.reverse(), testNetV)
+let step = localStorage.getItem('step')
+if (!step) {
+    step = 0
+} else {
+    step = +step
+}
 
-function test(container, nodeNumbers, testFunc, step = 0, density = 20) {
+test(container, NODE_NUMs.reverse(), testNetV, 'NetVTestResult', step)
+
+function test(container, nodeNumbers, testFunc, testResultName, step = 0, density = 20) {
     const stats = new Stats()
     stats.showPanel(0)
     stats.dom.setAttribute('class', 'status')
     document.body.appendChild(stats.dom)
 
-    console.log(nodeNumbers[step], nodeNumbers[step] * density)
+    document.write(`<h1>#nodes: ${nodeNumbers[step]}, #edge: ${nodeNumbers[step] * density}<h1>`)
     const testData = generateData(nodeNumbers[step], nodeNumbers[step] * density, WIDTH, HEIGHT)
 
     testFunc(WIDTH, HEIGHT, container, testData, stats)
@@ -28,13 +35,25 @@ function test(container, nodeNumbers, testFunc, step = 0, density = 20) {
 
     sleep(10000).then(() => {
         // wait for 10 seconds to run the test.
-        console.log(stats.getFPSHistory())
-        refresh(container)
-        document.body.removeChild(document.querySelector('.status'))
-        if (step + 1 < nodeNumbers.length) {
-            test(container, nodeNumbers, testFunc, step + 1)
+        const FPSHistory = stats.getFPSHistory()
+        let testResult = localStorage.getItem(testResultName)
+        if (!testResult) {
+            testResult = []
         } else {
-            console.log('Test complte.')
+            testResult = JSON.parse(testResult)
+        }
+        testResult.push({
+            size: nodeNumbers[step] * (density + 1),
+            value: FPSHistory.reduce((sum, fps) => sum + fps, 0) / FPSHistory.length
+        })
+        localStorage.setItem(testResultName, JSON.stringify(testResult))
+
+        localStorage.setItem('step', step + 1)
+
+        if (step + 1 < nodeNumbers.length) {
+            location.reload()
+        } else {
+            drawLineChart(testResult)
         }
     })
 }
