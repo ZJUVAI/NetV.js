@@ -1,5 +1,5 @@
 /**
- * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
+ * @author Xiaodong Zhao<zhaoxiaodong@zju.edu.cn> and Jiacheng Pan <panjiacheng@zju.edu.cn>
  * @description benchmark, FPS of NetV.js
  */
 
@@ -10,39 +10,41 @@ document.body.appendChild(stats.dom)
 const WIDTH = 1000
 const HEIGHT = 1000
 
-const NODE_NUM = 1e4
+const NODE_NUMs = [5e2, 1e3, 5e3, 1e4, 5e4]
+const NODE_NUM = 5e2
 const LINK_NUM = NODE_NUM * 20
 
-const netv = new NetV({
-    container: document.getElementById('main'),
-    width: WIDTH,
-    height: HEIGHT,
-    nodeLimit: 1e7,
-    linkLimit: 1e7
-})
+const container = document.getElementById('main')
 
-const testData = generateData(NODE_NUM, LINK_NUM, WIDTH, HEIGHT)
+testWithDiffNodeNumbers(container, NODE_NUMs)
 
-netv.data(testData)
+function testWithDiffNodeNumbers(container, nodeNumbers, step = 0, density = 20) {
+    console.log(nodeNumbers[step], nodeNumbers[step] * density)
+    const testData = generateData(nodeNumbers[step], nodeNumbers[step] * density, WIDTH, HEIGHT)
 
-render()
+    testNetV(WIDTH, HEIGHT, container, testData)
 
-function render() {
-    stats.begin()
+    function sleep(time) {
+        return new Promise((resolve) => setTimeout(resolve, time))
+    }
 
-    updateData(netv)
-    netv.draw()
-
-    stats.end()
-
-    requestAnimationFrame(render)
+    sleep(5000).then(() => {
+        console.log(stats.getFPSHistory())
+        refresh(container)
+        if (step + 1 < nodeNumbers.length) {
+            testWithDiffNodeNumbers(container, nodeNumbers, step + 1)
+        } else {
+            console.log('Test complte.')
+        }
+    })
 }
 
-function updateData(netv) {
-    netv.nodes().forEach((n) => {
-        n.position({
-            x: Math.random() * WIDTH,
-            y: Math.random() * HEIGHT
-        })
-    })
+function refresh(div) {
+    const canvas = div.querySelector('canvas')
+    if (canvas)
+        canvas
+            .getContext('webgl2')
+            .getExtension('WEBGL_lose_context')
+            .loseContext()
+    Array.from(div.children).forEach((child) => div.removeChild.bind(div)(child))
 }
