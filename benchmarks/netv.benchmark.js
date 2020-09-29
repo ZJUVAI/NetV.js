@@ -3,7 +3,7 @@
  * @description benchmark, FPS of NetV.js
  */
 
-function testNetV(width, height, container, data) {
+function testNetV(width, height, container, data, stats) {
     const netv = new NetV({
         container,
         width,

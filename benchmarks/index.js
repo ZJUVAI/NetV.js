@@ -2,37 +2,37 @@
  * @author Xiaodong Zhao<zhaoxiaodong@zju.edu.cn> and Jiacheng Pan <panjiacheng@zju.edu.cn>
  * @description benchmark, FPS of NetV.js
  */
-
-const stats = new Stats()
-stats.showPanel(0)
-document.body.appendChild(stats.dom)
-
 const WIDTH = 1000
 const HEIGHT = 1000
 
 const NODE_NUMs = [5e2, 1e3, 5e3, 1e4, 5e4]
-const NODE_NUM = 5e2
-const LINK_NUM = NODE_NUM * 20
 
 const container = document.getElementById('main')
 
-testWithDiffNodeNumbers(container, NODE_NUMs)
+test(container, NODE_NUMs.reverse(), testNetV)
 
-function testWithDiffNodeNumbers(container, nodeNumbers, step = 0, density = 20) {
+function test(container, nodeNumbers, testFunc, step = 0, density = 20) {
+    const stats = new Stats()
+    stats.showPanel(0)
+    stats.dom.setAttribute('class', 'status')
+    document.body.appendChild(stats.dom)
+
     console.log(nodeNumbers[step], nodeNumbers[step] * density)
     const testData = generateData(nodeNumbers[step], nodeNumbers[step] * density, WIDTH, HEIGHT)
 
-    testNetV(WIDTH, HEIGHT, container, testData)
+    testFunc(WIDTH, HEIGHT, container, testData, stats)
 
     function sleep(time) {
         return new Promise((resolve) => setTimeout(resolve, time))
     }
 
-    sleep(5000).then(() => {
+    sleep(10000).then(() => {
+        // wait for 10 seconds to run the test.
         console.log(stats.getFPSHistory())
         refresh(container)
+        document.body.removeChild(document.querySelector('.status'))
         if (step + 1 < nodeNumbers.length) {
-            testWithDiffNodeNumbers(container, nodeNumbers, step + 1)
+            test(container, nodeNumbers, testFunc, step + 1)
         } else {
             console.log('Test complte.')
         }
