@@ -1,47 +1,50 @@
-function generatePairInRange(a, b) {
+export function generatePairInRange(a, b) {
     function randRange(a, b) {
-        return a + Math.floor(Math.random() * (b - a));
+        return a + Math.floor(Math.random() * (b - a))
     }
-    const x = randRange(a, b);
-    let y = randRange(a, b);
+    const x = randRange(a, b)
+    let y = randRange(a, b)
     while (y === x) {
-        y = randRange(a, b);
+        y = randRange(a, b)
     }
     return {
         x: x,
-        y: y,
-    };
+        y: y
+    }
 }
 
-
-function generateData(nodeNum, edgeNum, width, height) {
+export function generateData({ nodeNum, edgeNum, width, height }) {
     const data = {
         nodes: [],
-        links: [],
-    };
+        links: []
+    }
 
-    data.nodes = Array(nodeNum).fill().map((v, i) => {
-        return {
-            id: String(i),
-            x: Math.random() * width,
-            y: Math.random() * height,
-        };
-    });
+    data.nodes = Array(nodeNum)
+        .fill()
+        .map((v, i) => {
+            return {
+                id: String(i),
+                x: Math.random() * width,
+                y: Math.random() * height
+            }
+        })
 
     const linkSet = new Set()
-    data.links = Array(edgeNum).fill().map((v, i) => {
-        let pair
-        do {
-            pair = generatePairInRange(0, nodeNum);
-        } while (linkSet.has(`${pair.x}-${pair.y}`))
-        linkSet.add(`${pair.x}-${pair.y}`)
-        linkSet.add(`${pair.y}-${pair.x}`)
+    data.links = Array(edgeNum)
+        .fill()
+        .map((v, i) => {
+            let pair
+            do {
+                pair = generatePairInRange(0, nodeNum)
+            } while (linkSet.has(`${pair.x}-${pair.y}`))
+            linkSet.add(`${pair.x}-${pair.y}`)
+            linkSet.add(`${pair.y}-${pair.x}`)
 
-        return {
-            source: String(pair.x),
-            target: String(pair.y),
-        }
-    });
+            return {
+                source: String(pair.x),
+                target: String(pair.y)
+            }
+        })
 
-    return data;
+    return data
 }

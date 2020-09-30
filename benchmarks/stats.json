@@ -1,0 +1,928 @@
+{
+  "errors": [
+  ],
+  "warnings": [
+  ],
+  "version": "4.44.1",
+  "hash": "bf876f9f74adfb60934e",
+  "time": 446,
+  "builtAt": 1601435629883,
+  "publicPath": "",
+  "outputPath": "D:\\Repositories\\NetV.js\\benchmarks",
+  "assetsByChunkName": {
+    "main": "bundle.js"
+  },
+  "assets": [
+    {
+      "name": "bundle.js",
+      "size": 2429153,
+      "chunks": [
+        "main"
+      ],
+      "chunkNames": [
+        "main"
+      ],
+      "info": {
+      },
+      "emitted": true
+    }
+  ],
+  "filteredAssets": 0,
+  "entrypoints": {
+    "main": {
+      "chunks": [
+        "main"
+      ],
+      "assets": [
+        "bundle.js"
+      ],
+      "children": {
+      },
+      "childAssets": {
+      }
+    }
+  },
+  "namedChunkGroups": {
+    "main": {
+      "chunks": [
+        "main"
+      ],
+      "assets": [
+        "bundle.js"
+      ],
+      "children": {
+      },
+      "childAssets": {
+      }
+    }
+  },
+  "chunks": [
+    {
+      "id": "main",
+      "rendered": true,
+      "initial": true,
+      "entry": true,
+      "size": 975088,
+      "names": [
+        "main"
+      ],
+      "files": [
+        "bundle.js"
+      ],
+      "hash": "83ef78924e88bf02b07e",
+      "siblings": [
+      ],
+      "parents": [
+      ],
+      "children": [
+      ],
+      "childrenByOrder": {
+      },
+      "modules": [
+        {
+          "id": "./benchmarks/index.ts",
+          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+          "name": "./benchmarks/index.ts",
+          "index": 0,
+          "index2": 6,
+          "size": 2968,
+          "cacheable": true,
+          "built": true,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "main"
+          ],
+          "issuer": null,
+          "issuerId": null,
+          "issuerName": null,
+          "issuerPath": null,
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [
+          ],
+          "reasons": [
+            {
+              "moduleId": null,
+              "moduleIdentifier": null,
+              "module": null,
+              "moduleName": null,
+              "type": "single entry",
+              "userRequest": "./benchmarks/index.ts",
+              "loc": "main"
+            }
+          ],
+          "providedExports": null,
+          "optimizationBailout": [
+          ],
+          "depth": 0
+        },
+        {
+          "id": "./benchmarks/lib/d3.v4.min.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\d3.v4.min.js",
+          "name": "./benchmarks/lib/d3.v4.min.js",
+          "index": 6,
+          "index2": 4,
+          "size": 221958,
+          "cacheable": true,
+          "built": false,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "main"
+          ],
+          "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+          "issuerId": "./benchmarks/lib/linechart.js",
+          "issuerName": "./benchmarks/lib/linechart.js",
+          "issuerPath": [
+            {
+              "id": "./benchmarks/index.ts",
+              "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+              "name": "./benchmarks/index.ts"
+            },
+            {
+              "id": "./benchmarks/lib/linechart.js",
+              "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+              "name": "./benchmarks/lib/linechart.js"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [
+          ],
+          "reasons": [
+            {
+              "moduleId": "./benchmarks/lib/linechart.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+              "module": "./benchmarks/lib/linechart.js",
+              "moduleName": "./benchmarks/lib/linechart.js",
+              "type": "harmony side effect evaluation",
+              "userRequest": "./d3.v4.min.js",
+              "loc": "1:0-36"
+            },
+            {
+              "moduleId": "./benchmarks/lib/linechart.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+              "module": "./benchmarks/lib/linechart.js",
+              "moduleName": "./benchmarks/lib/linechart.js",
+              "type": "harmony import specifier",
+              "userRequest": "./d3.v4.min.js",
+              "loc": "9:12-10:11"
+            },
+            {
+              "moduleId": "./benchmarks/lib/linechart.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+              "module": "./benchmarks/lib/linechart.js",
+              "moduleName": "./benchmarks/lib/linechart.js",
+              "type": "harmony import specifier",
+              "userRequest": "./d3.v4.min.js",
+              "loc": "20:14-21:17"
+            },
+            {
+              "moduleId": "./benchmarks/lib/linechart.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+              "module": "./benchmarks/lib/linechart.js",
+              "moduleName": "./benchmarks/lib/linechart.js",
+              "type": "harmony import specifier",
+              "userRequest": "./d3.v4.min.js",
+              "loc": "24:12-21"
+            },
+            {
+              "moduleId": "./benchmarks/lib/linechart.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+              "module": "./benchmarks/lib/linechart.js",
+              "moduleName": "./benchmarks/lib/linechart.js",
+              "type": "harmony import specifier",
+              "userRequest": "./d3.v4.min.js",
+              "loc": "31:14-27"
+            },
+            {
+              "moduleId": "./benchmarks/lib/linechart.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+              "module": "./benchmarks/lib/linechart.js",
+              "moduleName": "./benchmarks/lib/linechart.js",
+              "type": "harmony import specifier",
+              "userRequest": "./d3.v4.min.js",
+              "loc": "34:14-35:20"
+            },
+            {
+              "moduleId": "./benchmarks/lib/linechart.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+              "module": "./benchmarks/lib/linechart.js",
+              "moduleName": "./benchmarks/lib/linechart.js",
+              "type": "harmony import specifier",
+              "userRequest": "./d3.v4.min.js",
+              "loc": "38:12-18"
+            },
+            {
+              "moduleId": "./benchmarks/lib/linechart.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+              "module": "./benchmarks/lib/linechart.js",
+              "moduleName": "./benchmarks/lib/linechart.js",
+              "type": "harmony import specifier",
+              "userRequest": "./d3.v4.min.js",
+              "loc": "43:25-36"
+            },
+            {
+              "moduleId": "./benchmarks/lib/linechart.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+              "module": "./benchmarks/lib/linechart.js",
+              "moduleName": "./benchmarks/lib/linechart.js",
+              "type": "harmony import specifier",
+              "userRequest": "./d3.v4.min.js",
+              "loc": "53:12-54:21"
+            }
+          ],
+          "providedExports": null,
+          "optimizationBailout": [
+          ],
+          "depth": 2
+        },
+        {
+          "id": "./benchmarks/lib/linechart.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+          "name": "./benchmarks/lib/linechart.js",
+          "index": 5,
+          "index2": 5,
+          "size": 1715,
+          "cacheable": true,
+          "built": false,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "main"
+          ],
+          "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+          "issuerId": "./benchmarks/index.ts",
+          "issuerName": "./benchmarks/index.ts",
+          "issuerPath": [
+            {
+              "id": "./benchmarks/index.ts",
+              "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+              "name": "./benchmarks/index.ts"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [
+          ],
+          "reasons": [
+            {
+              "moduleId": "./benchmarks/index.ts",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+              "module": "./benchmarks/index.ts",
+              "moduleName": "./benchmarks/index.ts",
+              "type": "cjs require",
+              "userRequest": "./lib/linechart",
+              "loc": "10:20-46"
+            }
+          ],
+          "providedExports": [
+            "drawLineChart"
+          ],
+          "optimizationBailout": [
+          ],
+          "depth": 1
+        },
+        {
+          "id": "./benchmarks/lib/stats.module.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\stats.module.js",
+          "name": "./benchmarks/lib/stats.module.js",
+          "index": 3,
+          "index2": 2,
+          "size": 4186,
+          "cacheable": true,
+          "built": false,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "main"
+          ],
+          "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+          "issuerId": "./benchmarks/index.ts",
+          "issuerName": "./benchmarks/index.ts",
+          "issuerPath": [
+            {
+              "id": "./benchmarks/index.ts",
+              "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+              "name": "./benchmarks/index.ts"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [
+          ],
+          "reasons": [
+            {
+              "moduleId": "./benchmarks/index.ts",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+              "module": "./benchmarks/index.ts",
+              "moduleName": "./benchmarks/index.ts",
+              "type": "cjs require",
+              "userRequest": "./lib/stats.module",
+              "loc": "8:23-52"
+            }
+          ],
+          "providedExports": [
+            "default"
+          ],
+          "optimizationBailout": [
+          ],
+          "depth": 1
+        },
+        {
+          "id": "./benchmarks/lib/utils.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\utils.js",
+          "name": "./benchmarks/lib/utils.js",
+          "index": 4,
+          "index2": 3,
+          "size": 1207,
+          "cacheable": true,
+          "built": false,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "main"
+          ],
+          "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+          "issuerId": "./benchmarks/index.ts",
+          "issuerName": "./benchmarks/index.ts",
+          "issuerPath": [
+            {
+              "id": "./benchmarks/index.ts",
+              "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+              "name": "./benchmarks/index.ts"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [
+          ],
+          "reasons": [
+            {
+              "moduleId": "./benchmarks/index.ts",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+              "module": "./benchmarks/index.ts",
+              "moduleName": "./benchmarks/index.ts",
+              "type": "cjs require",
+              "userRequest": "./lib/utils",
+              "loc": "9:16-38"
+            }
+          ],
+          "providedExports": [
+            "generatePairInRange",
+            "generateData"
+          ],
+          "optimizationBailout": [
+          ],
+          "depth": 1
+        },
+        {
+          "id": "./benchmarks/netv.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
+          "name": "./benchmarks/netv.js",
+          "index": 1,
+          "index2": 1,
+          "size": 857,
+          "cacheable": true,
+          "built": false,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "main"
+          ],
+          "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+          "issuerId": "./benchmarks/index.ts",
+          "issuerName": "./benchmarks/index.ts",
+          "issuerPath": [
+            {
+              "id": "./benchmarks/index.ts",
+              "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+              "name": "./benchmarks/index.ts"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [
+          ],
+          "reasons": [
+            {
+              "moduleId": "./benchmarks/index.ts",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+              "module": "./benchmarks/index.ts",
+              "moduleName": "./benchmarks/index.ts",
+              "type": "cjs require",
+              "userRequest": "./netv",
+              "loc": "7:15-32"
+            }
+          ],
+          "providedExports": [
+            "testNetV"
+          ],
+          "optimizationBailout": [
+          ],
+          "depth": 1
+        },
+        {
+          "id": "./build/NetV.js",
+          "identifier": "D:\\Repositories\\NetV.js\\build\\NetV.js",
+          "name": "./build/NetV.js",
+          "index": 2,
+          "index2": 0,
+          "size": 742197,
+          "cacheable": true,
+          "built": false,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "main"
+          ],
+          "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
+          "issuerId": "./benchmarks/netv.js",
+          "issuerName": "./benchmarks/netv.js",
+          "issuerPath": [
+            {
+              "id": "./benchmarks/index.ts",
+              "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+              "name": "./benchmarks/index.ts"
+            },
+            {
+              "id": "./benchmarks/netv.js",
+              "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
+              "name": "./benchmarks/netv.js"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [
+          ],
+          "reasons": [
+            {
+              "moduleId": "./benchmarks/netv.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
+              "module": "./benchmarks/netv.js",
+              "moduleName": "./benchmarks/netv.js",
+              "type": "harmony side effect evaluation",
+              "userRequest": "../build/NetV",
+              "loc": "5:0-36"
+            },
+            {
+              "moduleId": "./benchmarks/netv.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
+              "module": "./benchmarks/netv.js",
+              "moduleName": "./benchmarks/netv.js",
+              "type": "harmony import specifier",
+              "userRequest": "../build/NetV",
+              "loc": "8:21-25"
+            }
+          ],
+          "providedExports": null,
+          "optimizationBailout": [
+          ],
+          "depth": 2
+        }
+      ],
+      "filteredModules": 0,
+      "origins": [
+        {
+          "module": "",
+          "moduleIdentifier": "",
+          "moduleName": "",
+          "loc": "main",
+          "request": "./benchmarks/index.ts",
+          "reasons": [
+          ]
+        }
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "id": "./benchmarks/index.ts",
+      "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+      "name": "./benchmarks/index.ts",
+      "index": 0,
+      "index2": 6,
+      "size": 2968,
+      "cacheable": true,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "main"
+      ],
+      "issuer": null,
+      "issuerId": null,
+      "issuerName": null,
+      "issuerPath": null,
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [
+      ],
+      "reasons": [
+        {
+          "moduleId": null,
+          "moduleIdentifier": null,
+          "module": null,
+          "moduleName": null,
+          "type": "single entry",
+          "userRequest": "./benchmarks/index.ts",
+          "loc": "main"
+        }
+      ],
+      "providedExports": null,
+      "optimizationBailout": [
+      ],
+      "depth": 0
+    },
+    {
+      "id": "./benchmarks/lib/d3.v4.min.js",
+      "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\d3.v4.min.js",
+      "name": "./benchmarks/lib/d3.v4.min.js",
+      "index": 6,
+      "index2": 4,
+      "size": 221958,
+      "cacheable": true,
+      "built": false,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "main"
+      ],
+      "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+      "issuerId": "./benchmarks/lib/linechart.js",
+      "issuerName": "./benchmarks/lib/linechart.js",
+      "issuerPath": [
+        {
+          "id": "./benchmarks/index.ts",
+          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+          "name": "./benchmarks/index.ts"
+        },
+        {
+          "id": "./benchmarks/lib/linechart.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+          "name": "./benchmarks/lib/linechart.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [
+      ],
+      "reasons": [
+        {
+          "moduleId": "./benchmarks/lib/linechart.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+          "module": "./benchmarks/lib/linechart.js",
+          "moduleName": "./benchmarks/lib/linechart.js",
+          "type": "harmony side effect evaluation",
+          "userRequest": "./d3.v4.min.js",
+          "loc": "1:0-36"
+        },
+        {
+          "moduleId": "./benchmarks/lib/linechart.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+          "module": "./benchmarks/lib/linechart.js",
+          "moduleName": "./benchmarks/lib/linechart.js",
+          "type": "harmony import specifier",
+          "userRequest": "./d3.v4.min.js",
+          "loc": "9:12-10:11"
+        },
+        {
+          "moduleId": "./benchmarks/lib/linechart.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+          "module": "./benchmarks/lib/linechart.js",
+          "moduleName": "./benchmarks/lib/linechart.js",
+          "type": "harmony import specifier",
+          "userRequest": "./d3.v4.min.js",
+          "loc": "20:14-21:17"
+        },
+        {
+          "moduleId": "./benchmarks/lib/linechart.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+          "module": "./benchmarks/lib/linechart.js",
+          "moduleName": "./benchmarks/lib/linechart.js",
+          "type": "harmony import specifier",
+          "userRequest": "./d3.v4.min.js",
+          "loc": "24:12-21"
+        },
+        {
+          "moduleId": "./benchmarks/lib/linechart.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+          "module": "./benchmarks/lib/linechart.js",
+          "moduleName": "./benchmarks/lib/linechart.js",
+          "type": "harmony import specifier",
+          "userRequest": "./d3.v4.min.js",
+          "loc": "31:14-27"
+        },
+        {
+          "moduleId": "./benchmarks/lib/linechart.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+          "module": "./benchmarks/lib/linechart.js",
+          "moduleName": "./benchmarks/lib/linechart.js",
+          "type": "harmony import specifier",
+          "userRequest": "./d3.v4.min.js",
+          "loc": "34:14-35:20"
+        },
+        {
+          "moduleId": "./benchmarks/lib/linechart.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+          "module": "./benchmarks/lib/linechart.js",
+          "moduleName": "./benchmarks/lib/linechart.js",
+          "type": "harmony import specifier",
+          "userRequest": "./d3.v4.min.js",
+          "loc": "38:12-18"
+        },
+        {
+          "moduleId": "./benchmarks/lib/linechart.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+          "module": "./benchmarks/lib/linechart.js",
+          "moduleName": "./benchmarks/lib/linechart.js",
+          "type": "harmony import specifier",
+          "userRequest": "./d3.v4.min.js",
+          "loc": "43:25-36"
+        },
+        {
+          "moduleId": "./benchmarks/lib/linechart.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+          "module": "./benchmarks/lib/linechart.js",
+          "moduleName": "./benchmarks/lib/linechart.js",
+          "type": "harmony import specifier",
+          "userRequest": "./d3.v4.min.js",
+          "loc": "53:12-54:21"
+        }
+      ],
+      "providedExports": null,
+      "optimizationBailout": [
+      ],
+      "depth": 2
+    },
+    {
+      "id": "./benchmarks/lib/linechart.js",
+      "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+      "name": "./benchmarks/lib/linechart.js",
+      "index": 5,
+      "index2": 5,
+      "size": 1715,
+      "cacheable": true,
+      "built": false,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "main"
+      ],
+      "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+      "issuerId": "./benchmarks/index.ts",
+      "issuerName": "./benchmarks/index.ts",
+      "issuerPath": [
+        {
+          "id": "./benchmarks/index.ts",
+          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+          "name": "./benchmarks/index.ts"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [
+      ],
+      "reasons": [
+        {
+          "moduleId": "./benchmarks/index.ts",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+          "module": "./benchmarks/index.ts",
+          "moduleName": "./benchmarks/index.ts",
+          "type": "cjs require",
+          "userRequest": "./lib/linechart",
+          "loc": "10:20-46"
+        }
+      ],
+      "providedExports": [
+        "drawLineChart"
+      ],
+      "optimizationBailout": [
+      ],
+      "depth": 1
+    },
+    {
+      "id": "./benchmarks/lib/stats.module.js",
+      "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\stats.module.js",
+      "name": "./benchmarks/lib/stats.module.js",
+      "index": 3,
+      "index2": 2,
+      "size": 4186,
+      "cacheable": true,
+      "built": false,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "main"
+      ],
+      "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+      "issuerId": "./benchmarks/index.ts",
+      "issuerName": "./benchmarks/index.ts",
+      "issuerPath": [
+        {
+          "id": "./benchmarks/index.ts",
+          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+          "name": "./benchmarks/index.ts"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [
+      ],
+      "reasons": [
+        {
+          "moduleId": "./benchmarks/index.ts",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+          "module": "./benchmarks/index.ts",
+          "moduleName": "./benchmarks/index.ts",
+          "type": "cjs require",
+          "userRequest": "./lib/stats.module",
+          "loc": "8:23-52"
+        }
+      ],
+      "providedExports": [
+        "default"
+      ],
+      "optimizationBailout": [
+      ],
+      "depth": 1
+    },
+    {
+      "id": "./benchmarks/lib/utils.js",
+      "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\utils.js",
+      "name": "./benchmarks/lib/utils.js",
+      "index": 4,
+      "index2": 3,
+      "size": 1207,
+      "cacheable": true,
+      "built": false,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "main"
+      ],
+      "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+      "issuerId": "./benchmarks/index.ts",
+      "issuerName": "./benchmarks/index.ts",
+      "issuerPath": [
+        {
+          "id": "./benchmarks/index.ts",
+          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+          "name": "./benchmarks/index.ts"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [
+      ],
+      "reasons": [
+        {
+          "moduleId": "./benchmarks/index.ts",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+          "module": "./benchmarks/index.ts",
+          "moduleName": "./benchmarks/index.ts",
+          "type": "cjs require",
+          "userRequest": "./lib/utils",
+          "loc": "9:16-38"
+        }
+      ],
+      "providedExports": [
+        "generatePairInRange",
+        "generateData"
+      ],
+      "optimizationBailout": [
+      ],
+      "depth": 1
+    },
+    {
+      "id": "./benchmarks/netv.js",
+      "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
+      "name": "./benchmarks/netv.js",
+      "index": 1,
+      "index2": 1,
+      "size": 857,
+      "cacheable": true,
+      "built": false,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "main"
+      ],
+      "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+      "issuerId": "./benchmarks/index.ts",
+      "issuerName": "./benchmarks/index.ts",
+      "issuerPath": [
+        {
+          "id": "./benchmarks/index.ts",
+          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+          "name": "./benchmarks/index.ts"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [
+      ],
+      "reasons": [
+        {
+          "moduleId": "./benchmarks/index.ts",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+          "module": "./benchmarks/index.ts",
+          "moduleName": "./benchmarks/index.ts",
+          "type": "cjs require",
+          "userRequest": "./netv",
+          "loc": "7:15-32"
+        }
+      ],
+      "providedExports": [
+        "testNetV"
+      ],
+      "optimizationBailout": [
+      ],
+      "depth": 1
+    },
+    {
+      "id": "./build/NetV.js",
+      "identifier": "D:\\Repositories\\NetV.js\\build\\NetV.js",
+      "name": "./build/NetV.js",
+      "index": 2,
+      "index2": 0,
+      "size": 742197,
+      "cacheable": true,
+      "built": false,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "main"
+      ],
+      "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
+      "issuerId": "./benchmarks/netv.js",
+      "issuerName": "./benchmarks/netv.js",
+      "issuerPath": [
+        {
+          "id": "./benchmarks/index.ts",
+          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
+          "name": "./benchmarks/index.ts"
+        },
+        {
+          "id": "./benchmarks/netv.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
+          "name": "./benchmarks/netv.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [
+      ],
+      "reasons": [
+        {
+          "moduleId": "./benchmarks/netv.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
+          "module": "./benchmarks/netv.js",
+          "moduleName": "./benchmarks/netv.js",
+          "type": "harmony side effect evaluation",
+          "userRequest": "../build/NetV",
+          "loc": "5:0-36"
+        },
+        {
+          "moduleId": "./benchmarks/netv.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
+          "module": "./benchmarks/netv.js",
+          "moduleName": "./benchmarks/netv.js",
+          "type": "harmony import specifier",
+          "userRequest": "../build/NetV",
+          "loc": "8:21-25"
+        }
+      ],
+      "providedExports": null,
+      "optimizationBailout": [
+      ],
+      "depth": 2
+    }
+  ],
+  "filteredModules": 0,
+  "logging": {
+    "webpack.buildChunkGraph.visitModules": {
+      "entries": [
+      ],
+      "filteredEntries": 2,
+      "debug": false
+    }
+  },
+  "children": [
+  ]
+}

@@ -1,10 +1,12 @@
+import * as d3 from './d3.v4.min.js'
+
 // set the dimensions and margins of the graph
-var margin = { top: 10, right: 30, bottom: 30, left: 60 },
-    width = 460 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom
+const margin = { top: 10, right: 30, bottom: 30, left: 60 }
+const width = 460 - margin.left - margin.right
+const height = 400 - margin.top - margin.bottom
 
 // append the svg object to the body of the page
-var svg = d3
+const svg = d3
     .select(document.body)
     .append('svg')
     .attr('width', width + margin.left + margin.right)
@@ -12,10 +14,10 @@ var svg = d3
     .append('g')
     .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
-//Read the data
-function drawLineChart(data) {
+// Read the data
+export function drawLineChart(data) {
     // Add X axis --> it is a size format
-    var x = d3
+    const x = d3
         .scaleLog()
         .base(2)
         .domain(
@@ -29,12 +31,12 @@ function drawLineChart(data) {
         .call(d3.axisBottom(x))
 
     // Add Y axis
-    var y = d3
+    const y = d3
         .scaleLinear()
         .domain([
             0,
             d3.max(data, function(d) {
-                return +d.value
+                return Number(d.value)
             })
         ])
         .range([height, 0])

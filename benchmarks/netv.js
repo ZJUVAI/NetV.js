@@ -2,8 +2,9 @@
  * @author Xiaodong Zhao<zhaoxiaodong@zju.edu.cn> and Jiacheng Pan <panjiacheng@zju.edu.cn>
  * @description benchmark, FPS of NetV.js
  */
+import { NetV } from '../build/NetV'
 
-function testNetV(width, height, container, data, stats) {
+export function testNetV({ width, height, container, data, stats }) {
     const netv = new NetV({
         container,
         width,
