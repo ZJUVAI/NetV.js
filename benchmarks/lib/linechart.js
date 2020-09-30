@@ -1,4 +1,4 @@
-import * as d3 from './d3.v4.min.js'
+import * as d3 from './d3.v5.min.js'
 
 // set the dimensions and margins of the graph
 const margin = { top: 10, right: 30, bottom: 30, left: 60 }
@@ -26,9 +26,8 @@ export function drawLineChart(container, data) {
             })
         )
         .range([0, width])
-    svg.append('g')
-        .attr('transform', 'translate(0,' + height + ')')
-        .call(d3.axisBottom(x))
+
+    // draw axis
 
     // Add Y axis
     const y = d3
@@ -40,7 +39,6 @@ export function drawLineChart(container, data) {
             })
         ])
         .range([height, 0])
-    svg.append('g').call(d3.axisLeft(y))
 
     // Add the line
     svg.append('path')

@@ -4,7 +4,7 @@
  */
 
 import Stats from './lib/stats.module'
-import * as d3 from './lib/d3.v4.min.js'
+import * as d3 from './lib/d3.v5.min.js'
 import { getFrameRate, initPage, reloadPage } from './lib/utils'
 import { drawLineChart } from './lib/linechart'
 import { generateRandomGraph } from './lib/graphGenerator'
@@ -96,6 +96,7 @@ export class TestCase {
             value: this.FPS
         })
         localStorage.setItem(this.localStorageName, JSON.stringify(this.testResult))
+        console.log(this.testResult)
     }
 
     finish() {
