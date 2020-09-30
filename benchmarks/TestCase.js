@@ -5,11 +5,10 @@
 
 import Stats from './lib/stats.module'
 import * as d3 from './lib/d3.v4.min.js'
-import { parseBoolean } from './lib/utils'
+import { getFrameRate, initPage, reloadPage } from './lib/utils'
 import { drawLineChart } from './lib/linechart'
 import { generateRandomGraph } from './lib/graphGenerator'
 
-const IS_REFRESHED_MANUALLY = 'isRefreshedManually'
 const STEP = 'step'
 
 function sleep(time) {
@@ -21,13 +20,15 @@ function sleep(time) {
 export class TestCase {
     constructor({ width = 500, height = 500, numbersOfNodes, numbersOfLinks, name }) {
         // does it need to clear local storage?
-        this.judgeAndClearLocalStorage()
+        initPage()
 
+        // fps stats panel
         this.stats = Stats()
         this.stats.showPanel(0)
         this.stats.dom.setAttribute('class', 'status')
         document.body.appendChild(this.stats.dom)
 
+        // step means the index of numbersOfNodes
         this.step = localStorage.getItem(STEP)
         if (this.step === undefined || this.step === null) {
             this.step = 0
@@ -52,36 +53,24 @@ export class TestCase {
 
         this.name = name
 
-        this.title = document.createElement('h1')
-        this.title.textContent = `#nodes: ${this.NoNodes}, #edge: ${this.NoLinks}`
-        document.body.appendChild(this.title)
-
         this.container = document.createElement('div')
+        this.container.setAttribute('style', `display: inline-block;`)
         document.body.appendChild(this.container)
+
+        this.reportDiv = document.createElement('div')
+        this.reportDiv.setAttribute('style', `display: inline-block; vertical-align: top;`)
+        document.body.appendChild(this.reportDiv)
+
+        this.title = document.createElement('h1')
+        this.title.textContent = `${name}, #nodes: ${this.NoNodes}, #edge: ${this.NoLinks}`
+        this.reportDiv.appendChild(this.title)
 
         this.localStorageName = this.name + '_benchmark_result'
         this.testResult = localStorage.getItem(this.localStorageName)
     }
 
-    judgeAndClearLocalStorage() {
-        // Whether the page is refreshed by manual at last time
-        let isRefreshedManually = localStorage.getItem(IS_REFRESHED_MANUALLY)
-        if (
-            isRefreshedManually === undefined ||
-            isRefreshedManually === null ||
-            parseBoolean(isRefreshedManually)
-        ) {
-            // The page will be refreshed for each benchmark test case
-            // So we need to distinguish whether the page is refreshed manually or automatically
-            // If the page is refreshed manually, we should clear the local storage
-            localStorage.clear()
-        } else {
-            // the page is refreshed automatically
-            localStorage.setItem(IS_REFRESHED_MANUALLY, 'true')
-        }
-    }
-
     async run(update, duration) {
+        console.log(getFrameRate())
         const refresh = () => {
             this.stats.begin()
             update()
@@ -112,11 +101,20 @@ export class TestCase {
     finish() {
         localStorage.setItem(STEP, (this.step + 1).toString())
 
+        const canvas = this.container.querySelector('canvas')
+        if (canvas)
+            canvas
+                .getContext('webgl2')
+                .getExtension('WEBGL_lose_context')
+                .loseContext()
+        Array.from(this.container.children).forEach((child) =>
+            this.container.removeChild.bind(this.container)(child)
+        )
+
         if (this.step + 1 < this.NsoNodes.length) {
-            localStorage.setItem(IS_REFRESHED_MANUALLY, 'false')
-            location.reload()
+            reloadPage()
         } else {
-            drawLineChart(this.testResult)
+            drawLineChart(this.reportDiv, this.testResult)
             localStorage.clear()
         }
     }

@@ -3,16 +3,22 @@
  * @description benchmark, FPS of NetV.js
  */
 import { NetV } from '../build/NetV'
+import { initPage, isFirstTime } from './lib/utils'
 import { TestCase } from './TestCase'
 
 const numbersOfNodes = [5e2, 1e3, 2e3, 4e3, 8e3]
 const density = 20
 
-const testCase = new TestCase({
-    numbersOfNodes,
-    numbersOfLinks: numbersOfNodes.map((n) => n * density),
-    name: 'NetV'
-})
+if (isFirstTime()) {
+    initPage() // to get the frame rate (fps)
+} else {
+    const testCase = new TestCase({
+        numbersOfNodes,
+        numbersOfLinks: numbersOfNodes.map((n) => n * density),
+        name: 'NetV'
+    })
+    test(testCase)
+}
 
 async function test(testCase) {
     const netv = new NetV({
@@ -37,5 +43,3 @@ async function test(testCase) {
 
     testCase.finish()
 }
-
-test(testCase)
