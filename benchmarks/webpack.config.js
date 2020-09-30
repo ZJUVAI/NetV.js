@@ -9,7 +9,7 @@ module.exports = (env, argv) => {
         }
     }
     return {
-        entry: './benchmarks/index.ts',
+        entry: './benchmarks/index.js',
         mode: 'development',
         devtool: 'inline-source-map',
         output: {

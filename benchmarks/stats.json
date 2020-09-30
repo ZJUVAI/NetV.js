@@ -4,9 +4,9 @@
   "warnings": [
   ],
   "version": "4.44.1",
-  "hash": "bf876f9f74adfb60934e",
-  "time": 446,
-  "builtAt": 1601435629883,
+  "hash": "d9fbffb71ccd7ea05ef6",
+  "time": 94,
+  "builtAt": 1601449369463,
   "publicPath": "",
   "outputPath": "D:\\Repositories\\NetV.js\\benchmarks",
   "assetsByChunkName": {
@@ -15,7 +15,7 @@
   "assets": [
     {
       "name": "bundle.js",
-      "size": 2429153,
+      "size": 2431253,
       "chunks": [
         "main"
       ],
@@ -62,14 +62,14 @@
       "rendered": true,
       "initial": true,
       "entry": true,
-      "size": 975088,
+      "size": 976308,
       "names": [
         "main"
       ],
       "files": [
         "bundle.js"
       ],
-      "hash": "83ef78924e88bf02b07e",
+      "hash": "3851928ec003afa8fa71",
       "siblings": [
       ],
       "parents": [
@@ -80,12 +80,68 @@
       },
       "modules": [
         {
-          "id": "./benchmarks/index.ts",
-          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-          "name": "./benchmarks/index.ts",
-          "index": 0,
+          "id": "./benchmarks/TestCase.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "name": "./benchmarks/TestCase.js",
+          "index": 2,
           "index2": 6,
-          "size": 2968,
+          "size": 3926,
+          "cacheable": true,
+          "built": false,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "main"
+          ],
+          "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+          "issuerId": "./benchmarks/index.js",
+          "issuerName": "./benchmarks/index.js",
+          "issuerPath": [
+            {
+              "id": "./benchmarks/index.js",
+              "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+              "name": "./benchmarks/index.js"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [
+          ],
+          "reasons": [
+            {
+              "moduleId": "./benchmarks/index.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+              "module": "./benchmarks/index.js",
+              "moduleName": "./benchmarks/index.js",
+              "type": "harmony side effect evaluation",
+              "userRequest": "./TestCase",
+              "loc": "6:0-37"
+            },
+            {
+              "moduleId": "./benchmarks/index.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+              "module": "./benchmarks/index.js",
+              "moduleName": "./benchmarks/index.js",
+              "type": "harmony import specifier",
+              "userRequest": "./TestCase",
+              "loc": "11:21-29"
+            }
+          ],
+          "providedExports": [
+            "TestCase"
+          ],
+          "optimizationBailout": [
+          ],
+          "depth": 1
+        },
+        {
+          "id": "./benchmarks/index.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+          "name": "./benchmarks/index.js",
+          "index": 0,
+          "index2": 7,
+          "size": 1052,
           "cacheable": true,
           "built": true,
           "optional": false,
@@ -109,11 +165,12 @@
               "module": null,
               "moduleName": null,
               "type": "single entry",
-              "userRequest": "./benchmarks/index.ts",
+              "userRequest": "./benchmarks/index.js",
               "loc": "main"
             }
           ],
-          "providedExports": null,
+          "providedExports": [
+          ],
           "optimizationBailout": [
           ],
           "depth": 0
@@ -122,8 +179,8 @@
           "id": "./benchmarks/lib/d3.v4.min.js",
           "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\d3.v4.min.js",
           "name": "./benchmarks/lib/d3.v4.min.js",
-          "index": 6,
-          "index2": 4,
+          "index": 4,
+          "index2": 2,
           "size": 221958,
           "cacheable": true,
           "built": false,
@@ -132,19 +189,19 @@
           "chunks": [
             "main"
           ],
-          "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
-          "issuerId": "./benchmarks/lib/linechart.js",
-          "issuerName": "./benchmarks/lib/linechart.js",
+          "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "issuerId": "./benchmarks/TestCase.js",
+          "issuerName": "./benchmarks/TestCase.js",
           "issuerPath": [
             {
-              "id": "./benchmarks/index.ts",
-              "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-              "name": "./benchmarks/index.ts"
+              "id": "./benchmarks/index.js",
+              "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+              "name": "./benchmarks/index.js"
             },
             {
-              "id": "./benchmarks/lib/linechart.js",
-              "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
-              "name": "./benchmarks/lib/linechart.js"
+              "id": "./benchmarks/TestCase.js",
+              "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+              "name": "./benchmarks/TestCase.js"
             }
           ],
           "failed": false,
@@ -153,6 +210,24 @@
           "assets": [
           ],
           "reasons": [
+            {
+              "moduleId": "./benchmarks/TestCase.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+              "module": "./benchmarks/TestCase.js",
+              "moduleName": "./benchmarks/TestCase.js",
+              "type": "harmony side effect evaluation",
+              "userRequest": "./lib/d3.v4.min.js",
+              "loc": "7:0-40"
+            },
+            {
+              "moduleId": "./benchmarks/TestCase.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+              "module": "./benchmarks/TestCase.js",
+              "moduleName": "./benchmarks/TestCase.js",
+              "type": "harmony import specifier",
+              "userRequest": "./lib/d3.v4.min.js",
+              "loc": "94:19-26"
+            },
             {
               "moduleId": "./benchmarks/lib/linechart.js",
               "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
@@ -241,105 +316,11 @@
           "depth": 2
         },
         {
-          "id": "./benchmarks/lib/linechart.js",
-          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
-          "name": "./benchmarks/lib/linechart.js",
-          "index": 5,
+          "id": "./benchmarks/lib/graphGenerator.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\graphGenerator.js",
+          "name": "./benchmarks/lib/graphGenerator.js",
+          "index": 7,
           "index2": 5,
-          "size": 1715,
-          "cacheable": true,
-          "built": false,
-          "optional": false,
-          "prefetched": false,
-          "chunks": [
-            "main"
-          ],
-          "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-          "issuerId": "./benchmarks/index.ts",
-          "issuerName": "./benchmarks/index.ts",
-          "issuerPath": [
-            {
-              "id": "./benchmarks/index.ts",
-              "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-              "name": "./benchmarks/index.ts"
-            }
-          ],
-          "failed": false,
-          "errors": 0,
-          "warnings": 0,
-          "assets": [
-          ],
-          "reasons": [
-            {
-              "moduleId": "./benchmarks/index.ts",
-              "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-              "module": "./benchmarks/index.ts",
-              "moduleName": "./benchmarks/index.ts",
-              "type": "cjs require",
-              "userRequest": "./lib/linechart",
-              "loc": "10:20-46"
-            }
-          ],
-          "providedExports": [
-            "drawLineChart"
-          ],
-          "optimizationBailout": [
-          ],
-          "depth": 1
-        },
-        {
-          "id": "./benchmarks/lib/stats.module.js",
-          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\stats.module.js",
-          "name": "./benchmarks/lib/stats.module.js",
-          "index": 3,
-          "index2": 2,
-          "size": 4186,
-          "cacheable": true,
-          "built": false,
-          "optional": false,
-          "prefetched": false,
-          "chunks": [
-            "main"
-          ],
-          "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-          "issuerId": "./benchmarks/index.ts",
-          "issuerName": "./benchmarks/index.ts",
-          "issuerPath": [
-            {
-              "id": "./benchmarks/index.ts",
-              "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-              "name": "./benchmarks/index.ts"
-            }
-          ],
-          "failed": false,
-          "errors": 0,
-          "warnings": 0,
-          "assets": [
-          ],
-          "reasons": [
-            {
-              "moduleId": "./benchmarks/index.ts",
-              "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-              "module": "./benchmarks/index.ts",
-              "moduleName": "./benchmarks/index.ts",
-              "type": "cjs require",
-              "userRequest": "./lib/stats.module",
-              "loc": "8:23-52"
-            }
-          ],
-          "providedExports": [
-            "default"
-          ],
-          "optimizationBailout": [
-          ],
-          "depth": 1
-        },
-        {
-          "id": "./benchmarks/lib/utils.js",
-          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\utils.js",
-          "name": "./benchmarks/lib/utils.js",
-          "index": 4,
-          "index2": 3,
           "size": 1207,
           "cacheable": true,
           "built": false,
@@ -348,14 +329,19 @@
           "chunks": [
             "main"
           ],
-          "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-          "issuerId": "./benchmarks/index.ts",
-          "issuerName": "./benchmarks/index.ts",
+          "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "issuerId": "./benchmarks/TestCase.js",
+          "issuerName": "./benchmarks/TestCase.js",
           "issuerPath": [
             {
-              "id": "./benchmarks/index.ts",
-              "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-              "name": "./benchmarks/index.ts"
+              "id": "./benchmarks/index.js",
+              "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+              "name": "./benchmarks/index.js"
+            },
+            {
+              "id": "./benchmarks/TestCase.js",
+              "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+              "name": "./benchmarks/TestCase.js"
             }
           ],
           "failed": false,
@@ -365,30 +351,38 @@
           ],
           "reasons": [
             {
-              "moduleId": "./benchmarks/index.ts",
-              "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-              "module": "./benchmarks/index.ts",
-              "moduleName": "./benchmarks/index.ts",
-              "type": "cjs require",
-              "userRequest": "./lib/utils",
-              "loc": "9:16-38"
+              "moduleId": "./benchmarks/TestCase.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+              "module": "./benchmarks/TestCase.js",
+              "moduleName": "./benchmarks/TestCase.js",
+              "type": "harmony side effect evaluation",
+              "userRequest": "./lib/graphGenerator",
+              "loc": "10:0-58"
+            },
+            {
+              "moduleId": "./benchmarks/TestCase.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+              "module": "./benchmarks/TestCase.js",
+              "moduleName": "./benchmarks/TestCase.js",
+              "type": "harmony import specifier",
+              "userRequest": "./lib/graphGenerator",
+              "loc": "46:20-39"
             }
           ],
           "providedExports": [
-            "generatePairInRange",
-            "generateData"
+            "generateRandomGraph"
           ],
           "optimizationBailout": [
           ],
-          "depth": 1
+          "depth": 2
         },
         {
-          "id": "./benchmarks/netv.js",
-          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
-          "name": "./benchmarks/netv.js",
-          "index": 1,
-          "index2": 1,
-          "size": 857,
+          "id": "./benchmarks/lib/linechart.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+          "name": "./benchmarks/lib/linechart.js",
+          "index": 6,
+          "index2": 4,
+          "size": 1715,
           "cacheable": true,
           "built": false,
           "optional": false,
@@ -396,14 +390,19 @@
           "chunks": [
             "main"
           ],
-          "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-          "issuerId": "./benchmarks/index.ts",
-          "issuerName": "./benchmarks/index.ts",
+          "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "issuerId": "./benchmarks/TestCase.js",
+          "issuerName": "./benchmarks/TestCase.js",
           "issuerPath": [
             {
-              "id": "./benchmarks/index.ts",
-              "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-              "name": "./benchmarks/index.ts"
+              "id": "./benchmarks/index.js",
+              "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+              "name": "./benchmarks/index.js"
+            },
+            {
+              "id": "./benchmarks/TestCase.js",
+              "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+              "name": "./benchmarks/TestCase.js"
             }
           ],
           "failed": false,
@@ -413,27 +412,158 @@
           ],
           "reasons": [
             {
-              "moduleId": "./benchmarks/index.ts",
-              "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-              "module": "./benchmarks/index.ts",
-              "moduleName": "./benchmarks/index.ts",
-              "type": "cjs require",
-              "userRequest": "./netv",
-              "loc": "7:15-32"
+              "moduleId": "./benchmarks/TestCase.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+              "module": "./benchmarks/TestCase.js",
+              "moduleName": "./benchmarks/TestCase.js",
+              "type": "harmony side effect evaluation",
+              "userRequest": "./lib/linechart",
+              "loc": "9:0-47"
+            },
+            {
+              "moduleId": "./benchmarks/TestCase.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+              "module": "./benchmarks/TestCase.js",
+              "moduleName": "./benchmarks/TestCase.js",
+              "type": "harmony import specifier",
+              "userRequest": "./lib/linechart",
+              "loc": "119:12-25"
             }
           ],
           "providedExports": [
-            "testNetV"
+            "drawLineChart"
           ],
           "optimizationBailout": [
           ],
-          "depth": 1
+          "depth": 2
+        },
+        {
+          "id": "./benchmarks/lib/stats.module.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\stats.module.js",
+          "name": "./benchmarks/lib/stats.module.js",
+          "index": 3,
+          "index2": 1,
+          "size": 4186,
+          "cacheable": true,
+          "built": false,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "main"
+          ],
+          "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "issuerId": "./benchmarks/TestCase.js",
+          "issuerName": "./benchmarks/TestCase.js",
+          "issuerPath": [
+            {
+              "id": "./benchmarks/index.js",
+              "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+              "name": "./benchmarks/index.js"
+            },
+            {
+              "id": "./benchmarks/TestCase.js",
+              "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+              "name": "./benchmarks/TestCase.js"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [
+          ],
+          "reasons": [
+            {
+              "moduleId": "./benchmarks/TestCase.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+              "module": "./benchmarks/TestCase.js",
+              "moduleName": "./benchmarks/TestCase.js",
+              "type": "harmony side effect evaluation",
+              "userRequest": "./lib/stats.module",
+              "loc": "6:0-38"
+            },
+            {
+              "moduleId": "./benchmarks/TestCase.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+              "module": "./benchmarks/TestCase.js",
+              "moduleName": "./benchmarks/TestCase.js",
+              "type": "harmony import specifier",
+              "userRequest": "./lib/stats.module",
+              "loc": "26:21-26"
+            }
+          ],
+          "providedExports": [
+            "default"
+          ],
+          "optimizationBailout": [
+          ],
+          "depth": 2
+        },
+        {
+          "id": "./benchmarks/lib/utils.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\utils.js",
+          "name": "./benchmarks/lib/utils.js",
+          "index": 5,
+          "index2": 3,
+          "size": 67,
+          "cacheable": true,
+          "built": false,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "main"
+          ],
+          "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "issuerId": "./benchmarks/TestCase.js",
+          "issuerName": "./benchmarks/TestCase.js",
+          "issuerPath": [
+            {
+              "id": "./benchmarks/index.js",
+              "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+              "name": "./benchmarks/index.js"
+            },
+            {
+              "id": "./benchmarks/TestCase.js",
+              "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+              "name": "./benchmarks/TestCase.js"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [
+          ],
+          "reasons": [
+            {
+              "moduleId": "./benchmarks/TestCase.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+              "module": "./benchmarks/TestCase.js",
+              "moduleName": "./benchmarks/TestCase.js",
+              "type": "harmony side effect evaluation",
+              "userRequest": "./lib/utils",
+              "loc": "8:0-42"
+            },
+            {
+              "moduleId": "./benchmarks/TestCase.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+              "module": "./benchmarks/TestCase.js",
+              "moduleName": "./benchmarks/TestCase.js",
+              "type": "harmony import specifier",
+              "userRequest": "./lib/utils",
+              "loc": "72:12-24"
+            }
+          ],
+          "providedExports": [
+            "parseBoolean"
+          ],
+          "optimizationBailout": [
+          ],
+          "depth": 2
         },
         {
           "id": "./build/NetV.js",
           "identifier": "D:\\Repositories\\NetV.js\\build\\NetV.js",
           "name": "./build/NetV.js",
-          "index": 2,
+          "index": 1,
           "index2": 0,
           "size": 742197,
           "cacheable": true,
@@ -443,19 +573,14 @@
           "chunks": [
             "main"
           ],
-          "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
-          "issuerId": "./benchmarks/netv.js",
-          "issuerName": "./benchmarks/netv.js",
+          "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+          "issuerId": "./benchmarks/index.js",
+          "issuerName": "./benchmarks/index.js",
           "issuerPath": [
             {
-              "id": "./benchmarks/index.ts",
-              "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-              "name": "./benchmarks/index.ts"
-            },
-            {
-              "id": "./benchmarks/netv.js",
-              "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
-              "name": "./benchmarks/netv.js"
+              "id": "./benchmarks/index.js",
+              "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+              "name": "./benchmarks/index.js"
             }
           ],
           "failed": false,
@@ -465,28 +590,28 @@
           ],
           "reasons": [
             {
-              "moduleId": "./benchmarks/netv.js",
-              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
-              "module": "./benchmarks/netv.js",
-              "moduleName": "./benchmarks/netv.js",
+              "moduleId": "./benchmarks/index.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+              "module": "./benchmarks/index.js",
+              "moduleName": "./benchmarks/index.js",
               "type": "harmony side effect evaluation",
               "userRequest": "../build/NetV",
               "loc": "5:0-36"
             },
             {
-              "moduleId": "./benchmarks/netv.js",
-              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
-              "module": "./benchmarks/netv.js",
-              "moduleName": "./benchmarks/netv.js",
+              "moduleId": "./benchmarks/index.js",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+              "module": "./benchmarks/index.js",
+              "moduleName": "./benchmarks/index.js",
               "type": "harmony import specifier",
               "userRequest": "../build/NetV",
-              "loc": "8:21-25"
+              "loc": "18:21-25"
             }
           ],
           "providedExports": null,
           "optimizationBailout": [
           ],
-          "depth": 2
+          "depth": 1
         }
       ],
       "filteredModules": 0,
@@ -496,7 +621,7 @@
           "moduleIdentifier": "",
           "moduleName": "",
           "loc": "main",
-          "request": "./benchmarks/index.ts",
+          "request": "./benchmarks/index.js",
           "reasons": [
           ]
         }
@@ -505,12 +630,68 @@
   ],
   "modules": [
     {
-      "id": "./benchmarks/index.ts",
-      "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-      "name": "./benchmarks/index.ts",
-      "index": 0,
+      "id": "./benchmarks/TestCase.js",
+      "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+      "name": "./benchmarks/TestCase.js",
+      "index": 2,
       "index2": 6,
-      "size": 2968,
+      "size": 3926,
+      "cacheable": true,
+      "built": false,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "main"
+      ],
+      "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+      "issuerId": "./benchmarks/index.js",
+      "issuerName": "./benchmarks/index.js",
+      "issuerPath": [
+        {
+          "id": "./benchmarks/index.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+          "name": "./benchmarks/index.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [
+      ],
+      "reasons": [
+        {
+          "moduleId": "./benchmarks/index.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+          "module": "./benchmarks/index.js",
+          "moduleName": "./benchmarks/index.js",
+          "type": "harmony side effect evaluation",
+          "userRequest": "./TestCase",
+          "loc": "6:0-37"
+        },
+        {
+          "moduleId": "./benchmarks/index.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+          "module": "./benchmarks/index.js",
+          "moduleName": "./benchmarks/index.js",
+          "type": "harmony import specifier",
+          "userRequest": "./TestCase",
+          "loc": "11:21-29"
+        }
+      ],
+      "providedExports": [
+        "TestCase"
+      ],
+      "optimizationBailout": [
+      ],
+      "depth": 1
+    },
+    {
+      "id": "./benchmarks/index.js",
+      "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+      "name": "./benchmarks/index.js",
+      "index": 0,
+      "index2": 7,
+      "size": 1052,
       "cacheable": true,
       "built": true,
       "optional": false,
@@ -534,11 +715,12 @@
           "module": null,
           "moduleName": null,
           "type": "single entry",
-          "userRequest": "./benchmarks/index.ts",
+          "userRequest": "./benchmarks/index.js",
           "loc": "main"
         }
       ],
-      "providedExports": null,
+      "providedExports": [
+      ],
       "optimizationBailout": [
       ],
       "depth": 0
@@ -547,8 +729,8 @@
       "id": "./benchmarks/lib/d3.v4.min.js",
       "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\d3.v4.min.js",
       "name": "./benchmarks/lib/d3.v4.min.js",
-      "index": 6,
-      "index2": 4,
+      "index": 4,
+      "index2": 2,
       "size": 221958,
       "cacheable": true,
       "built": false,
@@ -557,19 +739,19 @@
       "chunks": [
         "main"
       ],
-      "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
-      "issuerId": "./benchmarks/lib/linechart.js",
-      "issuerName": "./benchmarks/lib/linechart.js",
+      "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+      "issuerId": "./benchmarks/TestCase.js",
+      "issuerName": "./benchmarks/TestCase.js",
       "issuerPath": [
         {
-          "id": "./benchmarks/index.ts",
-          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-          "name": "./benchmarks/index.ts"
+          "id": "./benchmarks/index.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+          "name": "./benchmarks/index.js"
         },
         {
-          "id": "./benchmarks/lib/linechart.js",
-          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
-          "name": "./benchmarks/lib/linechart.js"
+          "id": "./benchmarks/TestCase.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "name": "./benchmarks/TestCase.js"
         }
       ],
       "failed": false,
@@ -578,6 +760,24 @@
       "assets": [
       ],
       "reasons": [
+        {
+          "moduleId": "./benchmarks/TestCase.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "module": "./benchmarks/TestCase.js",
+          "moduleName": "./benchmarks/TestCase.js",
+          "type": "harmony side effect evaluation",
+          "userRequest": "./lib/d3.v4.min.js",
+          "loc": "7:0-40"
+        },
+        {
+          "moduleId": "./benchmarks/TestCase.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "module": "./benchmarks/TestCase.js",
+          "moduleName": "./benchmarks/TestCase.js",
+          "type": "harmony import specifier",
+          "userRequest": "./lib/d3.v4.min.js",
+          "loc": "94:19-26"
+        },
         {
           "moduleId": "./benchmarks/lib/linechart.js",
           "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
@@ -666,105 +866,11 @@
       "depth": 2
     },
     {
-      "id": "./benchmarks/lib/linechart.js",
-      "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
-      "name": "./benchmarks/lib/linechart.js",
-      "index": 5,
+      "id": "./benchmarks/lib/graphGenerator.js",
+      "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\graphGenerator.js",
+      "name": "./benchmarks/lib/graphGenerator.js",
+      "index": 7,
       "index2": 5,
-      "size": 1715,
-      "cacheable": true,
-      "built": false,
-      "optional": false,
-      "prefetched": false,
-      "chunks": [
-        "main"
-      ],
-      "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-      "issuerId": "./benchmarks/index.ts",
-      "issuerName": "./benchmarks/index.ts",
-      "issuerPath": [
-        {
-          "id": "./benchmarks/index.ts",
-          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-          "name": "./benchmarks/index.ts"
-        }
-      ],
-      "failed": false,
-      "errors": 0,
-      "warnings": 0,
-      "assets": [
-      ],
-      "reasons": [
-        {
-          "moduleId": "./benchmarks/index.ts",
-          "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-          "module": "./benchmarks/index.ts",
-          "moduleName": "./benchmarks/index.ts",
-          "type": "cjs require",
-          "userRequest": "./lib/linechart",
-          "loc": "10:20-46"
-        }
-      ],
-      "providedExports": [
-        "drawLineChart"
-      ],
-      "optimizationBailout": [
-      ],
-      "depth": 1
-    },
-    {
-      "id": "./benchmarks/lib/stats.module.js",
-      "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\stats.module.js",
-      "name": "./benchmarks/lib/stats.module.js",
-      "index": 3,
-      "index2": 2,
-      "size": 4186,
-      "cacheable": true,
-      "built": false,
-      "optional": false,
-      "prefetched": false,
-      "chunks": [
-        "main"
-      ],
-      "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-      "issuerId": "./benchmarks/index.ts",
-      "issuerName": "./benchmarks/index.ts",
-      "issuerPath": [
-        {
-          "id": "./benchmarks/index.ts",
-          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-          "name": "./benchmarks/index.ts"
-        }
-      ],
-      "failed": false,
-      "errors": 0,
-      "warnings": 0,
-      "assets": [
-      ],
-      "reasons": [
-        {
-          "moduleId": "./benchmarks/index.ts",
-          "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-          "module": "./benchmarks/index.ts",
-          "moduleName": "./benchmarks/index.ts",
-          "type": "cjs require",
-          "userRequest": "./lib/stats.module",
-          "loc": "8:23-52"
-        }
-      ],
-      "providedExports": [
-        "default"
-      ],
-      "optimizationBailout": [
-      ],
-      "depth": 1
-    },
-    {
-      "id": "./benchmarks/lib/utils.js",
-      "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\utils.js",
-      "name": "./benchmarks/lib/utils.js",
-      "index": 4,
-      "index2": 3,
       "size": 1207,
       "cacheable": true,
       "built": false,
@@ -773,14 +879,19 @@
       "chunks": [
         "main"
       ],
-      "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-      "issuerId": "./benchmarks/index.ts",
-      "issuerName": "./benchmarks/index.ts",
+      "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+      "issuerId": "./benchmarks/TestCase.js",
+      "issuerName": "./benchmarks/TestCase.js",
       "issuerPath": [
         {
-          "id": "./benchmarks/index.ts",
-          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-          "name": "./benchmarks/index.ts"
+          "id": "./benchmarks/index.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+          "name": "./benchmarks/index.js"
+        },
+        {
+          "id": "./benchmarks/TestCase.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "name": "./benchmarks/TestCase.js"
         }
       ],
       "failed": false,
@@ -790,30 +901,38 @@
       ],
       "reasons": [
         {
-          "moduleId": "./benchmarks/index.ts",
-          "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-          "module": "./benchmarks/index.ts",
-          "moduleName": "./benchmarks/index.ts",
-          "type": "cjs require",
-          "userRequest": "./lib/utils",
-          "loc": "9:16-38"
+          "moduleId": "./benchmarks/TestCase.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "module": "./benchmarks/TestCase.js",
+          "moduleName": "./benchmarks/TestCase.js",
+          "type": "harmony side effect evaluation",
+          "userRequest": "./lib/graphGenerator",
+          "loc": "10:0-58"
+        },
+        {
+          "moduleId": "./benchmarks/TestCase.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "module": "./benchmarks/TestCase.js",
+          "moduleName": "./benchmarks/TestCase.js",
+          "type": "harmony import specifier",
+          "userRequest": "./lib/graphGenerator",
+          "loc": "46:20-39"
         }
       ],
       "providedExports": [
-        "generatePairInRange",
-        "generateData"
+        "generateRandomGraph"
       ],
       "optimizationBailout": [
       ],
-      "depth": 1
+      "depth": 2
     },
     {
-      "id": "./benchmarks/netv.js",
-      "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
-      "name": "./benchmarks/netv.js",
-      "index": 1,
-      "index2": 1,
-      "size": 857,
+      "id": "./benchmarks/lib/linechart.js",
+      "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\linechart.js",
+      "name": "./benchmarks/lib/linechart.js",
+      "index": 6,
+      "index2": 4,
+      "size": 1715,
       "cacheable": true,
       "built": false,
       "optional": false,
@@ -821,14 +940,19 @@
       "chunks": [
         "main"
       ],
-      "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-      "issuerId": "./benchmarks/index.ts",
-      "issuerName": "./benchmarks/index.ts",
+      "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+      "issuerId": "./benchmarks/TestCase.js",
+      "issuerName": "./benchmarks/TestCase.js",
       "issuerPath": [
         {
-          "id": "./benchmarks/index.ts",
-          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-          "name": "./benchmarks/index.ts"
+          "id": "./benchmarks/index.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+          "name": "./benchmarks/index.js"
+        },
+        {
+          "id": "./benchmarks/TestCase.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "name": "./benchmarks/TestCase.js"
         }
       ],
       "failed": false,
@@ -838,27 +962,158 @@
       ],
       "reasons": [
         {
-          "moduleId": "./benchmarks/index.ts",
-          "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-          "module": "./benchmarks/index.ts",
-          "moduleName": "./benchmarks/index.ts",
-          "type": "cjs require",
-          "userRequest": "./netv",
-          "loc": "7:15-32"
+          "moduleId": "./benchmarks/TestCase.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "module": "./benchmarks/TestCase.js",
+          "moduleName": "./benchmarks/TestCase.js",
+          "type": "harmony side effect evaluation",
+          "userRequest": "./lib/linechart",
+          "loc": "9:0-47"
+        },
+        {
+          "moduleId": "./benchmarks/TestCase.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "module": "./benchmarks/TestCase.js",
+          "moduleName": "./benchmarks/TestCase.js",
+          "type": "harmony import specifier",
+          "userRequest": "./lib/linechart",
+          "loc": "119:12-25"
         }
       ],
       "providedExports": [
-        "testNetV"
+        "drawLineChart"
       ],
       "optimizationBailout": [
       ],
-      "depth": 1
+      "depth": 2
+    },
+    {
+      "id": "./benchmarks/lib/stats.module.js",
+      "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\stats.module.js",
+      "name": "./benchmarks/lib/stats.module.js",
+      "index": 3,
+      "index2": 1,
+      "size": 4186,
+      "cacheable": true,
+      "built": false,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "main"
+      ],
+      "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+      "issuerId": "./benchmarks/TestCase.js",
+      "issuerName": "./benchmarks/TestCase.js",
+      "issuerPath": [
+        {
+          "id": "./benchmarks/index.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+          "name": "./benchmarks/index.js"
+        },
+        {
+          "id": "./benchmarks/TestCase.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "name": "./benchmarks/TestCase.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [
+      ],
+      "reasons": [
+        {
+          "moduleId": "./benchmarks/TestCase.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "module": "./benchmarks/TestCase.js",
+          "moduleName": "./benchmarks/TestCase.js",
+          "type": "harmony side effect evaluation",
+          "userRequest": "./lib/stats.module",
+          "loc": "6:0-38"
+        },
+        {
+          "moduleId": "./benchmarks/TestCase.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "module": "./benchmarks/TestCase.js",
+          "moduleName": "./benchmarks/TestCase.js",
+          "type": "harmony import specifier",
+          "userRequest": "./lib/stats.module",
+          "loc": "26:21-26"
+        }
+      ],
+      "providedExports": [
+        "default"
+      ],
+      "optimizationBailout": [
+      ],
+      "depth": 2
+    },
+    {
+      "id": "./benchmarks/lib/utils.js",
+      "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\lib\\utils.js",
+      "name": "./benchmarks/lib/utils.js",
+      "index": 5,
+      "index2": 3,
+      "size": 67,
+      "cacheable": true,
+      "built": false,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "main"
+      ],
+      "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+      "issuerId": "./benchmarks/TestCase.js",
+      "issuerName": "./benchmarks/TestCase.js",
+      "issuerPath": [
+        {
+          "id": "./benchmarks/index.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+          "name": "./benchmarks/index.js"
+        },
+        {
+          "id": "./benchmarks/TestCase.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "name": "./benchmarks/TestCase.js"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [
+      ],
+      "reasons": [
+        {
+          "moduleId": "./benchmarks/TestCase.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "module": "./benchmarks/TestCase.js",
+          "moduleName": "./benchmarks/TestCase.js",
+          "type": "harmony side effect evaluation",
+          "userRequest": "./lib/utils",
+          "loc": "8:0-42"
+        },
+        {
+          "moduleId": "./benchmarks/TestCase.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\TestCase.js",
+          "module": "./benchmarks/TestCase.js",
+          "moduleName": "./benchmarks/TestCase.js",
+          "type": "harmony import specifier",
+          "userRequest": "./lib/utils",
+          "loc": "72:12-24"
+        }
+      ],
+      "providedExports": [
+        "parseBoolean"
+      ],
+      "optimizationBailout": [
+      ],
+      "depth": 2
     },
     {
       "id": "./build/NetV.js",
       "identifier": "D:\\Repositories\\NetV.js\\build\\NetV.js",
       "name": "./build/NetV.js",
-      "index": 2,
+      "index": 1,
       "index2": 0,
       "size": 742197,
       "cacheable": true,
@@ -868,19 +1123,14 @@
       "chunks": [
         "main"
       ],
-      "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
-      "issuerId": "./benchmarks/netv.js",
-      "issuerName": "./benchmarks/netv.js",
+      "issuer": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+      "issuerId": "./benchmarks/index.js",
+      "issuerName": "./benchmarks/index.js",
       "issuerPath": [
         {
-          "id": "./benchmarks/index.ts",
-          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\benchmarks\\index.ts",
-          "name": "./benchmarks/index.ts"
-        },
-        {
-          "id": "./benchmarks/netv.js",
-          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
-          "name": "./benchmarks/netv.js"
+          "id": "./benchmarks/index.js",
+          "identifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+          "name": "./benchmarks/index.js"
         }
       ],
       "failed": false,
@@ -890,28 +1140,28 @@
       ],
       "reasons": [
         {
-          "moduleId": "./benchmarks/netv.js",
-          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
-          "module": "./benchmarks/netv.js",
-          "moduleName": "./benchmarks/netv.js",
+          "moduleId": "./benchmarks/index.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+          "module": "./benchmarks/index.js",
+          "moduleName": "./benchmarks/index.js",
           "type": "harmony side effect evaluation",
           "userRequest": "../build/NetV",
           "loc": "5:0-36"
         },
         {
-          "moduleId": "./benchmarks/netv.js",
-          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\netv.js",
-          "module": "./benchmarks/netv.js",
-          "moduleName": "./benchmarks/netv.js",
+          "moduleId": "./benchmarks/index.js",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\benchmarks\\index.js",
+          "module": "./benchmarks/index.js",
+          "moduleName": "./benchmarks/index.js",
           "type": "harmony import specifier",
           "userRequest": "../build/NetV",
-          "loc": "8:21-25"
+          "loc": "18:21-25"
         }
       ],
       "providedExports": null,
       "optimizationBailout": [
       ],
-      "depth": 2
+      "depth": 1
     }
   ],
   "filteredModules": 0,
