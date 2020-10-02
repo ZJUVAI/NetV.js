@@ -13,7 +13,9 @@
         "watch": "webpack --env.watch=true",
         "eslint": "eslint src/index.ts",
         "build:benchmarks": "webpack --env.watch=false --config benchmarks/webpack.config.js",
-        "watch:benchmarks": "webpack --env.watch=true --config benchmarks/webpack.config.js"
+        "watch:benchmarks": "webpack --env.watch=true --config benchmarks/webpack.config.js",
+        "build:test": "webpack --env.watch=false --config test/webpack.config.js",
+        "watch:test": "webpack --env.watch=true --config test/webpack.config.js"
     },
     "author": "",
     "license": "MIT",
