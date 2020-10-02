@@ -12,7 +12,8 @@
         "build-production": "webpack --env.watch=false --env.mode=production",
         "watch": "webpack --env.watch=true",
         "eslint": "eslint src/index.ts",
-        "test": "jest"
+        "build:test": "webpack --env.watch=false --config test/webpack.config.js",
+        "watch:test": "webpack --env.watch=true --config test/webpack.config.js"
     },
     "author": "",
     "license": "MIT",

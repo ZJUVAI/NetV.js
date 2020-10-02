@@ -9,13 +9,13 @@ module.exports = (env, argv) => {
         }
     }
     return {
-        entry: './src/index.ts',
+        entry: './test/index.ts',
         mode: 'development',
+        watch: watch,
         devtool: 'inline-source-map',
         output: {
-            filename: env['mode'] === 'production' ? 'NetV.min.js' : 'NetV.js',
-            libraryTarget: 'umd',
-            path: path.resolve(__dirname, 'build')
+            path: path.resolve(__dirname, 'test'),
+            filename: 'test.bundle.js'
         },
         resolve: {
             // Add `.ts` and `.tsx` as a resolvable extension.
@@ -50,7 +50,6 @@ module.exports = (env, argv) => {
                 }
             })
         ],
-        watch: watch,
         optimization: {
             minimize: env['mode'] === 'production'
         },

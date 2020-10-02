@@ -9,12 +9,12 @@ export function refresh(div: HTMLDivElement) {
 }
 
 export function loadJS(url, callback) {
-    const script = document.createElement('script')
+    const script: any = document.createElement('script')
     const fn = callback || function() {}
 
     script.type = 'text/javascript'
 
-    if (script.readyState) {
+    if ('readyState' in script) {
         // IE
         script.onreadystatechange = function() {
             if (script.readyState == 'loaded' || script.readyState == 'complete') {
