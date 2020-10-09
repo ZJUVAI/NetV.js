@@ -36,10 +36,6 @@ export function isRefreshedManually() {
     )
 }
 
-export function isFirstTime() {
-    return isRefreshedManually() || !localStorage.getItem(FRAME_RATE)
-}
-
 export function initPage() {
     // Whether the page is refreshed by manual at last time
 

@@ -2,44 +2,59 @@
  * @author Xiaodong Zhao<zhaoxiaodong@zju.edu.cn> and Jiacheng Pan <panjiacheng@zju.edu.cn>
  * @description benchmark, FPS of NetV.js
  */
-import { NetV } from '../build/NetV'
-import { initPage, isFirstTime } from './lib/utils'
+
+import { STEP, TEST_FUNCS_INDEX } from './configs'
+import testNetV from './netv'
+import { reloadPage } from './lib/utils'
+import testStardust from './stardust'
 import { TestCase } from './TestCase'
 
 const numbersOfNodes = [1e2, 5e2, 1e3].reverse() // , 2e3, 4e3, 8e3
 const density = 20
 
-if (isFirstTime()) {
-    initPage() // to get the frame rate (fps)
-} else {
-    const testCase = new TestCase({
-        numbersOfNodes,
-        numbersOfLinks: numbersOfNodes.map((n) => n * density),
-        name: 'NetV'
-    })
-    test(testCase)
+const testFuncs = [
+    {
+        name: 'NetV',
+        func: testNetV
+    },
+    {
+        name: 'stardust',
+        func: testStardust
+    }
+]
+
+const step = localStorage.getItem(STEP)
+let testFuncsIndex = localStorage.getItem(TEST_FUNCS_INDEX)
+
+if (!step) {
+    if (testFuncsIndex === undefined || testFuncsIndex === null) {
+        testFuncsIndex = 0
+    } else {
+        testFuncsIndex = Number(testFuncsIndex)
+        testFuncsIndex += 1
+    }
 }
 
-async function test(testCase) {
-    const netv = new NetV({
-        container: testCase.container,
-        width: testCase.width,
-        height: testCase.height,
-        nodeLimit: testCase.data.nodes.length,
-        linkLimit: testCase.data.links.length
-    })
+localStorage.setItem(TEST_FUNCS_INDEX, testFuncsIndex.toString())
 
-    netv.data(testCase.data)
+const testFunc = testFuncs[testFuncsIndex].func
 
-    await testCase.run(() => {
-        netv.nodes().forEach((n) => {
-            n.position({
-                x: Math.random() * testCase.width,
-                y: Math.random() * testCase.height
-            })
-        })
-        netv.draw()
-    }, 10000)
+const testCase = new TestCase({
+    numbersOfNodes,
+    numbersOfLinks: numbersOfNodes.map((n) => n * density),
+    name: testFuncs[testFuncsIndex].name
+})
 
+test(testCase, testFunc)
+
+async function test(testCase, testFunc) {
+    await testFunc(testCase)
     testCase.finish()
+
+    // if not reload
+    if (Number(testFuncsIndex) + 1 >= testFuncs.length) {
+        localStorage.clear()
+    } else {
+        reloadPage()
+    }
 }

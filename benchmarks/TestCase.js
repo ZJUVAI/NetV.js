@@ -5,11 +5,9 @@
 
 import Stats from './lib/stats.module'
 import * as d3 from './lib/d3.v5.min.js'
-import { getFrameRate, initPage, reloadPage } from './lib/utils'
-import { drawLineChart } from './lib/linechart'
+import { initPage, reloadPage } from './lib/utils'
 import { generateRandomGraph } from './lib/graphGenerator'
-
-const STEP = 'step'
+import { STEP, RESULT, TEST_DURATION_MS } from './configs'
 
 function sleep(time) {
     return new Promise((resolve) => {
@@ -39,14 +37,14 @@ export class TestCase {
         this.width = width
         this.height = height
 
-        this.NsoNodes = numbersOfNodes
-        this.NsoLinks = numbersOfLinks
-        this.NoNodes = this.NsoNodes[this.step]
-        this.NoLinks = this.NsoLinks[this.step]
+        this.NumberOfNodesList = numbersOfNodes
+        this.NumberOfLinksList = numbersOfLinks
+        this.NumberOfNodes = this.NumberOfNodesList[this.step]
+        this.NumberOfLinks = this.NumberOfLinksList[this.step]
 
         this.data = generateRandomGraph({
-            nodeNum: this.NoNodes,
-            linkNum: this.NoLinks,
+            nodeNum: this.NumberOfNodes,
+            linkNum: this.NumberOfLinks,
             width,
             height
         })
@@ -62,15 +60,13 @@ export class TestCase {
         document.body.appendChild(this.reportDiv)
 
         this.title = document.createElement('h3')
-        this.title.textContent = `${name}, #nodes: ${this.NoNodes}, #edge: ${this.NoLinks}`
+        this.title.textContent = `${name}, #nodes: ${this.NumberOfNodes}, #edge: ${this.NumberOfLinks}`
         this.reportDiv.appendChild(this.title)
 
-        this.localStorageName = this.name + '_benchmark_result'
-        this.testResult = localStorage.getItem(this.localStorageName)
+        this.testResult = localStorage.getItem(RESULT)
     }
 
-    async run(update, duration) {
-        console.log(getFrameRate())
+    async run(update) {
         const refresh = () => {
             this.stats.begin()
             update()
@@ -78,7 +74,7 @@ export class TestCase {
             requestAnimationFrame(refresh)
         }
         refresh(update)
-        await sleep(duration)
+        await sleep(TEST_DURATION_MS)
         const FPSHistory = this.stats.getFPSHistory()
         this.FPS = d3.mean(FPSHistory)
         this.storeFPSResult()
@@ -87,15 +83,16 @@ export class TestCase {
 
     storeFPSResult() {
         if (!this.testResult) {
-            this.testResult = []
+            this.testResult = {}
+            this.testResult[this.name] = []
         } else {
             this.testResult = JSON.parse(this.testResult)
         }
-        this.testResult.push({
-            size: this.NoNodes, // + this.NoLinks,
+        this.testResult[this.name].push({
+            size: this.NumberOfNodes, // + this.NumberOfLinks,
             value: this.FPS
         })
-        localStorage.setItem(this.localStorageName, JSON.stringify(this.testResult))
+        localStorage.setItem(RESULT, JSON.stringify(this.testResult))
         console.log(this.testResult)
     }
 
@@ -112,11 +109,11 @@ export class TestCase {
             this.container.removeChild.bind(this.container)(child)
         )
 
-        if (this.step + 1 < this.NsoNodes.length) {
+        if (this.step + 1 < this.NumberOfNodesList.length) {
             reloadPage()
         } else {
-            drawLineChart(this.reportDiv, this.testResult)
-            localStorage.clear()
+            // localStorage.clear()
+            localStorage.setItem(STEP, '0')
         }
     }
 }

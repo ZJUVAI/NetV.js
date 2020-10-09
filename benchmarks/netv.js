@@ -4,36 +4,24 @@
  */
 import { NetV } from '../build/NetV'
 
-export function testNetV({ width, height, container, data, stats }) {
+export default async function test(testCase) {
     const netv = new NetV({
-        container,
-        width,
-        height,
-        nodeLimit: data.nodes.length,
-        linkLimit: data.links.length
+        container: testCase.container,
+        width: testCase.width,
+        height: testCase.height,
+        nodeLimit: testCase.data.nodes.length,
+        linkLimit: testCase.data.links.length
     })
 
-    netv.data(data)
+    netv.data(testCase.data)
 
-    render()
-
-    function render() {
-        stats.begin()
-
-        updateData(netv)
-        netv.draw()
-
-        stats.end()
-
-        requestAnimationFrame(render)
-    }
-
-    function updateData(netv) {
+    await testCase.run(() => {
         netv.nodes().forEach((n) => {
             n.position({
-                x: Math.random() * width,
-                y: Math.random() * height
+                x: Math.random() * testCase.width,
+                y: Math.random() * testCase.height
             })
         })
-    }
+        netv.draw()
+    })
 }
