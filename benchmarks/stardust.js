@@ -17,9 +17,13 @@ export default async function test(testCase) {
     const snodesBG = Stardust.mark.create(Stardust.mark.circle(8), platform)
     const sedges = Stardust.mark.create(Stardust.mark.line(), platform)
 
-    snodes.attr('radius', (d) => d.r).attr('color', [1, 0, 0, 1])
-    snodesBG.attr('radius', (d) => d.r + 1).attr('color', [1, 1, 1, 0.5])
-    sedges.attr('width', (d) => d.strokeWidth).attr('color', [0.5, 0.5, 0.5, 0.1])
+    snodes.attr('radius', (d) => (d.r ? d.r : 1)).attr('color', [1, 0, 0, 1])
+
+    snodesBG.attr('radius', (d) => (d.r ? d.r + 1 : 2)).attr('color', [1, 1, 1, 0.5])
+
+    sedges
+        .attr('width', (d) => (d.strokeWidth ? d.strokeWidth : 1))
+        .attr('color', [0.5, 0.5, 0.5, 0.1])
 
     const positions = Stardust.array('Vector2')
         .value((d) => [d.x, d.y])
