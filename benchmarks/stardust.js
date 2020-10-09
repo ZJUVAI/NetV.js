@@ -7,7 +7,10 @@ import * as Stardust from './lib/stardust.bundle.min.js'
 export default async function test(testCase) {
     const { container, width, height, data } = testCase
 
-    const platform = Stardust.platform('webgl-2d', container, width, height)
+    const canvas = document.createElement('canvas')
+    container.appendChild(canvas)
+
+    const platform = Stardust.platform('webgl-2d', canvas, width, height)
     platform.pixelRatio = window.devicePixelRatio || 1
 
     const snodes = Stardust.mark.create(Stardust.mark.circle(8), platform)

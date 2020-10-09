@@ -45,13 +45,6 @@ export function initPage() {
         // If the page is refreshed manually, we should clear the local storage
         localStorage.clear()
         localStorage.setItem(IS_REFRESHED_MANUALLY, 'true')
-
-        // Calling the function to get the FPS
-        getFPS().then((fps) => {
-            console.log(fps)
-            localStorage.setItem(FRAME_RATE, fps)
-            reloadPage()
-        })
     } else {
         // the page is refreshed automatically
         localStorage.setItem(IS_REFRESHED_MANUALLY, 'true')

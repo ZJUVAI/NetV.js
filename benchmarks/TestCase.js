@@ -5,7 +5,7 @@
 
 import Stats from './lib/stats.module'
 import * as d3 from './lib/d3.v5.min.js'
-import { initPage, reloadPage } from './lib/utils'
+import { reloadPage } from './lib/utils'
 import { generateRandomGraph } from './lib/graphGenerator'
 import { STEP, RESULT, TEST_DURATION_MS } from './configs'
 
@@ -17,9 +17,6 @@ function sleep(time) {
 
 export class TestCase {
     constructor({ width = 500, height = 500, numbersOfNodes, numbersOfLinks, name }) {
-        // does it need to clear local storage?
-        initPage()
-
         // fps stats panel
         this.stats = Stats()
         this.stats.showPanel(0)
@@ -84,10 +81,14 @@ export class TestCase {
     storeFPSResult() {
         if (!this.testResult) {
             this.testResult = {}
-            this.testResult[this.name] = []
         } else {
             this.testResult = JSON.parse(this.testResult)
         }
+
+        if (!(this.name in this.testResult)) {
+            this.testResult[this.name] = []
+        }
+
         this.testResult[this.name].push({
             size: this.NumberOfNodes, // + this.NumberOfLinks,
             value: this.FPS
@@ -100,20 +101,23 @@ export class TestCase {
         localStorage.setItem(STEP, (this.step + 1).toString())
 
         const canvas = this.container.querySelector('canvas')
-        if (canvas)
-            canvas
-                .getContext('webgl2')
-                .getExtension('WEBGL_lose_context')
-                .loseContext()
+        if (canvas) {
+            let webgl = canvas.getContext('webgl2')
+            if (!webgl) {
+                webgl = canvas.getContext('webgl')
+            }
+            webgl.getExtension('WEBGL_lose_context').loseContext()
+        }
         Array.from(this.container.children).forEach((child) =>
             this.container.removeChild.bind(this.container)(child)
         )
 
         if (this.step + 1 < this.NumberOfNodesList.length) {
             reloadPage()
+            return true // is refreshed
         } else {
-            // localStorage.clear()
             localStorage.setItem(STEP, '0')
+            return false // not refreshed
         }
     }
 }

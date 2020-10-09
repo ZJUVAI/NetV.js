@@ -5,9 +5,12 @@
 
 import { STEP, TEST_FUNCS_INDEX } from './configs'
 import testNetV from './netv'
-import { reloadPage } from './lib/utils'
+import { initPage, reloadPage } from './lib/utils'
 import testStardust from './stardust'
 import { TestCase } from './TestCase'
+
+// does it need to clear local storage?
+initPage()
 
 const numbersOfNodes = [1e2, 5e2, 1e3].reverse() // , 2e3, 4e3, 8e3
 const density = 20
@@ -21,12 +24,12 @@ const testFuncs = [
         name: 'stardust',
         func: testStardust
     }
-]
+].reverse()
 
 const step = localStorage.getItem(STEP)
 let testFuncsIndex = localStorage.getItem(TEST_FUNCS_INDEX)
 
-if (!step) {
+if (!step || step === '0') {
     if (testFuncsIndex === undefined || testFuncsIndex === null) {
         testFuncsIndex = 0
     } else {
@@ -49,10 +52,11 @@ test(testCase, testFunc)
 
 async function test(testCase, testFunc) {
     await testFunc(testCase)
-    testCase.finish()
+    const isRefreshed = testCase.finish()
 
     // if not reload
-    if (Number(testFuncsIndex) + 1 >= testFuncs.length) {
+    if (!isRefreshed && Number(testFuncsIndex) + 1 >= testFuncs.length) {
+        // TODO: download data
         localStorage.clear()
     } else {
         reloadPage()
