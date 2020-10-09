@@ -5,8 +5,8 @@
   ],
   "version": "4.44.2",
   "hash": "25ebd6353d59d39c2d07",
-  "time": 170,
-  "builtAt": 1602233770667,
+  "time": 836,
+  "builtAt": 1602233844525,
   "publicPath": "",
   "outputPath": "/Users/jackie/Repository/NetV.js/benchmarks",
   "assetsByChunkName": {
@@ -87,7 +87,7 @@
           "index2": 9,
           "size": 3808,
           "cacheable": true,
-          "built": false,
+          "built": true,
           "optional": false,
           "prefetched": false,
           "chunks": [
@@ -143,7 +143,7 @@
           "index2": 0,
           "size": 146,
           "cacheable": true,
-          "built": false,
+          "built": true,
           "optional": false,
           "prefetched": false,
           "chunks": [
@@ -323,7 +323,7 @@
           "index2": 7,
           "size": 248314,
           "cacheable": true,
-          "built": false,
+          "built": true,
           "optional": false,
           "prefetched": false,
           "chunks": [
@@ -382,7 +382,7 @@
           "index2": 8,
           "size": 1157,
           "cacheable": true,
-          "built": false,
+          "built": true,
           "optional": false,
           "prefetched": false,
           "chunks": [
@@ -443,7 +443,7 @@
           "index2": 4,
           "size": 161102,
           "cacheable": true,
-          "built": false,
+          "built": true,
           "optional": false,
           "prefetched": false,
           "chunks": [
@@ -574,7 +574,7 @@
           "index2": 6,
           "size": 4002,
           "cacheable": true,
-          "built": false,
+          "built": true,
           "optional": false,
           "prefetched": false,
           "chunks": [
@@ -635,7 +635,7 @@
           "index2": 3,
           "size": 1743,
           "cacheable": true,
-          "built": false,
+          "built": true,
           "optional": false,
           "prefetched": false,
           "chunks": [
@@ -722,7 +722,7 @@
           "index2": 2,
           "size": 740,
           "cacheable": true,
-          "built": false,
+          "built": true,
           "optional": false,
           "prefetched": false,
           "chunks": [
@@ -778,7 +778,7 @@
           "index2": 5,
           "size": 1888,
           "cacheable": true,
-          "built": false,
+          "built": true,
           "optional": false,
           "prefetched": false,
           "chunks": [
@@ -834,7 +834,7 @@
           "index2": 1,
           "size": 719648,
           "cacheable": true,
-          "built": false,
+          "built": true,
           "optional": false,
           "prefetched": false,
           "chunks": [
@@ -909,7 +909,7 @@
       "index2": 9,
       "size": 3808,
       "cacheable": true,
-      "built": false,
+      "built": true,
       "optional": false,
       "prefetched": false,
       "chunks": [
@@ -965,7 +965,7 @@
       "index2": 0,
       "size": 146,
       "cacheable": true,
-      "built": false,
+      "built": true,
       "optional": false,
       "prefetched": false,
       "chunks": [
@@ -1145,7 +1145,7 @@
       "index2": 7,
       "size": 248314,
       "cacheable": true,
-      "built": false,
+      "built": true,
       "optional": false,
       "prefetched": false,
       "chunks": [
@@ -1204,7 +1204,7 @@
       "index2": 8,
       "size": 1157,
       "cacheable": true,
-      "built": false,
+      "built": true,
       "optional": false,
       "prefetched": false,
       "chunks": [
@@ -1265,7 +1265,7 @@
       "index2": 4,
       "size": 161102,
       "cacheable": true,
-      "built": false,
+      "built": true,
       "optional": false,
       "prefetched": false,
       "chunks": [
@@ -1396,7 +1396,7 @@
       "index2": 6,
       "size": 4002,
       "cacheable": true,
-      "built": false,
+      "built": true,
       "optional": false,
       "prefetched": false,
       "chunks": [
@@ -1457,7 +1457,7 @@
       "index2": 3,
       "size": 1743,
       "cacheable": true,
-      "built": false,
+      "built": true,
       "optional": false,
       "prefetched": false,
       "chunks": [
@@ -1544,7 +1544,7 @@
       "index2": 2,
       "size": 740,
       "cacheable": true,
-      "built": false,
+      "built": true,
       "optional": false,
       "prefetched": false,
       "chunks": [
@@ -1600,7 +1600,7 @@
       "index2": 5,
       "size": 1888,
       "cacheable": true,
-      "built": false,
+      "built": true,
       "optional": false,
       "prefetched": false,
       "chunks": [
@@ -1656,7 +1656,7 @@
       "index2": 1,
       "size": 719648,
       "cacheable": true,
-      "built": false,
+      "built": true,
       "optional": false,
       "prefetched": false,
       "chunks": [
