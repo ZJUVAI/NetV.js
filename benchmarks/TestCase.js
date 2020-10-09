@@ -61,7 +61,7 @@ export class TestCase {
         this.reportDiv.setAttribute('style', `display: inline-block; vertical-align: top;`)
         document.body.appendChild(this.reportDiv)
 
-        this.title = document.createElement('h1')
+        this.title = document.createElement('h3')
         this.title.textContent = `${name}, #nodes: ${this.NoNodes}, #edge: ${this.NoLinks}`
         this.reportDiv.appendChild(this.title)
 
@@ -92,7 +92,7 @@ export class TestCase {
             this.testResult = JSON.parse(this.testResult)
         }
         this.testResult.push({
-            size: this.NoNodes + this.NoLinks,
+            size: this.NoNodes, // + this.NoLinks,
             value: this.FPS
         })
         localStorage.setItem(this.localStorageName, JSON.stringify(this.testResult))
