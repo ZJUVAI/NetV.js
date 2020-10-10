@@ -6,49 +6,11 @@ const margin = { top: 10, right: 30, bottom: 30, left: 60 }
 const width = 500 - margin.left - margin.right
 const height = 300 - margin.top - margin.bottom
 
-// // The table generation function
-// function tabulate(container, data, columnNames) {
-//     var table = d3.select(container).append('table').attr('style', 'margin-left: 250px'),
-//         thead = table.append('thead'),
-//         tbody = table.append('tbody')
-
-//     // append the header row
-//     thead
-//         .append('tr')
-//         .selectAll('th')
-//         .data(columnNames)
-//         .enter()
-//         .append('th')
-//         .text(function (column) {
-//             return column
-//         })
-
-//     // create a row for each object in the data
-//     var rows = tbody.selectAll('tr').data(data).enter().append('tr')
-
-//     // create a cell in each row for each column
-//     var cells = rows
-//         .selectAll('td')
-//         .data(function (row) {
-//             return columnNames.map(function (column) {
-//                 return { column: column, value: row[column] }
-//             })
-//         })
-//         .enter()
-//         .append('td')
-//         .attr('style', 'font-family: Courier') // sets the font style
-//         .html(function (d) {
-//             return d.value
-//         })
-
-//     return table
-// }
-
 const getLinkCount = (str) => Number(str.split('&')[1].split(':')[1])
 
 // Read the data
-export async function drawLineChart(container, _data) {
-    const data = await d3.json('./result.json')
+export async function drawLineChart(container, data) {
+    // const data = await d3.json('./result.json')
 
     // append the svg object to the body of the page
     const svg = d3

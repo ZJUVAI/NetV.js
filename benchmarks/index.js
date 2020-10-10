@@ -14,77 +14,75 @@ import { initPage, reloadPage, download, json2csv } from './lib/utils'
 import { TestCase } from './TestCase'
 import { drawLineChart } from './lib/linechart'
 
-drawLineChart(document.body, {})
+// does it need to clear local storage?
+initPage()
 
-// // does it need to clear local storage?
-// initPage()
+const numbersOfNodes = [1e2, 5e2, 1e3, 2e3, 4e3, 8e3] // ! NOTE: the array should be ascending
+const density = 20
 
-// const numbersOfNodes = [1e2, 5e2, 1e3, 2e3, 4e3, 8e3] // ! NOTE: the array should be ascending
-// const density = 20
+const testFuncs = [
+    {
+        name: 'D3SVG',
+        func: testD3SVG
+    },
+    {
+        name: 'D3Canvas',
+        func: testD3Canvas
+    },
+    {
+        name: 'Cytoscape',
+        func: testCytoscape
+    },
+    {
+        name: 'Sigma.js (webgl)',
+        func: testSigma
+    },
+    {
+        name: 'NetV',
+        func: testNetV
+    },
+    {
+        name: 'Stardust',
+        func: testStardust
+    }
+]
 
-// const testFuncs = [
-//     {
-//         name: 'D3SVG',
-//         func: testD3SVG
-//     },
-//     {
-//         name: 'D3Canvas',
-//         func: testD3Canvas
-//     },
-//     {
-//         name: 'Cytoscape',
-//         func: testCytoscape
-//     },
-//     {
-//         name: 'Sigma.js (webgl)',
-//         func: testSigma
-//     },
-//     {
-//         name: 'NetV',
-//         func: testNetV
-//     },
-//     {
-//         name: 'Stardust',
-//         func: testStardust
-//     }
-// ]
+const step = localStorage.getItem(STEP)
+let testFuncsIndex = localStorage.getItem(TEST_FUNCS_INDEX)
 
-// const step = localStorage.getItem(STEP)
-// let testFuncsIndex = localStorage.getItem(TEST_FUNCS_INDEX)
+if (!step || step === '0') {
+    if (testFuncsIndex === undefined || testFuncsIndex === null) {
+        testFuncsIndex = 0
+    } else {
+        testFuncsIndex = Number(testFuncsIndex)
+        testFuncsIndex += 1
+    }
+}
 
-// if (!step || step === '0') {
-//     if (testFuncsIndex === undefined || testFuncsIndex === null) {
-//         testFuncsIndex = 0
-//     } else {
-//         testFuncsIndex = Number(testFuncsIndex)
-//         testFuncsIndex += 1
-//     }
-// }
+localStorage.setItem(TEST_FUNCS_INDEX, testFuncsIndex.toString())
 
-// localStorage.setItem(TEST_FUNCS_INDEX, testFuncsIndex.toString())
+const testFunc = testFuncs[testFuncsIndex].func
 
-// const testFunc = testFuncs[testFuncsIndex].func
+const testCase = new TestCase({
+    numbersOfNodes,
+    numbersOfLinks: numbersOfNodes.map((n) => n * density),
+    name: testFuncs[testFuncsIndex].name
+})
 
-// const testCase = new TestCase({
-//     numbersOfNodes,
-//     numbersOfLinks: numbersOfNodes.map((n) => n * density),
-//     name: testFuncs[testFuncsIndex].name
-// })
+test(testCase, testFunc)
 
-// test(testCase, testFunc)
+async function test(testCase, testFunc) {
+    await testFunc(testCase)
+    const isRefreshed = testCase.finish()
 
-// async function test(testCase, testFunc) {
-//     await testFunc(testCase)
-//     const isRefreshed = testCase.finish()
-
-//     // if not reload
-//     if (!isRefreshed && Number(testFuncsIndex) + 1 >= testFuncs.length) {
-//         const result = localStorage.getItem(RESULT)
-//         localStorage.clear()
-//         download(json2csv(JSON.parse(result)), 'result.csv', 'text/plain')
-//         download(result, 'result.json', 'text/plain')
-//         // drawLineChart(testCase.container, result)
-//     } else {
-//         reloadPage()
-//     }
-// }
+    // if not reload
+    if (!isRefreshed && Number(testFuncsIndex) + 1 >= testFuncs.length) {
+        const result = localStorage.getItem(RESULT)
+        localStorage.clear()
+        download(json2csv(JSON.parse(result)), 'result.csv', 'text/plain')
+        download(result, 'result.json', 'text/plain')
+        drawLineChart(testCase.container, result)
+    } else {
+        reloadPage()
+    }
+}

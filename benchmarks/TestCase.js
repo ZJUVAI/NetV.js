@@ -48,16 +48,16 @@ export class TestCase {
 
         this.name = name
 
-        this.container = document.createElement('div')
-        this.container.setAttribute(
-            'style',
-            `display: inline-block;width:${this.width};height:${this.height}`
-        )
-        document.body.appendChild(this.container)
-
         this.reportDiv = document.createElement('div')
-        this.reportDiv.setAttribute('style', `display: inline-block; vertical-align: top;`)
+        this.reportDiv.setAttribute(
+            'style',
+            `display: inline-block; vertical-align: top; position: relative; left: 80px;`
+        )
         document.body.appendChild(this.reportDiv)
+
+        this.container = document.createElement('div')
+        this.container.setAttribute('style', `width:${this.width};height:${this.height}`)
+        document.body.appendChild(this.container)
 
         this.title = document.createElement('h3')
         this.title.textContent = `${name}, #nodes: ${this.numberOfNodes}, #edge: ${this.numberOfLinks}`
@@ -112,6 +112,7 @@ export class TestCase {
         Array.from(this.container.children).forEach((child) =>
             this.container.removeChild.bind(this.container)(child)
         )
+        document.body.removeChild(this.reportDiv)
 
         if (this.step + 1 < this.numberOfNodesList.length && this.FPS >= 1) {
             reloadPage()
