@@ -14,7 +14,7 @@ import { TestCase } from './TestCase'
 // does it need to clear local storage?
 initPage()
 
-const numbersOfNodes = [1e2, 5e2, 1e3, 2e3, 4e3, 8e3]
+const numbersOfNodes = [1e2, 5e2, 1e3, 2e3, 4e3, 8e3] // ! NOTE: the array should be ascending
 const density = 20
 
 const testFuncs = [

@@ -114,7 +114,7 @@ export class TestCase {
             this.container.removeChild.bind(this.container)(child)
         )
 
-        if (this.step + 1 < this.NumberOfNodesList.length) {
+        if (this.step + 1 < this.NumberOfNodesList.length && this.FPS >= 1) {
             reloadPage()
             return true // is refreshed
         } else {
