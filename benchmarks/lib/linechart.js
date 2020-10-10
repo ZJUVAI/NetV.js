@@ -7,26 +7,38 @@ const width = 500 - margin.left - margin.right
 const height = 300 - margin.top - margin.bottom
 
 const legendsWidth = 200
+const fontSize = 12
 
-const getLinkCount = (str) => Number(str.split('&')[1].split(':')[1])
+const getElementCountFromName = (str) =>
+    Number(str.split('&')[1].split(':')[1]) + Number(str.split('&')[0].split(':')[1])
 
 // Read the data
 export async function drawLineChart(container, data) {
-    // data = await d3.json('./result.json')
+    data = await d3.json('./result-2020-9-10-17-17-55.json')
+    const itemNames = Object.keys(data)
+    const testCaseNames = Array.from(
+        Object.values(data).reduce((set, row) => {
+            Object.keys(row).forEach((name) => {
+                set.add(name)
+            })
+            return set
+        }, new Set())
+    )
+    testCaseNames.sort((a, b) => getElementCountFromName(a) - getElementCountFromName(b))
 
     // append the svg object to the body of the page
     const svg = d3
         .select(container)
         .append('svg')
         .attr('width', width + margin.left + margin.right + legendsWidth)
-        .attr('height', height + margin.top + margin.bottom)
+        .attr('height', height + margin.top + margin.bottom + (fontSize + 2) * testCaseNames.length)
 
     const chart = svg
         .append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
     // Add X axis --> it is a size format
-    const itemNames = Object.keys(data)
+
     const colors = [
         '#1b9e77',
         '#d95f02',
@@ -41,30 +53,16 @@ export async function drawLineChart(container, data) {
         map[name] = colors.pop()
         return map
     }, {})
-    const linksCountDomain = Object.values(data).reduce(
-        (result, row) => {
-            const domain = d3.extent(
-                Object.keys(row).map(getLinkCount) // 'nodes:xxx&links:xxx'
-            )
-            return domain.map((_, i) => {
-                if (i === 0) {
-                    return Math.min(domain[i], result[i])
-                } else {
-                    return Math.max(domain[i], result[i])
-                }
-            })
-        },
-        [Infinity, -Infinity]
-    )
     const maxFPS = d3.max(Object.values(data), (row) => {
         // row: {'nodes:xxx&link:xxx': xxx, 'nodes:yyy&link:yyy': yyy, ...}
         return d3.max(Object.values(row))
     })
 
-    const xDomain = linksCountDomain
+    const xDomain = [0, d3.max(testCaseNames, getElementCountFromName)]
 
     const yDomain = [0, Math.ceil(maxFPS / 10) * 10]
 
+    // const x = d3.scaleLog().base(2).domain(xDomain).range([0, width])
     const x = d3.scaleLinear().domain(xDomain).range([0, width])
     const y = d3.scaleLinear().domain(yDomain).range([height, 0])
 
@@ -92,28 +90,29 @@ export async function drawLineChart(container, data) {
         .attr('y2', height + 5)
         .attr('stroke', 'black')
     // draw x axis calibrations
-    let xCalibration = 1
-    while (xCalibration < x.domain()[1]) {
-        if (xCalibration > x.domain()[0]) {
-            xAxisG
-                .append('line')
-                .attr('x1', x(xCalibration))
-                .attr('x2', x(xCalibration))
-                .attr('y1', height - 5)
-                .attr('y2', height)
-                .attr('stroke', 'black')
-            xAxisG
-                .append('text')
-                .attr('x', x(xCalibration))
-                .attr('y', height + 15)
-                .text(xCalibration.toExponential())
-                .attr('fill', 'black')
-                .attr('text-anchor', 'middle')
-                .attr('font-size', 10)
-        }
-        // calibration *= String(calibration)[0] === '2' ? 5 : 2
-        xCalibration *= 10
-    }
+    xAxisG
+        .selectAll('line.calibration')
+        .data(testCaseNames)
+        .enter()
+        .append('line')
+        .classed('calibration', true)
+        .attr('x1', (d) => x(getElementCountFromName(d)))
+        .attr('x2', (d) => x(getElementCountFromName(d)))
+        .attr('y1', height - 5)
+        .attr('y2', height)
+        .attr('stroke', 'black')
+
+    xAxisG
+        .selectAll('text.calibration')
+        .data(testCaseNames.reverse())
+        .enter()
+        .append('text')
+        .attr('x', (d) => x(getElementCountFromName(d)))
+        .attr('y', (d, i) => height + (fontSize + 2) * (1 + i))
+        .text((d) => d)
+        .attr('fill', 'black')
+        .attr('text-anchor', 'middle')
+        .attr('font-size', fontSize)
 
     // draw y axis
     const yAxisG = chart.append('g').attr('id', 'y-aixs')
@@ -142,21 +141,21 @@ export async function drawLineChart(container, data) {
     let yCalibration = 0
     while (yCalibration < y.domain()[1]) {
         if (yCalibration > y.domain()[0]) {
-            xAxisG
+            yAxisG
                 .append('line')
                 .attr('y1', y(yCalibration))
                 .attr('y2', y(yCalibration))
                 .attr('x1', 0)
                 .attr('x2', -5)
                 .attr('stroke', 'black')
-            xAxisG
+            yAxisG
                 .append('text')
                 .attr('x', -15)
                 .attr('y', y(yCalibration) + 3)
                 .text(yCalibration)
                 .attr('fill', 'black')
                 .attr('text-anchor', 'middle')
-                .attr('font-size', 10)
+                .attr('font-size', fontSize)
         }
         // calibration *= String(calibration)[0] === '2' ? 5 : 2
         yCalibration += 10
@@ -168,7 +167,10 @@ export async function drawLineChart(container, data) {
         .enter()
         .append('path')
         .each(function (d) {
-            const points = Object.entries(d[1]).map(([key, value]) => [getLinkCount(key), value])
+            const points = Object.entries(d[1]).map(([key, value]) => [
+                getElementCountFromName(key),
+                value
+            ])
             points.sort((a, b) => a[0] - b[0])
 
             // eslint-disable-next-line no-invalid-this
@@ -216,6 +218,6 @@ export async function drawLineChart(container, data) {
                 .attr('y', legendsGap / 2 + 5)
                 .text(d)
                 .attr('fill', 'black')
-                .attr('font-size', 10)
+                .attr('font-size', fontSize)
         })
 }
