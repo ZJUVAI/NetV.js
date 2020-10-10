@@ -79,10 +79,14 @@ async function test(testCase, testFunc) {
     if (!isRefreshed && Number(testFuncsIndex) + 1 >= testFuncs.length) {
         const result = localStorage.getItem(RESULT)
         localStorage.clear()
-        download(json2csv(JSON.parse(result)), 'result.csv', 'text/plain')
-        download(result, 'result.json', 'text/plain')
-        drawLineChart(testCase.container, result)
+        // const timeStamp =
+        download(json2csv(JSON.parse(result)), `result.csv`, 'text/plain')
+        download(result, `result.json`, 'text/plain')
+        drawLineChart(testCase.container, JSON.parse(result))
     } else {
         reloadPage()
     }
 }
+
+// import { drawLineChart } from './lib/linechart'
+// drawLineChart(document.body, {})

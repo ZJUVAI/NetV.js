@@ -6,18 +6,22 @@ const margin = { top: 10, right: 30, bottom: 30, left: 60 }
 const width = 500 - margin.left - margin.right
 const height = 300 - margin.top - margin.bottom
 
+const legendsWidth = 100
+
 const getLinkCount = (str) => Number(str.split('&')[1].split(':')[1])
 
 // Read the data
 export async function drawLineChart(container, data) {
-    // const data = await d3.json('./result.json')
+    // data = await d3.json('./result.json')
 
     // append the svg object to the body of the page
     const svg = d3
         .select(container)
         .append('svg')
-        .attr('width', width + margin.left + margin.right)
+        .attr('width', width + margin.left + margin.right + legendsWidth)
         .attr('height', height + margin.top + margin.bottom)
+
+    const chart = svg
         .append('g')
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
@@ -37,21 +41,6 @@ export async function drawLineChart(container, data) {
         map[name] = colors.pop()
         return map
     }, {})
-    // const nodesCountDomain = Object.values(data).reduce(
-    //     (result, row) => {
-    //         const domain = d3.extent(
-    //             Object.keys(row).map((name) => Number(name.split('&')[0].split(':')[1])) // 'nodes:xxx&links:xxx'
-    //         )
-    //         return domain.map((_, i) => {
-    //             if (i === 0) {
-    //                 return Math.min(domain[i], result[i])
-    //             } else {
-    //                 return Math.max(domain[i], result[i])
-    //             }
-    //         })
-    //     },
-    //     [Infinity, -Infinity]
-    // )
     const linksCountDomain = Object.values(data).reduce(
         (result, row) => {
             const domain = d3.extent(
@@ -73,8 +62,6 @@ export async function drawLineChart(container, data) {
     })
 
     const xDomain = linksCountDomain
-    // xDomain[0] = Math.pow(10, Number(xDomain[0].toString().length - 1))
-    // xDomain[1] = Math.pow(10, Number((xDomain[1] - 1).toString().length))
 
     const yDomain = [0, Math.ceil(maxFPS / 10) * 10]
 
@@ -82,7 +69,7 @@ export async function drawLineChart(container, data) {
     const y = d3.scaleLinear().domain(yDomain).range([height, 0])
 
     // draw x axis
-    const xAxisG = svg.append('g').attr('id', 'x-aixs')
+    const xAxisG = chart.append('g').attr('id', 'x-aixs')
     xAxisG
         .append('line')
         .attr('x1', 0)
@@ -129,7 +116,7 @@ export async function drawLineChart(container, data) {
     }
 
     // draw y axis
-    const yAxisG = svg.append('g').attr('id', 'y-aixs')
+    const yAxisG = chart.append('g').attr('id', 'y-aixs')
     yAxisG
         .append('line')
         .attr('x1', 0)
@@ -175,7 +162,8 @@ export async function drawLineChart(container, data) {
         yCalibration += 10
     }
 
-    svg.selectAll('path')
+    chart
+        .selectAll('path')
         .data(Object.entries(data))
         .enter()
         .append('path')
@@ -198,11 +186,10 @@ export async function drawLineChart(container, data) {
                 )
         })
 
-    const legends = d3
-        .select(container)
-        .append('svg')
-        .attr('width', width + margin.left + margin.right)
-        .attr('height', height + margin.top + margin.bottom)
+    const legends = svg
+        .append('g')
+        .attr('id', 'legends')
+        .attr('transform', `translate(${width + margin.left + margin.right}, ${margin.top})`)
 
     const legendsGap = 20
     legends
@@ -210,7 +197,7 @@ export async function drawLineChart(container, data) {
         .data(itemNames)
         .enter()
         .append('g')
-        .attr('transform', (d, i) => 'translate(0,' + (margin.top + legendsGap * i) + ')')
+        .attr('transform', (d, i) => 'translate(0,' + legendsGap * i + ')')
         .each(function (d) {
             // eslint-disable-next-line no-invalid-this
             const g = d3.select(this)

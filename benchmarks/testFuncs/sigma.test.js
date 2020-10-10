@@ -16,8 +16,6 @@ export default async function test(testCase) {
         ]
     })
 
-    console.log(sigma)
-
     // Then, let's add some data to display:
     data.nodes.forEach((n, i) => {
         sigma.graph.addNode({
