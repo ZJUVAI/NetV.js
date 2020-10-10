@@ -79,9 +79,36 @@ async function test(testCase, testFunc) {
     if (!isRefreshed && Number(testFuncsIndex) + 1 >= testFuncs.length) {
         const result = localStorage.getItem(RESULT)
         localStorage.clear()
-        // const timeStamp =
-        download(json2csv(JSON.parse(result)), `result.csv`, 'text/plain')
-        download(result, `result.json`, 'text/plain')
+        const jsonDownloader = document.createElement('button')
+        testCase.container.appendChild(jsonDownloader)
+        jsonDownloader.textContent = 'Download JSON Result'
+        jsonDownloader.onclick = function () {
+            const time = new Date()
+            const timestamp = [
+                time.getFullYear(),
+                time.getMonth(),
+                time.getDate(),
+                time.getHours(),
+                time.getMinutes(),
+                time.getSeconds()
+            ].join('-')
+            download(result, `result-${timestamp}.json`, 'text/plain')
+        }
+        const csvDownloader = document.createElement('button')
+        testCase.container.appendChild(csvDownloader)
+        csvDownloader.textContent = 'Download CSV Result'
+        csvDownloader.onclick = function () {
+            const time = new Date()
+            const timestamp = [
+                time.getFullYear(),
+                time.getMonth() + 1,
+                time.getDate(),
+                time.getHours(),
+                time.getMinutes(),
+                time.getSeconds()
+            ].join('-')
+            download(json2csv(JSON.parse(result)), `result-${timestamp}.csv`, 'text/plain')
+        }
         drawLineChart(testCase.container, JSON.parse(result))
     } else {
         reloadPage()

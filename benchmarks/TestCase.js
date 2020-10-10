@@ -113,6 +113,7 @@ export class TestCase {
             this.container.removeChild.bind(this.container)(child)
         )
         document.body.removeChild(this.reportDiv)
+        document.body.removeChild(this.stats.dom)
 
         if (this.step + 1 < this.numberOfNodesList.length && this.FPS >= 1) {
             reloadPage()

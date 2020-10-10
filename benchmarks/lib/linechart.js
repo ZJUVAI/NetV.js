@@ -6,7 +6,7 @@ const margin = { top: 10, right: 30, bottom: 30, left: 60 }
 const width = 500 - margin.left - margin.right
 const height = 300 - margin.top - margin.bottom
 
-const legendsWidth = 100
+const legendsWidth = 200
 
 const getLinkCount = (str) => Number(str.split('&')[1].split(':')[1])
 
