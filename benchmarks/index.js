@@ -4,18 +4,23 @@
  */
 
 import { RESULT, STEP, TEST_FUNCS_INDEX } from './configs'
-import testNetV from './netv'
+import testNetV from './netv.test'
+import testStardust from './stardust.test'
+import testSigma from './sigma.test'
 import { initPage, reloadPage, download } from './lib/utils'
-import testStardust from './stardust'
 import { TestCase } from './TestCase'
 
 // does it need to clear local storage?
 initPage()
 
-const numbersOfNodes = [1e2, 5e2, 1e3, 2e3, 4e3, 8e3].reverse()
+const numbersOfNodes = [1e2, 5e2, 1e3, 2e3, 4e3, 8e3]
 const density = 20
 
 const testFuncs = [
+    {
+        name: 'Sigma.js',
+        func: testSigma
+    },
     {
         name: 'NetV',
         func: testNetV

@@ -49,7 +49,10 @@ export class TestCase {
         this.name = name
 
         this.container = document.createElement('div')
-        this.container.setAttribute('style', `display: inline-block;`)
+        this.container.setAttribute(
+            'style',
+            `display: inline-block;width:${this.width};height:${this.height}`
+        )
         document.body.appendChild(this.container)
 
         this.reportDiv = document.createElement('div')
