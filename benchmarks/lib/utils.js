@@ -1,31 +1,9 @@
+const IS_REFRESHED_MANUALLY = 'IS_REFRESHED_MANUALLY'
+const FRAME_RATE = 'FRAME_RATE'
+
 export function parseBoolean(str) {
     return str === 'true'
 }
-
-// Function that returns a Promise for the FPS
-const getFPS = () =>
-    new Promise((resolve) => {
-        let count = 0
-        const total = 10
-        let t1
-        let t2
-        function refresh() {
-            if (count === 0) {
-                t1 = new Date()
-            }
-            if (count === total) {
-                t2 = new Date()
-                resolve((total * 1000) / (t2 - t1))
-            } else {
-                count++
-                requestAnimationFrame(refresh)
-            }
-        }
-        refresh()
-    })
-
-const IS_REFRESHED_MANUALLY = 'IS_REFRESHED_MANUALLY'
-const FRAME_RATE = 'FRAME_RATE'
 
 export function isRefreshedManually() {
     let isRefreshedManually = localStorage.getItem(IS_REFRESHED_MANUALLY)

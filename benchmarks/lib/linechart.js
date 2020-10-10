@@ -1,3 +1,4 @@
+/* eslint-disable no-invalid-this */
 import * as d3 from './d3.v5.min.js'
 
 // set the dimensions and margins of the graph
@@ -5,46 +6,50 @@ const margin = { top: 10, right: 30, bottom: 30, left: 60 }
 const width = 500 - margin.left - margin.right
 const height = 300 - margin.top - margin.bottom
 
-// The table generation function
-function tabulate(container, data, columnNames) {
-    var table = d3.select(container).append('table').attr('style', 'margin-left: 250px'),
-        thead = table.append('thead'),
-        tbody = table.append('tbody')
+// // The table generation function
+// function tabulate(container, data, columnNames) {
+//     var table = d3.select(container).append('table').attr('style', 'margin-left: 250px'),
+//         thead = table.append('thead'),
+//         tbody = table.append('tbody')
 
-    // append the header row
-    thead
-        .append('tr')
-        .selectAll('th')
-        .data(columnNames)
-        .enter()
-        .append('th')
-        .text(function (column) {
-            return column
-        })
+//     // append the header row
+//     thead
+//         .append('tr')
+//         .selectAll('th')
+//         .data(columnNames)
+//         .enter()
+//         .append('th')
+//         .text(function (column) {
+//             return column
+//         })
 
-    // create a row for each object in the data
-    var rows = tbody.selectAll('tr').data(data).enter().append('tr')
+//     // create a row for each object in the data
+//     var rows = tbody.selectAll('tr').data(data).enter().append('tr')
 
-    // create a cell in each row for each column
-    var cells = rows
-        .selectAll('td')
-        .data(function (row) {
-            return columnNames.map(function (column) {
-                return { column: column, value: row[column] }
-            })
-        })
-        .enter()
-        .append('td')
-        .attr('style', 'font-family: Courier') // sets the font style
-        .html(function (d) {
-            return d.value
-        })
+//     // create a cell in each row for each column
+//     var cells = rows
+//         .selectAll('td')
+//         .data(function (row) {
+//             return columnNames.map(function (column) {
+//                 return { column: column, value: row[column] }
+//             })
+//         })
+//         .enter()
+//         .append('td')
+//         .attr('style', 'font-family: Courier') // sets the font style
+//         .html(function (d) {
+//             return d.value
+//         })
 
-    return table
-}
+//     return table
+// }
+
+const getLinkCount = (str) => Number(str.split('&')[1].split(':')[1])
 
 // Read the data
-export function drawLineChart(container, data) {
+export async function drawLineChart(container, _data) {
+    const data = await d3.json('./result.json')
+
     // append the svg object to the body of the page
     const svg = d3
         .select(container)
@@ -55,65 +60,213 @@ export function drawLineChart(container, data) {
         .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
     // Add X axis --> it is a size format
-    const xDomain = d3.extent(data, (d) => d.size)
-    xDomain[0] = Math.pow(10, parseInt(xDomain[0].toString().length - 1))
-    xDomain[1] = Math.pow(10, parseInt((xDomain[1] - 1).toString().length))
-    console.log(xDomain)
-    const x = d3.scaleLog().base(2).domain(xDomain).range([0, width])
+    const itemNames = Object.keys(data)
+    const colors = [
+        '#1b9e77',
+        '#d95f02',
+        '#7570b3',
+        '#e7298a',
+        '#66a61e',
+        '#e6ab02',
+        '#a6761d',
+        '#666666'
+    ]
+    const colorMap = itemNames.reduce((map, name) => {
+        map[name] = colors.pop()
+        return map
+    }, {})
+    // const nodesCountDomain = Object.values(data).reduce(
+    //     (result, row) => {
+    //         const domain = d3.extent(
+    //             Object.keys(row).map((name) => Number(name.split('&')[0].split(':')[1])) // 'nodes:xxx&links:xxx'
+    //         )
+    //         return domain.map((_, i) => {
+    //             if (i === 0) {
+    //                 return Math.min(domain[i], result[i])
+    //             } else {
+    //                 return Math.max(domain[i], result[i])
+    //             }
+    //         })
+    //     },
+    //     [Infinity, -Infinity]
+    // )
+    const linksCountDomain = Object.values(data).reduce(
+        (result, row) => {
+            const domain = d3.extent(
+                Object.keys(row).map(getLinkCount) // 'nodes:xxx&links:xxx'
+            )
+            return domain.map((_, i) => {
+                if (i === 0) {
+                    return Math.min(domain[i], result[i])
+                } else {
+                    return Math.max(domain[i], result[i])
+                }
+            })
+        },
+        [Infinity, -Infinity]
+    )
+    const maxFPS = d3.max(Object.values(data), (row) => {
+        // row: {'nodes:xxx&link:xxx': xxx, 'nodes:yyy&link:yyy': yyy, ...}
+        return d3.max(Object.values(row))
+    })
 
-    // draw axis
-    svg.append('line')
+    const xDomain = linksCountDomain
+    // xDomain[0] = Math.pow(10, Number(xDomain[0].toString().length - 1))
+    // xDomain[1] = Math.pow(10, Number((xDomain[1] - 1).toString().length))
+
+    const yDomain = [0, Math.ceil(maxFPS / 10) * 10]
+
+    const x = d3.scaleLinear().domain(xDomain).range([0, width])
+    const y = d3.scaleLinear().domain(yDomain).range([height, 0])
+
+    // draw x axis
+    const xAxisG = svg.append('g').attr('id', 'x-aixs')
+    xAxisG
+        .append('line')
         .attr('x1', 0)
-        .attr('x2', width)
         .attr('y1', height)
+        .attr('x2', width + 10)
         .attr('y2', height)
         .attr('stroke', 'black')
-    let calibration = 1
-    while (calibration <= x.domain()[1]) {
-        if (calibration >= x.domain()[0]) {
-            svg.append('line')
-                .attr('x1', x(calibration))
-                .attr('x2', x(calibration))
+    xAxisG
+        .append('line')
+        .attr('x1', width + 10)
+        .attr('y1', height)
+        .attr('x2', width + 10 - 7)
+        .attr('y2', height - 5)
+        .attr('stroke', 'black')
+    xAxisG
+        .append('line')
+        .attr('x1', width + 10)
+        .attr('y1', height)
+        .attr('x2', width + 10 - 7)
+        .attr('y2', height + 5)
+        .attr('stroke', 'black')
+    // draw x axis calibrations
+    let xCalibration = 1
+    while (xCalibration < x.domain()[1]) {
+        if (xCalibration > x.domain()[0]) {
+            xAxisG
+                .append('line')
+                .attr('x1', x(xCalibration))
+                .attr('x2', x(xCalibration))
                 .attr('y1', height - 5)
                 .attr('y2', height)
                 .attr('stroke', 'black')
-            svg.append('text')
-                .attr('x', x(calibration))
+            xAxisG
+                .append('text')
+                .attr('x', x(xCalibration))
                 .attr('y', height + 15)
-                .text(calibration)
-                .attr('stroke', 'black')
+                .text(xCalibration.toExponential())
+                .attr('fill', 'black')
+                .attr('text-anchor', 'middle')
+                .attr('font-size', 10)
         }
-        calibration *= 10
+        // calibration *= String(calibration)[0] === '2' ? 5 : 2
+        xCalibration *= 10
     }
 
-    // Add Y axis
-    const y = d3
-        .scaleLinear()
-        .domain([
-            0,
-            d3.max(data, function (d) {
-                return Number(d.value)
-            })
-        ])
-        .range([height, 0])
+    // draw y axis
+    const yAxisG = svg.append('g').attr('id', 'y-aixs')
+    yAxisG
+        .append('line')
+        .attr('x1', 0)
+        .attr('y1', height)
+        .attr('x2', 0)
+        .attr('y2', 0)
+        .attr('stroke', 'black')
+    yAxisG
+        .append('line')
+        .attr('x2', 0)
+        .attr('y2', 0)
+        .attr('x2', -5)
+        .attr('y2', 7)
+        .attr('stroke', 'black')
+    yAxisG
+        .append('line')
+        .attr('x2', 0)
+        .attr('y2', 0)
+        .attr('x2', 5)
+        .attr('y2', 7)
+        .attr('stroke', 'black')
+    // draw x axis calibrations
+    let yCalibration = 0
+    while (yCalibration < y.domain()[1]) {
+        if (yCalibration > y.domain()[0]) {
+            xAxisG
+                .append('line')
+                .attr('y1', y(yCalibration))
+                .attr('y2', y(yCalibration))
+                .attr('x1', 0)
+                .attr('x2', -5)
+                .attr('stroke', 'black')
+            xAxisG
+                .append('text')
+                .attr('x', -15)
+                .attr('y', y(yCalibration) + 3)
+                .text(yCalibration)
+                .attr('fill', 'black')
+                .attr('text-anchor', 'middle')
+                .attr('font-size', 10)
+        }
+        // calibration *= String(calibration)[0] === '2' ? 5 : 2
+        yCalibration += 10
+    }
 
-    // Add the line
-    svg.append('path')
-        .datum(data)
-        .attr('fill', 'none')
-        .attr('stroke', 'steelblue')
-        .attr('stroke-width', 1.5)
-        .attr(
-            'd',
-            d3
-                .line()
-                .x(function (d) {
-                    return x(d.size)
-                })
-                .y(function (d) {
-                    return y(d.value)
-                })
-        )
+    svg.selectAll('path')
+        .data(Object.entries(data))
+        .enter()
+        .append('path')
+        .each(function (d) {
+            const points = Object.entries(d[1]).map(([key, value]) => [getLinkCount(key), value])
+            points.sort((a, b) => a[0] - b[0])
 
-    tabulate(container, data, ['size', 'value'])
+            // eslint-disable-next-line no-invalid-this
+            d3.select(this)
+                .datum(points)
+                .attr('fill', 'none')
+                .attr('stroke', colorMap[d[0]])
+                .attr('stroke-width', d[0].indexOf('NetV') >= 0 ? 3 : 1.5)
+                .attr(
+                    'd',
+                    d3
+                        .line()
+                        .x((d) => x(d[0]))
+                        .y((d) => y(d[1]))
+                )
+        })
+
+    const legends = d3
+        .select(container)
+        .append('svg')
+        .attr('width', width + margin.left + margin.right)
+        .attr('height', height + margin.top + margin.bottom)
+
+    const legendsGap = 20
+    legends
+        .selectAll('g')
+        .data(itemNames)
+        .enter()
+        .append('g')
+        .attr('transform', (d, i) => 'translate(0,' + (margin.top + legendsGap * i) + ')')
+        .each(function (d) {
+            // eslint-disable-next-line no-invalid-this
+            const g = d3.select(this)
+
+            const length = 40
+            g.append('line')
+                .attr('x1', 0)
+                .attr('y1', legendsGap / 2)
+                .attr('x2', length)
+                .attr('y2', legendsGap / 2)
+                .attr('stroke', colorMap[d])
+                .attr('stroke-width', d.indexOf('NetV') >= 0 ? 3 : 1.5)
+
+            g.append('text')
+                .attr('x', length + 10)
+                .attr('y', legendsGap / 2 + 5)
+                .text(d)
+                .attr('fill', 'black')
+                .attr('font-size', 10)
+        })
 }

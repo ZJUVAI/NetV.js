@@ -93,7 +93,7 @@ export class TestCase {
         }
 
         this.testResult[this.name][
-            `nodes: ${this.numberOfNodes}&links: ${this.numberOfLinks}`
+            `nodes:${this.numberOfNodes}&links:${this.numberOfLinks}`
         ] = this.FPS
         localStorage.setItem(RESULT, JSON.stringify(this.testResult))
         console.log(this.testResult)
