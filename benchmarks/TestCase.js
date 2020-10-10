@@ -105,11 +105,10 @@ export class TestCase {
 
         const canvas = this.container.querySelector('canvas')
         if (canvas) {
-            let webgl = canvas.getContext('webgl2')
-            if (!webgl) {
-                webgl = canvas.getContext('webgl')
+            let webgl = canvas.getContext('webgl2') || canvas.getContext('webgl')
+            if (webgl) {
+                webgl.getExtension('WEBGL_lose_context').loseContext()
             }
-            webgl.getExtension('WEBGL_lose_context').loseContext()
         }
         Array.from(this.container.children).forEach((child) =>
             this.container.removeChild.bind(this.container)(child)

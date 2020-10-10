@@ -7,6 +7,7 @@ import { RESULT, STEP, TEST_FUNCS_INDEX } from './configs'
 import testNetV from './netv.test'
 import testStardust from './stardust.test'
 import testSigma from './sigma.test'
+import testCytoscape from './cytoscape.test'
 import { initPage, reloadPage, download } from './lib/utils'
 import { TestCase } from './TestCase'
 
@@ -17,6 +18,10 @@ const numbersOfNodes = [1e2, 5e2, 1e3, 2e3, 4e3, 8e3]
 const density = 20
 
 const testFuncs = [
+    {
+        name: 'Cytoscape',
+        func: testCytoscape
+    },
     {
         name: 'Sigma.js',
         func: testSigma
