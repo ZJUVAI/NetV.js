@@ -14,7 +14,6 @@ const getElementCountFromName = (str) =>
 
 // Read the data
 export async function drawLineChart(container, data) {
-    data = await d3.json('./result-2020-9-10-17-17-55.json')
     const itemNames = Object.keys(data)
     const testCaseNames = Array.from(
         Object.values(data).reduce((set, row) => {
