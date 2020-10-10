@@ -2,7 +2,7 @@
  * @author Jiacheng Pan<panjiacheng@zju.edu.cn>
  */
 
-import cytoscape from './lib/cytoscape.min.js'
+import cytoscape from '../lib/cytoscape.min.js'
 
 function makeCytoscapeData(data) {
     const res = []

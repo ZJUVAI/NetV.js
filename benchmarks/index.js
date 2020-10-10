@@ -4,10 +4,12 @@
  */
 
 import { RESULT, STEP, TEST_FUNCS_INDEX } from './configs'
-import testNetV from './netv.test'
-import testStardust from './stardust.test'
-import testSigma from './sigma.test'
-import testCytoscape from './cytoscape.test'
+import testNetV from './testFuncs/netv.test'
+import testStardust from './testFuncs/stardust.test'
+import testSigma from './testFuncs/sigma.test'
+import testCytoscape from './testFuncs/cytoscape.test'
+import testD3Canvas from './testFuncs/d3.canvas.test'
+import testD3SVG from './testFuncs/d3.svg.test'
 import { initPage, reloadPage, download } from './lib/utils'
 import { TestCase } from './TestCase'
 
@@ -18,6 +20,14 @@ const numbersOfNodes = [1e2, 5e2, 1e3, 2e3, 4e3, 8e3] // ! NOTE: the array shoul
 const density = 20
 
 const testFuncs = [
+    {
+        name: 'D3SVG',
+        func: testD3SVG
+    },
+    {
+        name: 'D3Canvas',
+        func: testD3Canvas
+    },
     {
         name: 'Cytoscape',
         func: testCytoscape

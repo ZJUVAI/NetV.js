@@ -2,7 +2,7 @@
  * @author Jiacheng Pan<panjiacheng@zju.edu.cn>
  */
 
-import * as Stardust from './lib/stardust.bundle.min.js'
+import * as Stardust from '../lib/stardust.bundle.min.js'
 
 export default async function test(testCase) {
     const { container, width, height, data } = testCase

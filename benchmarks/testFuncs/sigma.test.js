@@ -2,7 +2,7 @@
  * @author Jiacheng Pan<panjiacheng@zju.edu.cn>
  */
 
-import { sigma as Sigma } from './lib/sigma.require.js'
+import { sigma as Sigma } from '../lib/sigma.require.js'
 
 export default async function test(testCase) {
     const { container, width, height, data } = testCase
