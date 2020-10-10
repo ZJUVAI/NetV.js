@@ -5,3 +5,5 @@ node_modules
 npm-debug.log
 test/browser/data
 examples/data
+benchmarks/stats.json
+benchmarks/bundle.js

@@ -1,47 +1,67 @@
-function generatePairInRange(a, b) {
-    function randRange(a, b) {
-        return a + Math.floor(Math.random() * (b - a));
-    }
-    const x = randRange(a, b);
-    let y = randRange(a, b);
-    while (y === x) {
-        y = randRange(a, b);
-    }
-    return {
-        x: x,
-        y: y,
-    };
+const IS_REFRESHED_MANUALLY = 'IS_REFRESHED_MANUALLY'
+const FRAME_RATE = 'FRAME_RATE'
+
+export function parseBoolean(str) {
+    return str === 'true'
 }
 
+export function isRefreshedManually() {
+    let isRefreshedManually = localStorage.getItem(IS_REFRESHED_MANUALLY)
+    return (
+        isRefreshedManually === undefined ||
+        isRefreshedManually === null ||
+        parseBoolean(isRefreshedManually)
+    )
+}
 
-function generateData(nodeNum, edgeNum, width, height) {
-    const data = {
-        nodes: [],
-        links: [],
-    };
+export function initPage() {
+    // Whether the page is refreshed by manual at last time
 
-    data.nodes = Array(nodeNum).fill().map((v, i) => {
-        return {
-            id: String(i),
-            x: Math.random() * width,
-            y: Math.random() * height,
-        };
-    });
+    if (isRefreshedManually()) {
+        // The page will be refreshed for each benchmark test case
+        // So we need to distinguish whether the page is refreshed manually or automatically
+        // If the page is refreshed manually, we should clear the local storage
+        localStorage.clear()
+        localStorage.setItem(IS_REFRESHED_MANUALLY, 'true')
+    } else {
+        // the page is refreshed automatically
+        localStorage.setItem(IS_REFRESHED_MANUALLY, 'true')
+    }
+}
 
-    const linkSet = new Set()
-    data.links = Array(edgeNum).fill().map((v, i) => {
-        let pair
-        do {
-            pair = generatePairInRange(0, nodeNum);
-        } while (linkSet.has(`${pair.x}-${pair.y}`))
-        linkSet.add(`${pair.x}-${pair.y}`)
-        linkSet.add(`${pair.y}-${pair.x}`)
+export function getFrameRate() {
+    return Math.round(localStorage.getItem(FRAME_RATE))
+}
 
-        return {
-            source: String(pair.x),
-            target: String(pair.y),
-        }
-    });
+export function reloadPage() {
+    localStorage.setItem(IS_REFRESHED_MANUALLY, 'false')
+    location.reload()
+}
 
-    return data;
+export function download(content, fileName, contentType) {
+    const a = document.createElement('a')
+    const file = new Blob([content], { type: contentType })
+    a.href = URL.createObjectURL(file)
+    a.download = fileName
+    a.click()
+}
+
+export function json2csv(json) {
+    const rowHeaders = Object.keys(json)
+    const columnHeaders = Object.keys(Object.values(json)[0])
+    columnHeaders.unshift('Items')
+    let csv = columnHeaders.join(',')
+
+    csv += '\r\n'
+
+    csv += Object.values(json)
+        .map((row, i) => {
+            const cells = Object.values(row)
+            cells.unshift(rowHeaders[i])
+            return cells.join(',')
+        })
+        .join('\r\n')
+
+    console.log(csv)
+    return csv
 }
