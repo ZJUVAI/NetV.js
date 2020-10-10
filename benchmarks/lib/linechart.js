@@ -7,10 +7,7 @@ const height = 300 - margin.top - margin.bottom
 
 // The table generation function
 function tabulate(container, data, columnNames) {
-    var table = d3
-            .select(container)
-            .append('table')
-            .attr('style', 'margin-left: 250px'),
+    var table = d3.select(container).append('table').attr('style', 'margin-left: 250px'),
         thead = table.append('thead'),
         tbody = table.append('tbody')
 
@@ -21,29 +18,25 @@ function tabulate(container, data, columnNames) {
         .data(columnNames)
         .enter()
         .append('th')
-        .text(function(column) {
+        .text(function (column) {
             return column
         })
 
     // create a row for each object in the data
-    var rows = tbody
-        .selectAll('tr')
-        .data(data)
-        .enter()
-        .append('tr')
+    var rows = tbody.selectAll('tr').data(data).enter().append('tr')
 
     // create a cell in each row for each column
     var cells = rows
         .selectAll('td')
-        .data(function(row) {
-            return columnNames.map(function(column) {
+        .data(function (row) {
+            return columnNames.map(function (column) {
                 return { column: column, value: row[column] }
             })
         })
         .enter()
         .append('td')
         .attr('style', 'font-family: Courier') // sets the font style
-        .html(function(d) {
+        .html(function (d) {
             return d.value
         })
 
@@ -66,11 +59,7 @@ export function drawLineChart(container, data) {
     xDomain[0] = Math.pow(10, parseInt(xDomain[0].toString().length - 1))
     xDomain[1] = Math.pow(10, parseInt((xDomain[1] - 1).toString().length))
     console.log(xDomain)
-    const x = d3
-        .scaleLog()
-        .base(2)
-        .domain(xDomain)
-        .range([0, width])
+    const x = d3.scaleLog().base(2).domain(xDomain).range([0, width])
 
     // draw axis
     svg.append('line')
@@ -102,7 +91,7 @@ export function drawLineChart(container, data) {
         .scaleLinear()
         .domain([
             0,
-            d3.max(data, function(d) {
+            d3.max(data, function (d) {
                 return Number(d.value)
             })
         ])
@@ -118,10 +107,10 @@ export function drawLineChart(container, data) {
             'd',
             d3
                 .line()
-                .x(function(d) {
+                .x(function (d) {
                     return x(d.size)
                 })
-                .y(function(d) {
+                .y(function (d) {
                     return y(d.value)
                 })
         )

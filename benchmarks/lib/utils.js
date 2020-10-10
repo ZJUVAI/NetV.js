@@ -67,3 +67,23 @@ export function download(content, fileName, contentType) {
     a.download = fileName
     a.click()
 }
+
+export function json2csv(json) {
+    const rowHeaders = Object.keys(json)
+    const columnHeaders = Object.keys(Object.values(json)[0])
+    columnHeaders.unshift('Items')
+    let csv = columnHeaders.join(',')
+
+    csv += '\r\n'
+
+    csv += Object.values(json)
+        .map((row, i) => {
+            const cells = Object.values(row)
+            cells.unshift(rowHeaders[i])
+            return cells.join(',')
+        })
+        .join('\r\n')
+
+    console.log(csv)
+    return csv
+}

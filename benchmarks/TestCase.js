@@ -34,14 +34,14 @@ export class TestCase {
         this.width = width
         this.height = height
 
-        this.NumberOfNodesList = numbersOfNodes
-        this.NumberOfLinksList = numbersOfLinks
-        this.NumberOfNodes = this.NumberOfNodesList[this.step]
-        this.NumberOfLinks = this.NumberOfLinksList[this.step]
+        this.numberOfNodesList = numbersOfNodes
+        this.numberOfLinksList = numbersOfLinks
+        this.numberOfNodes = this.numberOfNodesList[this.step]
+        this.numberOfLinks = this.numberOfLinksList[this.step]
 
         this.data = generateRandomGraph({
-            nodeNum: this.NumberOfNodes,
-            linkNum: this.NumberOfLinks,
+            nodeNum: this.numberOfNodes,
+            linkNum: this.numberOfLinks,
             width,
             height
         })
@@ -60,7 +60,7 @@ export class TestCase {
         document.body.appendChild(this.reportDiv)
 
         this.title = document.createElement('h3')
-        this.title.textContent = `${name}, #nodes: ${this.NumberOfNodes}, #edge: ${this.NumberOfLinks}`
+        this.title.textContent = `${name}, #nodes: ${this.numberOfNodes}, #edge: ${this.numberOfLinks}`
         this.reportDiv.appendChild(this.title)
 
         this.testResult = localStorage.getItem(RESULT)
@@ -89,13 +89,12 @@ export class TestCase {
         }
 
         if (!(this.name in this.testResult)) {
-            this.testResult[this.name] = []
+            this.testResult[this.name] = {}
         }
 
-        this.testResult[this.name].push({
-            size: this.NumberOfNodes, // + this.NumberOfLinks,
-            value: this.FPS
-        })
+        this.testResult[this.name][
+            `nodes: ${this.numberOfNodes}&links: ${this.numberOfLinks}`
+        ] = this.FPS
         localStorage.setItem(RESULT, JSON.stringify(this.testResult))
         console.log(this.testResult)
     }
@@ -114,7 +113,7 @@ export class TestCase {
             this.container.removeChild.bind(this.container)(child)
         )
 
-        if (this.step + 1 < this.NumberOfNodesList.length && this.FPS >= 1) {
+        if (this.step + 1 < this.numberOfNodesList.length && this.FPS >= 1) {
             reloadPage()
             return true // is refreshed
         } else {

@@ -10,7 +10,7 @@ import testSigma from './testFuncs/sigma.test'
 import testCytoscape from './testFuncs/cytoscape.test'
 import testD3Canvas from './testFuncs/d3.canvas.test'
 import testD3SVG from './testFuncs/d3.svg.test'
-import { initPage, reloadPage, download } from './lib/utils'
+import { initPage, reloadPage, download, json2csv } from './lib/utils'
 import { TestCase } from './TestCase'
 
 // does it need to clear local storage?
@@ -78,7 +78,7 @@ async function test(testCase, testFunc) {
     if (!isRefreshed && Number(testFuncsIndex) + 1 >= testFuncs.length) {
         const result = localStorage.getItem(RESULT)
         localStorage.clear()
-        download(result, 'result.json', 'text/plain')
+        download(json2csv(JSON.parse(result)), 'result.csv', 'text/plain')
     } else {
         reloadPage()
     }
