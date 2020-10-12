@@ -29,7 +29,7 @@ class NetV {
     public $_configs = JSON.parse(JSON.stringify(defaultConfigs)) // NOTE: deep copy configs
     public $_interaction: InteractionManager
 
-    public $_lazyLinkUpdate = false // flag to control lazy update link or not
+    public $_lazyUpdate = false // flag to control lazy update
 
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
 
@@ -83,8 +83,8 @@ class NetV {
 
     public $_addModifiedLinkCount(n: number) {
         this.$_modifiedLinkCount += n
-        if (this.$_modifiedLinkCount > this.$_configs.lazyLinkUpdateThreshold) {
-            this.$_lazyLinkUpdate = true
+        if (this.$_modifiedLinkCount > this.$_configs.lazyUpdateThreshold) {
+            this.$_lazyUpdate = true
         }
     }
 
@@ -243,10 +243,12 @@ class NetV {
      * @description draw elements
      */
     public draw() {
-        if (this.$_lazyLinkUpdate) {
+        if (this.$_lazyUpdate) {
+            this.$_renderer.nodeManager.refreshPosition([...this.$_id2node.values()])
+
             // TODO: maybe need more efficient and reliable way to store and get all links
             this.$_renderer.linkManager.refreshPosition([...this.$_ends2link.values()])
-            this.$_lazyLinkUpdate = false
+            this.$_lazyUpdate = false
             this.$_modifiedLinkCount = 0
         }
         this.$_renderer.draw()

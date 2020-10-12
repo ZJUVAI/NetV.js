@@ -188,7 +188,7 @@ export class RenderLinkManager {
      * @param links all link data
      */
     public refreshPosition(links: Link[]) {
-        let count = 0
+        let count = 0 // TODO: useless count
         links.forEach((link, i) => {
             // TODO: consider link and render link attribute mapping
             const source = link.source()
