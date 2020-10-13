@@ -227,6 +227,33 @@ export class RenderNodeManager {
     }
 
     /**
+     * refresh all nodes position after lazy update
+     * @param nodes all node data
+     */
+    public refreshPosition(nodes: Node[]) {
+        // set array
+        nodes.forEach((node, i) => {
+            // TODO: consider node and render node attribute mapping
+            const position = node.position()
+            this.attributes[NodeAttrKey.POSITION].array[2 * i] = position.x
+            this.attributes[NodeAttrKey.POSITION].array[2 * i + 1] = position.y
+        })
+
+        this.attributes.forEach((attr) => {
+            if (!attr.isBuildIn) {
+                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+                this.gl.bufferSubData(
+                    this.gl.ARRAY_BUFFER,
+                    0,
+                    attr.array,
+                    0,
+                    attr.size * nodes.length
+                )
+            }
+        })
+    }
+
+    /**
      * add nodes data to engine
      * @param nodes nodes data
      */

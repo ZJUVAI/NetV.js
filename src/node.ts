@@ -113,24 +113,30 @@ class Node {
         // e.g. setOnePosition('x', 1) means set x position with value 1
         const setOnePosition = (key, value) => {
             this.$_position[key] = value // key: 'x' or 'y'
-            if (!this.$_core.$_lazyLinkUpdate) {
-                // lazeLinkUpdate means update links in batch mode
-                Object.entries(linkSets).forEach((entry) => {
-                    // entry[0]: 'source' / 'target'
-                    // entry[1]: the link set
-                    const key = entry[0] as LinkAttr
-                    const set = entry[1] as Set<Link>
-                    if (set) {
-                        this.$_core.$_addModifiedLinkCount(set.size)
-                        for (const link of set) {
-                            this.$_core.$_renderer.linkManager.changeAttribute(link, key)
-                        }
+            Object.entries(linkSets).forEach((entry) => {
+                // entry[0]: 'source' / 'target'
+                // entry[1]: the link set
+                const key = entry[0] as LinkAttr
+                const set = entry[1] as Set<Link>
+                if (set) {
+                    this.$_core.$_addModifiedLinkCount(set.size)
+                    for (const link of set) {
+                        this.$_core.$_renderer.linkManager.changeAttribute(link, key)
                     }
-                })
-            }
+                }
+            })
         }
 
         if (arguments.length > 0 && ('x' in position || 'y' in position)) {
+            if (this.$_core.$_lazyUpdate) {
+                if ('x' in position) {
+                    this.$_position['x'] = position.x
+                }
+                if ('y' in position) {
+                    this.$_position['y'] = position.y
+                }
+                return this.$_position
+            }
             linkSets = {
                 // find links from/to this node
                 source: this.$_core.$_sourceId2links.get(this.$_id),
