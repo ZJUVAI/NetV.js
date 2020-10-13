@@ -54,9 +54,10 @@ export class LabelManager {
         textElement.setAttribute('y', String(pos.y))
         textElement.setAttribute('text-anchor', 'start')
         textElement.setAttribute('alignment-baseline', 'middle')
+        textElement.style.userSelect = 'none' // NOTE: prevent unexpected selection when dragging node(delete and recreate textElement)
         textElement.innerHTML = text
 
-        this.$_svg.appendChild(textElement)
+        this.$_svg.prepend(textElement) // NOTE: make last added text at top
     }
 
     /**

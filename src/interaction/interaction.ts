@@ -103,6 +103,9 @@ export class InteractionManager {
                             (y - this.mouseDownPos.y) / this.transform.k
                     })
                     this.netv.draw()
+                    // when dragging, dynamic change label's position. because only operate on single element, it's ok to remove and recreate
+                    this.mouseDownElement.element.showLabel(false)
+                    this.mouseDownElement.element.showLabel(true)
                 }
             } else {
                 const yInv = this.netv.$_configs.height - y
