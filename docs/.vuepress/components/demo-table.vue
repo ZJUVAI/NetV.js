@@ -51,7 +51,7 @@ export default {
 						</a-button>
 					</template>
 					<a-card-meta
-                        <!-- v-bind:style="{textTransform: capitalize}" -->
+                        :style="{textTransform: 'capitalize'}"
 						:title="example"
 					>
 						<!-- <a-avatar

@@ -7,7 +7,7 @@ tagline: WebGL-based large-scale network visualization engine
 actionText: Get Start →
 actionLink: /guide/
 features:
-    - title: large-scale
+    - title: Large-scale
       details: WebGL-based; 10 million level node & edge drawing
     - title: Rich interactions
       details: Rich built-in interactions

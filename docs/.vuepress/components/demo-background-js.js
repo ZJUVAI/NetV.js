@@ -19,7 +19,7 @@ div.addEventListener('mousemove', (ev) => {
 const width = document.getElementById(id).clientWidth
 // const titleHeight = document.getElementsByClassName('hero')[0].clientHeight
 const featuresHeight = document.getElementsByClassName('features')[0].offsetTop
-const height = featuresHeight-100
+const height = featuresHeight
 // const height = titleHeight+featuresHeight+280+50//280是图片class的max-height
 console.log(height,width)
 const configs = {
@@ -44,7 +44,7 @@ const data = {
 let nodeNum = 5000
 const isMobile = /Android|webOS|iPhone|iPad|BlackBerry/i.test(navigator.userAgent)
 if (isMobile) {
-    nodeNum = 500
+    nodeNum = 300
 }
 
 // random generate nodes
