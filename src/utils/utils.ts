@@ -36,3 +36,19 @@ export function transformGraphPosition(
 
     return targetGraph
 }
+
+/**
+ * the function is to override object recursively
+ * @param overriddenObject: the Object to be overridden
+ * @param overridingObject: the Object to override the overridden Object
+ */
+export function override(overriddenObject: object, overridingObject: object) {
+    for (const key in overridingObject) {
+        if (key in overriddenObject && overridingObject[key] === Object(overridingObject[key])) {
+            // if overridingObject[key] is an object
+            override(overriddenObject[key], overridingObject[key])
+        } else {
+            overriddenObject[key] = overridingObject[key]
+        }
+    }
+}

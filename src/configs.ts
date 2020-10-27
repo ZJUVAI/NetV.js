@@ -15,11 +15,26 @@ export const linkLimit = 1000
 export const lazyUpdateThreshold = 10
 
 export const node = {
-    r: 5,
-    fill: { r: 0.2, g: 0.6, b: 0.2, a: 0.8 },
-    // strokeColor: { r: 0.6, g: 0.6, b: 0.6, a: 0.5 },
-    strokeColor: { r: 0.9, g: 0.9, b: 0.9, a: 0.6 },
-    strokeWidth: 2,
+    style: {
+        shape: 'circle', // default shape
+        circle: {
+            x: 0,
+            y: 0,
+            r: 5,
+            fill: { r: 0.2, g: 0.6, b: 0.2, a: 0.8 },
+            strokeColor: { r: 0.9, g: 0.9, b: 0.9, a: 0.6 },
+            strokeWidth: 2
+        },
+        rect: {
+            x: 0,
+            y: 0,
+            width: 5,
+            height: 5,
+            fill: { r: 0.2, g: 0.6, b: 0.2, a: 0.8 },
+            strokeColor: { r: 0.9, g: 0.9, b: 0.9, a: 0.6 },
+            strokeWidth: 2
+        }
+    },
     showLabel: false,
     // textOffset: { x: 8, y: 0 }, put in label config instead of each node
     clickCallback: (node: Node) => {},
@@ -27,9 +42,14 @@ export const node = {
 }
 
 export const link = {
-    // strokeColor: { r: 0.5, g: 0.5, b: 0.5, a: 0.2 },
-    strokeColor: { r: 0.4, g: 0.6, b: 0.8, a: 0.5 },
-    strokeWidth: 2,
+    style: {
+        shape: 'line',
+        line: {
+            shape: 'line',
+            strokeColor: { r: 0.4, g: 0.6, b: 0.8, a: 0.5 },
+            strokeWidth: 2
+        }
+    },
     clickCallback: (link: Link) => {},
     hoverCallback: (node: Node) => {}
 }

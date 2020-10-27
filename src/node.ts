@@ -20,10 +20,8 @@ class Node {
         x: 0,
         y: 0
     }
-    private $_strokeWidth: number
-    private $_strokeColor: interfaces.Color
-    private $_fill: interfaces.Color
-    private $_r: number // radius
+    private $_style: interfaces.NodeStyle = {}
+
     private $_showLabel: boolean
     private $_text: string
     private $_textOffset: { x: number; y: number } // NOTE: deprecated, current not used
@@ -35,10 +33,6 @@ class Node {
             ...{
                 x: this.$_position.x,
                 y: this.$_position.y,
-                strokeWidth: defaultConfigs.node.strokeWidth,
-                strokeColor: defaultConfigs.node.strokeColor,
-                r: defaultConfigs.node.r,
-                fill: defaultConfigs.node.fill,
                 showLabel: defaultConfigs.node.showLabel,
                 text: defaultConfigs.node.text,
                 clickCallback: defaultConfigs.node.clickCallback,
@@ -47,15 +41,32 @@ class Node {
             ...nodeData
         }
 
+        // add default node style
+        if (!data?.style) {
+            data.style = defaultConfigs.node.style[defaultConfigs.node.style.shape]
+        } else {
+            if (data.style?.shape) {
+                data.style = {
+                    ...defaultConfigs.node.style[data.style.shape],
+                    ...data.style
+                }
+            } else {
+                // no specified shape, using the default shape config
+                data.style = {
+                    ...defaultConfigs.node.style[defaultConfigs.node.style.shape],
+                    shape: defaultConfigs.node.style.shape,
+                    ...data.style
+                }
+            }
+        }
+
         this.$_setId(data.id)
         this.$_position = {
             x: data.x,
             y: data.y
         }
-        this.$_strokeWidth = data.strokeWidth
-        this.$_strokeColor = data.strokeColor
-        this.$_fill = data.fill
-        this.$_r = data.r
+        this.$_style = data.style
+
         this.$_showLabel = data.showLabel
         this.$_text = data.text
 
@@ -161,10 +172,10 @@ class Node {
      */
     public strokeWidth(value?: number) {
         if (arguments.length === 1) {
-            this.$_strokeWidth = value
+            this.$_style.strokeWidth = value
             this.$_core.$_renderer.nodeManager.changeAttribute(this, 'strokeWidth')
         }
-        return this.$_strokeWidth
+        return this.$_style.strokeWidth
     }
 
     /**
@@ -173,10 +184,10 @@ class Node {
      */
     public strokeColor(value?: interfaces.Color) {
         if (arguments.length === 1) {
-            this.$_strokeColor = value
+            this.$_style.strokeColor = value
             this.$_core.$_renderer.nodeManager.changeAttribute(this, 'strokeColor')
         }
-        return this.$_strokeColor
+        return this.$_style.strokeColor
     }
 
     /**
@@ -185,10 +196,10 @@ class Node {
      */
     public fill(value?: interfaces.Color) {
         if (arguments.length === 1) {
-            this.$_fill = value
+            this.$_style.fill = value
             this.$_core.$_renderer.nodeManager.changeAttribute(this, 'fill')
         }
-        return this.$_fill
+        return this.$_style.fill
     }
 
     /**
@@ -197,10 +208,10 @@ class Node {
      */
     public r(value?: number) {
         if (arguments.length === 1) {
-            this.$_r = value
+            this.$_style.r = value
             this.$_core.$_renderer.nodeManager.changeAttribute(this, 'radius')
         }
-        return this.$_r
+        return this.$_style.r
     }
 
     /**

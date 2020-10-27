@@ -44,15 +44,9 @@ class NetV {
             throw Error('Container should be specified as a div element!')
         }
         this.$_container = configs.container
-        // override configs
-        for (const key in configs) {
-            if (key === 'container') continue // NOTE: exclude container in configs
-            if (configs[key] === Object(configs[key])) {
-                this.$_configs[key] = { ...this.$_configs[key], ...configs[key] }
-            } else {
-                this.$_configs[key] = configs[key]
-            }
-        }
+
+        Utils.override(this.$_configs, configs)
+        delete this.$_configs['container']
 
         const canvas = document.createElement('canvas') // TODO: consider node enviroment, document not defined
         const pixelRatio = window.devicePixelRatio || 1

@@ -9,34 +9,44 @@ const testData = {
             id: '0',
             x: 300,
             y: 100,
-            fill: { r: 1, g: 0, b: 0, a: 1 },
-            strokeColor: { r: 0, g: 1, b: 1, a: 0.3 }
+            style: {
+                fill: { r: 1, g: 0, b: 0, a: 1 },
+                strokeColor: { r: 0, g: 1, b: 1, a: 0.3 }
+            }
         },
         {
             id: '1',
             x: 500,
             y: 100,
-            fill: { r: 0, g: 1, b: 0, a: 1 },
-            strokeColor: { r: 1, g: 0, b: 1, a: 0.3 }
+            style: {
+                fill: { r: 0, g: 1, b: 0, a: 1 },
+                strokeColor: { r: 1, g: 0, b: 1, a: 0.3 }
+            }
         },
         {
             id: '2',
             x: 400,
             y: 400,
-            fill: { r: 0, g: 0, b: 1, a: 1 },
-            strokeColor: { r: 1, g: 1, b: 0, a: 0.3 }
+            style: {
+                fill: { r: 0, g: 0, b: 1, a: 1 },
+                strokeColor: { r: 1, g: 1, b: 0, a: 0.3 }
+            }
         }
     ],
     links: [
         {
             source: '0',
             target: '2',
-            strokeWidth: 4
+            style: {
+                strokeWidth: 4
+            }
         },
         {
             source: '1',
             target: '2',
-            strokeWidth: 4
+            style: {
+                strokeWidth: 4
+            }
         }
     ]
 }
@@ -44,8 +54,11 @@ const testData = {
 const configs = {
     container: document.getElementById('main'),
     node: {
-        r: 10,
-        fill: { r: 1, g: 0, b: 0, a: 0.8 }
+        shape: 'circle',
+        circle: {
+            r: 10,
+            fill: { r: 1, g: 0, b: 0, a: 0.8 }
+        }
     },
     width: 800,
     height: 600,

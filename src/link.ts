@@ -15,16 +15,13 @@ class Link {
     private $_core: NetV
     private $_source: Node
     private $_target: Node
-    private $_strokeWidth: number
-    private $_strokeColor: interfaces.Color
+    private $_style: interfaces.LinkStyle = {}
 
     public constructor(core, linkData: interfaces.LinkData) {
         this.$_core = core
         const defaultConfigs = this.$_core.$_configs
         const data = {
             ...{
-                strokeWidth: defaultConfigs.link.strokeWidth,
-                strokeColor: defaultConfigs.link.strokeColor,
                 clickCallback: defaultConfigs.link.clickCallback,
                 hoverCallback: defaultConfigs.link.hoverCallback
             },
@@ -38,8 +35,26 @@ class Link {
             target: targetNode
         })
 
-        this.$_strokeWidth = data.strokeWidth
-        this.$_strokeColor = data.strokeColor
+        // add default link style
+        if (!data?.style?.shape) {
+            data.style = defaultConfigs.link.style[defaultConfigs.link.style.shape]
+        } else {
+            if (data.style?.shape) {
+                data.style = {
+                    ...defaultConfigs.link.style[data.style.shape],
+                    ...data.style
+                }
+            } else {
+                data.style = {
+                    ...defaultConfigs.link.style[defaultConfigs.link.style.shape],
+                    shape: defaultConfigs.link.style.shape,
+                    ...data.style
+                }
+            }
+        }
+
+        this.$_style.strokeWidth = data.style.strokeWidth
+        this.$_style.strokeColor = data.style.strokeColor
 
         this.setClickCallback(data.clickCallback)
         this.setHoverCallback(data.hoverCallback)
@@ -141,10 +156,10 @@ class Link {
      */
     public strokeWidth(value?: number) {
         if (arguments.length === 1) {
-            this.$_strokeWidth = value
+            this.$_style.strokeWidth = value
             this.$_core.$_renderer.linkManager.changeAttribute(this, 'strokeWidth')
         }
-        return this.$_strokeWidth
+        return this.$_style.strokeWidth
     }
 
     /**
@@ -153,10 +168,10 @@ class Link {
      */
     public strokeColor(value?: interfaces.Color) {
         if (arguments.length === 1) {
-            this.$_strokeColor = value
+            this.$_style.strokeColor = value
             this.$_core.$_renderer.linkManager.changeAttribute(this, 'strokeColor')
         }
-        return this.$_strokeColor
+        return this.$_style.strokeColor
     }
 
     /**

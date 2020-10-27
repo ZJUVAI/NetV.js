@@ -19,22 +19,36 @@ export interface Position {
     y?: number
 }
 
+export interface NodeStyle {
+    shape?: string
+    r?: number // for circle
+    width?: number // for rect
+    height?: number // for rect
+    x?: number // offset
+    y?: number // offset
+    fill?: Color
+    strokeWidth?: number
+    strokeColor?: Color
+}
+
 export interface NodeData {
     id: string
     x?: number
     y?: number
-    r?: number
-    fill?: Color
+    style?: NodeStyle
+    clickCallback?: (node: Node) => void
+}
+
+export interface LinkStyle {
+    shape?: string
     strokeWidth?: number
     strokeColor?: Color
-    clickCallback?: (node: Node) => void
 }
 
 export interface LinkData {
     source: string
     target: string
-    strokeColor?: Color
-    strokeWidth?: number
+    style?: LinkStyle
     clickCallback?: (link: Link) => void
 }
 
