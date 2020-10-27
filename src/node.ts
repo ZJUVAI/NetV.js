@@ -9,6 +9,7 @@ import { isValidId } from './utils/is'
 import { NetV } from './index'
 import { LinkAttr } from './renderer/interfaces'
 import Link from './link'
+import { $_loadDefaultStyle } from './utils/utils'
 
 class Node {
     public $_clickCallback: (node: Node) => void
@@ -42,23 +43,7 @@ class Node {
         }
 
         // add default node style
-        if (!data?.style) {
-            data.style = defaultConfigs.node.style[defaultConfigs.node.style.shape]
-        } else {
-            if (data.style?.shape) {
-                data.style = {
-                    ...defaultConfigs.node.style[data.style.shape],
-                    ...data.style
-                }
-            } else {
-                // no specified shape, using the default shape config
-                data.style = {
-                    ...defaultConfigs.node.style[defaultConfigs.node.style.shape],
-                    shape: defaultConfigs.node.style.shape,
-                    ...data.style
-                }
-            }
-        }
+        data.style = $_loadDefaultStyle(defaultConfigs.node.style, data.style)
 
         this.$_setId(data.id)
         this.$_position = {

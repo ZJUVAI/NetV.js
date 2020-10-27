@@ -3,7 +3,7 @@
  * @description some utility functions
  */
 
-import { NodeLinkData } from 'src/interfaces'
+import { NodeLinkData, NodeStyle, LinkStyle } from 'src/interfaces'
 
 /**
  * given a graph data with position, return a copy of graph, with position transformed to center of given size
@@ -51,4 +51,31 @@ export function override(overriddenObject: object, overridingObject: object) {
             overriddenObject[key] = overridingObject[key]
         }
     }
+}
+
+/**
+ *
+ * @param defaultStyle: the default style configs imported from Netv default configs and user default configs
+ * @param individualStyle: the individual element style
+ */
+export function $_loadDefaultStyle(defaultStyle, individualStyle: NodeStyle | LinkStyle) {
+    let style: object
+    // add default link style
+    if (!individualStyle) {
+        style = defaultStyle[defaultStyle.shape]
+    } else {
+        if (individualStyle?.shape) {
+            style = {
+                ...defaultStyle[individualStyle.shape],
+                ...individualStyle
+            }
+        } else {
+            style = {
+                ...defaultStyle[individualStyle.shape],
+                shape: defaultStyle.shape,
+                ...individualStyle
+            }
+        }
+    }
+    return style
 }

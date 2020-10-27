@@ -7,6 +7,7 @@
 import Node from './node'
 import * as interfaces from './interfaces'
 import { NetV } from './index'
+import { $_loadDefaultStyle } from './utils/utils'
 
 class Link {
     public $_clickCallback: (link: Link) => void
@@ -36,22 +37,7 @@ class Link {
         })
 
         // add default link style
-        if (!data?.style?.shape) {
-            data.style = defaultConfigs.link.style[defaultConfigs.link.style.shape]
-        } else {
-            if (data.style?.shape) {
-                data.style = {
-                    ...defaultConfigs.link.style[data.style.shape],
-                    ...data.style
-                }
-            } else {
-                data.style = {
-                    ...defaultConfigs.link.style[defaultConfigs.link.style.shape],
-                    shape: defaultConfigs.link.style.shape,
-                    ...data.style
-                }
-            }
-        }
+        data.style = $_loadDefaultStyle(defaultConfigs.link.style, data.style)
 
         this.$_style.strokeWidth = data.style.strokeWidth
         this.$_style.strokeColor = data.style.strokeColor
