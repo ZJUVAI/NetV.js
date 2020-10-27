@@ -9,9 +9,9 @@ import { isValidId } from '../utils/is'
 import { NetV } from '../index'
 import { LinkAttr } from '../renderer/interfaces'
 import Link from './link'
-import { overrideDefaultStyle } from './utils'
+import { Element } from './element'
 
-class Node {
+class Node extends Element {
     public $_clickCallback: (node: Node) => void
     public $_hoverCallback: (node: Node) => void
 
@@ -23,20 +23,18 @@ class Node {
     public strokeColor: (value?: interfaces.Color) => interfaces.Color
     public fill: (value?: interfaces.Color) => interfaces.Color
 
-    private $_core: NetV
     private $_id: string
     private $_position = {
         x: 0,
         y: 0
     }
-    private $_style: interfaces.NodeStyle = {}
 
     private $_showLabel: boolean
     private $_text: string
     private $_textOffset: { x: number; y: number } // NOTE: deprecated, current not used
 
     public constructor(core, nodeData: interfaces.NodeData) {
-        this.$_core = core
+        super(core)
         const defaultConfigs = this.$_core.$_configs
         const data = {
             ...{
@@ -51,7 +49,7 @@ class Node {
         }
 
         // add default node style
-        data.style = overrideDefaultStyle(defaultConfigs.node.style, data.style)
+        data.style = this.overrideDefaultStyle(defaultConfigs.node.style, data.style)
 
         this.$_setId(data.id)
         this.$_position = {
@@ -70,20 +68,13 @@ class Node {
         this.setClickCallback(data.clickCallback)
         this.setHoverCallback(data.hoverCallback)
 
+        const nodeManager = this.$_core.$_renderer.nodeManager
+        this.$_changeRenderAttribute = nodeManager.changeAttribute.bind(nodeManager)
+
         // generate style methods, e.g.: node.r(), node.strokeWidth()
         Object.keys(defaultConfigs.node.style[this.$_style.shape]).forEach((key) => {
-            this[key] = function(value?: any) {
-                if (arguments.length === 1) {
-                    if (value === Object(value)) {
-                        // value is an object
-                        this.$_style[key] = { ...value, ...this.$_style[key] }
-                    } else {
-                        this.$_style[key] = value
-                    }
-                    this.$_core.$_renderer.nodeManager.changeAttribute(this, key)
-                }
-                return this.$_style[key]
-            }
+            // generate style functions
+            this[key] = this.generateElementStyleGetterSetter(key)
         })
     }
 

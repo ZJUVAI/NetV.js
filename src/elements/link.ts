@@ -7,9 +7,9 @@
 import Node from './node'
 import * as interfaces from '../interfaces'
 import { NetV } from '../index'
-import { overrideDefaultStyle } from './utils'
+import { Element } from './element'
 
-class Link {
+class Link extends Element {
     public $_clickCallback: (link: Link) => void
     public $_hoverCallback: (link: Link) => void
 
@@ -17,13 +17,11 @@ class Link {
     public strokeWidth: (value?: number) => number
     public strokeColor: (value?: interfaces.Color) => interfaces.Color
 
-    private $_core: NetV
     private $_source: Node
     private $_target: Node
-    private $_style: interfaces.LinkStyle = {}
 
     public constructor(core, linkData: interfaces.LinkData) {
-        this.$_core = core
+        super(core)
         const defaultConfigs = this.$_core.$_configs
         const data = {
             ...{
@@ -41,27 +39,20 @@ class Link {
         })
 
         // add default link style
-        data.style = overrideDefaultStyle(defaultConfigs.link.style, data.style)
+        data.style = this.overrideDefaultStyle(defaultConfigs.link.style, data.style)
 
         this.$_style = data.style
 
         this.setClickCallback(data.clickCallback)
         this.setHoverCallback(data.hoverCallback)
 
+        const nodeManager = this.$_core.$_renderer.nodeManager
+        this.$_changeRenderAttribute = nodeManager.changeAttribute.bind(nodeManager)
+
         // generate style methods, e.g.: link.strokeWidth()
         Object.keys(defaultConfigs.link.style[this.$_style.shape]).forEach((key) => {
-            this[key] = function(value?: any) {
-                if (arguments.length === 1) {
-                    if (value === Object(value)) {
-                        // value is an object
-                        this.$_style[key] = { ...value, ...this.$_style[key] }
-                    } else {
-                        this.$_style[key] = value
-                    }
-                    this.$_core.$_renderer.linkManager.changeAttribute(this, key)
-                }
-                return this.$_style[key]
-            }
+            // generate style functions
+            this[key] = this.generateElementStyleGetterSetter(key)
         })
     }
 
