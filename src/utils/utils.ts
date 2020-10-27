@@ -71,7 +71,7 @@ export function $_loadDefaultStyle(defaultStyle, individualStyle: NodeStyle | Li
             }
         } else {
             style = {
-                ...defaultStyle[individualStyle.shape],
+                ...defaultStyle[defaultStyle.shape],
                 shape: defaultStyle.shape,
                 ...individualStyle
             }
