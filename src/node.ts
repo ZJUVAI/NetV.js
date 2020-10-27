@@ -115,7 +115,7 @@ class Node {
                 const key = entry[0] as LinkAttr
                 const set = entry[1] as Set<Link>
                 if (set) {
-                    this.$_core.$_addModifiedLinkCount(set.size)
+                    this.$_core.$_addModifiedElementCount(set.size)
                     for (const link of set) {
                         this.$_core.$_renderer.linkManager.changeAttribute(link, key)
                     }
@@ -124,7 +124,7 @@ class Node {
         }
 
         if (arguments.length > 0 && ('x' in position || 'y' in position)) {
-            if (this.$_core.$_lazyUpdate) {
+            if (this.$_core.$_shouldLazyUpdate) {
                 if ('x' in position) {
                     this.$_position['x'] = position.x
                 }
