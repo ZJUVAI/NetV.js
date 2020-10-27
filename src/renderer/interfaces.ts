@@ -27,7 +27,7 @@ export type RenderAttribute = {
     buffer?: WebGLBuffer
 }[]
 
-export type NodeAttr = 'position' | 'radius' | 'fill' | 'strokeWidth' | 'strokeColor'
+export type NodeAttr = 'position' | 'r' | 'fill' | 'strokeWidth' | 'strokeColor'
 export type LinkAttr = 'source' | 'target' | 'strokeWidth' | 'strokeColor'
 
 interface ElementManagerConfigs {

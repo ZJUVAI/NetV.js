@@ -20,7 +20,7 @@ import Node from '../../../elements/node'
 enum NodeAttrKey {
     TEMPLATE,
     POSITION,
-    RADIUS,
+    R,
     COLOR,
     STROKE_WIDTH,
     STROKE_COLOR
@@ -29,7 +29,7 @@ enum NodeAttrKey {
 enum NodeIdAttrKey {
     TEMPLATE,
     POSITION,
-    RADIUS,
+    R,
     COLOR,
     STROKE_WIDTH,
     STROKE_COLOR,
@@ -38,7 +38,7 @@ enum NodeIdAttrKey {
 
 const NodeAttrMap = {
     position: NodeAttrKey.POSITION,
-    radius: NodeAttrKey.RADIUS,
+    r: NodeAttrKey.R,
     fill: NodeAttrKey.COLOR,
     strokeWidth: NodeAttrKey.STROKE_WIDTH,
     strokeColor: NodeAttrKey.STROKE_COLOR
@@ -204,7 +204,7 @@ export class RenderNodeManager {
         } else if (attribute === 'fill') {
             const col = node.fill()
             data = [col.r, col.g, col.b, col.a]
-        } else if (attribute === 'radius') {
+        } else if (attribute === 'r') {
             data = [node.r() * this.pixelRatio]
         } else if (attribute === 'strokeWidth') {
             data = [node.strokeWidth() * this.pixelRatio]
@@ -265,7 +265,7 @@ export class RenderNodeManager {
             this.attributes[NodeAttrKey.POSITION].array[2 * (this.count + i)] = position.x
             this.attributes[NodeAttrKey.POSITION].array[2 * (this.count + i) + 1] = position.y
 
-            this.attributes[NodeAttrKey.RADIUS].array[this.count + i] = node.r() * this.pixelRatio
+            this.attributes[NodeAttrKey.R].array[this.count + i] = node.r() * this.pixelRatio
 
             const fill = node.fill()
             this.attributes[NodeAttrKey.COLOR].array[4 * (this.count + i)] = fill.r
