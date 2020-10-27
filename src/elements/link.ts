@@ -5,13 +5,17 @@
  */
 
 import Node from './node'
-import * as interfaces from './interfaces'
-import { NetV } from './index'
-import { $_loadDefaultStyle } from './utils/utils'
+import * as interfaces from '../interfaces'
+import { NetV } from '../index'
+import { overrideDefaultStyle } from './utils'
 
 class Link {
     public $_clickCallback: (link: Link) => void
     public $_hoverCallback: (link: Link) => void
+
+    // style getter/setter
+    public strokeWidth: (value?: number) => number
+    public strokeColor: (value?: interfaces.Color) => interfaces.Color
 
     private $_core: NetV
     private $_source: Node
@@ -37,13 +41,28 @@ class Link {
         })
 
         // add default link style
-        data.style = $_loadDefaultStyle(defaultConfigs.link.style, data.style)
+        data.style = overrideDefaultStyle(defaultConfigs.link.style, data.style)
 
-        this.$_style.strokeWidth = data.style.strokeWidth
-        this.$_style.strokeColor = data.style.strokeColor
+        this.$_style = data.style
 
         this.setClickCallback(data.clickCallback)
         this.setHoverCallback(data.hoverCallback)
+
+        // generate style methods, e.g.: link.strokeWidth()
+        Object.keys(defaultConfigs.link.style[this.$_style.shape]).forEach((key) => {
+            this[key] = function(value?: any) {
+                if (arguments.length === 1) {
+                    if (value === Object(value)) {
+                        // value is an object
+                        this.$_style[key] = { ...value, ...this.$_style[key] }
+                    } else {
+                        this.$_style[key] = value
+                    }
+                    this.$_core.$_renderer.linkManager.changeAttribute(this, key)
+                }
+                return this.$_style[key]
+            }
+        })
     }
 
     /**
@@ -133,31 +152,6 @@ class Link {
             source: this.$_source,
             target: this.$_target
         }
-    }
-
-    /**
-     * set/get stroke width of a node
-     * @param {number} [value]
-     * @memberof Node
-     */
-    public strokeWidth(value?: number) {
-        if (arguments.length === 1) {
-            this.$_style.strokeWidth = value
-            this.$_core.$_renderer.linkManager.changeAttribute(this, 'strokeWidth')
-        }
-        return this.$_style.strokeWidth
-    }
-
-    /**
-     * set/get stroke color of a node
-     * @param {Color} [value]
-     */
-    public strokeColor(value?: interfaces.Color) {
-        if (arguments.length === 1) {
-            this.$_style.strokeColor = value
-            this.$_core.$_renderer.linkManager.changeAttribute(this, 'strokeColor')
-        }
-        return this.$_style.strokeColor
     }
 
     /**

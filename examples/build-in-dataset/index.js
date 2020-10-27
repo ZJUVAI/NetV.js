@@ -5,7 +5,11 @@
 const netv = new NetV({
     container: document.getElementById('main'),
     link: {
-        strokeWidth: 1
+        style: {
+            line: {
+                strokeWidth: 1
+            }
+        }
     }
 })
 const data = netv.Utils.transformGraphPosition(netv.loadDataset('miserables'), 500, 400, 300)

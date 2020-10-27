@@ -4,8 +4,8 @@
  */
 
 import { RenderNodeManager } from './elements/node/render-node'
-import Node from '../node'
-import Link from 'src/link'
+import Node from '../elements/node'
+import Link from 'src/elements/link'
 import { RenderLinkManager } from './elements/link/render-link'
 import { Transform, Position } from '../interfaces'
 import { RendererConfigs } from './interfaces'

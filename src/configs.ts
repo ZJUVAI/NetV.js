@@ -3,8 +3,8 @@
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
  */
 
-import Node from './node'
-import Link from './link'
+import Node from './elements/node'
+import Link from './elements/link'
 
 export const width = 800
 export const height = 600
@@ -18,16 +18,14 @@ export const node = {
     style: {
         shape: 'circle', // default shape
         circle: {
-            x: 0,
-            y: 0,
+            offset: { x: 0, y: 0 },
             r: 5,
             fill: { r: 0.2, g: 0.6, b: 0.2, a: 0.8 },
             strokeColor: { r: 0.9, g: 0.9, b: 0.9, a: 0.6 },
             strokeWidth: 2
         },
         rect: {
-            x: 0,
-            y: 0,
+            offset: { x: 0, y: 0 },
             width: 5,
             height: 5,
             fill: { r: 0.2, g: 0.6, b: 0.2, a: 0.8 },

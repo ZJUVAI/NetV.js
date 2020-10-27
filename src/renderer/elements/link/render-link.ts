@@ -15,7 +15,7 @@ import {
 } from '../../utils'
 import { Transform } from '../../../interfaces'
 import { RenderAttribute, LinkAttr, LinkManagerConfigs } from '../../interfaces'
-import Link from '../../../link'
+import Link from '../../../elements/link'
 import Map2 from '../../../utils/map2'
 
 enum LinkAttrKey {

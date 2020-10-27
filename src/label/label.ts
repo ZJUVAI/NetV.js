@@ -4,7 +4,7 @@
  */
 
 import { NetV } from 'src'
-import Node from 'src/node'
+import Node from 'src/elements/node'
 import { Transform } from '../interfaces'
 
 export class LabelManager {

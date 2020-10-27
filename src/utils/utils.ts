@@ -3,7 +3,7 @@
  * @description some utility functions
  */
 
-import { NodeLinkData, NodeStyle, LinkStyle } from 'src/interfaces'
+import { NodeLinkData } from 'src/interfaces'
 
 /**
  * given a graph data with position, return a copy of graph, with position transformed to center of given size
@@ -43,39 +43,14 @@ export function transformGraphPosition(
  * @param overridingObject: the Object to override the overridden Object
  */
 export function override(overriddenObject: object, overridingObject: object) {
+    const object = JSON.parse(JSON.stringify(overriddenObject)) // deep copy
     for (const key in overridingObject) {
-        if (key in overriddenObject && overridingObject[key] === Object(overridingObject[key])) {
+        if (key in object && overridingObject[key] === Object(overridingObject[key])) {
             // if overridingObject[key] is an object
-            override(overriddenObject[key], overridingObject[key])
+            object[key] = override(object[key], overridingObject[key])
         } else {
-            overriddenObject[key] = overridingObject[key]
+            object[key] = overridingObject[key]
         }
     }
-}
-
-/**
- *
- * @param defaultStyle: the default style configs imported from Netv default configs and user default configs
- * @param individualStyle: the individual element style
- */
-export function $_loadDefaultStyle(defaultStyle, individualStyle: NodeStyle | LinkStyle) {
-    let style: object
-    // add default link style
-    if (!individualStyle) {
-        style = defaultStyle[defaultStyle.shape]
-    } else {
-        if (individualStyle?.shape) {
-            style = {
-                ...defaultStyle[individualStyle.shape],
-                ...individualStyle
-            }
-        } else {
-            style = {
-                ...defaultStyle[defaultStyle.shape],
-                shape: defaultStyle.shape,
-                ...individualStyle
-            }
-        }
-    }
-    return style
+    return object
 }

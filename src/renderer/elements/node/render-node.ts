@@ -15,7 +15,7 @@ import {
 } from '../../utils'
 import { Transform } from '../../../interfaces'
 import { RenderAttribute, NodeAttr, NodeManagerConfigs } from '../../interfaces'
-import Node from '../../../node'
+import Node from '../../../elements/node'
 
 enum NodeAttrKey {
     TEMPLATE,

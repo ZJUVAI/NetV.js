@@ -6,8 +6,8 @@
 
 import * as interfaces from './interfaces'
 import Map2 from './utils/map2'
-import Node from './node'
-import Link from './link'
+import Node from './elements/node'
+import Link from './elements/link'
 import * as defaultConfigs from './configs'
 import * as dataset from './dataset'
 import { Renderer } from './renderer'
@@ -45,7 +45,7 @@ class NetV {
         }
         this.$_container = configs.container
 
-        Utils.override(this.$_configs, configs)
+        this.$_configs = Utils.override(this.$_configs, configs)
         delete this.$_configs['container']
 
         const canvas = document.createElement('canvas') // TODO: consider node enviroment, document not defined

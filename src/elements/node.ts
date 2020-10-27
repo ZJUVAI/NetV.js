@@ -4,16 +4,24 @@
  * @dependences interfaces.ts, utils/is.ts
  */
 
-import * as interfaces from './interfaces'
-import { isValidId } from './utils/is'
-import { NetV } from './index'
-import { LinkAttr } from './renderer/interfaces'
+import * as interfaces from '../interfaces'
+import { isValidId } from '../utils/is'
+import { NetV } from '../index'
+import { LinkAttr } from '../renderer/interfaces'
 import Link from './link'
-import { $_loadDefaultStyle } from './utils/utils'
+import { overrideDefaultStyle } from './utils'
 
 class Node {
     public $_clickCallback: (node: Node) => void
     public $_hoverCallback: (node: Node) => void
+
+    // style getter/setter
+    public r?: (value?: number) => number
+    public width?: (value?: number) => number
+    public height?: (value?: number) => number
+    public strokeWidth: (value?: number) => number
+    public strokeColor: (value?: interfaces.Color) => interfaces.Color
+    public fill: (value?: interfaces.Color) => interfaces.Color
 
     private $_core: NetV
     private $_id: string
@@ -43,7 +51,7 @@ class Node {
         }
 
         // add default node style
-        data.style = $_loadDefaultStyle(defaultConfigs.node.style, data.style)
+        data.style = overrideDefaultStyle(defaultConfigs.node.style, data.style)
 
         this.$_setId(data.id)
         this.$_position = {
@@ -61,6 +69,22 @@ class Node {
 
         this.setClickCallback(data.clickCallback)
         this.setHoverCallback(data.hoverCallback)
+
+        // generate style methods, e.g.: node.r(), node.strokeWidth()
+        Object.keys(defaultConfigs.node.style[this.$_style.shape]).forEach((key) => {
+            this[key] = function(value?: any) {
+                if (arguments.length === 1) {
+                    if (value === Object(value)) {
+                        // value is an object
+                        this.$_style[key] = { ...value, ...this.$_style[key] }
+                    } else {
+                        this.$_style[key] = value
+                    }
+                    this.$_core.$_renderer.nodeManager.changeAttribute(this, key)
+                }
+                return this.$_style[key]
+            }
+        })
     }
 
     /**
@@ -142,55 +166,6 @@ class Node {
         }
 
         return this.$_position
-    }
-
-    /**
-     * set/get stroke width of a node
-     * @param {number} [value]
-     * @memberof Node
-     */
-    public strokeWidth(value?: number) {
-        if (arguments.length === 1) {
-            this.$_style.strokeWidth = value
-            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'strokeWidth')
-        }
-        return this.$_style.strokeWidth
-    }
-
-    /**
-     * set/get stroke color of a node
-     * @param {Color} [value]
-     */
-    public strokeColor(value?: interfaces.Color) {
-        if (arguments.length === 1) {
-            this.$_style.strokeColor = value
-            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'strokeColor')
-        }
-        return this.$_style.strokeColor
-    }
-
-    /**
-     * set/get fill color of a node
-     * @param {Color} [value]
-     */
-    public fill(value?: interfaces.Color) {
-        if (arguments.length === 1) {
-            this.$_style.fill = value
-            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'fill')
-        }
-        return this.$_style.fill
-    }
-
-    /**
-     * set/get radius of a node
-     * @param {number} [r]
-     */
-    public r(value?: number) {
-        if (arguments.length === 1) {
-            this.$_style.r = value
-            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'radius')
-        }
-        return this.$_style.r
     }
 
     /**

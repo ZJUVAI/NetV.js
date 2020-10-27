@@ -4,8 +4,8 @@
  * @dependences None
  */
 
-import Node from './node'
-import Link from './link'
+import Node from './elements/node'
+import Link from './elements/link'
 
 export interface Color {
     r: number
