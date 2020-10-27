@@ -37,6 +37,7 @@ export interface NodeData {
     y?: number
     style?: NodeStyle
     clickCallback?: (node: Node) => void
+    hoverCallback?: (node: Node) => void
 }
 
 export interface LinkStyle {
@@ -50,6 +51,7 @@ export interface LinkData {
     target: string
     style?: LinkStyle
     clickCallback?: (link: Link) => void
+    hoverCallback?: (link: Link) => void
 }
 
 export interface NodeLinkData {

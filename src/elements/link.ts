@@ -6,13 +6,9 @@
 
 import Node from './node'
 import * as interfaces from '../interfaces'
-import { NetV } from '../index'
 import { Element } from './element'
 
 class Link extends Element {
-    public $_clickCallback: (link: Link) => void
-    public $_hoverCallback: (link: Link) => void
-
     // style getter/setter
     public strokeWidth: (value?: number) => number
     public strokeColor: (value?: interfaces.Color) => interfaces.Color
@@ -21,38 +17,13 @@ class Link extends Element {
     private $_target: Node
 
     public constructor(core, linkData: interfaces.LinkData) {
-        super(core)
-        const defaultConfigs = this.$_core.$_configs
-        const data = {
-            ...{
-                clickCallback: defaultConfigs.link.clickCallback,
-                hoverCallback: defaultConfigs.link.hoverCallback
-            },
-            ...linkData
-        }
+        super(core, 'link', linkData)
 
-        const sourceNode = this.$_core.getNodeById(data.source)
-        const targetNode = this.$_core.getNodeById(data.target)
+        const sourceNode = this.$_core.getNodeById(linkData.source)
+        const targetNode = this.$_core.getNodeById(linkData.target)
         this.sourceTarget({
             source: sourceNode,
             target: targetNode
-        })
-
-        // add default link style
-        data.style = this.overrideDefaultStyle(defaultConfigs.link.style, data.style)
-
-        this.$_style = data.style
-
-        this.setClickCallback(data.clickCallback)
-        this.setHoverCallback(data.hoverCallback)
-
-        const nodeManager = this.$_core.$_renderer.nodeManager
-        this.$_changeRenderAttribute = nodeManager.changeAttribute.bind(nodeManager)
-
-        // generate style methods, e.g.: link.strokeWidth()
-        Object.keys(defaultConfigs.link.style[this.$_style.shape]).forEach((key) => {
-            // generate style functions
-            this[key] = this.generateElementStyleGetterSetter(key)
         })
     }
 
@@ -143,22 +114,6 @@ class Link extends Element {
             source: this.$_source,
             target: this.$_target
         }
-    }
-
-    /**
-     * set hover callback function
-     * @param callback hover callback function
-     */
-    private setHoverCallback(callback: (link: Link) => void) {
-        this.$_hoverCallback = callback
-    }
-
-    /**
-     * set click callback function
-     * @param callback click callback function
-     */
-    private setClickCallback(callback: (link: Link) => void) {
-        this.$_clickCallback = callback
     }
 }
 

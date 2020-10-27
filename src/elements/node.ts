@@ -6,15 +6,11 @@
 
 import * as interfaces from '../interfaces'
 import { isValidId } from '../utils/is'
-import { NetV } from '../index'
 import { LinkAttr } from '../renderer/interfaces'
 import Link from './link'
 import { Element } from './element'
 
 class Node extends Element {
-    public $_clickCallback: (node: Node) => void
-    public $_hoverCallback: (node: Node) => void
-
     // style getter/setter
     public r?: (value?: number) => number
     public width?: (value?: number) => number
@@ -34,29 +30,23 @@ class Node extends Element {
     private $_textOffset: { x: number; y: number } // NOTE: deprecated, current not used
 
     public constructor(core, nodeData: interfaces.NodeData) {
-        super(core)
+        super(core, 'node', nodeData)
         const defaultConfigs = this.$_core.$_configs
         const data = {
             ...{
                 x: this.$_position.x,
                 y: this.$_position.y,
                 showLabel: defaultConfigs.node.showLabel,
-                text: defaultConfigs.node.text,
-                clickCallback: defaultConfigs.node.clickCallback,
-                hoverCallback: defaultConfigs.node.hoverCallback
+                text: defaultConfigs.node.text
             },
             ...nodeData
         }
-
-        // add default node style
-        data.style = this.overrideDefaultStyle(defaultConfigs.node.style, data.style)
 
         this.$_setId(data.id)
         this.$_position = {
             x: data.x,
             y: data.y
         }
-        this.$_style = data.style
 
         this.$_showLabel = data.showLabel
         this.$_text = data.text
@@ -64,18 +54,6 @@ class Node extends Element {
         if (this.$_showLabel) {
             this.showLabel(true)
         }
-
-        this.setClickCallback(data.clickCallback)
-        this.setHoverCallback(data.hoverCallback)
-
-        const nodeManager = this.$_core.$_renderer.nodeManager
-        this.$_changeRenderAttribute = nodeManager.changeAttribute.bind(nodeManager)
-
-        // generate style methods, e.g.: node.r(), node.strokeWidth()
-        Object.keys(defaultConfigs.node.style[this.$_style.shape]).forEach((key) => {
-            // generate style functions
-            this[key] = this.generateElementStyleGetterSetter(key)
-        })
     }
 
     /**
@@ -217,22 +195,6 @@ class Node extends Element {
         } else {
             throw new Error(`Invalid ID ${value}`)
         }
-    }
-
-    /**
-     * set hover callback function
-     * @param callback hover callback function
-     */
-    private setHoverCallback(callback: (node: Node) => void) {
-        this.$_hoverCallback = callback
-    }
-
-    /**
-     * set click callback function
-     * @param callback click callback function
-     */
-    private setClickCallback(callback: (node: Node) => void) {
-        this.$_clickCallback = callback
     }
 }
 
