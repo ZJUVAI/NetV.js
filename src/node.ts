@@ -106,45 +106,39 @@ class Node {
     public position(position?: interfaces.Position) {
         let linkSets = {}
 
-        // e.g. setOnePosition('x', 1) means set x position with value 1
-        const setOnePosition = (key, value) => {
-            this.$_position[key] = value // key: 'x' or 'y'
-            Object.entries(linkSets).forEach((entry) => {
-                // entry[0]: 'source' / 'target'
-                // entry[1]: the link set
-                const key = entry[0] as LinkAttr
-                const set = entry[1] as Set<Link>
-                if (set) {
-                    this.$_core.$_addModifiedElementCount(set.size)
-                    for (const link of set) {
-                        this.$_core.$_renderer.linkManager.changeAttribute(link, key)
-                    }
-                }
-            })
-        }
-
         if (arguments.length > 0 && ('x' in position || 'y' in position)) {
-            if (this.$_core.$_shouldLazyUpdate) {
-                if ('x' in position) {
-                    this.$_position['x'] = position.x
-                }
-                if ('y' in position) {
-                    this.$_position['y'] = position.y
-                }
-                return this.$_position
-            }
-            linkSets = {
-                // find links from/to this node
-                source: this.$_core.$_sourceId2links.get(this.$_id),
-                target: this.$_core.$_targetId2links.get(this.$_id)
-            }
             if ('x' in position) {
-                setOnePosition('x', position.x)
+                this.$_position['x'] = position.x
             }
             if ('y' in position) {
-                setOnePosition('y', position.y)
+                this.$_position['y'] = position.y
             }
-            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
+
+            if (this.$_core.$_shouldLazyUpdate) {
+                return this.$_position
+            } else {
+                linkSets = {
+                    // find links from/to this node
+                    source: this.$_core.$_sourceId2links.get(this.$_id),
+                    target: this.$_core.$_targetId2links.get(this.$_id)
+                }
+
+                Object.entries(linkSets).forEach((entry) => {
+                    // entry[0]: 'source' / 'target'
+                    // entry[1]: the link set
+                    const key = entry[0] as LinkAttr
+                    const set = entry[1] as Set<Link>
+                    if (set) {
+                        this.$_core.$_addModifiedElementCount(set.size)
+                        for (const link of set) {
+                            this.$_core.$_renderer.linkManager.changeAttribute(link, key)
+                        }
+                    }
+                })
+
+                this.$_core.$_addModifiedElementCount(1)
+                this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
+            }
         }
 
         return this.$_position
