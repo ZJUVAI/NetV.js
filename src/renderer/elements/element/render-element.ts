@@ -1,10 +1,6 @@
-import { RenderAttribute, ElementManagerConfigs, ShaderSeries } from '../../interfaces'
-import {
-    createProgram,
-    createArrayBuffer,
-    extractAttributesFromShader,
-    encodeRenderId
-} from '../../utils'
+import { RenderAttribute, ShaderSeries } from '../../interfaces'
+import { createProgram, createArrayBuffer, extractAttributesFromShader } from '../../utils'
+import { Transform } from '../../../interfaces'
 
 export class RenderElementManager {
     protected gl: WebGL2RenderingContext
@@ -97,23 +93,18 @@ export class RenderElementManager {
                          0, -2 / this.height, 0,
                         -1,                1, 1
         ])
-        console.log('projectionLocation', projectionLocation, projectionLocation !== null)
         projectionLocation !== null &&
             this.gl.uniformMatrix3fv(projectionLocation, false, projection)
 
         const scale = new Float32Array([1, 1])
-        console.log('scaleLocation', scaleLocation, scaleLocation !== null)
         scaleLocation !== null && this.gl.uniform2fv(scaleLocation, scale)
 
         const translate = new Float32Array([0, 0])
-        console.log('translateLocation', translateLocation, translateLocation !== null)
         translateLocation !== null && this.gl.uniform2fv(translateLocation, translate)
 
         const viewport = new Float32Array([this.width, this.height])
-        console.log('viewportLocation', viewportLocation, viewportLocation !== null)
         viewportLocation !== null && this.gl.uniform2fv(viewportLocation, viewport)
 
-        console.log('pixelRatioLocation', pixelRatioLocation, pixelRatioLocation !== null)
         pixelRatioLocation !== null && this.gl.uniform1f(pixelRatioLocation, this.pixelRatio)
 
         // id uniforms, identical to node
@@ -131,5 +122,30 @@ export class RenderElementManager {
         idTranslateLocation !== null && this.gl.uniform2fv(idTranslateLocation, translate)
         idViewportLocation !== null && this.gl.uniform2fv(idViewportLocation, viewport)
         idPixelRatioLocation !== null && this.gl.uniform1f(idPixelRatioLocation, this.pixelRatio)
+    }
+
+    /**
+     * set Transform in Render Link
+     * @param transform current transform(pan&zoom condition)
+     */
+    public setTransform(transform: Transform) {
+        this.gl.useProgram(this.program)
+        const scaleLoc = this.gl.getUniformLocation(this.program, 'scale')
+        const translateLoc = this.gl.getUniformLocation(this.program, 'translate')
+
+        const scale = new Float32Array([transform.k, transform.k])
+        this.gl.uniform2fv(scaleLoc, scale)
+
+        const translate = new Float32Array([transform.x, transform.y])
+        this.gl.uniform2fv(translateLoc, translate)
+
+        // id uniforms, identical to link
+        // TODO: need refactor too
+        this.gl.useProgram(this.idProgram)
+        const idScaleLoc = this.gl.getUniformLocation(this.idProgram, 'scale')
+        const idTranslateLoc = this.gl.getUniformLocation(this.idProgram, 'translate')
+
+        this.gl.uniform2fv(idScaleLoc, scale)
+        this.gl.uniform2fv(idTranslateLoc, translate)
     }
 }

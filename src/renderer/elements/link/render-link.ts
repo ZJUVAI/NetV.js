@@ -7,14 +7,9 @@ import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
 import idVertShaderStr from './id-vertex.glsl'
 import idFragShaderStr from './id-fragment.glsl'
-import {
-    createProgram,
-    createArrayBuffer,
-    extractAttributesFromShader,
-    encodeRenderId
-} from '../../utils'
-import { Transform } from '../../../interfaces'
-import { RenderAttribute, LinkAttr, LinkManagerConfigs } from '../../interfaces'
+import { encodeRenderId } from '../../utils'
+
+import { LinkAttr, LinkManagerConfigs } from '../../interfaces'
 import Link from '../../../elements/link'
 import Map2 from '../../../utils/map2'
 import { RenderElementManager } from '../element/render-element'
@@ -240,31 +235,6 @@ export class RenderLinkManager extends RenderElementManager {
         )
 
         this.count += links.length
-    }
-
-    /**
-     * set Transform in Render Link
-     * @param transform current transform(pan&zoom condition)
-     */
-    public setTransform(transform: Transform) {
-        this.gl.useProgram(this.program)
-        const scaleLoc = this.gl.getUniformLocation(this.program, 'scale')
-        const translateLoc = this.gl.getUniformLocation(this.program, 'translate')
-
-        const scale = new Float32Array([transform.k, transform.k])
-        this.gl.uniform2fv(scaleLoc, scale)
-
-        const translate = new Float32Array([transform.x, transform.y])
-        this.gl.uniform2fv(translateLoc, translate)
-
-        // id uniforms, identical to link
-        // TODO: need refactor too
-        this.gl.useProgram(this.idProgram)
-        const idScaleLoc = this.gl.getUniformLocation(this.idProgram, 'scale')
-        const idTranslateLoc = this.gl.getUniformLocation(this.idProgram, 'translate')
-
-        this.gl.uniform2fv(idScaleLoc, scale)
-        this.gl.uniform2fv(idTranslateLoc, translate)
     }
 
     /**
