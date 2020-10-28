@@ -17,6 +17,7 @@ import { Transform } from '../../../interfaces'
 import { RenderAttribute, LinkAttr, LinkManagerConfigs } from '../../interfaces'
 import Link from '../../../elements/link'
 import Map2 from '../../../utils/map2'
+import { RenderElementManager } from '../element/render-element'
 
 enum LinkAttrKey {
     TEMPLATE,
@@ -42,20 +43,8 @@ const LinkAttrMap = {
     strokeColor: LinkAttrKey.COLOR
 }
 
-export class RenderLinkManager {
-    private gl: WebGL2RenderingContext
-    private limit: number
-    private count = 0
-    private width: number
-    private height: number
-    private pixelRatio: number
-    private program: WebGLProgram
-    private attributes: RenderAttribute
-    private idProgram: WebGLProgram
-    private idAttributes: RenderAttribute
-    private idTexture: WebGLTexture
+export class RenderLinkManager extends RenderElementManager {
     private renderIdToIds: { [key: number]: [string, string] }
-
     private idsToIndex = new Map2()
 
     /**
@@ -69,81 +58,24 @@ export class RenderLinkManager {
         params: LinkManagerConfigs,
         idTexture: WebGLTexture
     ) {
-        const { limit, width, height } = params
-        this.gl = gl
-        this.limit = limit
-        this.width = width
-        this.height = height
-        this.pixelRatio = window.devicePixelRatio || 1
-
-        this.attributes = extractAttributesFromShader(vertShaderStr)
-        this.program = createProgram(this.gl, vertShaderStr, fragShaderStr, this.attributes)
-
-        this.idAttributes = extractAttributesFromShader(idVertShaderStr)
-        this.idProgram = createProgram(this.gl, idVertShaderStr, idFragShaderStr, this.idAttributes)
-        this.idTexture = idTexture
+        super(
+            /* webgl context */ gl,
+            // prettier-ignore
+            /* parameters */ {...params, instanceVerteces: [
+                -0.5, 0.5, 1.0,
+                -0.5, -0.5, 1.0,
+                0.5, 0.5, 1.0,
+                0.5, -0.5, 1.0,
+            ]},
+            /* shader series */ {
+                vertex: vertShaderStr,
+                fragment: fragShaderStr,
+                idVertex: idVertShaderStr,
+                idFragment: idFragShaderStr
+            },
+            /* idTexture */ idTexture
+        )
         this.renderIdToIds = {}
-
-        // init arrays
-        // prettier-ignore
-        this.attributes[LinkAttrKey.TEMPLATE].array = new Float32Array([
-            -0.5, 0.5, 1.0,
-            -0.5, -0.5, 1.0,
-            0.5, 0.5, 1.0,
-            0.5, -0.5, 1.0,
-        ])
-        this.attributes.forEach((attr) => {
-            if (!attr.isBuildIn) attr.array = new Float32Array(attr.size * this.limit)
-        })
-
-        // init buffers
-        this.attributes.forEach((attr) => {
-            attr.buffer = createArrayBuffer(this.gl, attr.array)
-        })
-
-        // init id attributes and buffers
-        // TODO: hardcode check, need refactor
-        this.idAttributes.forEach((attr, idx) => {
-            if (idx < this.attributes.length) {
-                this.idAttributes[idx] = this.attributes[idx]
-            } else {
-                if (!attr.isBuildIn) attr.array = new Float32Array(attr.size * this.limit)
-                attr.buffer = createArrayBuffer(this.gl, attr.array)
-            }
-        })
-
-        // init uniforms
-        this.gl.useProgram(this.program)
-        const projectionLoc = this.gl.getUniformLocation(this.program, 'projection')
-        const scaleLoc = this.gl.getUniformLocation(this.program, 'scale')
-        const translateLoc = this.gl.getUniformLocation(this.program, 'translate')
-
-        // this.gl.viewport(0, 0, this.width, this.height) // TODO: viewport set, not needed? put here in case bug appear
-
-        // prettier-ignore
-        const projection = new Float32Array([
-            2 / this.width, 0, 0,
-            0, -2 / this.height, 0,
-            -1, 1, 1
-        ])
-        this.gl.uniformMatrix3fv(projectionLoc, false, projection)
-
-        const scale = new Float32Array([1, 1])
-        this.gl.uniform2fv(scaleLoc, scale)
-
-        const translate = new Float32Array([0, 0])
-        this.gl.uniform2fv(translateLoc, translate)
-
-        // id uniforms, identical to link
-        // TODO: need refactor too
-        this.gl.useProgram(this.idProgram)
-        const idProjectionLoc = this.gl.getUniformLocation(this.idProgram, 'projection')
-        const idScaleLoc = this.gl.getUniformLocation(this.idProgram, 'scale')
-        const idTranslateLoc = this.gl.getUniformLocation(this.idProgram, 'translate')
-
-        this.gl.uniformMatrix3fv(idProjectionLoc, false, projection)
-        this.gl.uniform2fv(idScaleLoc, scale)
-        this.gl.uniform2fv(idTranslateLoc, translate)
     }
 
     /**
@@ -353,20 +285,20 @@ export class RenderLinkManager {
 
             this.gl.useProgram(this.program)
             this.attributes.forEach((attr) => {
-                this.gl.enableVertexAttribArray(attr.index)
+                this.gl.enableVertexAttribArray(attr.location)
             })
 
             this.attributes.forEach((attr, i) => {
                 this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
                 this.gl.vertexAttribPointer(
-                    attr.index,
+                    attr.location,
                     attr.size,
                     this.gl.FLOAT,
                     false,
                     attr.isBuildIn ? 0 : attr.size * attr.array.BYTES_PER_ELEMENT,
                     0
                 )
-                if (!attr.isBuildIn) this.gl.vertexAttribDivisor(attr.index, 1)
+                if (!attr.isBuildIn) this.gl.vertexAttribDivisor(attr.location, 1)
             })
         }
 
@@ -378,20 +310,20 @@ export class RenderLinkManager {
         this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.idTexture)
 
         this.idAttributes.forEach((attr) => {
-            this.gl.enableVertexAttribArray(attr.index)
+            this.gl.enableVertexAttribArray(attr.location)
         })
 
         const attr = this.idAttributes[LinkIdAttrKey.ID]
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
         this.gl.vertexAttribPointer(
-            attr.index,
+            attr.location,
             attr.size,
             this.gl.FLOAT,
             false,
             attr.size * attr.array.BYTES_PER_ELEMENT,
             0
         )
-        this.gl.vertexAttribDivisor(attr.index, 1)
+        this.gl.vertexAttribDivisor(attr.location, 1)
 
         this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
         this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null)

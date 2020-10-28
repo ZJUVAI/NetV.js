@@ -4,6 +4,7 @@
  */
 
 import { Color } from '../interfaces'
+import { RenderAttribute } from './interfaces'
 
 /**
  * compile webgl shader
@@ -37,7 +38,7 @@ export function createProgram(
     gl: WebGL2RenderingContext,
     vertShaderStr: string,
     fragShaderStr: string,
-    attributes: { name: string; index: number }[]
+    attributes: RenderAttribute[]
 ): WebGLProgram {
     const vertShader = compileShader(gl, vertShaderStr, gl.VERTEX_SHADER)
     const fragShader = compileShader(gl, fragShaderStr, gl.FRAGMENT_SHADER)
@@ -45,7 +46,7 @@ export function createProgram(
     const program = gl.createProgram()
 
     attributes.forEach((attr) => {
-        gl.bindAttribLocation(program, attr.index, attr.name)
+        gl.bindAttribLocation(program, attr.location, attr.name)
     })
 
     gl.attachShader(program, vertShader)
@@ -77,9 +78,9 @@ export function createArrayBuffer(gl: WebGL2RenderingContext, data: Float32Array
  * @param {string} shaderStr
  * @returns {RenderAttribute[]} attributes array
  */
-export function extractAttributesFromShader(shaderStr: string) {
+export function extractAttributesFromShader(shaderStr: string): RenderAttribute[] {
     const matchings = shaderStr.match(/in\s.*;/g)
-    return matchings.map((match, index) => {
+    return matchings.map((match, location) => {
         const name = match.split(' ')[2].slice(0, -1)
         const type = match.split(' ')[1]
         let size = 1
@@ -88,13 +89,16 @@ export function extractAttributesFromShader(shaderStr: string) {
         }
         let isBuildIn = false
         if (name === 'inVertexPos') {
+            // an instance is formed by two triangles,
+            // thus we need four point positions to initial the instance
+            // more details: https://panjiacheng.site/wiki/2019/06/06/webGL/WebGL-BatchDraw%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB+%E7%90%86%E8%A7%A3/
             isBuildIn = true
         }
         return {
             name,
-            size,
-            index,
-            isBuildIn
+            size, // the space of one attribute, e.g. vec3 ocuppies 3 units of space
+            location, // the appearance order of one attribute in the shader code, which is equal to the result of getAttribLocation
+            isBuildIn // which means four vertices in one element: inVertexPos
         }
     })
 }

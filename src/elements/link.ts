@@ -33,7 +33,7 @@ class Link extends Element {
      * @returns {Node} a source Node Object
      * @memberof Link
      */
-    public source(node?: Node) {
+    public source(node?: Node): Node {
         if (arguments.length === 1) {
             // setter
             this.sourceTarget({
@@ -50,7 +50,7 @@ class Link extends Element {
      * @returns {Node} a target Node Object
      * @memberof Link
      */
-    public target(node?: Node) {
+    public target(node?: Node): Node {
         if (arguments.length === 1) {
             // setter
             this.sourceTarget({
