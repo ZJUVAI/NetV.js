@@ -29,7 +29,7 @@ export interface RenderAttribute {
     isBuildIn?: boolean
     array?: Float32Array
     buffer?: WebGLBuffer
-    extractValueFrom: (element: Node | Link) => number[]
+    extractAttributeValueFrom: (element: Node | Link) => number[]
 }
 
 export type NodeAttr = 'position' | 'r' | 'fill' | 'strokeWidth' | 'strokeColor'

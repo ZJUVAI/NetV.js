@@ -77,25 +77,25 @@ export class RenderNodeManager extends RenderElementManager {
 
         this.attributes.forEach((attr) => {
             if (attr.name === 'in_position') {
-                attr.extractValueFrom = (node: Node) => {
+                attr.extractAttributeValueFrom = (node: Node) => {
                     const position = node.position()
                     return [position.x, position.y]
                 }
             } else if (attr.name === 'in_r') {
-                attr.extractValueFrom = (node: Node) => {
+                attr.extractAttributeValueFrom = (node: Node) => {
                     return [node.r() * this.pixelRatio]
                 }
             } else if (attr.name === 'in_fill') {
-                attr.extractValueFrom = (node: Node) => {
+                attr.extractAttributeValueFrom = (node: Node) => {
                     const fill = node.fill()
                     return [fill.r, fill.g, fill.b, fill.a]
                 }
             } else if (attr.name === 'in_strokeWidth') {
-                attr.extractValueFrom = (node: Node) => {
+                attr.extractAttributeValueFrom = (node: Node) => {
                     return [node.strokeWidth() * this.pixelRatio]
                 }
             } else if (attr.name === 'in_strokeColor') {
-                attr.extractValueFrom = (node: Node) => {
+                attr.extractAttributeValueFrom = (node: Node) => {
                     const strokeColor = node.strokeColor()
                     return [strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a]
                 }
@@ -177,7 +177,7 @@ export class RenderNodeManager extends RenderElementManager {
             // node attribute => webgl attribute
             this.attributes.forEach((attr) => {
                 if (!attr.isBuildIn) {
-                    const value = attr.extractValueFrom(node)
+                    const value = attr.extractAttributeValueFrom(node)
                     value.forEach((v, j) => {
                         attr.array[attr.size * (this.count + i) + j] = v
                     })

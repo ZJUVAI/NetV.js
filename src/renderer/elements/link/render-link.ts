@@ -74,21 +74,21 @@ export class RenderLinkManager extends RenderElementManager {
 
         this.attributes.forEach((attr) => {
             if (attr.name === 'in_source') {
-                attr.extractValueFrom = (link: Link) => {
+                attr.extractAttributeValueFrom = (link: Link) => {
                     const sourcePosition = link.source().position()
                     return [sourcePosition.x, sourcePosition.y]
                 }
             } else if (attr.name === 'in_target') {
-                attr.extractValueFrom = (link: Link) => {
+                attr.extractAttributeValueFrom = (link: Link) => {
                     const targetPosition = link.target().position()
                     return [targetPosition.x, targetPosition.y]
                 }
             } else if (attr.name === 'in_strokeWidth') {
-                attr.extractValueFrom = (link: Link) => {
+                attr.extractAttributeValueFrom = (link: Link) => {
                     return [link.strokeWidth() * this.pixelRatio]
                 }
             } else if (attr.name === 'in_strokeColor') {
-                attr.extractValueFrom = (link: Link) => {
+                attr.extractAttributeValueFrom = (link: Link) => {
                     const strokeColor = link.strokeColor()
                     return [strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a]
                 }
@@ -198,7 +198,7 @@ export class RenderLinkManager extends RenderElementManager {
             // link attribute => webgl attribute
             this.attributes.forEach((attr) => {
                 if (!attr.isBuildIn) {
-                    const value = attr.extractValueFrom(link)
+                    const value = attr.extractAttributeValueFrom(link)
                     value.forEach((v, j) => {
                         attr.array[attr.size * (this.count + i) + j] = v
                     })

@@ -100,7 +100,7 @@ export function extractAttributesFromShader(shaderStr: string): Map<string, Rend
             size, // the space of one attribute, e.g. vec3 ocuppies 3 units of space
             location, // the appearance order of one attribute in the shader code, which is equal to the result of getAttribLocation
             isBuildIn, // which means four vertices in one element: inVertexPos
-            extractValueFrom: () => [] // a function which is use to append an element into the array of this attribute
+            extractAttributeValueFrom: () => [] // a function which is use to append an element into the array of this attribute
         })
     })
     return attributesMap
