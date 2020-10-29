@@ -27,9 +27,8 @@ const netv = new NetV({
 
 const LAYOUTED_GRAPH_URLS = {
     bcsstk31:
-        'https://uc1ac81c4f62c8f90f4037ed2c1f.dl.dropboxusercontent.com/cd/0/get/BCAskZv_wKJbKXBfnrD6FLdWmR0vBlxx013Uln51ECS3kwcIncDpWBEtPAr7nU43igEzZCZFNhz8Kg9qRbxvp0uMBfRjMrTFx6ANYyUoKh17HHKKlG4VqQdk1-0OZxfjSSE/file?dl=1#',
-    '3elt':
-        'https://uca135b6ffd9e00ec034c38adf8c.dl.dropboxusercontent.com/cd/0/get/BCD_I9LvWNnHFVgdkFCDE7v8UWHE3sO4gMbgF36sNMyDZp01tt9dzXYEBqXFLW5E_S-oPNnCsbXdEt4ccDj0xsxuF-ievCmDmI0933UPCACFTaBftH7hVxsklpbUo3WT3so/file?dl=1#'
+        'https://raw.githubusercontent.com/jiacheng-pan/datasets/main/layouted-graphs/bcsstk31.json',
+    '3elt': 'https://raw.githubusercontent.com/jiacheng-pan/datasets/main/layouted-graphs/3elt.json'
 }
 
 fetch(LAYOUTED_GRAPH_URLS['bcsstk31'])

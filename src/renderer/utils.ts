@@ -38,7 +38,7 @@ export function createProgram(
     gl: WebGL2RenderingContext,
     vertShaderStr: string,
     fragShaderStr: string,
-    attributes: RenderAttribute[]
+    attributes: Map<string, RenderAttribute>
 ): WebGLProgram {
     const vertShader = compileShader(gl, vertShaderStr, gl.VERTEX_SHADER)
     const fragShader = compileShader(gl, fragShaderStr, gl.FRAGMENT_SHADER)
@@ -78,9 +78,10 @@ export function createArrayBuffer(gl: WebGL2RenderingContext, data: Float32Array
  * @param {string} shaderStr
  * @returns {RenderAttribute[]} attributes array
  */
-export function extractAttributesFromShader(shaderStr: string): RenderAttribute[] {
+export function extractAttributesFromShader(shaderStr: string): Map<string, RenderAttribute> {
     const matchings = shaderStr.match(/in\s.*;/g)
-    return matchings.map((match, location) => {
+    const attributesMap = new Map()
+    matchings.forEach((match, location) => {
         const name = match.split(' ')[2].slice(0, -1)
         const type = match.split(' ')[1]
         let size = 1
@@ -94,13 +95,15 @@ export function extractAttributesFromShader(shaderStr: string): RenderAttribute[
             // more details: https://panjiacheng.site/wiki/2019/06/06/webGL/WebGL-BatchDraw%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB+%E7%90%86%E8%A7%A3/
             isBuildIn = true
         }
-        return {
+        attributesMap.set(name, {
             name,
             size, // the space of one attribute, e.g. vec3 ocuppies 3 units of space
             location, // the appearance order of one attribute in the shader code, which is equal to the result of getAttribLocation
-            isBuildIn // which means four vertices in one element: inVertexPos
-        }
+            isBuildIn, // which means four vertices in one element: inVertexPos
+            extractValueFrom: () => [] // a function which is use to append an element into the array of this attribute
+        })
     })
+    return attributesMap
 }
 
 /**

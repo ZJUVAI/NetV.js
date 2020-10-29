@@ -71,6 +71,29 @@ export class RenderLinkManager extends RenderElementManager {
             /* idTexture */ idTexture
         )
         this.renderIdToIds = {}
+
+        this.attributes.forEach((attr) => {
+            if (attr.name === 'in_source') {
+                attr.extractValueFrom = (link: Link) => {
+                    const sourcePosition = link.source().position()
+                    return [sourcePosition.x, sourcePosition.y]
+                }
+            } else if (attr.name === 'in_target') {
+                attr.extractValueFrom = (link: Link) => {
+                    const targetPosition = link.target().position()
+                    return [targetPosition.x, targetPosition.y]
+                }
+            } else if (attr.name === 'in_strokeWidth') {
+                attr.extractValueFrom = (link: Link) => {
+                    return [link.strokeWidth() * this.pixelRatio]
+                }
+            } else if (attr.name === 'in_strokeColor') {
+                attr.extractValueFrom = (link: Link) => {
+                    const strokeColor = link.strokeColor()
+                    return [strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a]
+                }
+            }
+        })
     }
 
     /**
@@ -79,8 +102,6 @@ export class RenderLinkManager extends RenderElementManager {
      * @param attribute attribute key to change
      */
     public changeAttribute(link: Link, attribute: LinkAttr) {
-        const key = LinkAttrMap[attribute]
-        const attr = this.attributes[key]
         const nodes = link.sourceTarget()
         const index = this.idsToIndex.get([nodes.source.id(), nodes.target.id()])
         let data = null
@@ -99,6 +120,7 @@ export class RenderLinkManager extends RenderElementManager {
             console.error('Link attribute not supported.')
             return // early return, skip following buffer change
         }
+        const attr = this.attributes.get(`in_${attribute}`)
         attr.array.set(data, attr.size * index)
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
         this.gl.bufferSubData(
@@ -120,13 +142,13 @@ export class RenderLinkManager extends RenderElementManager {
             // TODO: consider link and render link attribute mapping
             const source = link.source()
             const sourcePosition = source.position()
-            this.attributes[LinkAttrKey.SOURCE].array[2 * (count + i)] = sourcePosition.x
-            this.attributes[LinkAttrKey.SOURCE].array[2 * (count + i) + 1] = sourcePosition.y
+            this.attributes.get('in_source').array[2 * (count + i)] = sourcePosition.x
+            this.attributes.get('in_source').array[2 * (count + i) + 1] = sourcePosition.y
 
             const target = link.target()
             const targetPosition = target.position()
-            this.attributes[LinkAttrKey.TARGET].array[2 * (count + i)] = targetPosition.x
-            this.attributes[LinkAttrKey.TARGET].array[2 * (count + i) + 1] = targetPosition.y
+            this.attributes.get('in_target').array[2 * (count + i)] = targetPosition.x
+            this.attributes.get('in_target').array[2 * (count + i) + 1] = targetPosition.y
 
             // currently no need for color&renderId change
             /*
@@ -140,15 +162,15 @@ export class RenderLinkManager extends RenderElementManager {
             this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 3] = color.a
 
             const renderIdColor = encodeRenderId(2 * (this.count + i) + 1) // NOTE: link render id, use odd integer
-            this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i)] = renderIdColor.r
-            this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i) + 1] = renderIdColor.g
-            this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i) + 2] = renderIdColor.b
-            this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i) + 3] = renderIdColor.a
+            this.idAttributes.get('in_id').array[4 * (this.count + i)] = renderIdColor.r
+            this.idAttributes.get('in_id').array[4 * (this.count + i) + 1] = renderIdColor.g
+            this.idAttributes.get('in_id').array[4 * (this.count + i) + 2] = renderIdColor.b
+            this.idAttributes.get('in_id').array[4 * (this.count + i) + 3] = renderIdColor.a
             */
         })
 
-        const sourceAttr = this.attributes[LinkAttrKey.SOURCE]
-        const targetAttr = this.attributes[LinkAttrKey.TARGET]
+        const sourceAttr = this.attributes.get('in_source')
+        const targetAttr = this.attributes.get('in_target')
 
         const arr = [sourceAttr, targetAttr]
 
@@ -173,31 +195,21 @@ export class RenderLinkManager extends RenderElementManager {
     public addData(links: Link[]) {
         // set array
         links.forEach((link, i) => {
-            // TODO: consider link and render link attribute mapping
-            const source = link.source()
-            const sourcePosition = source.position()
-            this.attributes[LinkAttrKey.SOURCE].array[2 * (this.count + i)] = sourcePosition.x
-            this.attributes[LinkAttrKey.SOURCE].array[2 * (this.count + i) + 1] = sourcePosition.y
-
-            const target = link.target()
-            const targetPosition = target.position()
-            this.attributes[LinkAttrKey.TARGET].array[2 * (this.count + i)] = targetPosition.x
-            this.attributes[LinkAttrKey.TARGET].array[2 * (this.count + i) + 1] = targetPosition.y
-
-            this.attributes[LinkAttrKey.WIDTH].array[this.count + i] =
-                link.strokeWidth() * this.pixelRatio
-
-            const color = link.strokeColor()
-            this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i)] = color.r
-            this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 1] = color.g
-            this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 2] = color.b
-            this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 3] = color.a
+            // link attribute => webgl attribute
+            this.attributes.forEach((attr) => {
+                if (!attr.isBuildIn) {
+                    const value = attr.extractValueFrom(link)
+                    value.forEach((v, j) => {
+                        attr.array[attr.size * (this.count + i) + j] = v
+                    })
+                }
+            })
 
             const renderIdColor = encodeRenderId(2 * (this.count + i) + 1) // NOTE: link render id, use odd integer
-            this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i)] = renderIdColor.r
-            this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i) + 1] = renderIdColor.g
-            this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i) + 2] = renderIdColor.b
-            this.idAttributes[LinkIdAttrKey.ID].array[4 * (this.count + i) + 3] = renderIdColor.a
+            this.idAttributes.get('in_id').array[4 * (this.count + i)] = renderIdColor.r
+            this.idAttributes.get('in_id').array[4 * (this.count + i) + 1] = renderIdColor.g
+            this.idAttributes.get('in_id').array[4 * (this.count + i) + 2] = renderIdColor.b
+            this.idAttributes.get('in_id').array[4 * (this.count + i) + 3] = renderIdColor.a
 
             const sourceTarget = link.sourceTarget()
             this.renderIdToIds[2 * (this.count + i) + 1] = [
@@ -224,7 +236,7 @@ export class RenderLinkManager extends RenderElementManager {
         })
 
         // id buffer data
-        const attr = this.idAttributes[LinkIdAttrKey.ID]
+        const attr = this.idAttributes.get('in_id')
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
         this.gl.bufferSubData(
             this.gl.ARRAY_BUFFER,
@@ -243,62 +255,5 @@ export class RenderLinkManager extends RenderElementManager {
      */
     public getIdsByRenderId(renderId: number): [string, string] {
         return this.renderIdToIds[renderId]
-    }
-
-    /**
-     * draw links
-     */
-    public draw() {
-        if (this.count > 0) {
-            this.gl.enable(this.gl.BLEND)
-            this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
-
-            this.gl.useProgram(this.program)
-            this.attributes.forEach((attr) => {
-                this.gl.enableVertexAttribArray(attr.location)
-            })
-
-            this.attributes.forEach((attr, i) => {
-                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
-                this.gl.vertexAttribPointer(
-                    attr.location,
-                    attr.size,
-                    this.gl.FLOAT,
-                    false,
-                    attr.isBuildIn ? 0 : attr.size * attr.array.BYTES_PER_ELEMENT,
-                    0
-                )
-                if (!attr.isBuildIn) this.gl.vertexAttribDivisor(attr.location, 1)
-            })
-        }
-
-        this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
-
-        // draw id
-        this.gl.blendFunc(this.gl.ONE, this.gl.ZERO)
-        this.gl.useProgram(this.idProgram)
-        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.idTexture)
-
-        this.idAttributes.forEach((attr) => {
-            this.gl.enableVertexAttribArray(attr.location)
-        })
-
-        const attr = this.idAttributes[LinkIdAttrKey.ID]
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
-        this.gl.vertexAttribPointer(
-            attr.location,
-            attr.size,
-            this.gl.FLOAT,
-            false,
-            attr.size * attr.array.BYTES_PER_ELEMENT,
-            0
-        )
-        this.gl.vertexAttribDivisor(attr.location, 1)
-
-        this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
-        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null)
-
-        this.gl.enable(this.gl.BLEND)
-        this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
     }
 }

@@ -2,7 +2,7 @@ import * as interfaces from '../interfaces'
 import { NetV } from '../index'
 import { override } from '../utils/utils'
 
-export class Element {
+export default class Element {
     public $_style: interfaces.NodeStyle = {}
     public $_clickCallback: (element: Element) => void
     public $_hoverCallback: (element: Element) => void

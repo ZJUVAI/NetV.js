@@ -13,11 +13,11 @@ export class RenderElementManager {
     protected pixelRatio: number
 
     protected program: WebGLProgram
-    protected attributes: RenderAttribute[]
+    protected attributes: Map<string, RenderAttribute>
 
     // id shaders are design for mapping canvas pixels to elements
     protected idProgram: WebGLProgram
-    protected idAttributes: RenderAttribute[]
+    protected idAttributes: Map<string, RenderAttribute>
     protected idTexture: WebGLTexture
 
     public constructor(
@@ -56,7 +56,7 @@ export class RenderElementManager {
             if (!attr.isBuildIn) {
                 attr.array = new Float32Array(attr.size * this.capacity)
             } else {
-                // build in attribute,
+                // build in attribute: veteces positions
                 // four verteces of one element (https://panjiacheng.site/wiki/2019/06/06/webGL/WebGL-BatchDraw%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB+%E7%90%86%E8%A7%A3/)
                 // prettier-ignore
                 attr.array = new Float32Array(instanceVerteces)
@@ -66,14 +66,14 @@ export class RenderElementManager {
         })
 
         // init id attributes and buffers
-        this.idAttributes.forEach((attr, idx) => {
-            if (idx < this.attributes.length) {
-                this.idAttributes[idx] = this.attributes[idx]
-            } else {
+        this.idAttributes.forEach((attr, name) => {
+            if (name === 'in_id') {
                 // attr: in vec4 inId;
                 // TODO: hardcode check, need refactor
                 if (!attr.isBuildIn) attr.array = new Float32Array(attr.size * this.capacity)
                 attr.buffer = createArrayBuffer(this.gl, attr.array)
+            } else {
+                this.idAttributes.set(name, this.attributes.get(name))
             }
         })
 
@@ -148,4 +148,60 @@ export class RenderElementManager {
         this.gl.uniform2fv(idScaleLoc, scale)
         this.gl.uniform2fv(idTranslateLoc, translate)
     }
+
+    public draw() {
+        if (this.count > 0) {
+            this.gl.enable(this.gl.BLEND)
+            this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
+
+            this.gl.useProgram(this.program)
+            this.attributes.forEach((attr) => {
+                this.gl.enableVertexAttribArray(attr.location)
+            })
+
+            this.attributes.forEach((attr, i) => {
+                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+                this.gl.vertexAttribPointer(
+                    attr.location,
+                    attr.size,
+                    this.gl.FLOAT,
+                    false,
+                    attr.size * attr.array.BYTES_PER_ELEMENT,
+                    0
+                )
+                if (!attr.isBuildIn) this.gl.vertexAttribDivisor(attr.location, 1)
+            })
+        }
+
+        this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
+
+        // draw id
+        this.gl.blendFunc(this.gl.ONE, this.gl.ZERO)
+        this.gl.useProgram(this.idProgram)
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.idTexture)
+
+        this.idAttributes.forEach((attr) => {
+            this.gl.enableVertexAttribArray(attr.location)
+        })
+
+        const attr = this.idAttributes.get('in_id') // ! HARDCODE CHECK
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+        this.gl.vertexAttribPointer(
+            attr.location,
+            attr.size,
+            this.gl.FLOAT,
+            false,
+            attr.size * attr.array.BYTES_PER_ELEMENT,
+            0
+        )
+        this.gl.vertexAttribDivisor(attr.location, 1)
+
+        this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null)
+
+        this.gl.enable(this.gl.BLEND)
+        this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
+    }
+
+    // public addData(elements: Element[]) {}
 }

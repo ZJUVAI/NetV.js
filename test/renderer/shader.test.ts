@@ -15,7 +15,7 @@ const testVertShaderStr = `
 precision highp float;
 in vec3 inVertexPos;
 in vec2 inPosition;
-in float inRadius;
+in float r;
 in vec4 inFill;
 
 out vec2 pos;
@@ -28,7 +28,7 @@ uniform vec2 translate;
 uniform vec2 viewport;
 
 void main(void) {
-    size = inRadius;
+    size = r;
     color = inFill;
     float vertexSize = dotSize * (2. * sqrt(2.));
     pos = scale * inPosition + translate;

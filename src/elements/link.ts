@@ -6,7 +6,7 @@
 
 import Node from './node'
 import * as interfaces from '../interfaces'
-import { Element } from './element'
+import Element from './element'
 
 class Link extends Element {
     // style getter/setter

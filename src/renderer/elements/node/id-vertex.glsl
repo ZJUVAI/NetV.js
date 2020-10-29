@@ -1,17 +1,17 @@
 #version 300 es
 precision highp float;
 in vec3 inVertexPos;
-in vec2 inPosition;
-in float inRadius;
-in vec4 inFill;
-in float inStrokeWidth;
-in vec4 inStrokeColor;
+in vec2 in_position;
+in float in_r;
+in vec4 in_fill;
+in float in_strokeWidth;
+in vec4 in_strokeColor;
 
-in vec4 inId;
+in vec4 in_id;
 
-out vec2 pos;
-out float radius;
-out vec4 color;
+out vec2 position;
+out float r;
+out vec4 fill;
 out float strokeWidth;
 out vec4 strokeColor;
 
@@ -23,19 +23,18 @@ uniform vec2 translate;
 uniform vec2 viewport;
 
 void main(void) {
-    id = inId;
-
-    float size = inRadius + inStrokeWidth / 2.;
-    radius = inRadius;
-    color = inFill;
-    strokeWidth = inStrokeWidth;
-    strokeColor = inStrokeColor;
-    float vertexSize = size * (2. * sqrt(2.)) * 1.5; // NOTE: x 1.5 to prevent border factor
-    pos = scale * inPosition + translate;
+    id = in_id;
+    
+    r = in_r;
+    fill = in_fill;
+    strokeColor = in_strokeColor;
+    strokeWidth = in_strokeWidth;
+    float size = (in_r + in_strokeWidth / 2.) * 2. * 1.5;  // NOTE: multiply 2. to make radius to diameter; multiply 1.5 to prevent border factor
+    position = scale * in_position + translate;
     mat3 transform = mat3(
-        vertexSize, 0, 0,
-        0, vertexSize, 0,
-        pos.x, pos.y, 1
+        size, 0, 0,
+        0, size, 0,
+        position.x, position.y, 1
     );
 
     gl_Position = vec4(projection * transform * inVertexPos, 1.);

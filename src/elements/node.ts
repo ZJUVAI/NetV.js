@@ -8,7 +8,7 @@ import * as interfaces from '../interfaces'
 import { isValidId } from '../utils/is'
 import { LinkAttr } from '../renderer/interfaces'
 import Link from './link'
-import { Element } from './element'
+import Element from './element'
 
 class Node extends Element {
     // style getter/setter

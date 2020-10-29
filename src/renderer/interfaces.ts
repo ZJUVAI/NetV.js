@@ -3,6 +3,10 @@
  * @description some interfaces for webglrenderer
  */
 
+import Node from 'src/elements/node'
+import Link from 'src/elements/link'
+import Element from 'src/elements/element'
+
 import { Color } from 'src/interfaces'
 
 export interface RendererConfigs {
@@ -25,6 +29,7 @@ export interface RenderAttribute {
     isBuildIn?: boolean
     array?: Float32Array
     buffer?: WebGLBuffer
+    extractValueFrom: (element: Node | Link) => number[]
 }
 
 export type NodeAttr = 'position' | 'r' | 'fill' | 'strokeWidth' | 'strokeColor'

@@ -1,22 +1,22 @@
 #version 300 es
 precision highp float;
 in vec3 inVertexPos;
-in vec2 inSourcePosition;
-in vec2 inTargetPosition;
-in float inStrokeWidth;
-in vec4 inStrokeColor;
+in vec2 in_source; // source node position
+in vec2 in_target; // target node position
+in float in_strokeWidth;
+in vec4 in_strokeColor;
 
-out vec4 color;
+out vec4 strokeColor;
 
 uniform mat3 projection;
 uniform vec2 scale;
 uniform vec2 translate;
 
 void main(void) {
-    color = inStrokeColor;
+    strokeColor = in_strokeColor;
 
-    vec2 source = inSourcePosition * scale + translate;
-    vec2 target = inTargetPosition * scale + translate;
+    vec2 source = in_source * scale + translate;
+    vec2 target = in_target * scale + translate;
     vec2 delta = source - target;
     vec2 center = 0.5 * (source + target);
     float len = length(delta);
@@ -24,7 +24,7 @@ void main(void) {
 
     mat3 line_scale = mat3(
         len, 0, 0,
-        0, inStrokeWidth, 0,
+        0, in_strokeWidth, 0,
         0, 0, 1
     );
     mat3 line_rotate = mat3(
