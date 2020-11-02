@@ -1,6 +1,10 @@
 import { RenderAttribute, ShaderSeries } from '../../interfaces'
 import { createProgram, createArrayBuffer, extractAttributesFromShader } from '../../utils'
 import { Transform } from '../../../interfaces'
+import Element from '../../../elements/element'
+import Node from '../../../elements/node'
+import Link from '../../../elements/link'
+import { encodeRenderId } from '../../utils'
 
 export class RenderElementManager {
     protected gl: WebGL2RenderingContext
@@ -19,6 +23,9 @@ export class RenderElementManager {
     protected idProgram: WebGLProgram
     protected idAttributes: Map<string, RenderAttribute>
     protected idTexture: WebGLTexture
+
+    protected renderIdToElement: { [key: number]: Node | Link }
+    protected elementToRenderId = new Map()
 
     public constructor(
         gl: WebGL2RenderingContext,
@@ -124,6 +131,23 @@ export class RenderElementManager {
         idPixelRatioLocation !== null && this.gl.uniform1f(idPixelRatioLocation, this.pixelRatio)
     }
 
+    public setRenderIdOf(element: Node | Link, renderId: number) {
+        this.renderIdToElement[renderId] = element
+        this.elementToRenderId.set(element, renderId)
+    }
+
+    public getRenderIdOf(element: Node | Link): number {
+        return this.elementToRenderId.get(element)
+    }
+
+    /**
+     * render id to link ids(source and target)
+     * @param renderId
+     */
+    public getElementByRenderId(renderId: number): Node | Link {
+        return this.renderIdToElement[renderId]
+    }
+
     /**
      * set Transform in Render Link
      * @param transform current transform(pan&zoom condition)
@@ -203,5 +227,86 @@ export class RenderElementManager {
         this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
     }
 
-    // public addData(elements: Element[]) {}
+    /**
+     * add element data to engine
+     * @param elements elements data
+     */
+    public addData(elements: Node[] | Link[]) {
+        // set array
+        elements.forEach((element: Node | Link, i) => {
+            const index = this.count + i
+            // link attribute => webgl attribute
+            this.attributes.forEach((attr) => {
+                if (!attr.isBuildIn) {
+                    const value = attr.extractAttributeValueFrom(element)
+                    value.forEach((v, j) => {
+                        // inject into the Buffer Array
+                        attr.array[attr.size * index + j] = v
+                    })
+                }
+            })
+
+            const offset = element.constructor.name === 'Node' ? 0 : 1 // NOTE: node render id, use even integer
+            const renderId = 2 * index + offset
+            const renderIdColor = encodeRenderId(renderId)
+            this.idAttributes.get('in_id').array[4 * index] = renderIdColor.r
+            this.idAttributes.get('in_id').array[4 * index + 1] = renderIdColor.g
+            this.idAttributes.get('in_id').array[4 * index + 2] = renderIdColor.b
+            this.idAttributes.get('in_id').array[4 * index + 3] = renderIdColor.a
+
+            this.setRenderIdOf(element, renderId)
+        })
+
+        this.attributes.forEach((attr) => {
+            if (!attr.isBuildIn) {
+                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+                this.gl.bufferSubData(
+                    this.gl.ARRAY_BUFFER,
+                    attr.size * this.count * attr.array.BYTES_PER_ELEMENT,
+                    attr.array,
+                    attr.size * this.count,
+                    attr.size * elements.length
+                )
+            }
+        })
+
+        // id buffer data
+        const attr = this.idAttributes.get('in_id')
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+        this.gl.bufferSubData(
+            this.gl.ARRAY_BUFFER,
+            attr.size * this.count * attr.array.BYTES_PER_ELEMENT,
+            attr.array,
+            attr.size * this.count,
+            attr.size * elements.length
+        )
+
+        this.count += elements.length
+    }
+
+    /**
+     * change an element's attribute
+     * @param element link/node data
+     * @param attribute attribute key to change
+     */
+    public changeAttribute(element: Node | Link, attribute: string) {
+        const renderId = this.getRenderIdOf(element)
+        const index = Math.floor(renderId / 2)
+        const attr = this.attributes.get(`in_${attribute}`)
+        if (attr === undefined) {
+            console.error(
+                `Attribute: ${attribute} is not supported in a ${element.constructor.name} instance.`
+            )
+        }
+        const data = attr.extractAttributeValueFrom(element)
+        attr.array.set(data, attr.size * index)
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+        this.gl.bufferSubData(
+            this.gl.ARRAY_BUFFER,
+            attr.size * index * attr.array.BYTES_PER_ELEMENT,
+            attr.array,
+            attr.size * index,
+            attr.size
+        )
+    }
 }

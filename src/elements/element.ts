@@ -12,9 +12,9 @@ export default class Element {
 
     public constructor(
         core: NetV,
-        type: 'node' | 'link',
         data: interfaces.NodeData | interfaces.LinkData
     ) {
+        const type = this.constructor.name.toLowerCase()
         this.$_core = core
         const defaultConfigs = this.$_core.$_configs
 
@@ -60,7 +60,7 @@ export default class Element {
             if (value !== undefined) {
                 if (value === Object(value)) {
                     // value is an object
-                    this.$_style[key] = { ...value, ...this.$_style[key] }
+                    this.$_style[key] = override(this.$_style[key], value) // { ...this.$_style[key], ...value }
                 } else {
                     this.$_style[key] = value
                 }

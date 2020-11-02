@@ -30,7 +30,7 @@ class Node extends Element {
     private $_textOffset: { x: number; y: number } // NOTE: deprecated, current not used
 
     public constructor(core, nodeData: interfaces.NodeData) {
-        super(core, 'node', nodeData)
+        super(core, nodeData)
         const defaultConfigs = this.$_core.$_configs
         const data = {
             ...{

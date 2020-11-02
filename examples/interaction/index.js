@@ -66,7 +66,14 @@ const configs = {
     },
     link: {
         clickCallback: (link) => {
-            alert(`Link ${link.source().id()}-${link.target().id()} clicked~`)
+            link.strokeColor({
+                r: Math.random(),
+                g: Math.random(),
+                b: Math.random(),
+                a: Math.random(),
+            })
+            netv.draw()
+            // alert(`Link ${link.source().id()}-${link.target().id()} clicked~`)
         }
     },
     width: 800,
@@ -80,7 +87,7 @@ testData.nodes[0].clickCallback = (node) => {
     node.fill({
         r: 1,
         g: 1,
-        b: 0,
+        b: 1,
         a: 1
     })
     node.r(15)

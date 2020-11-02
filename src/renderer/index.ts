@@ -103,11 +103,12 @@ export class Renderer {
         if (renderId >= 0) {
             if (renderId % 2 === 0) {
                 // NOTE: node has even render id, link has odd render id
-                const nodeId = this.nodeManager.getIdByRenderId(renderId)
-                return nodeId
+                const node = this.nodeManager.getElementByRenderId(renderId) as Node
+                return node.id()
             } else {
-                const linkIds = this.linkManager.getIdsByRenderId(renderId)
-                return linkIds
+                const link = this.linkManager.getElementByRenderId(renderId) as Link
+                const sourceTarget = link.sourceTarget()
+                return [sourceTarget.source.id(), sourceTarget.target.id()]
             }
         }
     }

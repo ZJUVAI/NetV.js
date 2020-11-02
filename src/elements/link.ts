@@ -17,7 +17,7 @@ class Link extends Element {
     private $_target: Node
 
     public constructor(core, linkData: interfaces.LinkData) {
-        super(core, 'link', linkData)
+        super(core, linkData)
 
         const sourceNode = this.$_core.getNodeById(linkData.source)
         const targetNode = this.$_core.getNodeById(linkData.target)
