@@ -10,7 +10,7 @@ const netv = new NetV({
     link: {
         style: {
             shape: 'line',
-            line: { strokeWidth: 1 }
+            strokeWidth: 1
         }
     },
     label: {

@@ -19,16 +19,21 @@ export interface Position {
     y?: number
 }
 
+export type NodeShape = 'circle' | 'rect' | 'triangle'
+
 export interface NodeStyle {
-    shape?: string
-    r?: number // for circle
-    width?: number // for rect
-    height?: number // for rect
-    x?: number // offset
-    y?: number // offset
+    shape?: NodeShape
+    offset?: Position
     fill?: Color
     strokeWidth?: number
     strokeColor?: Color
+    /* circle shape styles */
+    r?: number
+    /* rect shape styles */
+    width?: number
+    height?: number
+    /* triangle shape styles */
+    verteces?: [Position, Position, Position]
 }
 
 export interface NodeData {
@@ -40,8 +45,10 @@ export interface NodeData {
     hoverCallback?: (node: Node) => void
 }
 
+export type LinkShape = 'line'
+
 export interface LinkStyle {
-    shape?: string
+    shape?: LinkShape
     strokeWidth?: number
     strokeColor?: Color
 }

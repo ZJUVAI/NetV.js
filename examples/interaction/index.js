@@ -55,10 +55,8 @@ const configs = {
     container: document.getElementById('main'),
     node: {
         style: {
-            circle: {
-                r: 10,
-                fill: { r: 1, g: 0, b: 0, a: 0.8 }
-            }
+            r: 10,
+            fill: { r: 1, g: 0, b: 0, a: 0.8 }
         },
         clickCallback: (node) => {
             alert(`Node ${node.id()} clicked~`)
@@ -70,7 +68,7 @@ const configs = {
                 r: Math.random(),
                 g: Math.random(),
                 b: Math.random(),
-                a: Math.random(),
+                a: Math.random()
             })
             netv.draw()
             // alert(`Link ${link.source().id()}-${link.target().id()} clicked~`)

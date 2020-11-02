@@ -55,10 +55,8 @@ const configs = {
     container: document.getElementById('main'),
     node: {
         shape: 'circle',
-        circle: {
-            r: 10,
-            fill: { r: 1, g: 0, b: 0, a: 0.8 }
-        }
+        r: 10,
+        fill: { r: 1, g: 0, b: 0, a: 0.8 }
     },
     width: 800,
     height: 600,

@@ -7,10 +7,10 @@ const netv = new NetV({
     nodeLimit: 1e5,
     linkLimit: 1e7,
     node: {
-        style: { circle: { strokeWidth: 0 } }
+        style: { strokeWidth: 0 }
     },
     link: {
-        style: { line: { strokeWidth: 0.5 } }
+        style: { strokeWidth: 0.5 }
     }
 })
 const data = netv.Utils.transformGraphPosition(netv.loadDataset('patents'), 500, 400, 300)

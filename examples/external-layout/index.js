@@ -6,9 +6,7 @@ const netv = new NetV({
     container: document.getElementById('main'),
     link: {
         style: {
-            line: {
-                strokeWidth: 1
-            }
+            strokeWidth: 1
         }
     }
 })

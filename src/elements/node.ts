@@ -12,12 +12,20 @@ import Element from './element'
 
 class Node extends Element {
     // style getter/setter
-    public r?: (value?: number) => number
-    public width?: (value?: number) => number
-    public height?: (value?: number) => number
+    public shape: (value?: interfaces.NodeShape) => interfaces.NodeShape
+    public offset: (value?: interfaces.Position) => interfaces.Position
     public strokeWidth: (value?: number) => number
     public strokeColor: (value?: interfaces.Color) => interfaces.Color
     public fill: (value?: interfaces.Color) => interfaces.Color
+    /* circle shape styles */
+    public r?: (value?: number) => number
+    /* rect shape styles */
+    public width?: (value?: number) => number
+    public height?: (value?: number) => number
+    /* triangle shape styles */
+    public verteces: (
+        value?: interfaces.Position[]
+    ) => [interfaces.Position, interfaces.Position, interfaces.Position]
 
     private $_id: string
     private $_position = {

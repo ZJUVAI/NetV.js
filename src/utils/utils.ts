@@ -43,6 +43,16 @@ export function transformGraphPosition(
  * @param overridingObject: the Object to override the overridden Object
  */
 export function override(overriddenObject: object, overridingObject: object) {
+    if (overriddenObject !== Object(overriddenObject)) {
+        // overriddenObject is not an object
+        if (overridingObject !== Object(overridingObject)) {
+            // overridingObject is not an object
+            return overridingObject
+        } else {
+            return JSON.parse(JSON.stringify(overridingObject)) // deep copy
+        }
+    }
+
     const object = JSON.parse(JSON.stringify(overriddenObject)) // deep copy
     for (const key in overridingObject) {
         if (key in object && overridingObject[key] === Object(overridingObject[key])) {

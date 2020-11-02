@@ -7,7 +7,7 @@ import vertShaderStr from './vertex.glsl'
 import fragShaderStr from './fragment.glsl'
 import idVertShaderStr from './id-vertex.glsl'
 import idFragShaderStr from './id-fragment.glsl'
-import { NodeAttr, NodeManagerConfigs } from '../../interfaces'
+import { NodeManagerConfigs } from '../../interfaces'
 import Node from '../../../elements/node'
 import { RenderElementManager } from '../element/render-element'
 

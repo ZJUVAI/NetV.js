@@ -17,21 +17,21 @@ export const maxLazyUpdateElementCount = 10
 export const node = {
     style: {
         shape: 'circle', // default shape
-        circle: {
-            offset: { x: 0, y: 0 },
-            r: 5,
-            fill: { r: 0.2, g: 0.6, b: 0.2, a: 0.8 },
-            strokeColor: { r: 0.9, g: 0.9, b: 0.9, a: 0.6 },
-            strokeWidth: 2
-        },
-        rect: {
-            offset: { x: 0, y: 0 },
-            width: 5,
-            height: 5,
-            fill: { r: 0.2, g: 0.6, b: 0.2, a: 0.8 },
-            strokeColor: { r: 0.9, g: 0.9, b: 0.9, a: 0.6 },
-            strokeWidth: 2
-        }
+        offset: { x: 0, y: 0 },
+        fill: { r: 0.2, g: 0.6, b: 0.2, a: 0.8 },
+        strokeColor: { r: 0.9, g: 0.9, b: 0.9, a: 0.6 },
+        strokeWidth: 2,
+        /* circle shape styles */
+        r: 5,
+        /* rect shape styles */
+        width: 5,
+        height: 5,
+        /* triangle shape styles */
+        verteces: [
+            { x: 0, y: -4 },
+            { x: -2 * Math.sqrt(3), y: 2 },
+            { x: 2 * Math.sqrt(3), y: 2 }
+        ]
     },
     showLabel: false,
     // textOffset: { x: 8, y: 0 }, put in label config instead of each node
@@ -42,11 +42,8 @@ export const node = {
 export const link = {
     style: {
         shape: 'line',
-        line: {
-            shape: 'line',
-            strokeColor: { r: 0.4, g: 0.6, b: 0.8, a: 0.5 },
-            strokeWidth: 2
-        }
+        strokeColor: { r: 0.4, g: 0.6, b: 0.8, a: 0.5 },
+        strokeWidth: 2
     },
     clickCallback: (link: Link) => {},
     hoverCallback: (node: Node) => {}

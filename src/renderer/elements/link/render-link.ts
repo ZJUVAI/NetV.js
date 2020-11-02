@@ -8,9 +8,8 @@ import fragShaderStr from './fragment.glsl'
 import idVertShaderStr from './id-vertex.glsl'
 import idFragShaderStr from './id-fragment.glsl'
 
-import { LinkAttr, LinkManagerConfigs } from '../../interfaces'
+import { LinkManagerConfigs } from '../../interfaces'
 import Link from '../../../elements/link'
-import Map2 from '../../../utils/map2'
 import { RenderElementManager } from '../element/render-element'
 
 export class RenderLinkManager extends RenderElementManager {

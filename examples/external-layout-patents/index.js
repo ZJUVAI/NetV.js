@@ -8,16 +8,12 @@ const netv = new NetV({
     linkLimit: 1e7,
     node: {
         style: {
-            circle: {
-                strokeWidth: 0
-            }
+            strokeWidth: 0
         }
     },
     link: {
         style: {
-            line: {
-                strokeWidth: 0.5
-            }
+            strokeWidth: 0.5
         }
     }
 })

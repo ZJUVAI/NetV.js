@@ -6,9 +6,7 @@ const netv = new NetV({
     container: document.getElementById('main'),
     link: {
         style: {
-            line: {
-                strokeWidth: 1
-            }
+            strokeWidth: 1
         }
     }
 })
@@ -29,8 +27,9 @@ const colorMap = [
 ]
 data.nodes.forEach((node) => {
     const { r, g, b, a } = colorMap[node.group]
-    node.style = {}
-    node.style.fill = { r: r / 255, g: g / 255, b: b / 255, a }
+    node.style = {
+        fill: { r: r / 255, g: g / 255, b: b / 255, a }
+    }
 })
 netv.data(data)
 netv.draw()

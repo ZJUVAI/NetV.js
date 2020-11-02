@@ -1,7 +1,6 @@
 import { RenderAttribute, ShaderSeries } from '../../interfaces'
 import { createProgram, createArrayBuffer, extractAttributesFromShader } from '../../utils'
 import { Transform } from '../../../interfaces'
-import Element from '../../../elements/element'
 import Node from '../../../elements/node'
 import Link from '../../../elements/link'
 import { encodeRenderId } from '../../utils'
