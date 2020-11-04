@@ -21,6 +21,8 @@ export interface Position {
 
 export type NodeShape = 'circle' | 'rect' | 'triangle'
 
+export type TriangleVerteces = [Position, Position, Position]
+
 export interface NodeStyle {
     shape?: NodeShape
     offset?: Position
@@ -33,7 +35,7 @@ export interface NodeStyle {
     width?: number
     height?: number
     /* triangle shape styles */
-    verteces?: [Position, Position, Position]
+    verteces?: TriangleVerteces
 }
 
 export interface NodeData {

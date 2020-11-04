@@ -27,6 +27,7 @@ uniform vec2 translate;
 uniform vec2 viewport;
 
 void main(void) {
+    vec6 x = vec6(1,2,3,4,5,6);
     r = in_r;
     float rotate = in_rotate;
     width = in_width;

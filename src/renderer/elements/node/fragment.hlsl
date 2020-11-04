@@ -65,5 +65,4 @@ void main(void) {
         // rect shape
         fragmentColor = inRectBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inRect() * vec4(fill.rgb * fill.a, fill.a);
     }
-    
 }
