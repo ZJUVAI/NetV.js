@@ -3,10 +3,10 @@
  * @description Link used in renderer
  */
 
-import vertShaderStr from './vertex.glsl'
-import fragShaderStr from './fragment.glsl'
-import idVertShaderStr from './id-vertex.glsl'
-import idFragShaderStr from './id-fragment.glsl'
+import vertShaderStr from './vertex.hlsl'
+import fragShaderStr from './fragment.hlsl'
+import idVertShaderStr from './id-vertex.hlsl'
+import idFragShaderStr from './id-fragment.hlsl'
 
 import { LinkManagerConfigs } from '../../interfaces'
 import Link from '../../../elements/link'

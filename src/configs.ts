@@ -26,6 +26,7 @@ export const node = {
         /* rect shape styles */
         width: 5,
         height: 5,
+        rotate: 0, // -pi to +pi, positive value means clockwise
         /* triangle shape styles */
         verteces: [
             { x: 0, y: -4 },

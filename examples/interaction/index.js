@@ -10,6 +10,7 @@ const testData = {
             x: 300,
             y: 100,
             style: {
+                shape: 'rect',
                 fill: { r: 1, g: 0, b: 0, a: 1 },
                 strokeColor: { r: 0, g: 1, b: 1, a: 0.3 }
             }
@@ -56,6 +57,9 @@ const configs = {
     node: {
         style: {
             r: 10,
+            width: 15,
+            height: 10,
+            rotate: Math.PI / 4,
             fill: { r: 1, g: 0, b: 0, a: 0.8 }
         },
         clickCallback: (node) => {

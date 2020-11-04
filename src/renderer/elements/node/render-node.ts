@@ -3,10 +3,10 @@
  * @description Node using in Renderer
  */
 
-import vertShaderStr from './vertex.glsl'
-import fragShaderStr from './fragment.glsl'
-import idVertShaderStr from './id-vertex.glsl'
-import idFragShaderStr from './id-fragment.glsl'
+import vertShaderStr from './vertex.hlsl'
+import fragShaderStr from './fragment.hlsl'
+import idVertShaderStr from './id-vertex.hlsl'
+import idFragShaderStr from './id-fragment.hlsl'
 import { NodeManagerConfigs } from '../../interfaces'
 import Node from '../../../elements/node'
 import { RenderElementManager } from '../element/render-element'
@@ -55,6 +55,18 @@ export class RenderNodeManager extends RenderElementManager {
                 attr.extractAttributeValueFrom = (node: Node) => {
                     return [node.r() * this.pixelRatio]
                 }
+            } else if (attr.name === 'in_width') {
+                attr.extractAttributeValueFrom = (node: Node) => {
+                    return [node.width() * this.pixelRatio]
+                }
+            } else if (attr.name === 'in_height') {
+                attr.extractAttributeValueFrom = (node: Node) => {
+                    return [node.height() * this.pixelRatio]
+                }
+            } else if (attr.name === 'in_rotate') {
+                attr.extractAttributeValueFrom = (node: Node) => {
+                    return [node.rotate()]
+                }
             } else if (attr.name === 'in_fill') {
                 attr.extractAttributeValueFrom = (node: Node) => {
                     const fill = node.fill()
@@ -68,6 +80,17 @@ export class RenderNodeManager extends RenderElementManager {
                 attr.extractAttributeValueFrom = (node: Node) => {
                     const strokeColor = node.strokeColor()
                     return [strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a]
+                }
+            } else if (attr.name === 'in_shape') {
+                attr.extractAttributeValueFrom = (node: Node) => {
+                    const shape = node.shape()
+                    if (shape === 'rect') {
+                        return [1]
+                    } else if (shape === 'triangle') {
+                        return [2]
+                    } else {
+                        return [0]
+                    }
                 }
             }
         })
