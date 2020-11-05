@@ -92,6 +92,21 @@ export class RenderNodeManager extends RenderElementManager {
                         return [0]
                     }
                 }
+            } else if (attr.name === 'in_vertex_alpha') {
+                attr.extractAttributeValueFrom = (node: Node) => {
+                    const vertexAlpha = node.vertexAlpha()
+                    return [vertexAlpha.x, vertexAlpha.y]
+                }
+            } else if (attr.name === 'in_vertex_beta') {
+                attr.extractAttributeValueFrom = (node: Node) => {
+                    const vertexAlpha = node.vertexBeta()
+                    return [vertexAlpha.x, vertexAlpha.y]
+                }
+            } else if (attr.name === 'in_vertex_gamma') {
+                attr.extractAttributeValueFrom = (node: Node) => {
+                    const vertexAlpha = node.vertexGamma()
+                    return [vertexAlpha.x, vertexAlpha.y]
+                }
             }
         })
     }

@@ -28,11 +28,9 @@ export const node = {
         height: 5,
         rotate: 0, // -pi to +pi, positive value means clockwise
         /* triangle shape styles */
-        verteces: [
-            { x: 0, y: -4 },
-            { x: -2 * Math.sqrt(3), y: 2 },
-            { x: 2 * Math.sqrt(3), y: 2 }
-        ]
+        vertexAlpha: { x: 0, y: -4 },
+        vertexBeta: { x: -2 * Math.sqrt(3), y: 2 },
+        vertexGamma: { x: 2 * Math.sqrt(3), y: 2 }
     },
     showLabel: false,
     // textOffset: { x: 8, y: 0 }, put in label config instead of each node

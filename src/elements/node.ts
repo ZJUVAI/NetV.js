@@ -24,7 +24,9 @@ class Node extends Element {
     public height?: (value?: number) => number
     public rotate?: (value?: number) => number
     /* triangle shape styles */
-    public verteces: (value?: interfaces.TriangleVerteces) => interfaces.TriangleVerteces
+    public vertexAlpha: (value?: interfaces.Position) => interfaces.Position
+    public vertexBeta: (value?: interfaces.Position) => interfaces.Position
+    public vertexGamma: (value?: interfaces.Position) => interfaces.Position
 
     private $_id: string
     private $_position = {

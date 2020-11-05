@@ -21,6 +21,7 @@ const testData = {
             x: 500,
             y: 100,
             style: {
+                shape: 'triangle',
                 fill: { r: 0, g: 1, b: 0, a: 1 },
                 strokeColor: { r: 1, g: 0, b: 1, a: 0.3 }
             }
@@ -59,7 +60,10 @@ const configs = {
         style: {
             r: 10,
             width: 20,
-            height: 15,
+            height: 20,
+            vertexAlpha: { x: 0, y: -10 },
+            vertexBeta: { x: -5 * Math.sqrt(3), y: 5 },
+            vertexGamma: { x: 5 * Math.sqrt(3), y: 5 },
             strokeWidth: 5,
             fill: { r: 1, g: 0, b: 0, a: 0.8 }
         },
