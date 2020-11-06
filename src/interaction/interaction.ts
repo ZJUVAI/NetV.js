@@ -4,6 +4,7 @@
  */
 
 import { NetV } from 'src'
+import { Position } from '../interfaces'
 
 export class InteractionManager {
     private netv: NetV
@@ -22,6 +23,25 @@ export class InteractionManager {
 
     public constructor(netv: NetV) {
         this.netv = netv
+    }
+
+    /**
+     * move current position to center of canvas
+     * @param pos
+     */
+    public centerPosition(pos: Position) {
+        const x = pos.x * this.transform.k + this.transform.x
+        const y = pos.y * this.transform.k + this.transform.y
+        const center = {
+            x: this.netv.$_configs.width / 2,
+            y: this.netv.$_configs.height / 2
+        }
+        this.transform.x += center.x - x
+        this.transform.y += center.y - y
+
+        this.netv.$_renderer.setTransform(this.transform)
+        this.netv.labelManager.setTransform(this.transform)
+        this.netv.draw()
     }
 
     /**

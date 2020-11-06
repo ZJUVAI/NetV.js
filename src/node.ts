@@ -240,6 +240,14 @@ class Node {
     }
 
     /**
+     * move current Node to center of canvas
+     */
+    public moveToCenter() {
+        const pos = this.$_position
+        this.$_core.$_interaction.centerPosition(pos)
+    }
+
+    /**
      * set the id of this node.
      * it is only used for constructor
      * because a node's id is not allowed to be changed.
