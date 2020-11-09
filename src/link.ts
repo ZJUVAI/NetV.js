@@ -10,6 +10,7 @@ import { NetV } from './index'
 
 class Link {
     public $_clickCallback: (link: Link) => void
+    public $_hoverCallback: (link: Link) => void
 
     private $_core: NetV
     private $_source: Node
@@ -24,7 +25,8 @@ class Link {
             ...{
                 strokeWidth: defaultConfigs.link.strokeWidth,
                 strokeColor: defaultConfigs.link.strokeColor,
-                clickCallback: defaultConfigs.link.clickCallback
+                clickCallback: defaultConfigs.link.clickCallback,
+                hoverCallback: defaultConfigs.link.hoverCallback
             },
             ...linkData
         }
@@ -40,6 +42,7 @@ class Link {
         this.$_strokeColor = data.strokeColor
 
         this.setClickCallback(data.clickCallback)
+        this.setHoverCallback(data.hoverCallback)
     }
 
     /**
@@ -106,17 +109,23 @@ class Link {
                 // delete old Map
                 this.$_core.$_ends2link.delete([oldSource.id(), oldTarget.id()])
 
-                this.$_core.$_id2links.get(oldSource.id())?.delete(this)
+                this.$_core.$_sourceId2links.get(oldSource.id())?.delete(this)
+                this.$_core.$_targetId2links.get(oldTarget.id())?.delete(this)
             }
 
             this.$_source = newSource
             this.$_target = newTarget
             this.$_core.$_ends2link.set([newSourceId, newTargetId], this)
 
-            if (!this.$_core.$_id2links.has(newSourceId)) {
-                this.$_core.$_id2links.set(newSourceId, new Set([this]))
+            if (!this.$_core.$_sourceId2links.has(newSourceId)) {
+                this.$_core.$_sourceId2links.set(newSourceId, new Set([this]))
             } else {
-                this.$_core.$_id2links.get(newSourceId).add(this)
+                this.$_core.$_sourceId2links.get(newSourceId).add(this)
+            }
+            if (!this.$_core.$_targetId2links.has(newTargetId)) {
+                this.$_core.$_targetId2links.set(newTargetId, new Set([this]))
+            } else {
+                this.$_core.$_targetId2links.get(newTargetId).add(this)
             }
         }
         return {
@@ -148,6 +157,14 @@ class Link {
             this.$_core.$_renderer.linkManager.changeAttribute(this, 'strokeColor')
         }
         return this.$_strokeColor
+    }
+
+    /**
+     * set hover callback function
+     * @param callback hover callback function
+     */
+    private setHoverCallback(callback: (link: Link) => void) {
+        this.$_hoverCallback = callback
     }
 
     /**

@@ -14,6 +14,11 @@ export interface Color {
     a: number
 }
 
+export interface Position {
+    x?: number
+    y?: number
+}
+
 export interface NodeData {
     id: string
     x?: number
@@ -36,4 +41,10 @@ export interface LinkData {
 export interface NodeLinkData {
     nodes: NodeData[]
     links: LinkData[]
+}
+
+export interface Transform {
+    x: number
+    y: number
+    k: number
 }

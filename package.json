@@ -1,6 +1,6 @@
 {
     "name": "netv",
-    "version": "1.0.2",
+    "version": "1.0.6",
     "description": "A network visualization library based on WebGL",
     "main": "build/NetV.js",
     "files": [
@@ -12,7 +12,10 @@
         "build-production": "webpack --env.watch=false --env.mode=production",
         "watch": "webpack --env.watch=true",
         "eslint": "eslint src/index.ts",
-        "test": "jest"
+        "build:benchmarks": "webpack --env.watch=false --config benchmarks/webpack.config.js",
+        "watch:benchmarks": "webpack --env.watch=true --config benchmarks/webpack.config.js",
+        "build:test": "webpack --env.watch=false --config test/webpack.config.js",
+        "watch:test": "webpack --env.watch=true --config test/webpack.config.js"
     },
     "author": "",
     "license": "MIT",
@@ -36,7 +39,7 @@
         "typescript": "^3.9.3",
         "webpack": "^4.43.0",
         "webpack-bundle-analyzer": "^3.8.0",
-        "webpack-cli": "^3.3.11"
+        "webpack-cli": "^3.3.12"
     },
     "dependencies": {
         "d3-force": "^2.1.1"

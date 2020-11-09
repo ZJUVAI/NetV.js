@@ -1,0 +1,278 @@
+{
+  "errors": [
+  ],
+  "warnings": [
+  ],
+  "version": "4.44.1",
+  "hash": "55c68de7b6c318f4c5a0",
+  "time": 38,
+  "builtAt": 1601290133557,
+  "publicPath": "",
+  "outputPath": "D:\\Repositories\\NetV.js\\test",
+  "assetsByChunkName": {
+    "main": "test.bundle.js"
+  },
+  "assets": [
+    {
+      "name": "test.bundle.js",
+      "size": 18427,
+      "chunks": [
+        "main"
+      ],
+      "chunkNames": [
+        "main"
+      ],
+      "info": {
+      },
+      "emitted": true
+    }
+  ],
+  "filteredAssets": 0,
+  "entrypoints": {
+    "main": {
+      "chunks": [
+        "main"
+      ],
+      "assets": [
+        "test.bundle.js"
+      ],
+      "children": {
+      },
+      "childAssets": {
+      }
+    }
+  },
+  "namedChunkGroups": {
+    "main": {
+      "chunks": [
+        "main"
+      ],
+      "assets": [
+        "test.bundle.js"
+      ],
+      "children": {
+      },
+      "childAssets": {
+      }
+    }
+  },
+  "chunks": [
+    {
+      "id": "main",
+      "rendered": true,
+      "initial": true,
+      "entry": true,
+      "size": 2880,
+      "names": [
+        "main"
+      ],
+      "files": [
+        "test.bundle.js"
+      ],
+      "hash": "eca2d1cedd32dc750978",
+      "siblings": [
+      ],
+      "parents": [
+      ],
+      "children": [
+      ],
+      "childrenByOrder": {
+      },
+      "modules": [
+        {
+          "id": "./test/index.ts",
+          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\test\\index.ts",
+          "name": "./test/index.ts",
+          "index": 0,
+          "index2": 1,
+          "size": 909,
+          "cacheable": true,
+          "built": true,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "main"
+          ],
+          "issuer": null,
+          "issuerId": null,
+          "issuerName": null,
+          "issuerPath": null,
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [
+          ],
+          "reasons": [
+            {
+              "moduleId": null,
+              "moduleIdentifier": null,
+              "module": null,
+              "moduleName": null,
+              "type": "single entry",
+              "userRequest": "./test/index.ts",
+              "loc": "main"
+            }
+          ],
+          "providedExports": null,
+          "optimizationBailout": [
+          ],
+          "depth": 0
+        },
+        {
+          "id": "./test/utils/toc.ts",
+          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\test\\utils\\toc.ts",
+          "name": "./test/utils/toc.ts",
+          "index": 1,
+          "index2": 0,
+          "size": 1971,
+          "cacheable": true,
+          "built": false,
+          "optional": false,
+          "prefetched": false,
+          "chunks": [
+            "main"
+          ],
+          "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\test\\index.ts",
+          "issuerId": "./test/index.ts",
+          "issuerName": "./test/index.ts",
+          "issuerPath": [
+            {
+              "id": "./test/index.ts",
+              "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\test\\index.ts",
+              "name": "./test/index.ts"
+            }
+          ],
+          "failed": false,
+          "errors": 0,
+          "warnings": 0,
+          "assets": [
+          ],
+          "reasons": [
+            {
+              "moduleId": "./test/index.ts",
+              "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\test\\index.ts",
+              "module": "./test/index.ts",
+              "moduleName": "./test/index.ts",
+              "type": "cjs require",
+              "userRequest": "./utils/toc",
+              "loc": "3:14-36"
+            }
+          ],
+          "providedExports": null,
+          "optimizationBailout": [
+          ],
+          "depth": 1
+        }
+      ],
+      "filteredModules": 0,
+      "origins": [
+        {
+          "module": "",
+          "moduleIdentifier": "",
+          "moduleName": "",
+          "loc": "main",
+          "request": "./test/index.ts",
+          "reasons": [
+          ]
+        }
+      ]
+    }
+  ],
+  "modules": [
+    {
+      "id": "./test/index.ts",
+      "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\test\\index.ts",
+      "name": "./test/index.ts",
+      "index": 0,
+      "index2": 1,
+      "size": 909,
+      "cacheable": true,
+      "built": true,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "main"
+      ],
+      "issuer": null,
+      "issuerId": null,
+      "issuerName": null,
+      "issuerPath": null,
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [
+      ],
+      "reasons": [
+        {
+          "moduleId": null,
+          "moduleIdentifier": null,
+          "module": null,
+          "moduleName": null,
+          "type": "single entry",
+          "userRequest": "./test/index.ts",
+          "loc": "main"
+        }
+      ],
+      "providedExports": null,
+      "optimizationBailout": [
+      ],
+      "depth": 0
+    },
+    {
+      "id": "./test/utils/toc.ts",
+      "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\test\\utils\\toc.ts",
+      "name": "./test/utils/toc.ts",
+      "index": 1,
+      "index2": 0,
+      "size": 1971,
+      "cacheable": true,
+      "built": false,
+      "optional": false,
+      "prefetched": false,
+      "chunks": [
+        "main"
+      ],
+      "issuer": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\test\\index.ts",
+      "issuerId": "./test/index.ts",
+      "issuerName": "./test/index.ts",
+      "issuerPath": [
+        {
+          "id": "./test/index.ts",
+          "identifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\test\\index.ts",
+          "name": "./test/index.ts"
+        }
+      ],
+      "failed": false,
+      "errors": 0,
+      "warnings": 0,
+      "assets": [
+      ],
+      "reasons": [
+        {
+          "moduleId": "./test/index.ts",
+          "moduleIdentifier": "D:\\Repositories\\NetV.js\\node_modules\\ts-loader\\index.js!D:\\Repositories\\NetV.js\\test\\index.ts",
+          "module": "./test/index.ts",
+          "moduleName": "./test/index.ts",
+          "type": "cjs require",
+          "userRequest": "./utils/toc",
+          "loc": "3:14-36"
+        }
+      ],
+      "providedExports": null,
+      "optimizationBailout": [
+      ],
+      "depth": 1
+    }
+  ],
+  "filteredModules": 0,
+  "logging": {
+    "webpack.buildChunkGraph.visitModules": {
+      "entries": [
+      ],
+      "filteredEntries": 2,
+      "debug": false
+    }
+  },
+  "children": [
+  ]
+}

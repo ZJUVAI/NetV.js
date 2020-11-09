@@ -14,21 +14,29 @@ import { Renderer } from './renderer'
 import { InteractionManager } from './interaction/interaction'
 import * as Utils from './utils/utils'
 import * as Layouts from './layout/index'
+import { LabelManager } from './label/label'
 
 class NetV {
     public static Layouts = Layouts
 
     public Utils = Utils // TODO: need refactor to static?
 
+    public labelManager: LabelManager
+
     public $_id2node = new Map()
     public $_ends2link = new Map2()
-    public $_id2links: Map<string, Set<Link>> = new Map()
+    public $_sourceId2links: Map<string, Set<Link>> = new Map()
+    public $_targetId2links: Map<string, Set<Link>> = new Map()
     public $_container: HTMLDivElement
     public $_renderer: Renderer
     public $_configs = JSON.parse(JSON.stringify(defaultConfigs)) // NOTE: deep copy configs
     public $_interaction: InteractionManager
 
+    public $_lazyUpdate = false // flag to control lazy update
+
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
+
+    private $_modifiedLinkCount = 0 // record modified link num to control lazy update
 
     /**
      * @description create NetV object.
@@ -66,12 +74,21 @@ class NetV {
             linkLimit: this.$_configs.linkLimit
         })
 
+        this.labelManager = new LabelManager(this)
+
         this.$_interaction = new InteractionManager(this)
         if (this.$_configs.enablePanZoom) {
             this.$_interaction.initZoom()
         }
 
-        this.$_interaction.initClick()
+        this.$_interaction.initMouse()
+    }
+
+    public $_addModifiedLinkCount(n: number) {
+        this.$_modifiedLinkCount += n
+        if (this.$_modifiedLinkCount > this.$_configs.lazyUpdateThreshold) {
+            this.$_lazyUpdate = true
+        }
     }
 
     /**
@@ -86,7 +103,8 @@ class NetV {
             this.$_data = { ...this.$_data, ...nodeLinkData }
             this.$_id2node = new Map()
             this.$_ends2link = new Map2()
-            this.$_id2links = new Map()
+            this.$_sourceId2links = new Map()
+            this.$_targetId2links = new Map()
 
             this.addNodes(this.$_data.nodes)
             this.addLinks(this.$_data.links)
@@ -138,7 +156,8 @@ class NetV {
             const link = new Link(this, linkData)
             return link
         })
-        this.$_renderer.addLinks(newLinks)
+        // this.$_renderer.addLinks(newLinks)
+        this.$_renderer.addLinks([...this.$_ends2link.values()]) // NOTE: preserve link order, not elegant
         return newLinks
     }
 
@@ -181,7 +200,8 @@ class NetV {
         this.$_data = undefined
         this.$_id2node = new Map()
         this.$_ends2link = new Map2()
-        this.$_id2links = new Map()
+        this.$_sourceId2links = new Map()
+        this.$_targetId2links = new Map()
     }
 
     /**
@@ -201,10 +221,9 @@ class NetV {
      * @param y y pos
      */
     public getElementByPosition(
-        x: number,
-        y: number
+        position: interfaces.Position
     ): { type: 'node' | 'link'; element: Node | Link } | undefined {
-        const id = this.$_renderer.getIdByPosition(x, y)
+        const id = this.$_renderer.getIdByPosition(position)
         if (id) {
             if (typeof id === 'string') {
                 const node = this.getNodeById(id)
@@ -227,6 +246,14 @@ class NetV {
      * @description draw elements
      */
     public draw() {
+        if (this.$_lazyUpdate) {
+            this.$_renderer.nodeManager.refreshPosition([...this.$_id2node.values()])
+
+            // TODO: maybe need more efficient and reliable way to store and get all links
+            this.$_renderer.linkManager.refreshPosition([...this.$_ends2link.values()])
+            this.$_lazyUpdate = false
+            this.$_modifiedLinkCount = 0
+        }
         this.$_renderer.draw()
     }
 }
