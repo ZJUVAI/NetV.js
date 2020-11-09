@@ -27,8 +27,10 @@ data.nodes.forEach((node) => {
     const { r, g, b, a } = colorMap[node.group]
     node.fill = { r: r / 255, g: g / 255, b: b / 255, a }
     // NOTE: build-in dataset contains position, random it
-    node.x = Math.random() * 500 + 150 // scale and offset to center
-    node.y = Math.random() * 500
+    node.x = undefined
+    node.y = undefined
+    // node.x = Math.random() * 500 + 150 // scale and offset to center
+    // node.y = Math.random() * 500
 })
 netv.data(data)
 
