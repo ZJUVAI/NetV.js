@@ -27,39 +27,15 @@ data.nodes.forEach((node) => {
     const { r, g, b, a } = colorMap[node.group]
     node.fill = { r: r / 255, g: g / 255, b: b / 255, a }
     // NOTE: build-in dataset contains position, random it
-    node.x = undefined
-    node.y = undefined
-    // node.x = Math.random() * 500 + 150 // scale and offset to center
-    // node.y = Math.random() * 500
+    node.x = Math.random() * 500 + 150 // scale and offset to center
+    node.y = Math.random() * 500
 })
 netv.data(data)
+netv.draw()
 
-const width = 800
-const height = 600
+randomLayout()
 
-const simulation = d3
-    .forceSimulation(data.nodes)
-    .force(
-        'link',
-        d3.forceLink(data.links).id((d) => d.id)
-    )
-    .force('charge', d3.forceManyBody())
-    .force('center', d3.forceCenter(width / 2, height / 2))
-
-
-simulation.on('tick', () => {
-    data.nodes.forEach((n) => {
-        const node = netv.getNodeById(n.id)
-        node.x(n.x)
-        node.y(n.y)
-    })
-
-    netv.draw()
-})
-
-simulation.on('end', () => {
-    console.log('force layout done')
-
+function randomLayout() {
     const layout = new NetV.Layouts.RandomLayout(netv)
     layout.time(1000)
     layout.onStart(() => {
@@ -70,10 +46,13 @@ simulation.on('end', () => {
     })
     layout.onStop(() => {
         console.log('random layout done')
+        // call force layout
+        forceLayout()
     })
     layout.start()
 
-    // direct get final result
-    // layout.finish()
-    // console.log('random layout done')
-})
+}
+function forceLayout() {
+    const layout = new NetV.Layouts.D3ForceLayout(netv)
+    layout.start()
+}

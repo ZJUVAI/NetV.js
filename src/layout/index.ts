@@ -4,5 +4,6 @@
  */
 
 import { RandomLayout } from './random'
+import { D3ForceLayout } from './d3-force'
 
-export { RandomLayout }
+export { RandomLayout, D3ForceLayout }
