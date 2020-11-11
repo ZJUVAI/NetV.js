@@ -45,9 +45,9 @@ float sign (vec2 p1, vec2 p2, vec2 p3) {
 float inTriangle() {
     float stroke_scale = calculate_stroke_scale(vertex_alpha, vertex_beta, vertex_gamma);
     vec2 flip_pos = vec2(position.x, viewport.y - position.y);
-    vec2 flip_vertex_alpha = vec2(vertex_alpha.x, - vertex_alpha.y);
-    vec2 flip_vertex_beta = vec2(vertex_beta.x, - vertex_beta.y);
-    vec2 flip_vertex_gamma = vec2(vertex_gamma.x, - vertex_gamma.y);
+    vec2 flip_vertex_alpha = vec2(vertex_alpha.x, - vertex_alpha.y) / stroke_scale;
+    vec2 flip_vertex_beta = vec2(vertex_beta.x, - vertex_beta.y) / stroke_scale;
+    vec2 flip_vertex_gamma = vec2(vertex_gamma.x, - vertex_gamma.y) / stroke_scale;
 
     float d1 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertex_alpha, flip_vertex_beta);
     float d2 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertex_beta, flip_vertex_gamma);
