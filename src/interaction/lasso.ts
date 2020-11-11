@@ -5,7 +5,7 @@
 
 import { Lasso } from 'lasso-selection'
 import { NetV } from '../index'
-import Node from '../node'
+import Node from '../elements/node'
 
 export class LassoManager {
     private $_svg: SVGElement
@@ -55,7 +55,7 @@ export class LassoManager {
 
     /**
      * set lasso's data transfrom
-     * @param transform 
+     * @param transform
      */
     setTransform(transform: { x: number; y: number; k: number }) {
         this.$_lasso.dataTransform(transform)
@@ -63,7 +63,7 @@ export class LassoManager {
 
     /**
      * set lasso's selected callback
-     * @param callback 
+     * @param callback
      */
     onSelectedCallback(callback: (items: Node[]) => {}) {
         this.$_lasso.onSelected((selectedItems) => {
