@@ -79,6 +79,7 @@ export class InteractionManager {
 
                 this.netv.$_renderer.setTransform(this.transform)
                 this.netv.labelManager.setTransform(this.transform)
+                this.lasso.setTransform(this.transform)
                 this.netv.draw()
             }
 
@@ -127,6 +128,7 @@ export class InteractionManager {
 
                     this.netv.$_renderer.setTransform(this.transform)
                     this.netv.labelManager.setTransform(this.transform)
+                    this.lasso.setTransform(this.transform)
                     this.netv.draw()
                 } else {
                     // drag node

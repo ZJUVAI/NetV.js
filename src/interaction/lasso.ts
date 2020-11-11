@@ -40,6 +40,10 @@ export class LassoManager {
         this.$_lasso.data(data)
     }
 
+    setTransform(transform: { x: number; y: number; k: number }) {
+        this.$_lasso.dataTransform(transform)
+    }
+
     onSelectedCallback(callback: (items: Node[]) => {}) {
         this.$_lasso.onSelected((selectedItems) => {
             const selectedNodes = selectedItems.map((item) => item.node)
