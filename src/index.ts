@@ -79,6 +79,7 @@ class NetV {
         }
 
         this.$_interaction.initMouse()
+        this.$_interaction.initLasso()
     }
 
     public $_addModifiedLinkCount(n: number) {
@@ -106,6 +107,8 @@ class NetV {
             this.addNodes(this.$_data.nodes)
             this.addLinks(this.$_data.links)
         }
+
+        this.$_interaction.setLassoData()
     }
 
     /**
