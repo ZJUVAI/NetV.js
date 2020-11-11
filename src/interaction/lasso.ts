@@ -4,7 +4,7 @@
  */
 
 import { Lasso } from 'lasso-selection'
-import { NetV } from '../index'
+import NetV from '../index'
 import Node from '../elements/node'
 
 export class LassoManager {

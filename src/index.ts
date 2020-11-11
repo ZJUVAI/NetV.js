@@ -15,7 +15,7 @@ import { InteractionManager } from './interaction/interaction'
 import * as Utils from './utils/utils'
 import { LabelManager } from './label/label'
 
-export class NetV {
+export default class NetV {
     public labelManager: LabelManager
     public interaction: InteractionManager
 
@@ -251,5 +251,14 @@ export class NetV {
         this.$_renderer.draw()
     }
 }
+
+declare global {
+    // to ensure window.NetV will not report ts error
+    interface Window {
+        NetV: any
+    }
+}
+
+window.NetV = NetV
 
 export { Utils }

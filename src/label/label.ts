@@ -3,7 +3,7 @@
  * @description graph label related class or method
  */
 
-import { NetV } from 'src'
+import NetV from 'src'
 import Node from 'src/elements/node'
 import { Transform } from '../interfaces'
 
