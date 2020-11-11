@@ -6,8 +6,8 @@
 
 import * as interfaces from './interfaces'
 import Map2 from './utils/map2'
-import Node from './node'
-import Link from './link'
+import Node from './elements/node'
+import Link from './elements/link'
 import * as defaultConfigs from './configs'
 import * as dataset from './dataset'
 import { Renderer } from './renderer'
@@ -29,11 +29,11 @@ class NetV {
     public $_renderer: Renderer
     public $_configs = JSON.parse(JSON.stringify(defaultConfigs)) // NOTE: deep copy configs
 
-    public $_lazyUpdate = false // flag to control lazy update
+    public $_shouldLazyUpdate = false // flag to control lazy update
 
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
 
-    private $_modifiedLinkCount = 0 // record modified link num to control lazy update
+    private $_modifiedElementCount = 0 // record modified link num to control lazy update
 
     /**
      * @description create NetV object.
@@ -44,15 +44,9 @@ class NetV {
             throw Error('Container should be specified as a div element!')
         }
         this.$_container = configs.container
-        // override configs
-        for (const key in configs) {
-            if (key === 'container') continue // NOTE: exclude container in configs
-            if (configs[key] === Object(configs[key])) {
-                this.$_configs[key] = { ...this.$_configs[key], ...configs[key] }
-            } else {
-                this.$_configs[key] = configs[key]
-            }
-        }
+
+        this.$_configs = Utils.override(this.$_configs, configs)
+        delete this.$_configs['container']
 
         const canvas = document.createElement('canvas') // TODO: consider node enviroment, document not defined
         const pixelRatio = window.devicePixelRatio || 1
@@ -82,10 +76,10 @@ class NetV {
         this.interaction.initLasso()
     }
 
-    public $_addModifiedLinkCount(n: number) {
-        this.$_modifiedLinkCount += n
-        if (this.$_modifiedLinkCount > this.$_configs.lazyUpdateThreshold) {
-            this.$_lazyUpdate = true
+    public $_addModifiedElementCount(n: number) {
+        this.$_modifiedElementCount += n
+        if (this.$_modifiedElementCount > this.$_configs.maxLazyUpdateElementCount) {
+            this.$_shouldLazyUpdate = true
         }
     }
 
@@ -248,13 +242,13 @@ class NetV {
      * @description draw elements
      */
     public draw() {
-        if (this.$_lazyUpdate) {
+        if (this.$_shouldLazyUpdate) {
             this.$_renderer.nodeManager.refreshPosition([...this.$_id2node.values()])
 
             // TODO: maybe need more efficient and reliable way to store and get all links
             this.$_renderer.linkManager.refreshPosition([...this.$_ends2link.values()])
-            this.$_lazyUpdate = false
-            this.$_modifiedLinkCount = 0
+            this.$_shouldLazyUpdate = false
+            this.$_modifiedElementCount = 0
         }
         this.$_renderer.draw()
     }

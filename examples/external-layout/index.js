@@ -5,7 +5,9 @@
 const netv = new NetV({
     container: document.getElementById('main'),
     link: {
-        strokeWidth: 1
+        style: {
+            strokeWidth: 1
+        }
     }
 })
 const data = netv.Utils.transformGraphPosition(netv.loadDataset('miserables'), 500, 400, 300)
@@ -25,7 +27,7 @@ const colorMap = [
 ]
 data.nodes.forEach((node) => {
     const { r, g, b, a } = colorMap[node.group]
-    node.fill = { r: r / 255, g: g / 255, b: b / 255, a }
+    node.style = { fill: { r: r / 255, g: g / 255, b: b / 255, a } }
     // NOTE: build-in dataset contains position, random it
     node.x = Math.random() * 500 + 150 // scale and offset to center
     node.y = Math.random() * 500
@@ -43,7 +45,6 @@ const simulation = d3
     )
     .force('charge', d3.forceManyBody())
     .force('center', d3.forceCenter(width / 2, height / 2))
-
 
 simulation.on('tick', () => {
     data.nodes.forEach((n) => {

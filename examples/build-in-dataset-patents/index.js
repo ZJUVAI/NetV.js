@@ -7,10 +7,10 @@ const netv = new NetV({
     nodeLimit: 1e5,
     linkLimit: 1e7,
     node: {
-        strokeWidth: 0
+        style: { strokeWidth: 0 }
     },
     link: {
-        strokeWidth: 0.5
+        style: { strokeWidth: 0.5 }
     }
 })
 const data = netv.Utils.transformGraphPosition(netv.loadDataset('patents'), 500, 400, 300)
@@ -32,8 +32,9 @@ const radius = (x) => {
 }
 data.nodes.forEach((node) => {
     const { r, g, b, a } = colorMap[node.type]
-    node.fill = { r: r / 255, g: g / 255, b: b / 255, a }
-    node.r = radius(node)
+    node.style = {}
+    node.style.fill = { r: r / 255, g: g / 255, b: b / 255, a }
+    node.style.r = radius(node)
 })
 netv.data(data)
 netv.draw()

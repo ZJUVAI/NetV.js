@@ -5,10 +5,13 @@
 const netv = new NetV({
     container: document.getElementById('main'),
     node: {
-        showLabel: true,
+        showLabel: true
     },
     link: {
-        strokeWidth: 1
+        style: {
+            shape: 'line',
+            strokeWidth: 1
+        }
     },
     label: {
         offset: {
@@ -34,7 +37,7 @@ const colorMap = [
 ]
 data.nodes.forEach((node) => {
     const { r, g, b, a } = colorMap[node.group]
-    node.fill = { r: r / 255, g: g / 255, b: b / 255, a }
+    node.style = { fill: { r: r / 255, g: g / 255, b: b / 255, a } }
     node.text = node.id
 })
 netv.data(data)
