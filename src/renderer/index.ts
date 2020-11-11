@@ -29,7 +29,7 @@ export class Renderer {
     public constructor(configs: RendererConfigs) {
         const { canvas, width, height, backgroundColor, nodeLimit, linkLimit } = configs
         try {
-            this.gl = canvas.getContext('webgl2')
+            this.gl = canvas.getContext('webgl2', { alpha: false })
         } catch {
             throw new Error('NetV requires WebGL2 supported by your browser')
         }

@@ -15,7 +15,7 @@ import { InteractionManager } from './interaction/interaction'
 import * as Utils from './utils/utils'
 import { LabelManager } from './label/label'
 
-export default class NetV {
+export class NetV {
     public labelManager: LabelManager
     public interaction: InteractionManager
 

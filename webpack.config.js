@@ -14,7 +14,9 @@ module.exports = (env, argv) => {
         devtool: 'inline-source-map',
         output: {
             filename: env['mode'] === 'production' ? 'NetV.min.js' : 'NetV.js',
+            library: 'NetV',
             libraryTarget: 'umd',
+            libraryExport: 'NetV',
             path: path.resolve(__dirname, 'build')
         },
         resolve: {
