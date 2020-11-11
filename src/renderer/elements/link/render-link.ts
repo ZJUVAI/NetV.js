@@ -240,7 +240,7 @@ export class RenderLinkManager {
     }
 
     /**
-     * clear node data
+     * clear link data
      * not actually erase data, but reset count
      */
     public clearData() {
