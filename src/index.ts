@@ -19,6 +19,7 @@ class NetV {
     public Utils = Utils
 
     public labelManager: LabelManager
+    public interaction: InteractionManager
 
     public $_id2node = new Map()
     public $_ends2link = new Map2()
@@ -27,7 +28,6 @@ class NetV {
     public $_container: HTMLDivElement
     public $_renderer: Renderer
     public $_configs = JSON.parse(JSON.stringify(defaultConfigs)) // NOTE: deep copy configs
-    public $_interaction: InteractionManager
 
     public $_lazyUpdate = false // flag to control lazy update
 
@@ -73,13 +73,13 @@ class NetV {
 
         this.labelManager = new LabelManager(this)
 
-        this.$_interaction = new InteractionManager(this)
+        this.interaction = new InteractionManager(this)
         if (this.$_configs.enablePanZoom) {
-            this.$_interaction.initZoom()
+            this.interaction.initZoom()
         }
 
-        this.$_interaction.initMouse()
-        this.$_interaction.initLasso()
+        this.interaction.initMouse()
+        this.interaction.initLasso()
     }
 
     public $_addModifiedLinkCount(n: number) {
@@ -110,7 +110,7 @@ class NetV {
             this.addLinks(this.$_data.links)
         }
 
-        this.$_interaction.setLassoData()
+        this.interaction.setLassoData()
     }
 
     /**
