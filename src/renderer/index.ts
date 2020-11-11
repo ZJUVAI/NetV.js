@@ -52,6 +52,14 @@ export class Renderer {
     }
 
     /**
+     * clear data in renderer
+     */
+    public clearData() {
+        this.nodeManager.clearData()
+        this.linkManager.clearData()
+    }
+
+    /**
      * add nodes to node manager
      * @param nodes node data in NetV
      */

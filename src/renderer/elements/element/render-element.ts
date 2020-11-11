@@ -308,4 +308,12 @@ export class RenderElementManager {
             attr.size
         )
     }
+
+    /**
+     * clear data
+     * not actually erase data, but reset count
+     */
+    public clearData() {
+        this.count = 0
+    }
 }
