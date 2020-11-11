@@ -3,7 +3,7 @@
  * @description handle all interaction in NetV
  */
 
-import { NetV } from 'src'
+import NetV from 'src'
 import Node from '../elements/node'
 import { LassoManager } from './lasso'
 

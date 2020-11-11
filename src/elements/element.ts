@@ -1,5 +1,5 @@
 import * as interfaces from '../interfaces'
-import { NetV } from '../index'
+import NetV from '../index'
 import { override } from '../utils/utils'
 
 export default class Element {
