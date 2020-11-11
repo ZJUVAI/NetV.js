@@ -240,6 +240,14 @@ export class RenderLinkManager {
     }
 
     /**
+     * clear link data
+     * not actually erase data, but reset count
+     */
+    public clearData() {
+        this.count = 0
+    }
+
+    /**
      * add links data to engine
      * @param links links data
      */
