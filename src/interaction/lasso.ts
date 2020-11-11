@@ -1,3 +1,8 @@
+/**
+ * @author Xiaodong Zhao
+ * @description lasso interaction class
+ */
+
 import { Lasso } from 'lasso-selection'
 import { NetV } from '../index'
 import Node from '../node'
@@ -6,7 +11,8 @@ export class LassoManager {
     private $_svg: SVGElement
     private $_lasso
     private $_core: NetV
-    constructor(core) {
+
+    constructor(core: NetV) {
         this.$_svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg') as SVGElement
         this.$_core = core
         core.$_container.prepend(this.$_svg)
@@ -23,6 +29,10 @@ export class LassoManager {
         this.$_lasso = new Lasso(this.$_svg)
     }
 
+    /**
+     * enable/disable lasso
+     * @param enable use lasso or not
+     */
     toggleLasso(enable: boolean) {
         if (enable) {
             this.$_svg.style.pointerEvents = 'visible'
@@ -31,6 +41,9 @@ export class LassoManager {
         }
     }
 
+    /**
+     * set lasso's data, pull from core
+     */
     setData() {
         const data = this.$_core.nodes().map((node: Node) => ({
             x: node.x(),
@@ -40,10 +53,18 @@ export class LassoManager {
         this.$_lasso.data(data)
     }
 
+    /**
+     * set lasso's data transfrom
+     * @param transform 
+     */
     setTransform(transform: { x: number; y: number; k: number }) {
         this.$_lasso.dataTransform(transform)
     }
 
+    /**
+     * set lasso's selected callback
+     * @param callback 
+     */
     onSelectedCallback(callback: (items: Node[]) => {}) {
         this.$_lasso.onSelected((selectedItems) => {
             const selectedNodes = selectedItems.map((item) => item.node)
