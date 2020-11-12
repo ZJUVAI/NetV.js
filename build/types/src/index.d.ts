@@ -10,8 +10,10 @@ import Link from './link';
 import { Renderer } from './renderer';
 import { InteractionManager } from './interaction/interaction';
 import * as Utils from './utils/utils';
+import * as Layouts from './layout/index';
 import { LabelManager } from './label/label';
 declare class NetV {
+    static Layouts: typeof Layouts;
     Utils: typeof Utils;
     labelManager: LabelManager;
     $_id2node: Map<any, any>;
