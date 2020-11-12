@@ -255,6 +255,15 @@ class NetV {
         }
         this.$_renderer.draw()
     }
+
+    /**
+     * pan on canvas to get given node centered
+     * @param node 
+     */
+    public centerOn(node: Node) {
+        const pos = node.position()
+        this.$_interaction.centerPosition(pos)
+    }
 }
 
 export { NetV }
