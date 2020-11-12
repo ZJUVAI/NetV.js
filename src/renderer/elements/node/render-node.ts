@@ -254,6 +254,14 @@ export class RenderNodeManager {
     }
 
     /**
+     * clear node data
+     * not actually erase data, but reset count
+     */
+    public clearData() {
+        this.count = 0
+    }
+
+    /**
      * add nodes data to engine
      * @param nodes nodes data
      */
