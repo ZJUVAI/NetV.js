@@ -3,9 +3,11 @@
     "version": "1.0.8",
     "description": "A network visualization library based on WebGL",
     "main": "build/NetV.js",
+    "types": "build/types/src/index.d.ts",
     "files": [
         "src",
-        "build/*.js"
+        "build/*.js",
+        "build/types"
     ],
     "scripts": {
         "build": "webpack --env.watch=false",
