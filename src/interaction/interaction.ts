@@ -4,9 +4,14 @@
  */
 
 import { NetV } from 'src'
+import Node from '../node'
+import { LassoManager } from './lasso'
 
 export class InteractionManager {
     private netv: NetV
+
+    private lasso: LassoManager
+
     private transform = {
         x: 0,
         y: 0,
@@ -22,6 +27,37 @@ export class InteractionManager {
 
     public constructor(netv: NetV) {
         this.netv = netv
+    }
+
+    /**
+     * init Lasso interaction
+     */
+    public initLasso() {
+        this.lasso = new LassoManager(this.netv)
+    }
+
+    /**
+     * update lasso data
+     */
+    public setLassoData() {
+        this.lasso.setData()
+    }
+
+    /**
+     * control use lasso or not
+     * @param enable enable lasso or not
+     */
+    public toggleLasso(enable: boolean) {
+        this.lasso.toggleLasso(enable)
+    }
+
+    /**
+     * set lasso callback
+     * callback function can get selected Nodes
+     * @param callback selected callback
+     */
+    public onLassoSelected(callback: (items: Node[]) => {}) {
+        this.lasso.onSelectedCallback(callback)
     }
 
     /**
@@ -43,6 +79,7 @@ export class InteractionManager {
 
                 this.netv.$_renderer.setTransform(this.transform)
                 this.netv.labelManager.setTransform(this.transform)
+                this.lasso.setTransform(this.transform)
                 this.netv.draw()
             }
 
@@ -91,6 +128,7 @@ export class InteractionManager {
 
                     this.netv.$_renderer.setTransform(this.transform)
                     this.netv.labelManager.setTransform(this.transform)
+                    this.lasso.setTransform(this.transform)
                     this.netv.draw()
                 } else {
                     // drag node

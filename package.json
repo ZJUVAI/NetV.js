@@ -45,6 +45,7 @@
         "webpack-cli": "^3.3.12"
     },
     "dependencies": {
-        "d3-force": "^2.1.1"
+        "d3-force": "^2.1.1",
+        "lasso-selection": "^1.0.1"
     }
 }

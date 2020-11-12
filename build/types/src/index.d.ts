@@ -16,6 +16,7 @@ declare class NetV {
     static Layouts: typeof Layouts;
     Utils: typeof Utils;
     labelManager: LabelManager;
+    interaction: InteractionManager;
     $_id2node: Map<any, any>;
     $_ends2link: Map2;
     $_sourceId2links: Map<string, Set<Link>>;
@@ -23,7 +24,6 @@ declare class NetV {
     $_container: HTMLDivElement;
     $_renderer: Renderer;
     $_configs: any;
-    $_interaction: InteractionManager;
     $_lazyUpdate: boolean;
     private $_data;
     private $_modifiedLinkCount;
