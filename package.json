@@ -1,24 +1,24 @@
 {
-  "name": "netv",
-  "version": "1.0.0",
-  "description": "A network visualization library based on WebGL",
-  "main": "build/NetV.js",
-  "scripts": {
-    "start": "vuepress dev src --no-cache -p 6001",
-    "build": "vuepress build src",
-    "deploy": "git add . && git commit -m 'DeployedAutomatically' && git push origin docs"
-  },
-  "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "@vuepress/plugin-active-header-links": "^1.5.1",
-    "vuepress": "^1.5.1",
-    "vuepress-plugin-smooth-scroll": "0.0.9"
-  },
-  "dependencies": {
-    "@vuepress/plugin-nprogress": "^1.5.2",
-    "ant-design-vue": "^1.6.2",
-    "node-sass": "^4.14.1",
-    "sass-loader": "^8.0.2"
-  }
+    "name": "netv",
+    "version": "1.0.0",
+    "description": "A network visualization library based on WebGL",
+    "main": "build/NetV.js",
+    "scripts": {
+        "start": "vuepress dev src --no-cache -p 6001",
+        "build": "vuepress build src",
+        "deploy": "echo netv.zjuvag.org>docs/CNAME && git add . && git commit -m 'DeployedAutomatically' && git push origin docs"
+    },
+    "author": "",
+    "license": "MIT",
+    "devDependencies": {
+        "@vuepress/plugin-active-header-links": "^1.5.1",
+        "vuepress": "^1.5.1",
+        "vuepress-plugin-smooth-scroll": "0.0.9"
+    },
+    "dependencies": {
+        "@vuepress/plugin-nprogress": "^1.5.2",
+        "ant-design-vue": "^1.6.2",
+        "node-sass": "^4.14.1",
+        "sass-loader": "^8.0.2"
+    }
 }
