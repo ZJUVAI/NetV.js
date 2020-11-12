@@ -16,6 +16,7 @@ import * as Utils from './utils/utils'
 import { LabelManager } from './label/label'
 
 export default class NetV {
+    public static Utils = Utils
     public labelManager: LabelManager
     public interaction: InteractionManager
 
@@ -260,5 +261,3 @@ declare global {
 }
 
 window.NetV = NetV
-
-export { Utils }
