@@ -32,7 +32,7 @@ const testData = {
             y: 400,
             style: {
                 fill: { r: 0, g: 0, b: 1, a: 1 },
-                strokeColor: { r: 1, g: 1, b: 0, a: 0.3 }
+                strokeColor: { r: 1, g: 0, b: 1, a: 0.3 }
             }
         }
     ],
@@ -58,12 +58,12 @@ const configs = {
     container: document.getElementById('main'),
     node: {
         style: {
-            r: 10,
-            width: 20,
-            height: 20,
-            vertexAlpha: { x: 0, y: -10 },
-            vertexBeta: { x: -5 * Math.sqrt(3), y: 5 },
-            vertexGamma: { x: 5 * Math.sqrt(3), y: 5 },
+            r: 25,
+            width: 50,
+            height: 50,
+            vertexAlpha: { x: 0, y: -25 },
+            vertexBeta: { x: -12.5 * Math.sqrt(3), y: 12.5 },
+            vertexGamma: { x: 12.5 * Math.sqrt(3), y: 12.5 },
             strokeWidth: 5,
             fill: { r: 1, g: 0, b: 0, a: 0.8 }
         },
