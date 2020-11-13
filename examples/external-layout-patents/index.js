@@ -17,7 +17,7 @@ const netv = new NetV({
         }
     }
 })
-const data = netv.Utils.transformGraphPosition(netv.loadDataset('patents'), 500, 400, 300)
+const data = NetV.Utils.transformGraphPosition(netv.loadDataset('patents'), 500, 400, 300)
 const colorMap = {
     patent: { r: 102, g: 194, b: 165, a: 1 },
     inventor: { r: 252, g: 141, b: 98, a: 1 },

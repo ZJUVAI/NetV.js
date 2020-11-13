@@ -20,7 +20,7 @@ const netv = new NetV({
         }
     }
 })
-const data = netv.Utils.transformGraphPosition(netv.loadDataset('miserables'), 500, 400, 300)
+const data = NetV.Utils.transformGraphPosition(netv.loadDataset('miserables'), 500, 400, 300)
 const colorMap = [
     { r: 166, g: 206, b: 227, a: 0.9 },
     { r: 178, g: 223, b: 138, a: 0.9 },
