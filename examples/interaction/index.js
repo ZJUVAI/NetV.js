@@ -9,6 +9,7 @@ const testData = {
             id: '0',
             x: 300,
             y: 100,
+            class: '000',
             style: {
                 shape: 'rect',
                 // rotate: Math.PI / 4,
@@ -20,6 +21,7 @@ const testData = {
             id: '1',
             x: 500,
             y: 100,
+            class: '111',
             style: {
                 shape: 'triangle',
                 fill: { r: 0, g: 1, b: 0, a: 1 },
@@ -30,6 +32,7 @@ const testData = {
             id: '2',
             x: 400,
             y: 400,
+            class: '222',
             style: {
                 fill: { r: 0, g: 0, b: 1, a: 1 },
                 strokeColor: { r: 1, g: 0, b: 1, a: 0.3 }
@@ -40,6 +43,7 @@ const testData = {
         {
             source: '0',
             target: '2',
+            class: 'link 0 - 2',
             style: {
                 strokeWidth: 4
             }
@@ -47,6 +51,7 @@ const testData = {
         {
             source: '1',
             target: '2',
+            class: 'link 1 - 2',
             style: {
                 strokeWidth: 4
             }
