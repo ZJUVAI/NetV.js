@@ -59,6 +59,7 @@ export const elementReservedKeys = new Set([
     'x',
     'y',
     'label',
+    'text',
     'style',
     'clickCallback',
     'hoverCallback'
