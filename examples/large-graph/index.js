@@ -30,7 +30,7 @@ const LAYOUTED_GRAPH_URLS = {
 fetch(LAYOUTED_GRAPH_URLS['bcsstk31'])
     .then((res) => res.json())
     .then((json) => {
-        const data = netv.Utils.transformGraphPosition(json, 600, 400, 300)
+        const data = NetV.Utils.transformGraphPosition(json, 600, 400, 300)
         netv.data(data)
         netv.draw()
     })
