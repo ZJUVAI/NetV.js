@@ -112,3 +112,5 @@ netv.links()[1].onHover((link) => {
 })
 
 netv.draw()
+
+netv.on('zoom', console.log)
