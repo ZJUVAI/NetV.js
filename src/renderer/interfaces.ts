@@ -16,6 +16,8 @@ export interface RendererConfigs {
     backgroundColor: Color
     nodeLimit: number
     linkLimit: number
+    getAllNodes: () => Node[]
+    getAllLinks: () => Link[]
 }
 
 /**
