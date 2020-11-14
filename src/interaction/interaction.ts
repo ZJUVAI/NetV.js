@@ -21,13 +21,14 @@ export class InteractionManager {
     private isMouseMove = false
     private mouseDownElement
     private mouseDownElementOriginPos: { x: number; y: number } // NOTE: record pos, only support node's drag
-    private handleZoom: (e: any) => void
+    private zoomHandlers: Map<Function, any>
 
     private mouseDownPos: { x: number; y: number }
     private dragStartTransform: { x: number; y: number; k: number }
 
     public constructor(netv: NetV) {
         this.netv = netv
+        this.zoomHandlers = new Map()
     }
 
     /**
@@ -64,7 +65,7 @@ export class InteractionManager {
     /**
      * init zoom interaction
      */
-    public onZoom(callback: (e: any) => {}) {
+    public onZoom(callback: (e: any) => any) {
         const canvas = this.netv.$_container.querySelector('canvas')
         const handleZoom = (evt: WheelEvent) => {
             const x = evt.offsetX || evt.pageX - canvas.offsetLeft
@@ -90,16 +91,16 @@ export class InteractionManager {
             })
         }
 
-        this.handleZoom = handleZoom
+        this.zoomHandlers.set(callback, handleZoom)
 
         canvas.addEventListener('DOMMouseScroll', handleZoom, false)
         canvas.addEventListener('mousewheel', handleZoom, false)
     }
 
-    public offZoom() {
+    public offZoom(callback: (e: any) => any) {
         const canvas = this.netv.$_container.querySelector('canvas')
-        canvas.removeEventListener('DOMMouseScroll', this.handleZoom)
-        canvas.removeEventListener('mousewheel', this.handleZoom)
+        canvas.removeEventListener('DOMMouseScroll', this.zoomHandlers.get(callback))
+        canvas.removeEventListener('mousewheel', this.zoomHandlers.get(callback))
     }
 
     public onPan() {}

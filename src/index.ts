@@ -254,7 +254,7 @@ export default class NetV {
      *
      * @memberof NetV
      */
-    public on(eventName: string, callback?: (e: any) => {}) {
+    public on(eventName: string, callback?: (e: any) => any) {
         if (eventName.toLowerCase() === 'zoom') {
             console.log('zoom')
             this.$_interactionManager.onZoom(callback)
@@ -270,9 +270,9 @@ export default class NetV {
      *
      * @memberof NetV
      */
-    public off(eventName: string) {
+    public off(eventName: string, callback?: (e: any) => any) {
         if (eventName.toLowerCase() === 'zoom') {
-            this.$_interactionManager.offZoom()
+            this.$_interactionManager.offZoom(callback)
         }
     }
 }
