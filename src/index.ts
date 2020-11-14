@@ -58,8 +58,8 @@ export default class NetV {
             backgroundColor: this.$_configs.backgroundColor,
             nodeLimit: this.$_configs.nodeLimit,
             linkLimit: this.$_configs.linkLimit,
-            getAllNodes: this.nodes,
-            getAllLinks: this.links
+            getAllNodes: this.nodes.bind(this),
+            getAllLinks: this.links.bind(this)
         })
 
         this.labelManager = new LabelManager(this)
