@@ -29,7 +29,7 @@ export default class NetV {
 
     public $_shouldLazyUpdate = false // flag to control lazy update
 
-    private $_interactionManager: InteractionManager
+    public $_interactionManager: InteractionManager
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
 
     private $_modifiedElementCount = 0 // record modified link num to control lazy update
