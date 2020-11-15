@@ -4,14 +4,10 @@
  */
 
 import NetV from 'src'
-import Node from '../elements/node'
+import Element from '../elements/element'
 import { LassoManager } from './lasso'
 
 export class InteractionManager {
-    public clickListenedElementsCount = 0
-    public hoverListenedElementsCount = 0
-    public dragListenedElementsCount = 0
-
     private netv: NetV
     private canvas: HTMLCanvasElement
 
@@ -25,6 +21,7 @@ export class InteractionManager {
 
     private isZoomListened = false
     private isMouseListened = false
+    private mouseEventCallbackCount = 0
 
     // map user defined callback => handlers, can be use to remove listeners
     private zoomCallbackSet: Set<(e: any) => any>
@@ -83,125 +80,51 @@ export class InteractionManager {
         this.zoomCallbackSet.add(callback)
 
         if (!this.isZoomListened) {
-            this.canvas.addEventListener('DOMMouseScroll', this.handleZoom, false)
-            this.canvas.addEventListener('mousewheel', this.handleZoom, false)
+            this.addWheelListeners()
             this.isZoomListened = true
         }
     }
 
     public offZoom(callback: (e: any) => any) {
-        const canvas = this.netv.$_container.querySelector('canvas')
         this.zoomCallbackSet.delete(callback)
+
         if (!this.zoomCallbackSet.size) {
-            canvas.removeEventListener('DOMMouseScroll', this.handleZoom)
-            canvas.removeEventListener('mousewheel', this.handleZoom)
+            this.removeWheelListeners()
             this.isZoomListened = false
         }
     }
 
     public onPan(callback: (e: any) => any) {
-        const canvas = this.canvas
-
         this.panCallbackSet.add(callback)
 
         if (!this.isMouseListened) {
-            canvas.addEventListener('mousedown', this.handleMouseDown)
-            canvas.addEventListener('mousemove', this.handleMouseMove)
-            canvas.addEventListener('mouseup', this.handleMouseUp)
+            this.addMouseListeners()
             this.isMouseListened = true
         }
     }
 
     public offPan(callback: (e: any) => any) {
-        const canvas = this.canvas
-
         this.panCallbackSet.delete(callback)
 
-        // TODO maybe we need to removeEventListener, but the mouse event listener are shared by click/hover/...
+        if (!this.panCallbackSet.size && this.mouseEventCallbackCount <= 0) {
+            // no pan callback functions and no listened mouse event on elements
+            this.removeMouseListeners()
+            this.isMouseListened = false
+        }
     }
 
-    /**
-     * setup click utility
-     */
-    public initMouse() {
-        const canvas = this.netv.$_container.querySelector('canvas')
-        const handleMouseDown = (evt: MouseEvent) => {
-            const x = evt.offsetX || evt.pageX - canvas.offsetLeft
-            const y = evt.offsetY || evt.pageY - canvas.offsetTop
-            const yInv = this.netv.$_configs.height - y
-
-            this.isMouseDown = true
-            this.mouseDownPos = { x, y }
-            this.dragStartTransform = JSON.parse(JSON.stringify(this.transform))
-
-            this.mouseDownElement = this.netv.getElementByPosition({
-                x,
-                y: yInv
-            })
-            if (this.mouseDownElement?.element.position) {
-                // record orgin position for drag
-                this.mouseDownElementOriginPos = { ...this.mouseDownElement.element.position() }
-            }
+    public changeMouseEventCallbackCountBy(n: number) {
+        this.mouseEventCallbackCount += n
+        if (!this.isMouseListened && this.mouseEventCallbackCount > 0) {
+            // there is some mouse event listened elements
+            this.addMouseListeners()
+            this.isMouseListened = true
         }
-
-        const handleMouseMove = (evt: MouseEvent) => {
-            const x = evt.offsetX || evt.pageX - canvas.offsetLeft
-            const y = evt.offsetY || evt.pageY - canvas.offsetTop
-
-            if (this.isMouseDown) {
-                this.isMouseMove = true
-
-                if (!this.mouseDownElement || !this.mouseDownElement.element.position) {
-                    // pan, when not dragging node
-                    this.transform.x = this.dragStartTransform.x + x - this.mouseDownPos.x
-                    this.transform.y = this.dragStartTransform.y + y - this.mouseDownPos.y
-
-                    this.netv.$_renderer.setTransform(this.transform)
-                    this.netv.labelManager.setTransform(this.transform)
-                    this.lasso.setTransform(this.transform)
-                    this.netv.draw()
-                } else {
-                    // drag node
-                    this.mouseDownElement.element.position({
-                        x:
-                            this.mouseDownElementOriginPos.x +
-                            (x - this.mouseDownPos.x) / this.transform.k,
-                        y:
-                            this.mouseDownElementOriginPos.y +
-                            (y - this.mouseDownPos.y) / this.transform.k
-                    })
-                    this.netv.draw()
-                    // when dragging, dynamic change label's position. because only operate on single element, it's ok to remove and recreate
-                    this.mouseDownElement.element.showLabel(false)
-                    this.mouseDownElement.element.showLabel(true)
-                }
-            } else {
-                const yInv = this.netv.$_configs.height - y
-                const element = this.netv.getElementByPosition({ x, y: yInv })
-                if (element?.element.$_hoverCallback) {
-                    element.element.$_hoverCallback(element.element as any)
-                }
-                return // currently not support hover
-            }
+        if (this.mouseEventCallbackCount <= 0 && !this.panCallbackSet.size) {
+            // no pan callback functions and no mouse event listened elements
+            this.removeMouseListeners()
+            this.isMouseListened = false
         }
-
-        const handleMouseUp = (evt: MouseEvent) => {
-            if (!this.isMouseMove && this.mouseDownElement) {
-                // click
-                if (this.mouseDownElement?.element.$_clickCallback) {
-                    this.mouseDownElement.element.$_clickCallback(
-                        this.mouseDownElement.element as any
-                    ) // TODO: not elegant
-                }
-            }
-            this.isMouseDown = false
-            this.isMouseMove = false
-            this.mouseDownElement = undefined
-        }
-
-        canvas.addEventListener('mousedown', handleMouseDown)
-        canvas.addEventListener('mousemove', handleMouseMove)
-        canvas.addEventListener('mouseup', handleMouseUp)
     }
 
     /**
@@ -231,6 +154,7 @@ export class InteractionManager {
         this.zoomCallbackSet.forEach((callback) =>
             callback({
                 event: evt,
+                name: 'zoom',
                 transform: this.transform
             })
         )
@@ -285,6 +209,7 @@ export class InteractionManager {
                 this.panCallbackSet.forEach((callback) =>
                     callback({
                         event: evt,
+                        name: 'pan',
                         transform: this.transform
                     })
                 )
@@ -298,7 +223,10 @@ export class InteractionManager {
                         this.mouseDownElementOriginPos.y +
                         (y - this.mouseDownPos.y) / this.transform.k
                 })
+
                 this.netv.draw()
+
+                // TODO drag callbacks
 
                 // when dragging, dynamic change label's position. because only operate on single element, it's ok to remove and recreate
                 this.mouseDownElement.element.showLabel(false)
@@ -307,8 +235,14 @@ export class InteractionManager {
         } else {
             const yInv = this.netv.$_configs.height - y
             const element = this.netv.getElementByPosition({ x, y: yInv })
-            if (element?.element.$_hoverCallback) {
-                element.element.$_hoverCallback(element.element as any)
+            if (element?.element.$_hoverCallbackSet.size) {
+                element.element.$_hoverCallbackSet.forEach((callback) =>
+                    callback({
+                        event: evt,
+                        name: 'hover',
+                        element
+                    })
+                )
             }
             return // currently not support hover
         }
@@ -322,12 +256,43 @@ export class InteractionManager {
     private handleMouseUp(evt: MouseEvent) {
         if (!this.isMouseMove && this.mouseDownElement) {
             // click
-            if (this.mouseDownElement?.element.$_clickCallback) {
-                this.mouseDownElement.element.$_clickCallback(this.mouseDownElement.element as any) // TODO: not elegant
+            if (this.mouseDownElement?.element.$_clickCallbackSet) {
+                const element = this.mouseDownElement.element as Element
+                element.$_mouseupCallbackSet.forEach((callback) =>
+                    callback({
+                        event: evt,
+                        name: 'mouseup',
+                        element: this.mouseDownElement.element
+                    })
+                )
             }
         }
         this.isMouseDown = false
         this.isMouseMove = false
         this.mouseDownElement = undefined
+    }
+
+    private addWheelListeners() {
+        this.canvas.addEventListener('DOMMouseScroll', this.handleZoom, false)
+        this.canvas.addEventListener('mousewheel', this.handleZoom, false)
+    }
+
+    private removeWheelListeners() {
+        this.canvas.removeEventListener('DOMMouseScroll', this.handleZoom)
+        this.canvas.removeEventListener('mousewheel', this.handleZoom)
+    }
+
+    private addMouseListeners() {
+        const canvas = this.canvas
+        canvas.addEventListener('mousedown', this.handleMouseDown)
+        canvas.addEventListener('mousemove', this.handleMouseMove)
+        canvas.addEventListener('mouseup', this.handleMouseUp)
+    }
+
+    private removeMouseListeners() {
+        const canvas = this.canvas
+        canvas.removeEventListener('mousedown', this.handleMouseDown)
+        canvas.removeEventListener('mousemove', this.handleMouseMove)
+        canvas.removeEventListener('mouseup', this.handleMouseUp)
     }
 }

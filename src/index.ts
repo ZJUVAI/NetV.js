@@ -68,7 +68,6 @@ export default class NetV {
 
         this.$_interactionManager = new InteractionManager(this)
 
-        this.$_interactionManager.initMouse() // TODO
         this.$_interactionManager.initLasso() // TODO
     }
 

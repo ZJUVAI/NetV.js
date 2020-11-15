@@ -5,8 +5,12 @@ import { elementReservedKeys } from '../configs'
 
 export default class Element {
     public $_style: interfaces.NodeStyle | interfaces.LinkStyle = {}
-    public $_clickCallback: (element: Element) => void
-    public $_hoverCallback: (element: Element) => void
+    public $_mousedownCallbackSet: Set<(e: any) => void>
+    public $_mouseupCallbackSet: Set<(e: any) => void>
+    public $_hoverCallbackSet: Set<(e: any) => void>
+    public $_dragstartCallbackSet: Set<(e: any) => void>
+    public $_draggingCallbackSet: Set<(e: any) => void>
+    public $_dragendCallbackSet: Set<(e: any) => void>
 
     protected $_core: NetV
     protected $_changeRenderAttribute: (element: Element, key: string) => void
@@ -31,9 +35,6 @@ export default class Element {
         const renderManager = this.$_core.$_renderer[`${type}Manager`]
         this.$_changeRenderAttribute = renderManager.changeAttribute.bind(renderManager)
 
-        // TODO this.onClick(data?.clickCallback || defaultConfigs[type].clickCallback)
-        // TODO this.onHover(data?.hoverCallback || defaultConfigs[type].hoverCallback)
-
         // generate style methods, e.g.: node.r(), link.strokeWidth()
         Object.keys(this.$_style).forEach((key) => {
             // generate style functions
@@ -47,17 +48,14 @@ export default class Element {
      * @memberof Element
      */
     public on(eventName: string, callback: (e: any) => any) {
-        if (eventName === 'click') {
-            this.$_core.$_interactionManager.clickListenedElementsCount += 1
-            // TODO this.$_clickCallback = callback
-        } else if (eventName === 'hover') {
-            this.$_core.$_interactionManager.hoverListenedElementsCount += 1
-            // TODO this.$_hoverCallback = callback
-        } else if (eventName === 'drag') {
-            if (this.constructor.name === 'Node') {
-                // only node can be dragged
-                this.$_core.$_interactionManager.dragListenedElementsCount += 1
-                // TODO  this.$_hoverCallback = callback
+        if (
+            eventName.slice(0, 4) !== 'drag' ||
+            (eventName.slice(0, 4) === 'drag' && this.constructor.name === 'Node') // only node can be dragged
+        ) {
+            const callbackSetName = `$_${eventName}CallbackSet`
+            this[callbackSetName]?.add(callback)
+            if (this[callbackSetName]) {
+                this.$_core.$_interactionManager.changeMouseEventCallbackCountBy(1)
             }
         }
     }
@@ -68,36 +66,17 @@ export default class Element {
      * @memberof Element
      */
     public off(eventName: string, callback: (e: any) => any) {
-        if (eventName === 'click') {
-            this.$_core.$_interactionManager.clickListenedElementsCount -= 1
-            // TODO this.$_clickCallback = callback
-        } else if (eventName === 'hover') {
-            this.$_core.$_interactionManager.hoverListenedElementsCount -= 1
-            // TODO this.$_hoverCallback = callback
-        } else if (eventName === 'drag') {
-            if (this.constructor.name === 'Node') {
-                // only node can be dragged
-                this.$_core.$_interactionManager.dragListenedElementsCount -= 1
-                // TODO this.$_hoverCallback = callback
+        if (
+            eventName.slice(0, 4) !== 'drag' ||
+            (eventName.slice(0, 4) === 'drag' && this.constructor.name === 'Node') // only node can be dragged
+        ) {
+            const callbackSetName = `$_${eventName}CallbackSet`
+            this[callbackSetName]?.delete(callback)
+            if (this[callbackSetName]) {
+                this.$_core.$_interactionManager.changeMouseEventCallbackCountBy(-1)
             }
         }
     }
-
-    // /**
-    //  * set hover callback function
-    //  * @param callback hover callback function
-    //  */
-    // public onHover(callback: (element: Element) => void) {
-    //     this.$_hoverCallback = callback
-    // }
-
-    // /**
-    //  * set click callback function
-    //  * @param callback click callback function
-    //  */
-    // public onClick(callback: (element: Element) => void) {
-    //     this.$_clickCallback = callback
-    // }
 
     /**
      * get/set custom attributes
