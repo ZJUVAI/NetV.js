@@ -5,12 +5,9 @@ import { elementReservedKeys } from '../configs'
 
 export default class Element {
     public $_style: interfaces.NodeStyle | interfaces.LinkStyle = {}
-    public $_mousedownCallbackSet: Set<(e: any) => void>
-    public $_mouseupCallbackSet: Set<(e: any) => void>
-    public $_hoverCallbackSet: Set<(e: any) => void>
-    public $_dragstartCallbackSet: Set<(e: any) => void>
-    public $_draggingCallbackSet: Set<(e: any) => void>
-    public $_dragendCallbackSet: Set<(e: any) => void>
+    public $_mousedownCallbackSet: Set<(e: any) => void> = new Set()
+    public $_mouseupCallbackSet: Set<(e: any) => void> = new Set()
+    public $_hoverCallbackSet: Set<(e: any) => void> = new Set()
 
     protected $_core: NetV
     protected $_changeRenderAttribute: (element: Element, key: string) => void
@@ -55,7 +52,7 @@ export default class Element {
             const callbackSetName = `$_${eventName}CallbackSet`
             this[callbackSetName]?.add(callback)
             if (this[callbackSetName]) {
-                this.$_core.$_interactionManager.changeMouseEventCallbackCountBy(1)
+                this.$_core.$_interactionManager.increaseMouseEventCallbackCountBy(1)
             }
         }
     }
@@ -73,7 +70,7 @@ export default class Element {
             const callbackSetName = `$_${eventName}CallbackSet`
             this[callbackSetName]?.delete(callback)
             if (this[callbackSetName]) {
-                this.$_core.$_interactionManager.changeMouseEventCallbackCountBy(-1)
+                this.$_core.$_interactionManager.decreaseMouseEventCallbackCountBy(1)
             }
         }
     }

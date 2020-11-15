@@ -255,10 +255,9 @@ export default class NetV {
      */
     public on(eventName: string, callback?: (e: any) => any) {
         if (eventName.toLowerCase() === 'zoom') {
-            console.log('zoom')
             this.$_interactionManager.onZoom(callback)
         } else if (eventName.toLowerCase() === 'pan') {
-            console.log('pan')
+            this.$_interactionManager.onPan(callback)
         } else if (eventName.toLowerCase() === 'lasso') {
             console.log('lass')
         }
