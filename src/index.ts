@@ -65,8 +65,6 @@ export default class NetV {
         this.labelManager = new LabelManager(this)
 
         this.$_interactionManager = new InteractionManager(this)
-
-        this.$_interactionManager.initLasso() // TODO
     }
 
     /**
@@ -89,8 +87,6 @@ export default class NetV {
             this.addNodes(this.$_data.nodes)
             this.addLinks(this.$_data.links)
         }
-
-        this.$_interactionManager.setLassoData() // TODO
     }
 
     /**
