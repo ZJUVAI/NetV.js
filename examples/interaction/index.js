@@ -124,10 +124,10 @@ netv.nodes().forEach((node) => {
     node.on('dragend', console.log)
 })
 
-netv.links()[0].on('mouseup', (e) => {
+netv.links()[0].on('click', (e) => {
     console.log(e)
     const link = e.element
-    console.log(`${link.source().id()}-${link.target().id()} hovered`)
+    console.log(`${link.source().id()}-${link.target().id()} clicked`)
 })
 
 netv.links()[1].on('hover', (e) => {

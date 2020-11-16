@@ -233,6 +233,7 @@ export class InteractionManager {
                     })
                 )
             } else {
+                // drag node
                 const element: Node = this.mouseDownElement.element
                 if (!lastIsMouseMove) {
                     element.$_dragstartCallbackSet.forEach((callback) => {
@@ -269,6 +270,7 @@ export class InteractionManager {
                 element.showLabel(true)
             }
         } else {
+            // hover
             const yInv = this.netv.$_configs.height - y
             const element = this.netv.getElementByPosition({ x, y: yInv })?.element
             if (element?.$_hoverCallbackSet.size) {
