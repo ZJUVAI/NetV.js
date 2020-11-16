@@ -1,9 +1,13 @@
 import { RenderAttribute, ShaderSeries } from '../../interfaces'
-import { createProgram, createArrayBuffer, extractAttributesFromShader } from '../../utils'
+import {
+    createProgram,
+    createArrayBuffer,
+    extractAttributesFromShader,
+    encodeRenderId
+} from '../../utils'
 import { Transform } from '../../../interfaces'
 import Node from '../../../elements/node'
 import Link from '../../../elements/link'
-import { encodeRenderId } from '../../utils'
 
 export class RenderElementManager {
     protected gl: WebGL2RenderingContext
