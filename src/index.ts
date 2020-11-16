@@ -18,7 +18,6 @@ import { LabelManager } from './label/label'
 export default class NetV {
     public static Utils = Utils
     public labelManager: LabelManager
-    public interaction: InteractionManager
 
     public $_id2node = new Map()
     public $_ends2link = new Map2()
@@ -28,6 +27,7 @@ export default class NetV {
     public $_renderer: Renderer
     public $_configs = JSON.parse(JSON.stringify(defaultConfigs)) // NOTE: deep copy configs
 
+    public $_interactionManager: InteractionManager
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
 
     /**
@@ -64,13 +64,9 @@ export default class NetV {
 
         this.labelManager = new LabelManager(this)
 
-        this.interaction = new InteractionManager(this)
-        if (this.$_configs.enablePanZoom) {
-            this.interaction.initZoom()
-        }
+        this.$_interactionManager = new InteractionManager(this)
 
-        this.interaction.initMouse()
-        this.interaction.initLasso()
+        this.$_interactionManager.initLasso() // TODO
     }
 
     /**
@@ -94,7 +90,7 @@ export default class NetV {
             this.addLinks(this.$_data.links)
         }
 
-        this.interaction.setLassoData()
+        this.$_interactionManager.setLassoData() // TODO
     }
 
     /**
@@ -233,6 +229,32 @@ export default class NetV {
      */
     public draw() {
         this.$_renderer.draw()
+    }
+
+    /**
+     * @description event listener
+     *
+     * @memberof NetV
+     */
+    public on(eventName: string, callback?: (e: any) => any) {
+        if (eventName.toLowerCase() === 'zoom') {
+            this.$_interactionManager.onZoom(callback)
+        } else if (eventName.toLowerCase() === 'pan') {
+            this.$_interactionManager.onPan(callback)
+        } else if (eventName.toLowerCase() === 'lasso') {
+            console.log('lass')
+        }
+    }
+
+    /**
+     * @description turn off event listener
+     *
+     * @memberof NetV
+     */
+    public off(eventName: string, callback?: (e: any) => any) {
+        if (eventName.toLowerCase() === 'zoom') {
+            this.$_interactionManager.offZoom(callback)
+        }
     }
 }
 
