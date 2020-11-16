@@ -31,10 +31,8 @@ export const node = {
         vertexBeta: { x: -2 * Math.sqrt(3), y: 2 },
         vertexGamma: { x: 2 * Math.sqrt(3), y: 2 }
     },
-    showLabel: false,
+    showLabel: false
     // textOffset: { x: 8, y: 0 }, put in label config instead of each node
-    clickCallback: (node: Node) => {},
-    hoverCallback: (node: Node) => {}
 }
 
 export const link = {
@@ -42,9 +40,7 @@ export const link = {
         shape: 'line',
         strokeColor: { r: 0.4, g: 0.6, b: 0.8, a: 0.5 },
         strokeWidth: 2
-    },
-    clickCallback: (link: Link) => {},
-    hoverCallback: (node: Node) => {}
+    }
 }
 
 export const label = {

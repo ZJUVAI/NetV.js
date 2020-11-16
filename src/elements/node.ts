@@ -28,6 +28,10 @@ class Node extends Element {
     public vertexBeta: (value?: interfaces.Position) => interfaces.Position
     public vertexGamma: (value?: interfaces.Position) => interfaces.Position
 
+    public $_dragstartCallbackSet: Set<(e: any) => void> = new Set()
+    public $_draggingCallbackSet: Set<(e: any) => void> = new Set()
+    public $_dragendCallbackSet: Set<(e: any) => void> = new Set()
+
     private $_id: string
     private $_position = {
         x: 0,

@@ -90,7 +90,11 @@ const configs = {
 }
 const netv = new NetV(configs)
 
-testData.nodes[0].clickCallback = (node) => {
+netv.data(testData)
+
+netv.nodes()[0].on('mousedown', (e) => {
+    console.log(e)
+    const node = e.element
     node.fill({
         r: 1,
         g: 1,
@@ -99,16 +103,40 @@ testData.nodes[0].clickCallback = (node) => {
     })
     node.r(15)
     netv.draw()
-}
+})
 
-netv.data(testData)
+netv.nodes()[0].on('mouseup', (e) => {
+    console.log(e)
+    const node = e.element
+    node.fill({ r: 1, g: 0, b: 0, a: 1 })
+    node.r(25)
+    netv.draw()
+})
 
-netv.nodes()[0].onHover((node) => {
+netv.nodes()[0].on('hover', (e) => {
+    const node = e.element
     console.log(`${node.id()} hovered`)
 })
 
-netv.links()[1].onHover((link) => {
+netv.nodes().forEach((node) => {
+    node.on('dragstart', console.log)
+    node.on('dragging', console.log)
+    node.on('dragend', console.log)
+})
+
+netv.links()[0].on('click', (e) => {
+    console.log(e)
+    const link = e.element
+    console.log(`${link.source().id()}-${link.target().id()} clicked`)
+})
+
+netv.links()[1].on('hover', (e) => {
+    const link = e.element
     console.log(`${link.source().id()}-${link.target().id()} hovered`)
 })
 
 netv.draw()
+
+const log = console.log
+netv.on('zoom', log)
+netv.on('pan', log)

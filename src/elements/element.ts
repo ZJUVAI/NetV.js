@@ -5,8 +5,10 @@ import { elementReservedKeys } from '../configs'
 
 export default class Element {
     public $_style: interfaces.NodeStyle | interfaces.LinkStyle = {}
-    public $_clickCallback: (element: Element) => void
-    public $_hoverCallback: (element: Element) => void
+    public $_mousedownCallbackSet: Set<(e: any) => void> = new Set()
+    public $_mouseupCallbackSet: Set<(e: any) => void> = new Set()
+    public $_hoverCallbackSet: Set<(e: any) => void> = new Set()
+    public $_clickCallbackSet: Set<(e: any) => void> = new Set()
 
     protected $_core: NetV
     protected $_changeRenderAttribute: (element: Element, key: string) => void
@@ -31,9 +33,6 @@ export default class Element {
         const renderManager = this.$_core.$_renderer[`${type}Manager`]
         this.$_changeRenderAttribute = renderManager.changeAttribute.bind(renderManager)
 
-        this.onClick(data?.clickCallback || defaultConfigs[type].clickCallback)
-        this.onHover(data?.hoverCallback || defaultConfigs[type].hoverCallback)
-
         // generate style methods, e.g.: node.r(), link.strokeWidth()
         Object.keys(this.$_style).forEach((key) => {
             // generate style functions
@@ -42,19 +41,39 @@ export default class Element {
     }
 
     /**
-     * set hover callback function
-     * @param callback hover callback function
+     * @param {string} eventName
+     * @param {(e: any) => any} callback
+     * @memberof Element
      */
-    public onHover(callback: (element: Element) => void) {
-        this.$_hoverCallback = callback
+    public on(eventName: string, callback: (e: any) => any) {
+        if (
+            eventName.slice(0, 4) !== 'drag' ||
+            (eventName.slice(0, 4) === 'drag' && this.constructor.name === 'Node') // only node can be dragged
+        ) {
+            const callbackSetName = `$_${eventName}CallbackSet`
+            this[callbackSetName]?.add(callback)
+            if (this[callbackSetName]) {
+                this.$_core.$_interactionManager.increaseMouseEventCallbackCountBy(1)
+            }
+        }
     }
 
     /**
-     * set click callback function
-     * @param callback click callback function
+     * @param {string} eventName
+     * @param {(e: any) => any} callback
+     * @memberof Element
      */
-    public onClick(callback: (element: Element) => void) {
-        this.$_clickCallback = callback
+    public off(eventName: string, callback: (e: any) => any) {
+        if (
+            eventName.slice(0, 4) !== 'drag' ||
+            (eventName.slice(0, 4) === 'drag' && this.constructor.name === 'Node') // only node can be dragged
+        ) {
+            const callbackSetName = `$_${eventName}CallbackSet`
+            this[callbackSetName]?.delete(callback)
+            if (this[callbackSetName]) {
+                this.$_core.$_interactionManager.decreaseMouseEventCallbackCountBy(1)
+            }
+        }
     }
 
     /**
