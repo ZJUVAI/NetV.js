@@ -37,12 +37,7 @@ netv.draw()
 netv.on('pan', () => { })
 netv.on('zoom', () => { })
 
-// TODO: tmp setting, consider uniform API
-netv.$_interactionManager.onLassoSelected((nodes) => {
-    console.log(`Lasso selected ${nodes.length} nodes.`)
-    console.log(nodes)
+const lasso = new Lasso(netv, { enable: true })
+lasso.onSelected((selectedItems) => {
+    console.log(selectedItems)
 })
-
-function toggleLasso(flag) {
-    netv.$_interactionManager.toggleLasso(flag)
-}
