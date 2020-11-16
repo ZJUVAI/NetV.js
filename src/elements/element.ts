@@ -8,6 +8,7 @@ export default class Element {
     public $_mousedownCallbackSet: Set<(e: any) => void> = new Set()
     public $_mouseupCallbackSet: Set<(e: any) => void> = new Set()
     public $_hoverCallbackSet: Set<(e: any) => void> = new Set()
+    public $_clickCallbackSet: Set<(e: any) => void> = new Set()
 
     protected $_core: NetV
     protected $_changeRenderAttribute: (element: Element, key: string) => void

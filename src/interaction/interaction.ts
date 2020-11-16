@@ -302,6 +302,16 @@ export class InteractionManager {
                         })
                     )
                 }
+            } else {
+                // click
+                const element = this.mouseDownElement.element
+                element.$_clickCallbackSet.forEach((callback) =>
+                    callback({
+                        event: evt,
+                        name: 'click',
+                        element
+                    })
+                )
             }
             // mouseup
             if (this.mouseDownElement?.element.$_mouseupCallbackSet) {
