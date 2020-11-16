@@ -47,7 +47,7 @@ export class Renderer {
         } = configs
 
         try {
-            this.gl = canvas.getContext('webgl2', { antialias: false })
+            this.gl = canvas.getContext('webgl2')
         } catch {
             throw new Error('NetV requires WebGL2 supported by your browser')
         }
