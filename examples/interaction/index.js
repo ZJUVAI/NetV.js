@@ -11,7 +11,7 @@ const testData = {
             y: 100,
             style: {
                 shape: 'rect',
-                rotate: Math.PI / 4,
+                // rotate: Math.PI / 4,
                 fill: { r: 1, g: 0, b: 0, a: 1 },
                 strokeColor: { r: 1, g: 0, b: 1, a: 0.3 }
             }

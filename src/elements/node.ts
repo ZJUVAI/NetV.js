@@ -120,7 +120,7 @@ class Node extends Element {
                 this.$_position['y'] = position.y
             }
 
-            if (this.$_core.$_shouldLazyUpdate) {
+            if (this.$_core.$_renderer.shouldLazyUpdate) {
                 return this.$_position
             } else {
                 linkSets = {
@@ -135,14 +135,14 @@ class Node extends Element {
                     const key = entry[0] as LinkAttr
                     const set = entry[1] as Set<Link>
                     if (set) {
-                        this.$_core.$_addModifiedElementCount(set.size)
+                        this.$_core.$_renderer.increaseModifiedElementsCountBy(set.size)
                         for (const link of set) {
                             this.$_core.$_renderer.linkManager.changeAttribute(link, key)
                         }
                     }
                 })
 
-                this.$_core.$_addModifiedElementCount(1)
+                this.$_core.$_renderer.increaseModifiedElementsCountBy(1)
                 this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
             }
         }

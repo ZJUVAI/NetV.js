@@ -4,7 +4,7 @@
  */
 
 import NetV from 'src'
-import Node from 'src/elements/node'
+import Node from '../elements/node'
 import Element from '../elements/element'
 import { LassoManager } from './lasso'
 

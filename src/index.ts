@@ -27,12 +27,8 @@ export default class NetV {
     public $_renderer: Renderer
     public $_configs = JSON.parse(JSON.stringify(defaultConfigs)) // NOTE: deep copy configs
 
-    public $_shouldLazyUpdate = false // flag to control lazy update
-
     public $_interactionManager: InteractionManager
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
-
-    private $_modifiedElementCount = 0 // record modified link num to control lazy update
 
     /**
      * @description create NetV object.
@@ -61,7 +57,9 @@ export default class NetV {
             height: this.$_configs.height,
             backgroundColor: this.$_configs.backgroundColor,
             nodeLimit: this.$_configs.nodeLimit,
-            linkLimit: this.$_configs.linkLimit
+            linkLimit: this.$_configs.linkLimit,
+            getAllNodes: this.nodes.bind(this),
+            getAllLinks: this.links.bind(this)
         })
 
         this.labelManager = new LabelManager(this)
@@ -69,13 +67,6 @@ export default class NetV {
         this.$_interactionManager = new InteractionManager(this)
 
         this.$_interactionManager.initLasso() // TODO
-    }
-
-    public $_addModifiedElementCount(n: number) {
-        this.$_modifiedElementCount += n
-        if (this.$_modifiedElementCount > this.$_configs.maxLazyUpdateElementCount) {
-            this.$_shouldLazyUpdate = true
-        }
     }
 
     /**
@@ -172,14 +163,14 @@ export default class NetV {
     /**
      * @description get all nodes
      */
-    public nodes() {
+    public nodes(): Node[] {
         return [...this.$_id2node.values()]
     }
 
     /**
      * @description get all links
      */
-    public links() {
+    public links(): Link[] {
         return [...this.$_ends2link.values()]
     }
 
@@ -237,14 +228,6 @@ export default class NetV {
      * @description draw elements
      */
     public draw() {
-        if (this.$_shouldLazyUpdate) {
-            this.$_renderer.nodeManager.refreshPosition([...this.$_id2node.values()])
-
-            // TODO: maybe need more efficient and reliable way to store and get all links
-            this.$_renderer.linkManager.refreshPosition([...this.$_ends2link.values()])
-            this.$_shouldLazyUpdate = false
-            this.$_modifiedElementCount = 0
-        }
         this.$_renderer.draw()
     }
 
