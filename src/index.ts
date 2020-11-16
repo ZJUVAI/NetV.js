@@ -201,6 +201,7 @@ class NetV {
         this.$_ends2link = new Map2()
         this.$_sourceId2links = new Map()
         this.$_targetId2links = new Map()
+        this.$_renderer.clearData()
     }
 
     /**
