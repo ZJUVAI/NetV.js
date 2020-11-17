@@ -1,6 +1,6 @@
 #version 300 es
 precision highp float;
-in vec4 color;
+in vec4 strokeColor;
 
 in vec4 id;
 

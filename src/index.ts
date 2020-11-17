@@ -6,8 +6,8 @@
 
 import * as interfaces from './interfaces'
 import Map2 from './utils/map2'
-import Node from './node'
-import Link from './link'
+import Node from './elements/node'
+import Link from './elements/link'
 import * as defaultConfigs from './configs'
 import * as dataset from './dataset'
 import { Renderer } from './renderer'
@@ -16,9 +16,8 @@ import * as Utils from './utils/utils'
 import { LabelManager } from './label/label'
 import { Position } from './interfaces'
 
-class NetV {
-    public Utils = Utils
-
+export default class NetV {
+    public static Utils = Utils
     public labelManager: LabelManager
 
     public $_id2node = new Map()
@@ -28,13 +27,9 @@ class NetV {
     public $_container: HTMLDivElement
     public $_renderer: Renderer
     public $_configs = JSON.parse(JSON.stringify(defaultConfigs)) // NOTE: deep copy configs
-    public $_interaction: InteractionManager
 
-    public $_lazyUpdate = false // flag to control lazy update
-
+    public $_interactionManager: InteractionManager
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
-
-    private $_modifiedLinkCount = 0 // record modified link num to control lazy update
 
     /**
      * @description create NetV object.
@@ -45,15 +40,9 @@ class NetV {
             throw Error('Container should be specified as a div element!')
         }
         this.$_container = configs.container
-        // override configs
-        for (const key in configs) {
-            if (key === 'container') continue // NOTE: exclude container in configs
-            if (configs[key] === Object(configs[key])) {
-                this.$_configs[key] = { ...this.$_configs[key], ...configs[key] }
-            } else {
-                this.$_configs[key] = configs[key]
-            }
-        }
+
+        this.$_configs = Utils.override(this.$_configs, configs)
+        delete this.$_configs['container']
 
         const canvas = document.createElement('canvas') // TODO: consider node enviroment, document not defined
         const pixelRatio = window.devicePixelRatio || 1
@@ -69,24 +58,14 @@ class NetV {
             height: this.$_configs.height,
             backgroundColor: this.$_configs.backgroundColor,
             nodeLimit: this.$_configs.nodeLimit,
-            linkLimit: this.$_configs.linkLimit
+            linkLimit: this.$_configs.linkLimit,
+            getAllNodes: this.nodes.bind(this),
+            getAllLinks: this.links.bind(this)
         })
 
         this.labelManager = new LabelManager(this)
 
-        this.$_interaction = new InteractionManager(this)
-        if (this.$_configs.enablePanZoom) {
-            this.$_interaction.initZoom()
-        }
-
-        this.$_interaction.initMouse()
-    }
-
-    public $_addModifiedLinkCount(n: number) {
-        this.$_modifiedLinkCount += n
-        if (this.$_modifiedLinkCount > this.$_configs.lazyUpdateThreshold) {
-            this.$_lazyUpdate = true
-        }
+        this.$_interactionManager = new InteractionManager(this)
     }
 
     /**
@@ -181,14 +160,14 @@ class NetV {
     /**
      * @description get all nodes
      */
-    public nodes() {
+    public nodes(): Node[] {
         return [...this.$_id2node.values()]
     }
 
     /**
      * @description get all links
      */
-    public links() {
+    public links(): Link[] {
         return [...this.$_ends2link.values()]
     }
 
@@ -247,14 +226,6 @@ class NetV {
      * @description draw elements
      */
     public draw() {
-        if (this.$_lazyUpdate) {
-            this.$_renderer.nodeManager.refreshPosition([...this.$_id2node.values()])
-
-            // TODO: maybe need more efficient and reliable way to store and get all links
-            this.$_renderer.linkManager.refreshPosition([...this.$_ends2link.values()])
-            this.$_lazyUpdate = false
-            this.$_modifiedLinkCount = 0
-        }
         this.$_renderer.draw()
     }
 
@@ -264,7 +235,7 @@ class NetV {
      */
     public centerOn(node: Node) {
         const pos = node.position()
-        this.$_interaction.centerPosition(pos)
+        this.$_interactionManager.centerPosition(pos)
     }
 
     /**
@@ -273,7 +244,7 @@ class NetV {
      * @param y
      */
     public panBy(x: number, y: number) {
-        this.$_interaction.panBy(x, y)
+        this.$_interactionManager.panBy(x, y)
         this.draw()
     }
 
@@ -283,9 +254,42 @@ class NetV {
      * @param center optional, zoom center position
      */
     public zoomBy(factor: number, center?: Position) {
-        this.$_interaction.zoomBy(factor, center)
+        this.$_interactionManager.zoomBy(factor, center)
         this.draw()
+    }
+
+    /**
+     * @description event listener
+     *
+     * @memberof NetV
+     */
+    public on(eventName: string, callback?: (e: any) => any) {
+        if (eventName.toLowerCase() === 'zoom') {
+            this.$_interactionManager.onZoom(callback)
+        } else if (eventName.toLowerCase() === 'pan') {
+            this.$_interactionManager.onPan(callback)
+        } else if (eventName.toLowerCase() === 'lasso') {
+            console.log('lass')
+        }
+    }
+
+    /**
+     * @description turn off event listener
+     *
+     * @memberof NetV
+     */
+    public off(eventName: string, callback?: (e: any) => any) {
+        if (eventName.toLowerCase() === 'zoom') {
+            this.$_interactionManager.offZoom(callback)
+        }
     }
 }
 
-export { NetV }
+declare global {
+    // to ensure window.NetV will not report ts error
+    interface Window {
+        NetV: any
+    }
+}
+
+window.NetV = NetV

@@ -17,11 +17,11 @@ const netv = new NetV({
 })
 
 fetch('../data/bcsstk31.txt.json')
-// fetch('../data/3elt.txt.json')
-// fetch('../data/fin512.json')
+    // fetch('../data/3elt.txt.json')
+    // fetch('../data/fin512.json')
     .then((res) => res.json())
     .then((json) => {
-        const data = netv.Utils.transformGraphPosition(json, 1000, 500, 500)
+        const data = NetV.Utils.transformGraphPosition(json, 1000, 500, 500)
         netv.data(data)
         netv.draw()
     })
