@@ -102,5 +102,10 @@ declare class NetV {
      * @description draw elements
      */
     draw(): void;
+    /**
+     * pan on canvas to get given node centered
+     * @param node
+     */
+    centerOn(node: Node): void;
 }
 export { NetV };

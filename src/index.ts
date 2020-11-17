@@ -207,6 +207,7 @@ class NetV {
         this.$_ends2link = new Map2()
         this.$_sourceId2links = new Map()
         this.$_targetId2links = new Map()
+        this.$_renderer.clearData()
     }
 
     /**
@@ -260,6 +261,15 @@ class NetV {
             this.$_modifiedLinkCount = 0
         }
         this.$_renderer.draw()
+    }
+
+    /**
+     * pan on canvas to get given node centered
+     * @param node 
+     */
+    public centerOn(node: Node) {
+        const pos = node.position()
+        this.interaction.centerPosition(pos)
     }
 }
 

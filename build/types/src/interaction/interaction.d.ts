@@ -4,6 +4,7 @@
  */
 import { NetV } from 'src';
 import Node from '../node';
+import { Position } from '../interfaces';
 export declare class InteractionManager {
     private netv;
     private lasso;
@@ -34,6 +35,11 @@ export declare class InteractionManager {
      * @param callback selected callback
      */
     onLassoSelected(callback: (items: Node[]) => {}): void;
+    /**
+     * move current position to center of canvas
+     * @param pos
+     */
+    centerPosition(pos: Position): void;
     /**
      * init zoom&pan interaction
      * currently no callback
