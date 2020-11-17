@@ -6,6 +6,7 @@ import { Layout } from './layout';
 import { NetV } from '../index';
 declare class D3ForceLayout extends Layout {
     private simulation;
+    private data;
     constructor(netv: NetV);
     start(): void;
     stop(): void;

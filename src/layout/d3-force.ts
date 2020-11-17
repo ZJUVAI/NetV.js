@@ -6,21 +6,23 @@
 import { Layout } from './layout'
 import { NetV } from '../index'
 import * as d3Force from 'd3-force'
+import { NodeLinkData } from 'src/interfaces'
 
 class D3ForceLayout extends Layout {
     private simulation
+    private data: NodeLinkData
     public constructor(netv: NetV) {
         super(netv)
 
         const width = this.netv.$_configs.width
         const height = this.netv.$_configs.height
-        const data = this.netv.data() // TODO: maybe need a deep copy
+        this.data = this.netv.data() // TODO: maybe need a deep copy
         this.simulation = d3Force
-            .forceSimulation(data.nodes)
+            .forceSimulation(this.data.nodes)
             .force(
                 'link',
                 // @ts-ignore
-                d3Force.forceLink(data.links).id((d) => d.id)
+                d3Force.forceLink(this.data.links).id((d) => d.id)
             )
             .force('charge', d3Force.forceManyBody())
             .force('center', d3Force.forceCenter(width / 2, height / 2))
@@ -29,13 +31,13 @@ class D3ForceLayout extends Layout {
 
     public start() {
         this.simulation.on('tick', () => {
-            data.nodes.forEach((n) => {
-                const node = netv.getNodeById(n.id)
+            this.data.nodes.forEach((n) => {
+                const node = this.netv.getNodeById(n.id)
                 node.x(n.x)
                 node.y(n.y)
             })
 
-            netv.draw()
+            this.netv.draw()
             this.tickCallback && this.tickCallback()
         })
         this.startCallback && this.startCallback()
