@@ -4,7 +4,7 @@
  */
 
 import { NetV } from 'src'
-import { Position } from '../interfaces'
+import { Position, Transform } from '../interfaces'
 
 export class InteractionManager {
     private netv: NetV
@@ -23,6 +23,40 @@ export class InteractionManager {
 
     public constructor(netv: NetV) {
         this.netv = netv
+    }
+
+    /**
+     * progmatically pan
+     * @param x
+     * @param y
+     */
+    public panBy(x: number, y: number) {
+        this.transform.x += x
+        this.transform.y += y
+
+        this.netv.$_renderer.setTransform(this.transform)
+        this.netv.labelManager.setTransform(this.transform)
+    }
+
+    /**
+     * progmatically zoom
+     * @param factor zoom factor
+     * @param center optional, zoom center position
+     */
+    public zoomBy(factor: number, center?: Position) {
+        let centerPos = center
+        if (!centerPos) {
+            centerPos = { x: this.netv.$_configs.width / 2, y: this.netv.$_configs.height / 2 }
+        }
+        const { x, y } = centerPos
+
+        this.transform.x = (1 - factor) * x + factor * this.transform.x
+        this.transform.y = (1 - factor) * y + factor * this.transform.y
+
+        this.transform.k *= factor
+
+        this.netv.$_renderer.setTransform(this.transform)
+        this.netv.labelManager.setTransform(this.transform)
     }
 
     /**
