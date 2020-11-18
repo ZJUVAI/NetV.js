@@ -14,6 +14,7 @@ import { Renderer } from './renderer'
 import { InteractionManager } from './interaction/interaction'
 import * as Utils from './utils/utils'
 import { LabelManager } from './label/label'
+import { Position } from './interfaces'
 
 export default class NetV {
     public static Utils = Utils
@@ -180,6 +181,7 @@ export default class NetV {
         this.$_ends2link = new Map2()
         this.$_sourceId2links = new Map()
         this.$_targetId2links = new Map()
+        this.$_renderer.clearData()
     }
 
     /**
@@ -225,6 +227,35 @@ export default class NetV {
      */
     public draw() {
         this.$_renderer.draw()
+    }
+
+    /**
+     * pan on canvas to get given node centered
+     * @param node
+     */
+    public centerOn(node: Node) {
+        const pos = node.position()
+        this.$_interactionManager.centerPosition(pos)
+    }
+
+    /**
+     * progmatically pan
+     * @param x
+     * @param y
+     */
+    public panBy(x: number, y: number) {
+        this.$_interactionManager.panBy(x, y)
+        this.draw()
+    }
+
+    /**
+     * progmatically zoom
+     * @param factor zoom factor
+     * @param center optional, zoom center position
+     */
+    public zoomBy(factor: number, center?: Position) {
+        this.$_interactionManager.zoomBy(factor, center)
+        this.draw()
     }
 
     /**

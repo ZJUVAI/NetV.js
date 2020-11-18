@@ -3,6 +3,7 @@
  * @description handle all interaction in NetV
  */
 
+import { Position, Transform } from '../interfaces'
 import NetV from 'src'
 import Node from '../elements/node'
 import Element from '../elements/element'
@@ -38,6 +39,83 @@ export class InteractionManager {
         this.canvas = this.netv.$_container.querySelector('canvas')
         this.zoomCallbackSet = new Set()
         this.panCallbackSet = new Set()
+    }
+
+    /**
+     * progmatically pan
+     * @param x
+     * @param y
+     */
+    public panBy(x: number, y: number) {
+        this.transform.x += x
+        this.transform.y += y
+
+        this.netv.$_renderer.setTransform(this.transform)
+        this.netv.labelManager.setTransform(this.transform)
+    }
+
+    /**
+     * progmatically zoom
+     * @param factor zoom factor
+     * @param center optional, zoom center position
+     */
+    public zoomBy(factor: number, center?: Position) {
+        let centerPos = center
+        if (!centerPos) {
+            centerPos = { x: this.netv.$_configs.width / 2, y: this.netv.$_configs.height / 2 }
+        }
+        const { x, y } = centerPos
+
+        this.transform.x = (1 - factor) * x + factor * this.transform.x
+        this.transform.y = (1 - factor) * y + factor * this.transform.y
+
+        this.transform.k *= factor
+
+        this.netv.$_renderer.setTransform(this.transform)
+        this.netv.labelManager.setTransform(this.transform)
+    }
+
+    /**
+     * move current position to center of canvas
+     * @param pos
+     */
+    public centerPosition(pos: Position) {
+        const x = pos.x * this.transform.k + this.transform.x
+        const y = pos.y * this.transform.k + this.transform.y
+        const center = {
+            x: this.netv.$_configs.width / 2,
+            y: this.netv.$_configs.height / 2
+        }
+        // this.transform.x += center.x - x
+        // this.transform.y += center.y - y
+        // interpolation
+        const stepCount = 20
+        const difference = {
+            x: center.x - x,
+            y: center.y - y
+        }
+        const originTranslate = {
+            x: this.transform.x,
+            y: this.transform.y
+        }
+
+        const ease = (x) => {
+            return x * x
+        }
+
+        let steps = 1
+
+        const animation = setInterval(() => {
+            this.transform.x = originTranslate.x + difference.x * ease(steps / stepCount)
+            this.transform.y = originTranslate.y + difference.y * ease(steps / stepCount)
+
+            this.netv.$_renderer.setTransform(this.transform)
+            this.netv.labelManager.setTransform(this.transform)
+            this.netv.draw()
+
+            steps += 1
+            if (steps > stepCount) clearInterval(animation)
+        }, 500 / stepCount)
     }
 
     /**
