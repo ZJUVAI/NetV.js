@@ -30,6 +30,8 @@ class NetV {
     public $_configs = JSON.parse(JSON.stringify(defaultConfigs)) // NOTE: deep copy configs
     public $_interaction: InteractionManager
 
+    public $_transform: interfaces.Transform = { x: 0, y: 0, k: 1 }
+
     public $_lazyUpdate = false // flag to control lazy update
 
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
@@ -296,6 +298,20 @@ class NetV {
      */
     public zoomBy(factor: number, center?: Position) {
         this.$_interaction.zoomBy(factor, center)
+        this.draw()
+    }
+
+    /**
+     * get/set netv's transform
+     * @param value optional, transform to set
+     */
+    public transform(value?: interfaces.Transform) {
+        if (value === undefined) {
+            return this.$_transform
+        }
+        this.$_transform = value
+        this.$_renderer.setTransform(this.$_transform)
+        this.labelManager.setTransform(this.$_transform)
         this.draw()
     }
 }
