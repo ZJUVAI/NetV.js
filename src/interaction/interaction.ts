@@ -100,9 +100,9 @@ export class InteractionManager {
      * currently no callback
      */
     public initZoom() {
-        const newTransform = { ...this.netv.$_transform }
         const canvas = this.netv.$_container.querySelector('canvas')
         const handleScroll = (evt: MouseWheelEvent) => {
+            const newTransform = { ...this.netv.$_transform }
             const x = evt.offsetX || evt.pageX - canvas.offsetLeft
             const y = evt.offsetY || evt.pageY - canvas.offsetTop
             const delta = evt.deltaY ? evt.deltaY / 40 : evt.detail ? -evt.detail : 0
