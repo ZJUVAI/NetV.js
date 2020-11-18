@@ -256,19 +256,21 @@ export class InteractionManager {
                 // pan, when not dragging node
                 newTransform.x = this.dragStartTransform.x + x - this.mouseDownPos.x
                 newTransform.y = this.dragStartTransform.y + y - this.mouseDownPos.y
-
-                this.netv.transform(newTransform)
-                this.panCallbackSet.forEach((callback) =>
-                    callback({
-                        event: evt,
-                        name: 'pan',
-                        transform: newTransform
-                    })
-                )
+                if (this.panCallbackSet.size) {
+                    this.netv.transform(newTransform)
+                    this.panCallbackSet.forEach((callback) =>
+                        callback({
+                            event: evt,
+                            name: 'pan',
+                            transform: newTransform
+                        })
+                    )
+                }
             } else {
                 // drag node
                 const element: Node = this.mouseDownElement.element
                 if (!lastIsMouseMove) {
+                    // last time, the mouse is not move
                     element.$_dragstartCallbackSet.forEach((callback) => {
                         callback({
                             event: evt,
@@ -278,15 +280,27 @@ export class InteractionManager {
                     })
                 }
 
-                // drag node
-                element.position({
-                    x:
-                        this.mouseDownElementOriginPos.x +
-                        (x - this.mouseDownPos.x) / newTransform.k,
-                    y: this.mouseDownElementOriginPos.y + (y - this.mouseDownPos.y) / newTransform.k
-                })
+                if (
+                    element.$_dragstartCallbackSet.size +
+                    element.$_draggingCallbackSet.size +
+                    element.$_dragendCallbackSet.size
+                ) {
+                    // drag node
+                    element.position({
+                        x:
+                            this.mouseDownElementOriginPos.x +
+                            (x - this.mouseDownPos.x) / newTransform.k,
+                        y:
+                            this.mouseDownElementOriginPos.y +
+                            (y - this.mouseDownPos.y) / newTransform.k
+                    })
 
-                this.netv.draw()
+                    this.netv.draw()
+
+                    // when dragging, dynamic change label's position. because only operate on single element, it's ok to remove and recreate
+                    element.showLabel(false)
+                    element.showLabel(true)
+                }
 
                 element.$_draggingCallbackSet.forEach((callback) => {
                     callback({
@@ -295,10 +309,6 @@ export class InteractionManager {
                         element
                     })
                 })
-
-                // when dragging, dynamic change label's position. because only operate on single element, it's ok to remove and recreate
-                element.showLabel(false)
-                element.showLabel(true)
             }
         } else {
             // hover
