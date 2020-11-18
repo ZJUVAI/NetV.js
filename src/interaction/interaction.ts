@@ -3,6 +3,7 @@
  * @description handle all interaction in NetV
  */
 
+import { Position } from '../interfaces'
 import NetV from 'src'
 import Node from '../elements/node'
 import Element from '../elements/element'
@@ -10,12 +11,6 @@ import Element from '../elements/element'
 export class InteractionManager {
     private netv: NetV
     private canvas: HTMLCanvasElement
-
-    private transform = {
-        x: 0,
-        y: 0,
-        k: 1
-    }
 
     private isZoomListened = false
     private isMouseListened = false
@@ -38,6 +33,81 @@ export class InteractionManager {
         this.canvas = this.netv.$_container.querySelector('canvas')
         this.zoomCallbackSet = new Set()
         this.panCallbackSet = new Set()
+    }
+
+    /**
+     * progmatically pan
+     * @param x
+     * @param y
+     */
+    public panBy(x: number, y: number) {
+        const newTransform = { ...this.netv.$_transform }
+        newTransform.x += x
+        newTransform.y += y
+        this.netv.transform(newTransform)
+    }
+
+    /**
+     * progmatically zoom
+     * @param factor zoom factor
+     * @param center optional, zoom center position
+     */
+    public zoomBy(factor: number, center?: Position) {
+        const newTransform = { ...this.netv.$_transform }
+        let centerPos = center
+        if (!centerPos) {
+            centerPos = { x: this.netv.$_configs.width / 2, y: this.netv.$_configs.height / 2 }
+        }
+        const { x, y } = centerPos
+
+        newTransform.x = (1 - factor) * x + factor * newTransform.x
+        newTransform.y = (1 - factor) * y + factor * newTransform.y
+
+        newTransform.k *= factor
+
+        this.netv.transform(newTransform)
+    }
+
+    /**
+     * move current position to center of canvas
+     * @param pos
+     */
+    public centerPosition(pos: Position) {
+        const newTransform = { ...this.netv.$_transform }
+        const x = pos.x * newTransform.k + newTransform.x
+        const y = pos.y * newTransform.k + newTransform.y
+        const center = {
+            x: this.netv.$_configs.width / 2,
+            y: this.netv.$_configs.height / 2
+        }
+        // newTransform.x += center.x - x
+        // newTransform.y += center.y - y
+        // interpolation
+        const stepCount = 20
+        const difference = {
+            x: center.x - x,
+            y: center.y - y
+        }
+        const originTranslate = {
+            x: newTransform.x,
+            y: newTransform.y
+        }
+
+        const ease = (x) => {
+            return x * x
+        }
+
+        let steps = 1
+
+        const animation = setInterval(() => {
+            newTransform.x = originTranslate.x + difference.x * ease(steps / stepCount)
+            newTransform.y = originTranslate.y + difference.y * ease(steps / stepCount)
+
+            this.netv.transform(newTransform)
+
+            steps += 1
+            if (steps > stepCount) clearInterval(animation)
+        }, 500 / stepCount)
     }
 
     /**
@@ -104,30 +174,29 @@ export class InteractionManager {
      * @memberof InteractionManager
      */
     private handleZoom(evt: WheelEvent) {
+        const newTransform = { ...this.netv.$_transform }
         const x = evt.offsetX || evt.pageX - this.canvas.offsetLeft
         const y = evt.offsetY || evt.pageY - this.canvas.offsetTop
         const delta = evt.deltaY ? evt.deltaY / 40 : evt.detail ? -evt.detail : 0
         if (delta) {
             const k = Math.pow(1.1, delta)
-            this.transform.x = (1 - k) * x + k * this.transform.x
-            this.transform.y = (1 - k) * y + k * this.transform.y
+            newTransform.x = (1 - k) * x + k * newTransform.x
+            newTransform.y = (1 - k) * y + k * newTransform.y
 
-            this.transform.k *= k
+            newTransform.k *= k
 
-            this.netv.$_renderer.setTransform(this.transform)
-            this.netv.labelManager.setTransform(this.transform)
-            this.netv.draw()
+            this.netv.transform(newTransform)
+
+            this.zoomCallbackSet.forEach((callback) =>
+                callback({
+                    event: evt,
+                    name: 'zoom',
+                    transform: newTransform
+                })
+            )
         }
 
         evt.preventDefault()
-
-        this.zoomCallbackSet.forEach((callback) =>
-            callback({
-                event: evt,
-                name: 'zoom',
-                transform: this.transform
-            })
-        )
     }
 
     /**
@@ -140,9 +209,11 @@ export class InteractionManager {
         const y = evt.offsetY || evt.pageY - this.canvas.offsetTop
         const yInv = this.netv.$_configs.height - y
 
+        const newTransform = { ...this.netv.$_transform }
+
         this.isMouseDown = true
         this.mouseDownPos = { x, y }
-        this.dragStartTransform = JSON.parse(JSON.stringify(this.transform))
+        this.dragStartTransform = JSON.parse(JSON.stringify(newTransform))
 
         this.mouseDownElement = this.netv.getElementByPosition({
             x,
@@ -169,6 +240,7 @@ export class InteractionManager {
      * @memberof InteractionManager
      */
     private handleMouseMove(evt: MouseEvent) {
+        let newTransform = { ...this.netv.$_transform }
         const x = evt.offsetX || evt.pageX - this.canvas.offsetLeft
         const y = evt.offsetY || evt.pageY - this.canvas.offsetTop
 
@@ -182,20 +254,15 @@ export class InteractionManager {
                 this.mouseDownElement.element.constructor.name !== 'Node'
             ) {
                 // pan, when not dragging node
+                newTransform.x = this.dragStartTransform.x + x - this.mouseDownPos.x
+                newTransform.y = this.dragStartTransform.y + y - this.mouseDownPos.y
                 if (this.panCallbackSet.size) {
-                    // pan event is listened
-                    this.transform.x = this.dragStartTransform.x + x - this.mouseDownPos.x
-                    this.transform.y = this.dragStartTransform.y + y - this.mouseDownPos.y
-
-                    this.netv.$_renderer.setTransform(this.transform)
-                    this.netv.labelManager.setTransform(this.transform)
-                    this.netv.draw()
-
+                    this.netv.transform(newTransform)
                     this.panCallbackSet.forEach((callback) =>
                         callback({
                             event: evt,
                             name: 'pan',
-                            transform: this.transform
+                            transform: newTransform
                         })
                     )
                 }
@@ -222,10 +289,10 @@ export class InteractionManager {
                     element.position({
                         x:
                             this.mouseDownElementOriginPos.x +
-                            (x - this.mouseDownPos.x) / this.transform.k,
+                            (x - this.mouseDownPos.x) / newTransform.k,
                         y:
                             this.mouseDownElementOriginPos.y +
-                            (y - this.mouseDownPos.y) / this.transform.k
+                            (y - this.mouseDownPos.y) / newTransform.k
                     })
 
                     this.netv.draw()
