@@ -74,6 +74,14 @@ export class Renderer {
     }
 
     /**
+     * set clearColor for renderer
+     * @param color 
+     */
+    public setBackgroundColor(color: Color) {
+        this.backgroundColor = color
+    }
+
+    /**
      * clear data in renderer
      */
     public clearData() {

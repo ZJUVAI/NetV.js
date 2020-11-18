@@ -28,6 +28,10 @@ export default class NetV {
     public $_renderer: Renderer
     public $_configs = JSON.parse(JSON.stringify(defaultConfigs)) // NOTE: deep copy configs
 
+    public $_transform: interfaces.Transform = { x: 0, y: 0, k: 1 }
+
+    public $_lazyUpdate = false // flag to control lazy update
+
     public $_interactionManager: InteractionManager
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
 
@@ -66,6 +70,18 @@ export default class NetV {
         this.labelManager = new LabelManager(this)
 
         this.$_interactionManager = new InteractionManager(this)
+    }
+
+    /**
+     * get/set canvas's background color
+     * @param color
+     */
+    public backgroundColor(color?: interfaces.Color) {
+        if (color) {
+            this.$_configs.backgroundColor = color
+            this.$_renderer.setBackgroundColor(color)
+        }
+        return this.$_configs.backgroundColor
     }
 
     /**
@@ -259,8 +275,20 @@ export default class NetV {
     }
 
     /**
+     * get/set netv's transform
+     * @param value optional, transform to set
+     */
+    public transform(value?: interfaces.Transform) {
+        if (value === undefined) {
+            return this.$_transform
+        }
+        this.$_transform = value
+        this.$_renderer.setTransform(this.$_transform)
+        this.labelManager.setTransform(this.$_transform)
+        this.draw()
+    }
+    /**
      * @description event listener
-     *
      * @memberof NetV
      */
     public on(eventName: string, callback?: (e: any) => any) {
