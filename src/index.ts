@@ -82,6 +82,18 @@ class NetV {
         this.$_interaction.initMouse()
     }
 
+    /**
+     * get/set canvas's background color
+     * @param color
+     */
+    public backgroundColor(color?: interfaces.Color) {
+        if (color) {
+            this.$_configs.backgroundColor = color
+            this.$_renderer.setBackgroundColor(color)
+        }
+        return this.$_configs.backgroundColor
+    }
+
     public $_addModifiedLinkCount(n: number) {
         this.$_modifiedLinkCount += n
         if (this.$_modifiedLinkCount > this.$_configs.lazyUpdateThreshold) {
