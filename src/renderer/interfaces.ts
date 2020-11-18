@@ -3,6 +3,10 @@
  * @description some interfaces for webglrenderer
  */
 
+import Node from 'src/elements/node'
+import Link from 'src/elements/link'
+import Element from 'src/elements/element'
+
 import { Color } from 'src/interfaces'
 
 export interface RendererConfigs {
@@ -12,25 +16,28 @@ export interface RendererConfigs {
     backgroundColor: Color
     nodeLimit: number
     linkLimit: number
+    getAllNodes: () => Node[]
+    getAllLinks: () => Link[]
 }
 
 /**
  * attribute used in render node and render link
  * contains attribute index, array and buffer
  */
-export type RenderAttribute = {
+export interface RenderAttribute {
     name: string
-    index: number
+    location: number
     size: number
     isBuildIn?: boolean
     array?: Float32Array
     buffer?: WebGLBuffer
-}[]
+    extractAttributeValueFrom: (element: Node | Link) => number[]
+}
 
-export type NodeAttr = 'position' | 'radius' | 'fill' | 'strokeWidth' | 'strokeColor'
+export type NodeAttr = 'position' | 'r' | 'fill' | 'strokeWidth' | 'strokeColor'
 export type LinkAttr = 'source' | 'target' | 'strokeWidth' | 'strokeColor'
 
-interface ElementManagerConfigs {
+export interface ElementManagerConfigs {
     width: number
     height: number
     limit: number
@@ -38,3 +45,10 @@ interface ElementManagerConfigs {
 
 export type NodeManagerConfigs = ElementManagerConfigs
 export type LinkManagerConfigs = ElementManagerConfigs
+
+export interface ShaderSeries {
+    vertex: string
+    fragment: string
+    idVertex: string
+    idFragment: string
+}
