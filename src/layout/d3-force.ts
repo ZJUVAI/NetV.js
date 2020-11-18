@@ -16,7 +16,13 @@ class D3ForceLayout extends Layout {
 
         const width = this.netv.$_configs.width
         const height = this.netv.$_configs.height
-        this.data = this.netv.data() // TODO: maybe need a deep copy
+        // this.data = this.netv.data() // TODO: maybe need a deep copy
+        this.data = {
+            nodes: this.netv.nodes().map((node) => ({ id: node.id(), x: node.x(), y: node.y() })),
+            links: this.netv
+                .links()
+                .map((link) => ({ source: link.source().id(), target: link.target().id() }))
+        }
         this.simulation = d3Force
             .forceSimulation(this.data.nodes)
             .force(
