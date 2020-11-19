@@ -57,7 +57,7 @@ export class Renderer {
     public dispose() {
         // refer: https://stackoverflow.com/a/23606581
         const numTextureUnits = this.gl.getParameter(this.gl.MAX_TEXTURE_IMAGE_UNITS)
-        for (var unit = 0; unit < numTextureUnits; ++unit) {
+        for (let unit = 0; unit < numTextureUnits; ++unit) {
             this.gl.activeTexture(this.gl.TEXTURE0 + unit)
             this.gl.bindTexture(this.gl.TEXTURE_2D, null)
             this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, null)
