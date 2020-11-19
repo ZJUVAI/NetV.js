@@ -8,6 +8,7 @@ import Link from 'src/link';
 import { RenderLinkManager } from './elements/link/render-link';
 import { Transform, Position } from '../interfaces';
 import { RendererConfigs } from './interfaces';
+import { Color } from 'src/interfaces';
 export declare class Renderer {
     nodeManager: RenderNodeManager;
     linkManager: RenderLinkManager;
@@ -21,6 +22,15 @@ export declare class Renderer {
      * @param configs {canvas: HTMLCanvasElement, width: number, height: number, backgroundColor: Color, defaultConfigs: Object} configs passed to renderer
      */
     constructor(configs: RendererConfigs);
+    /**
+     * dispose renderer stuffs
+     */
+    dispose(): void;
+    /**
+     * set clearColor for renderer
+     * @param color
+     */
+    setBackgroundColor(color: Color): void;
     /**
      * clear data in renderer
      */

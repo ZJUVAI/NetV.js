@@ -15,6 +15,7 @@ import { InteractionManager } from './interaction/interaction'
 import * as Utils from './utils/utils'
 import * as Layouts from './layout/index'
 import { LabelManager } from './label/label'
+import { Position } from './interfaces'
 
 class NetV {
     public static Layouts = Layouts
@@ -22,15 +23,18 @@ class NetV {
     public Utils = Utils // TODO: need refactor to static?
 
     public labelManager: LabelManager
-    public interaction: InteractionManager
+    public $_interactionManager: InteractionManager
 
     public $_id2node = new Map()
     public $_ends2link = new Map2()
     public $_sourceId2links: Map<string, Set<Link>> = new Map()
     public $_targetId2links: Map<string, Set<Link>> = new Map()
     public $_container: HTMLDivElement
+    public $_canvas: HTMLCanvasElement
     public $_renderer: Renderer
     public $_configs = JSON.parse(JSON.stringify(defaultConfigs)) // NOTE: deep copy configs
+
+    public $_transform: interfaces.Transform = { x: 0, y: 0, k: 1 }
 
     public $_lazyUpdate = false // flag to control lazy update
 
@@ -64,6 +68,7 @@ class NetV {
         canvas.setAttribute('width', String(this.$_configs.width * pixelRatio))
         canvas.setAttribute('height', String(this.$_configs.height * pixelRatio))
         this.$_container.appendChild(canvas)
+        this.$_canvas = canvas
 
         this.$_renderer = new Renderer({
             canvas,
@@ -76,13 +81,24 @@ class NetV {
 
         this.labelManager = new LabelManager(this)
 
-        this.interaction = new InteractionManager(this)
+        this.$_interactionManager = new InteractionManager(this)
         if (this.$_configs.enablePanZoom) {
-            this.interaction.initZoom()
+            this.$_interactionManager.initZoom()
         }
 
-        this.interaction.initMouse()
-        this.interaction.initLasso()
+        this.$_interactionManager.initMouse()
+    }
+
+    /**
+     * get/set canvas's background color
+     * @param color
+     */
+    public backgroundColor(color?: interfaces.Color) {
+        if (color) {
+            this.$_configs.backgroundColor = color
+            this.$_renderer.setBackgroundColor(color)
+        }
+        return this.$_configs.backgroundColor
     }
 
     public $_addModifiedLinkCount(n: number) {
@@ -112,8 +128,6 @@ class NetV {
             this.addNodes(this.$_data.nodes)
             this.addLinks(this.$_data.links)
         }
-
-        this.interaction.setLassoData()
     }
 
     /**
@@ -211,6 +225,18 @@ class NetV {
     }
 
     /**
+     * dispose NetV object, clear all stuffs
+     */
+    public dispose() {
+        this.wipe()
+        this.$_renderer.dispose()
+        this.$_canvas.remove()
+        // remove label canvas
+        // TODO: consider standalone interaction plugin
+        this.labelManager.dispose()
+    }
+
+    /**
      * @description return build-in dataset according to name
      * @param name dataset name
      */
@@ -265,11 +291,45 @@ class NetV {
 
     /**
      * pan on canvas to get given node centered
-     * @param node 
+     * @param node
      */
     public centerOn(node: Node) {
         const pos = node.position()
-        this.interaction.centerPosition(pos)
+        this.$_interactionManager.centerPosition(pos)
+    }
+
+    /**
+     * progmatically pan
+     * @param x
+     * @param y
+     */
+    public panBy(x: number, y: number) {
+        this.$_interactionManager.panBy(x, y)
+        this.draw()
+    }
+
+    /**
+     * progmatically zoom
+     * @param factor zoom factor
+     * @param center optional, zoom center position
+     */
+    public zoomBy(factor: number, center?: Position) {
+        this.$_interactionManager.zoomBy(factor, center)
+        this.draw()
+    }
+
+    /**
+     * get/set netv's transform
+     * @param value optional, transform to set
+     */
+    public transform(value?: interfaces.Transform) {
+        if (value === undefined) {
+            return this.$_transform
+        }
+        this.$_transform = value
+        this.$_renderer.setTransform(this.$_transform)
+        this.labelManager.setTransform(this.$_transform)
+        this.draw()
     }
 }
 

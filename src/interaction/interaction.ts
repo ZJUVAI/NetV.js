@@ -4,20 +4,9 @@
  */
 
 import { NetV } from 'src'
-import Node from '../node'
-import { LassoManager } from './lasso'
-import { Position } from '../interfaces'
-
+import { Position, Transform } from '../interfaces'
 export class InteractionManager {
     private netv: NetV
-
-    private lasso: LassoManager
-
-    private transform = {
-        x: 0,
-        y: 0,
-        k: 1
-    }
     private isMouseDown = false
     private isMouseMove = false
     private mouseDownElement
@@ -31,34 +20,36 @@ export class InteractionManager {
     }
 
     /**
-     * init Lasso interaction
+     * progmatically pan
+     * @param x
+     * @param y
      */
-    public initLasso() {
-        this.lasso = new LassoManager(this.netv)
+    public panBy(x: number, y: number) {
+        const newTransform = { ...this.netv.$_transform }
+        newTransform.x += x
+        newTransform.y += y
+        this.netv.transform(newTransform)
     }
 
     /**
-     * update lasso data
+     * progmatically zoom
+     * @param factor zoom factor
+     * @param center optional, zoom center position
      */
-    public setLassoData() {
-        this.lasso.setData()
-    }
+    public zoomBy(factor: number, center?: Position) {
+        const newTransform = { ...this.netv.$_transform }
+        let centerPos = center
+        if (!centerPos) {
+            centerPos = { x: this.netv.$_configs.width / 2, y: this.netv.$_configs.height / 2 }
+        }
+        const { x, y } = centerPos
 
-    /**
-     * control use lasso or not
-     * @param enable enable lasso or not
-     */
-    public toggleLasso(enable: boolean) {
-        this.lasso.toggleLasso(enable)
-    }
+        newTransform.x = (1 - factor) * x + factor * newTransform.x
+        newTransform.y = (1 - factor) * y + factor * newTransform.y
 
-    /**
-     * set lasso callback
-     * callback function can get selected Nodes
-     * @param callback selected callback
-     */
-    public onLassoSelected(callback: (items: Node[]) => {}) {
-        this.lasso.onSelectedCallback(callback)
+        newTransform.k *= factor
+
+        this.netv.transform(newTransform)
     }
 
     /**
@@ -66,14 +57,15 @@ export class InteractionManager {
      * @param pos
      */
     public centerPosition(pos: Position) {
-        const x = pos.x * this.transform.k + this.transform.x
-        const y = pos.y * this.transform.k + this.transform.y
+        const newTransform = { ...this.netv.$_transform }
+        const x = pos.x * newTransform.k + newTransform.x
+        const y = pos.y * newTransform.k + newTransform.y
         const center = {
             x: this.netv.$_configs.width / 2,
             y: this.netv.$_configs.height / 2
         }
-        // this.transform.x += center.x - x
-        // this.transform.y += center.y - y
+        // newTransform.x += center.x - x
+        // newTransform.y += center.y - y
         // interpolation
         const stepCount = 20
         const difference = {
@@ -81,8 +73,8 @@ export class InteractionManager {
             y: center.y - y
         }
         const originTranslate = {
-            x: this.transform.x,
-            y: this.transform.y
+            x: newTransform.x,
+            y: newTransform.y
         }
 
         const ease = (x) => {
@@ -92,12 +84,10 @@ export class InteractionManager {
         let steps = 1
 
         const animation = setInterval(() => {
-            this.transform.x = originTranslate.x + difference.x * ease(steps / stepCount)
-            this.transform.y = originTranslate.y + difference.y * ease(steps / stepCount)
+            newTransform.x = originTranslate.x + difference.x * ease(steps / stepCount)
+            newTransform.y = originTranslate.y + difference.y * ease(steps / stepCount)
 
-            this.netv.$_renderer.setTransform(this.transform)
-            this.netv.labelManager.setTransform(this.transform)
-            this.netv.draw()
+            this.netv.transform(newTransform)
 
             steps += 1
             if (steps > stepCount) clearInterval(animation)
@@ -111,20 +101,18 @@ export class InteractionManager {
     public initZoom() {
         const canvas = this.netv.$_container.querySelector('canvas')
         const handleScroll = (evt: MouseWheelEvent) => {
+            const newTransform = { ...this.netv.$_transform }
             const x = evt.offsetX || evt.pageX - canvas.offsetLeft
             const y = evt.offsetY || evt.pageY - canvas.offsetTop
             const delta = evt.deltaY ? evt.deltaY / 40 : evt.detail ? -evt.detail : 0
             if (delta) {
                 const k = Math.pow(1.1, delta)
-                this.transform.x = (1 - k) * x + k * this.transform.x
-                this.transform.y = (1 - k) * y + k * this.transform.y
+                newTransform.x = (1 - k) * x + k * newTransform.x
+                newTransform.y = (1 - k) * y + k * newTransform.y
 
-                this.transform.k *= k
+                newTransform.k *= k
 
-                this.netv.$_renderer.setTransform(this.transform)
-                this.netv.labelManager.setTransform(this.transform)
-                this.lasso.setTransform(this.transform)
-                this.netv.draw()
+                this.netv.transform(newTransform)
             }
 
             evt.preventDefault()
@@ -138,15 +126,17 @@ export class InteractionManager {
      * setup click utility
      */
     public initMouse() {
+        let newTransform = { ...this.netv.$_transform }
         const canvas = this.netv.$_container.querySelector('canvas')
         const handleMouseDown = (evt: MouseEvent) => {
+            newTransform = { ...this.netv.$_transform }
             const x = evt.offsetX || evt.pageX - canvas.offsetLeft
             const y = evt.offsetY || evt.pageY - canvas.offsetTop
             const yInv = this.netv.$_configs.height - y
 
             this.isMouseDown = true
             this.mouseDownPos = { x, y }
-            this.dragStartTransform = JSON.parse(JSON.stringify(this.transform))
+            this.dragStartTransform = JSON.parse(JSON.stringify(newTransform))
 
             this.mouseDownElement = this.netv.getElementByPosition({
                 x,
@@ -167,22 +157,19 @@ export class InteractionManager {
 
                 if (!this.mouseDownElement || !this.mouseDownElement.element.position) {
                     // pan, when not dragging node
-                    this.transform.x = this.dragStartTransform.x + x - this.mouseDownPos.x
-                    this.transform.y = this.dragStartTransform.y + y - this.mouseDownPos.y
+                    newTransform.x = this.dragStartTransform.x + x - this.mouseDownPos.x
+                    newTransform.y = this.dragStartTransform.y + y - this.mouseDownPos.y
 
-                    this.netv.$_renderer.setTransform(this.transform)
-                    this.netv.labelManager.setTransform(this.transform)
-                    this.lasso.setTransform(this.transform)
-                    this.netv.draw()
+                    this.netv.transform(newTransform)
                 } else {
                     // drag node
                     this.mouseDownElement.element.position({
                         x:
                             this.mouseDownElementOriginPos.x +
-                            (x - this.mouseDownPos.x) / this.transform.k,
+                            (x - this.mouseDownPos.x) / newTransform.k,
                         y:
                             this.mouseDownElementOriginPos.y +
-                            (y - this.mouseDownPos.y) / this.transform.k
+                            (y - this.mouseDownPos.y) / newTransform.k
                     })
                     this.netv.draw()
                     // when dragging, dynamic change label's position. because only operate on single element, it's ok to remove and recreate

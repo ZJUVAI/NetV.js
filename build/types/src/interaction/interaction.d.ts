@@ -3,12 +3,9 @@
  * @description handle all interaction in NetV
  */
 import { NetV } from 'src';
-import Node from '../node';
 import { Position } from '../interfaces';
 export declare class InteractionManager {
     private netv;
-    private lasso;
-    private transform;
     private isMouseDown;
     private isMouseMove;
     private mouseDownElement;
@@ -17,24 +14,17 @@ export declare class InteractionManager {
     private dragStartTransform;
     constructor(netv: NetV);
     /**
-     * init Lasso interaction
+     * progmatically pan
+     * @param x
+     * @param y
      */
-    initLasso(): void;
+    panBy(x: number, y: number): void;
     /**
-     * update lasso data
+     * progmatically zoom
+     * @param factor zoom factor
+     * @param center optional, zoom center position
      */
-    setLassoData(): void;
-    /**
-     * control use lasso or not
-     * @param enable enable lasso or not
-     */
-    toggleLasso(enable: boolean): void;
-    /**
-     * set lasso callback
-     * callback function can get selected Nodes
-     * @param callback selected callback
-     */
-    onLassoSelected(callback: (items: Node[]) => {}): void;
+    zoomBy(factor: number, center?: Position): void;
     /**
      * move current position to center of canvas
      * @param pos

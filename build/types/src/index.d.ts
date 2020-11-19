@@ -12,18 +12,21 @@ import { InteractionManager } from './interaction/interaction';
 import * as Utils from './utils/utils';
 import * as Layouts from './layout/index';
 import { LabelManager } from './label/label';
+import { Position } from './interfaces';
 declare class NetV {
     static Layouts: typeof Layouts;
     Utils: typeof Utils;
     labelManager: LabelManager;
-    interaction: InteractionManager;
+    $_interactionManager: InteractionManager;
     $_id2node: Map<any, any>;
     $_ends2link: Map2;
     $_sourceId2links: Map<string, Set<Link>>;
     $_targetId2links: Map<string, Set<Link>>;
     $_container: HTMLDivElement;
+    $_canvas: HTMLCanvasElement;
     $_renderer: Renderer;
     $_configs: any;
+    $_transform: interfaces.Transform;
     $_lazyUpdate: boolean;
     private $_data;
     private $_modifiedLinkCount;
@@ -32,6 +35,11 @@ declare class NetV {
      * @param configs configurations of NetV, must include a `container: HTMLDivElement` term
      */
     constructor(configs: any);
+    /**
+     * get/set canvas's background color
+     * @param color
+     */
+    backgroundColor(color?: interfaces.Color): any;
     $_addModifiedLinkCount(n: number): void;
     /**
      * @description data getter setter
@@ -85,6 +93,10 @@ declare class NetV {
      */
     wipe(): void;
     /**
+     * dispose NetV object, clear all stuffs
+     */
+    dispose(): void;
+    /**
      * @description return build-in dataset according to name
      * @param name dataset name
      */
@@ -107,5 +119,22 @@ declare class NetV {
      * @param node
      */
     centerOn(node: Node): void;
+    /**
+     * progmatically pan
+     * @param x
+     * @param y
+     */
+    panBy(x: number, y: number): void;
+    /**
+     * progmatically zoom
+     * @param factor zoom factor
+     * @param center optional, zoom center position
+     */
+    zoomBy(factor: number, center?: Position): void;
+    /**
+     * get/set netv's transform
+     * @param value optional, transform to set
+     */
+    transform(value?: interfaces.Transform): interfaces.Transform;
 }
 export { NetV };

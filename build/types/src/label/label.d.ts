@@ -13,6 +13,10 @@ export declare class LabelManager {
     private $_strokeWidth;
     constructor(core: NetV);
     /**
+     * dispose label's svg
+     */
+    dispose(): void;
+    /**
      * draw node's label
      * @param node node to add label
      */
