@@ -39,6 +39,13 @@ export class LabelManager {
     }
 
     /**
+     * dispose label's svg
+     */
+    public dispose() {
+        this.$_svg.remove()
+    }
+
+    /**
      * draw node's label
      * @param node node to add label
      */
