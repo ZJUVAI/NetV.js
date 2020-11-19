@@ -52,8 +52,27 @@ export class Renderer {
     }
 
     /**
+     * dispose renderer stuffs
+     */
+    public dispose() {
+        // refer: https://stackoverflow.com/a/23606581
+        const numTextureUnits = this.gl.getParameter(this.gl.MAX_TEXTURE_IMAGE_UNITS)
+        for (var unit = 0; unit < numTextureUnits; ++unit) {
+            this.gl.activeTexture(this.gl.TEXTURE0 + unit)
+            this.gl.bindTexture(this.gl.TEXTURE_2D, null)
+            this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, null)
+        }
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null)
+        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, null)
+        this.gl.bindRenderbuffer(this.gl.RENDERBUFFER, null)
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null)
+        this.gl.getExtension('WEBGL_lose_context').loseContext()
+        // TODO: maybe need free more buffers or something else
+    }
+
+    /**
      * set clearColor for renderer
-     * @param color 
+     * @param color
      */
     public setBackgroundColor(color: Color) {
         this.backgroundColor = color
