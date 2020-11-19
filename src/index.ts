@@ -25,6 +25,7 @@ export default class NetV {
     public $_sourceId2links: Map<string, Set<Link>> = new Map()
     public $_targetId2links: Map<string, Set<Link>> = new Map()
     public $_container: HTMLDivElement
+    public $_canvas: HTMLCanvasElement
     public $_renderer: Renderer
     public $_configs = JSON.parse(JSON.stringify(defaultConfigs)) // NOTE: deep copy configs
 
@@ -55,6 +56,7 @@ export default class NetV {
         canvas.setAttribute('width', String(this.$_configs.width * pixelRatio))
         canvas.setAttribute('height', String(this.$_configs.height * pixelRatio))
         this.$_container.appendChild(canvas)
+        this.$_canvas = canvas
 
         this.$_renderer = new Renderer({
             canvas,
@@ -198,6 +200,18 @@ export default class NetV {
         this.$_sourceId2links = new Map()
         this.$_targetId2links = new Map()
         this.$_renderer.clearData()
+    }
+
+    /**
+     * dispose NetV object, clear all stuffs
+     */
+    public dispose() {
+        this.wipe()
+        this.$_renderer.dispose()
+        this.$_canvas.remove()
+        // remove label canvas
+        // TODO: consider standalone interaction plugin
+        this.labelManager.dispose()
     }
 
     /**
