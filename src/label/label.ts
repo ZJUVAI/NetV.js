@@ -39,6 +39,13 @@ export class LabelManager {
     }
 
     /**
+     * dispose label's svg
+     */
+    public dispose() {
+        this.$_svg.remove()
+    }
+
+    /**
      * draw node's label
      * @param node node to add label
      */
@@ -76,8 +83,16 @@ export class LabelManager {
     public setTransform(transform: Transform) {
         this.$_svg.setAttribute(
             'transform',
-            `translate(${this.$_offset.x + (1 - transform.k) * -400 + transform.x}
-             ${this.$_offset.y + (1 - transform.k) * -300 + transform.y})
+            `translate(${
+                this.$_offset.x +
+                (1 - transform.k) * -(this.$_core.$_configs.width / 2) +
+                transform.x
+            }
+             ${
+                 this.$_offset.y +
+                 (1 - transform.k) * -(this.$_core.$_configs.height / 2) +
+                 transform.y
+             })
              scale(${transform.k})`
         )
         this.$_svg.setAttribute('font-size', `${this.$_fontSize / transform.k}px`)
