@@ -11,10 +11,10 @@ import { NetV } from './index'
 class Link {
     public $_clickCallback: (link: Link) => void
     public $_hoverCallback: (link: Link) => void
+    public $_source: Node
+    public $_target: Node
 
     private $_core: NetV
-    private $_source: Node
-    private $_target: Node
     private $_strokeWidth: number
     private $_strokeColor: interfaces.Color
 

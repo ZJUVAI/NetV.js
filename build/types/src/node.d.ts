@@ -4,6 +4,7 @@
  * @dependences interfaces.ts, utils/is.ts
  */
 import * as interfaces from './interfaces';
+import Link from './link';
 declare class Node {
     $_clickCallback: (node: Node) => void;
     $_hoverCallback: (node: Node) => void;
@@ -23,6 +24,14 @@ declare class Node {
      * @memberof Node
      */
     id(): string;
+    /**
+     * get neighbor nodes for current node
+     */
+    neighborNodes(): unknown[];
+    /**
+     * get neighbor links for current node
+     */
+    neighborLinks(): Link[];
     /**
      * set/get x postion
      * @param {number} [value]

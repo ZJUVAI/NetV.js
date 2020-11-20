@@ -8,9 +8,9 @@ import * as interfaces from './interfaces';
 declare class Link {
     $_clickCallback: (link: Link) => void;
     $_hoverCallback: (link: Link) => void;
+    $_source: Node;
+    $_target: Node;
     private $_core;
-    private $_source;
-    private $_target;
     private $_strokeWidth;
     private $_strokeColor;
     constructor(core: any, linkData: interfaces.LinkData);

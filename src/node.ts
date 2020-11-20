@@ -76,6 +76,35 @@ class Node {
     }
 
     /**
+     * get neighbor nodes for current node
+     */
+    public neighborNodes() {
+        // NOTE: currently API not intent to support directed graph
+        const nodeSet = new Set()
+        this.$_core.$_sourceId2links.get(this.$_id).forEach((link) => {
+            nodeSet.add(link.$_target)
+        })
+
+        this.$_core.$_targetId2links.get(this.$_id).forEach((link) => {
+            nodeSet.add(link.$_source)
+        })
+
+        return Array.from(nodeSet)
+    }
+
+    /**
+     * get neighbor links for current node
+     */
+    public neighborLinks() {
+        // NOTE: currently API not intent to support directed graph
+        const linkSet = new Set([
+            ...this.$_core.$_sourceId2links.get(this.$_id),
+            ...this.$_core.$_targetId2links.get(this.$_id)
+        ])
+        return Array.from(linkSet)
+    }
+
+    /**
      * set/get x postion
      * @param {number} [value]
      * @memberof Node
