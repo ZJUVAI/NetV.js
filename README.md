@@ -1,78 +1,24 @@
-# NetV.js
-
-A large scale network visualization engine based on WebGL.
-
-Homepage: https://zjuvag.org/netv.js/
-
-## Features
-
-* GPU-accelerated render large-scale graphs (millons of elements)
-* High FPS for dynamic rendering graphs
-* Fast WebGL-based mouse interaction on graphs
-
-## Usage
-
-Download NetV.js from releases: https://github.com/ZJUVAG/NetV.js/releases
-
-Or import from CDN: https://unpkg.com/netv/build/NetV.js 
-
-If you use npm, you can also install netv:
-
-```bash
-npm install netv
-```
-
-Basic example shows below:
-
-```js
-const testData = {
-    nodes: [
-        { id: '0', x: 300, y: 100 },
-        { id: '1', x: 500, y: 100 },
-        { id: '2', x: 400, y: 400 }
-    ],
-    links: [
-        { source: '0', target: '2' },
-        { source: '1', target: '2' }
-    ]
-}
-
-const netv = new NetV({
-    container: document.getElementById('main')
-})
-netv.data(testData)
-netv.draw()
-
-```
-
-## Contribution
-
-Feel freely submitting issues and pull requests. You may check our [contribution guide](https://github.com/ZJUVAG/NetV.js/blob/dev/docs/development-guide.md).
-
 
 # NetV.js
 
-基于WebGL的大规模图可视化引擎
+本分支专为巫英才/陈为老师的可视化课程的课程作业提供。
 
-主页: https://zjuvag.org/netv.js/
 
-## 特性
 
-* GPU加速的大规模图数据渲染(支持千万级元素)
-* 高性能FPS实时渲染
-* 基于WebGl的快速交互响应
+## 安装使用
 
-## 使用
+准备工作：安装[`git`](https://git-scm.com/)和[`Node.js`](https://nodejs.org/zh-cn/)。
 
-下载 NetV.js 的地址: https://github.com/ZJUVAG/NetV.js/releases
-
-或者从CDN引入: https://unpkg.com/netv/build/NetV.js 
-
-NPM安装：
+本项目的安装和启动方法：
 
 ```bash
-npm install netv
+git clone https://github.com/ZJUVAG/NetV.js.git
+cd NetV.js
+npm install
+npm run build # or: npm run watch
 ```
+
+之后你可以打开`examples`文件夹下的预览功能。
 
 基础用法
 
@@ -96,6 +42,7 @@ netv.data(testData)
 netv.draw()
 
 ```
+
 
 
 ## 贡献
