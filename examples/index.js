@@ -1,5 +1,5 @@
 const graph = { nodes: [], links: [] }
-const shapes = ['rect', 'circle', 'triangle']
+const shapes = ['rect', 'circle', 'triangle'] // TODO: to be add more shapes
 shapes.forEach((shape, i) => {
     const node = {
         id: String(i),
@@ -27,6 +27,7 @@ shapes.forEach((shape, i) => {
                 vertexGamma: { x: 12.5 * Math.sqrt(3), y: 12.5 }
             }
             break
+        // TODO: to be add more cases
     }
     graph.nodes.push(node)
     if (i > 0) {
@@ -70,6 +71,7 @@ netV.nodes().forEach((node) => {
         reverseFillOf(node)
         netV.draw()
     })
+    node.on('dragging', () => {})
 })
 
 netV.links().forEach((link) => {
