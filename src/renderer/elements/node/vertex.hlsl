@@ -43,7 +43,7 @@ vec2 calculate_inner_point (vec2 p1, vec2 p2, vec2 p3) {
     return inner;
 }
 
-float calculate_stroke_scale (vec2 p1, vec2 p2, vec2 p3) {
+float calculate_stroke_scale (vec2 p1, vec2 p2, vec2 p3, float strokeWidth, float pixelRatio) {
     vec2 inner = calculate_inner_point(p1, p2, p3);
     float a = distance(p1, inner);
     float b = distance(p2, inner);
@@ -107,7 +107,7 @@ void main(void) {
     } else if (shape == 2.0) { // triangle shape
         // calculate the normal of the edge: alpha => beta
         vec2 inner = calculate_inner_point(vertex_alpha, vertex_beta, vertex_gamma);
-        float stroke_scale = calculate_stroke_scale(vertex_alpha, vertex_beta, vertex_gamma);
+        float stroke_scale = calculate_stroke_scale(vertex_alpha, vertex_beta, vertex_gamma, strokeWidth, pixelRatio);
 
         vec2 outer_vertex_alpha = (vertex_alpha - inner) * stroke_scale + inner ; // consider stroke in
         vec2 outer_vertex_beta = (vertex_beta - inner) * stroke_scale + inner ; // consider stroke in

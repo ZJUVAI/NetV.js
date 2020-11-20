@@ -1,15 +1,20 @@
+// 图数据包含了节点数据（nodes）和节点与节点之间的链接（links）
 const graph = { nodes: [], links: [] }
-const shapes = ['rect', 'circle', 'triangle'] // TODO: to be add more shapes
+// 当前的节点支持了以下三种不同的形状
+const shapes = ['rect', 'circle', 'triangle'] // TODO: 你需要为节点增加新的形状
+
+// 为每个形状生成一个节点
 shapes.forEach((shape, i) => {
     const node = {
-        id: String(i),
-        x: 200 * (i + 1),
+        id: String(i), // 每个节点的索引，也是唯一性标记
+        x: 200 * (i + 1), // 依次水平排列
         y: 100,
         style: {
-            shape,
-            fill: { r: 1, g: 0, b: 0, a: 1 },
-            strokeWidth: 4,
-            strokeColor: { r: 1, g: 0, b: 1, a: 0.3 }
+            // 指定节点的外观
+            shape, // 节点的形状
+            fill: { r: 1, g: 0, b: 0, a: 1 }, // 填充颜色
+            strokeWidth: 4, // 边框宽度
+            strokeColor: { r: 1, g: 0, b: 1, a: 0.3 } // 边框颜色
         }
     }
     switch (shape) {
