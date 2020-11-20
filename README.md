@@ -45,6 +45,10 @@ npm run build # or: npm run watch
 
 
 
+
+
+
+
 ## 贡献
 
 可以随时向我们提issuse或者提交贡献代码，具体细节可以查看 [开发指南](https://github.com/ZJUVAG/NetV.js/blob/dev/docs/development-guide-chinese.md).
