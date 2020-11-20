@@ -220,10 +220,13 @@ export class InteractionManager {
             y: yInv
         })
 
-        if (this.mouseDownElement?.element.constructor.name === 'Node') {
-            const element = this.mouseDownElement.element as Node // only node can be dragged
-            // record orgin position for drag
-            this.mouseDownElementOriginPos = { ...element.position() }
+        if (this.mouseDownElement?.element) {
+            const element = this.mouseDownElement.element
+            if (element?.constructor.name === 'Node') {
+                // only node can be dragged
+                // record orgin position for drag
+                this.mouseDownElementOriginPos = { ...element.position() }
+            }
             element.$_mousedownCallbackSet.forEach((callback) => {
                 callback({
                     event: evt,
