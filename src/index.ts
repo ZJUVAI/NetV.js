@@ -14,10 +14,11 @@ import { Renderer } from './renderer'
 import { InteractionManager } from './interaction/interaction'
 import * as Utils from './utils/utils'
 import { LabelManager } from './label/label'
-import { Position } from './interfaces'
+import * as Layout from './layout'
 
 export default class NetV {
     public static Utils = Utils
+    public static Layouts = Layout
     public labelManager: LabelManager
 
     public $_id2node = new Map()
@@ -283,7 +284,7 @@ export default class NetV {
      * @param factor zoom factor
      * @param center optional, zoom center position
      */
-    public zoomBy(factor: number, center?: Position) {
+    public zoomBy(factor: number, center?: interfaces.Position) {
         this.$_interactionManager.zoomBy(factor, center)
         this.draw()
     }

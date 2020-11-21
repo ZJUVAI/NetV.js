@@ -1,19 +1,30 @@
-import NetV from '../index'
+import { NodeLinkData } from 'src/interfaces'
 
-abstract class Layout {
-    protected netv: NetV
+export default abstract class Layout {
+    protected graph: NodeLinkData
+    protected parameters: any
+    protected isStopped = false
     protected startCallback: () => {}
     protected tickCallback: () => {}
     protected stopCallback: () => {}
 
-    public constructor(netv: NetV) {
-        this.netv = netv
+    public constructor(graph: NodeLinkData, parameters) {
+        this.graph = graph
+        this.parameters = parameters
     }
 
-    public abstract start(): void
-    public abstract stop(): void
+    public start(): void {}
+    public stop(): void {
+        this.isStopped = true
+    }
 
-    public abstract onStart(cb: () => {}): void
-    public abstract onTick?(cb: () => {}): void
-    public abstract onStop(cb: () => {}): void
+    public onStart(cb: () => {}): void {
+        this.startCallback = cb
+    }
+    public onTick?(cb: () => {}): void {
+        this.tickCallback = cb
+    }
+    public onStop(cb: () => {}): void {
+        this.stopCallback = cb
+    }
 }
