@@ -22,11 +22,13 @@ npm install
 npm run build # or: npm run watch
 ```
 
-之后你可以打开`examples/index.html`进行预览。
+之后你可以打开`examples`中的相关样例进行预览。
 
 
 
 ## 作业要求
+
+推荐开发工具：vscode+prettier插件+eslint插件
 
 ### 节点形状渲染
 
@@ -45,7 +47,15 @@ npm run build # or: npm run watch
 
 
 
+### 布局计算
 
+在`src/layout`文件夹里，目前已经实现了一种径向层次布局（可以在`examples/layouts`中查看效果），需要你帮助实现`d3-force`和`forceatlas2`两种布局，要求这两种布局能够实现`layout.ts`中定义的各个成员函数。
+
+
+
+## 结果演示
+
+除了演示你的可视化成果外，你还需要解释你的实现（代码逻辑），最好能够现场讲解代码实现。
 
 
 

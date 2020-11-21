@@ -92,7 +92,7 @@ export default class RadialTree extends Layout {
         const d3tree = d3
             .tree()
             .size([2 * Math.PI, radius])
-            .separation((a, b) => (a.parent == b.parent ? 1 : 2) / a.depth)
+            .separation((a, b) => (a.parent === b.parent ? 1 : 2) / a.depth)
         d3tree(hierachy)
         console.log(hierachy)
 
