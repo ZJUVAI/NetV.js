@@ -23,6 +23,7 @@ export class InteractionManager {
     private isMouseDown = false
     private isMouseMove = false
     private mouseDownElement
+    private mouseMoveElement
     private mouseDownElementOriginPos: { x: number; y: number } // NOTE: record pos, only support node's drag
 
     private mouseDownPos: { x: number; y: number }
@@ -220,10 +221,13 @@ export class InteractionManager {
             y: yInv
         })
 
-        if (this.mouseDownElement?.element.constructor.name === 'Node') {
-            const element = this.mouseDownElement.element as Node // only node can be dragged
-            // record orgin position for drag
-            this.mouseDownElementOriginPos = { ...element.position() }
+        if (this.mouseDownElement?.element) {
+            const element = this.mouseDownElement.element
+            if (element?.constructor.name === 'Node') {
+                // only node can be dragged
+                // record orgin position for drag
+                this.mouseDownElementOriginPos = { ...element.position() }
+            }
             element.$_mousedownCallbackSet.forEach((callback) => {
                 callback({
                     event: evt,
@@ -245,6 +249,7 @@ export class InteractionManager {
         const y = evt.offsetY || evt.pageY - this.canvas.offsetTop
 
         const lastIsMouseMove = this.isMouseMove
+        const lastMouseMoveElement = this.mouseMoveElement
 
         if (this.isMouseDown) {
             this.isMouseMove = true
@@ -314,12 +319,28 @@ export class InteractionManager {
             // hover
             const yInv = this.netv.$_configs.height - y
             const element = this.netv.getElementByPosition({ x, y: yInv })?.element
-            if (element?.$_hoverCallbackSet.size) {
-                element.$_hoverCallbackSet.forEach((callback) =>
+            this.mouseMoveElement = element
+            if (lastMouseMoveElement === element) {
+                element?.$_mousemoveCallbackSet.forEach((callback) =>
                     callback({
                         event: evt,
-                        name: 'hover',
+                        name: 'mousemove',
                         element
+                    })
+                )
+            } else {
+                element?.$_mouseoverCallbackSet.forEach((callback) =>
+                    callback({
+                        event: evt,
+                        name: 'mouseover',
+                        element
+                    })
+                )
+                lastMouseMoveElement?.$_mouseoutCallbackSet.forEach((callback) =>
+                    callback({
+                        event: evt,
+                        name: 'mouseout',
+                        element: lastMouseMoveElement
                     })
                 )
             }

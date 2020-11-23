@@ -33,3 +33,40 @@ data.nodes.forEach((node) => {
 })
 netv.data(data)
 netv.draw()
+
+netv.on('zoom', () => { })
+netv.on('pan', () => { })
+netv.nodes().forEach((node) => {
+    const unhighlightLink = (link) => {
+        link.strokeColor({
+            ...link.strokeColor(),
+            a: 0.01
+        })
+    }
+
+    const highlightLink = (link) => {
+        link.strokeColor({
+            ...link.strokeColor(),
+            a: 0.5
+        })
+    }
+
+    const neighborLinks = node.neighborLinks()
+
+    const mouseover = () => {
+        netv.links().forEach(unhighlightLink)
+        neighborLinks.forEach(highlightLink)
+        netv.draw()
+    }
+    const mouseout = () => {
+        netv.links().forEach(highlightLink)
+        netv.draw()
+    }
+    node.on('mouseover', mouseover)
+    node.on('mouseout', mouseout)
+    node.on('click', () => {
+        node.off('mouseover', mouseout)
+        node.off('mouseover', mouseover)
+    })
+    node.on('dragging', () => { })
+})
