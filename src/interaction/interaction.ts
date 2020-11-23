@@ -175,7 +175,7 @@ export class InteractionManager {
 
     public offPan(callback: (e: any) => any) {
         this.panCallbackSet.delete(callback)
-        this.increaseMouseEventCallbackCountBy(1)
+        this.decreaseMouseEventCallbackCountBy(1)
     }
 
     public increaseMouseEventCallbackCountBy(n: number) {
