@@ -17,6 +17,18 @@ export declare class LabelManager {
      */
     dispose(): void;
     /**
+     * draw all labels
+     */
+    draw(): void;
+    /**
+     * update all labels for netv
+     */
+    update(): void;
+    /**
+     * remove all labels
+     */
+    remove(): void;
+    /**
      * draw node's label
      * @param node node to add label
      */
