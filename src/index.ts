@@ -310,8 +310,12 @@ export default class NetV {
             this.$_interactionManager.onZoom(callback)
         } else if (eventName.toLowerCase() === 'pan') {
             this.$_interactionManager.onPan(callback)
-        } else if (eventName.toLowerCase() === 'lasso') {
-            console.log('lass')
+        } else if (eventName.toLowerCase() === 'mousedown') {
+            this.$_interactionManager.onMousedown(callback)
+        } else if (eventName.toLowerCase() === 'mouseup') {
+            this.$_interactionManager.onMouseup(callback)
+        } else if (eventName.toLowerCase() === 'click') {
+            this.$_interactionManager.onClick(callback)
         }
     }
 

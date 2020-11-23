@@ -140,3 +140,18 @@ netv.draw()
 const log = console.log
 netv.on('zoom', log)
 netv.on('pan', log)
+
+const reverseBackgroundColor = () => {
+    netv.backgroundColor({
+        r: 1 - netv.backgroundColor().r,
+        g: 1 - netv.backgroundColor().g,
+        b: 1 - netv.backgroundColor().b,
+        a: netv.backgroundColor().a
+    })
+    netv.draw()
+}
+netv.on('mousedown', reverseBackgroundColor)
+netv.on('mouseup', reverseBackgroundColor)
+netv.on('click', () => {
+    console.log('Canvas is clicked!')
+})

@@ -19,6 +19,9 @@ export class InteractionManager {
     // map user defined callback => handlers, can be use to remove listeners
     private zoomCallbackSet: Set<(e: any) => any>
     private panCallbackSet: Set<(e: any) => any>
+    private clickCallbackSet: Set<(e: any) => any>
+    private mousedownCallbackSet: Set<(e: any) => any>
+    private mouseupCallbackSet: Set<(e: any) => any>
 
     private isMouseDown = false
     private isMouseMove = false
@@ -34,6 +37,9 @@ export class InteractionManager {
         this.canvas = this.netv.$_container.querySelector('canvas')
         this.zoomCallbackSet = new Set()
         this.panCallbackSet = new Set()
+        this.clickCallbackSet = new Set()
+        this.mousedownCallbackSet = new Set()
+        this.mouseupCallbackSet = new Set()
     }
 
     /**
@@ -132,23 +138,44 @@ export class InteractionManager {
         }
     }
 
+    public onClick(callback: (e: any) => any) {
+        this.clickCallbackSet.add(callback)
+        this.increaseMouseEventCallbackCountBy(1)
+    }
+
+    public offClick(callback: (e: any) => any) {
+        this.clickCallbackSet.delete(callback)
+        this.decreaseMouseEventCallbackCountBy(1)
+    }
+
+    public onMousedown(callback: (e: any) => any) {
+        this.mousedownCallbackSet.add(callback)
+        this.increaseMouseEventCallbackCountBy(1)
+    }
+
+    public offMousedown(callback: (e: any) => any) {
+        this.mousedownCallbackSet.delete(callback)
+        this.decreaseMouseEventCallbackCountBy(1)
+    }
+
+    public onMouseup(callback: (e: any) => any) {
+        this.mouseupCallbackSet.add(callback)
+        this.increaseMouseEventCallbackCountBy(1)
+    }
+
+    public offMouseup(callback: (e: any) => any) {
+        this.mouseupCallbackSet.delete(callback)
+        this.decreaseMouseEventCallbackCountBy(1)
+    }
+
     public onPan(callback: (e: any) => any) {
         this.panCallbackSet.add(callback)
-
-        if (!this.isMouseListened) {
-            this.addMouseListeners()
-            this.isMouseListened = true
-        }
+        this.increaseMouseEventCallbackCountBy(1)
     }
 
     public offPan(callback: (e: any) => any) {
         this.panCallbackSet.delete(callback)
-
-        if (!this.panCallbackSet.size && this.mouseEventCallbackCount <= 0) {
-            // no pan callback functions and no listened mouse event on elements
-            this.removeMouseListeners()
-            this.isMouseListened = false
-        }
+        this.increaseMouseEventCallbackCountBy(1)
     }
 
     public increaseMouseEventCallbackCountBy(n: number) {
@@ -235,6 +262,13 @@ export class InteractionManager {
                     element
                 })
             })
+        } else {
+            this.mousedownCallbackSet.forEach((callback) => {
+                callback({
+                    event: evt,
+                    name: 'mousedown'
+                })
+            })
         }
     }
 
@@ -253,11 +287,49 @@ export class InteractionManager {
 
         if (this.isMouseDown) {
             this.isMouseMove = true
-
+            const element = this.mouseDownElement?.element as Node
+            // drag a node: 1. mousedown on a Node; and 2. the node is listened;
+            // else pan
             if (
-                !this.mouseDownElement ||
-                this.mouseDownElement.element.constructor.name !== 'Node'
+                element?.constructor.name === 'Node' &&
+                element.$_dragstartCallbackSet.size +
+                    element.$_draggingCallbackSet.size +
+                    element.$_dragendCallbackSet.size
             ) {
+                // drag a listened node
+                if (!lastIsMouseMove) {
+                    // last time, the mouse is not move
+                    element.$_dragstartCallbackSet.forEach((callback) => {
+                        callback({
+                            event: evt,
+                            name: 'dragstart',
+                            element
+                        })
+                    })
+                }
+
+                // change node position
+                element.position({
+                    x:
+                        this.mouseDownElementOriginPos.x +
+                        (x - this.mouseDownPos.x) / newTransform.k,
+                    y: this.mouseDownElementOriginPos.y + (y - this.mouseDownPos.y) / newTransform.k
+                })
+
+                this.netv.draw()
+
+                // when dragging, dynamic change label's position. because only operate on single element, it's ok to remove and recreate
+                element.showLabel(false)
+                element.showLabel(true)
+
+                element.$_draggingCallbackSet.forEach((callback) => {
+                    callback({
+                        event: evt,
+                        name: 'dragging',
+                        element
+                    })
+                })
+            } else {
                 // pan, when not dragging node
                 newTransform.x = this.dragStartTransform.x + x - this.mouseDownPos.x
                 newTransform.y = this.dragStartTransform.y + y - this.mouseDownPos.y
@@ -271,49 +343,6 @@ export class InteractionManager {
                         })
                     )
                 }
-            } else {
-                // drag node
-                const element: Node = this.mouseDownElement.element
-                if (!lastIsMouseMove) {
-                    // last time, the mouse is not move
-                    element.$_dragstartCallbackSet.forEach((callback) => {
-                        callback({
-                            event: evt,
-                            name: 'dragstart',
-                            element
-                        })
-                    })
-                }
-
-                if (
-                    element.$_dragstartCallbackSet.size +
-                    element.$_draggingCallbackSet.size +
-                    element.$_dragendCallbackSet.size
-                ) {
-                    // drag node
-                    element.position({
-                        x:
-                            this.mouseDownElementOriginPos.x +
-                            (x - this.mouseDownPos.x) / newTransform.k,
-                        y:
-                            this.mouseDownElementOriginPos.y +
-                            (y - this.mouseDownPos.y) / newTransform.k
-                    })
-
-                    this.netv.draw()
-
-                    // when dragging, dynamic change label's position. because only operate on single element, it's ok to remove and recreate
-                    element.showLabel(false)
-                    element.showLabel(true)
-                }
-
-                element.$_draggingCallbackSet.forEach((callback) => {
-                    callback({
-                        event: evt,
-                        name: 'dragging',
-                        element
-                    })
-                })
             }
         } else {
             // hover
@@ -385,6 +414,24 @@ export class InteractionManager {
                         event: evt,
                         name: 'mouseup',
                         element
+                    })
+                )
+            }
+        } else {
+            // canvas mouseup
+            this.mouseupCallbackSet.forEach((callback) =>
+                callback({
+                    event: evt,
+                    name: 'mouseup'
+                })
+            )
+            if (!this.isMouseMove) {
+                // click, not pan
+
+                this.clickCallbackSet.forEach((callback) =>
+                    callback({
+                        event: evt,
+                        name: 'click'
                     })
                 )
             }
