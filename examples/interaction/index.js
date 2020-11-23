@@ -119,9 +119,9 @@ netv.nodes()[0].on('mouseover', (e) => {
 })
 
 netv.nodes().forEach((node) => {
-    node.on('dragstart', console.log)
-    node.on('dragging', console.log)
-    node.on('dragend', console.log)
+    node.on('dragstart')
+    node.on('dragging')
+    node.on('dragend')
 })
 
 netv.links()[0].on('click', (e) => {
@@ -137,9 +137,8 @@ netv.links()[1].on('mouseout', (e) => {
 
 netv.draw()
 
-const log = console.log
-netv.on('zoom', log)
-netv.on('pan', log)
+netv.on('zoom')
+netv.on('pan')
 
 const reverseBackgroundColor = () => {
     netv.backgroundColor({

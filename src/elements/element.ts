@@ -1,7 +1,7 @@
 import * as interfaces from '../interfaces'
 import NetV from '../index'
 import { override } from '../utils/utils'
-import { EMPTY_FUNCTION } from 'src/utils/const'
+import { EMPTY_FUNCTION } from '../utils/const'
 
 export default class Element {
     public $_style: interfaces.NodeStyle | interfaces.LinkStyle = {}
