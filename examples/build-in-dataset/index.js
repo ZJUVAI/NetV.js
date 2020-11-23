@@ -34,8 +34,8 @@ data.nodes.forEach((node) => {
 netv.data(data)
 netv.draw()
 
-netv.on('zoom', () => {})
-netv.on('pan', () => {})
+netv.on('zoom', () => { })
+netv.on('pan', () => { })
 netv.nodes().forEach((node) => {
     const unhighlightLink = (link) => {
         link.strokeColor({
@@ -50,17 +50,12 @@ netv.nodes().forEach((node) => {
             a: 0.5
         })
     }
-    const sourceLinks = netv.$_targetId2links.get(node.id())
-    const targetLinks = netv.$_sourceId2links.get(node.id())
 
-    const neighborLinkSet = new Set([
-        ...(sourceLinks ? sourceLinks : []),
-        ...(targetLinks ? targetLinks : [])
-    ])
+    const neighborLinks = node.neighborLinks()
 
     const mouseover = () => {
         netv.links().forEach(unhighlightLink)
-        neighborLinkSet.forEach(highlightLink)
+        neighborLinks.forEach(highlightLink)
         netv.draw()
     }
     const mouseout = () => {
@@ -73,5 +68,5 @@ netv.nodes().forEach((node) => {
         node.off('mouseover', mouseout)
         node.off('mouseover', mouseover)
     })
-    node.on('dragging', () => {})
+    node.on('dragging', () => { })
 })

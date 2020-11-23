@@ -78,6 +78,38 @@ class Node extends Element {
     }
 
     /**
+     * get neighbor nodes for current node
+     */
+    public neighborNodes() {
+        // NOTE: currently API not intent to support directed graph
+        let sourceLinks = this.$_core.$_sourceId2links.get(this.$_id)
+        if (!sourceLinks) sourceLinks = new Set()
+        let targetLinks = this.$_core.$_targetId2links.get(this.$_id)
+        if (!targetLinks) targetLinks = new Set()
+
+        const nodeSet = new Set([
+            ...[...sourceLinks].map((link) => link.$_source),
+            ...[...targetLinks].map((link) => link.$_target)
+        ])
+
+        return Array.from(nodeSet)
+    }
+
+    /**
+     * get neighbor links for current node
+     */
+    public neighborLinks() {
+        // NOTE: currently API not intent to support directed graph
+        let sourceLinks = this.$_core.$_sourceId2links.get(this.$_id)
+        if (!sourceLinks) sourceLinks = new Set()
+        let targetLinks = this.$_core.$_targetId2links.get(this.$_id)
+        if (!targetLinks) targetLinks = new Set()
+
+        const linkSet = new Set([...sourceLinks, ...targetLinks])
+        return Array.from(linkSet)
+    }
+
+    /**
      * set/get x postion
      * @param {number} [value]
      * @memberof Node

@@ -13,8 +13,8 @@ class Link extends Element {
     public strokeWidth: (value?: number) => number
     public strokeColor: (value?: interfaces.Color) => interfaces.Color
 
-    private $_source: Node
-    private $_target: Node
+    public $_source: Node
+    public $_target: Node
 
     public constructor(core, linkData: interfaces.LinkData) {
         super(core, linkData)
