@@ -46,6 +46,34 @@ export class LabelManager {
     }
 
     /**
+     * draw all labels
+     */
+    public draw() {
+        for (const node of this.$_core.nodes()) {
+            this.drawLabel(node)
+        }
+    }
+
+    /**
+     * update all labels for netv
+     */
+    public update() {
+        for (const node of this.$_core.nodes()) {
+            this.removeLabel(node)
+            this.drawLabel(node)
+        }
+    }
+
+    /**
+     * remove all labels
+     */
+    public remove() {
+        for (const node of this.$_core.nodes()) {
+            this.removeLabel(node)
+        }
+    }
+
+    /**
      * draw node's label
      * @param node node to add label
      */
