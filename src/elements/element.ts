@@ -7,7 +7,9 @@ export default class Element {
     public $_style: interfaces.NodeStyle | interfaces.LinkStyle = {}
     public $_mousedownCallbackSet: Set<(e: any) => void> = new Set()
     public $_mouseupCallbackSet: Set<(e: any) => void> = new Set()
-    public $_hoverCallbackSet: Set<(e: any) => void> = new Set()
+    public $_mouseoverCallbackSet: Set<(e: any) => void> = new Set()
+    public $_mouseoutCallbackSet: Set<(e: any) => void> = new Set()
+    public $_mousemoveCallbackSet: Set<(e: any) => void> = new Set()
     public $_clickCallbackSet: Set<(e: any) => void> = new Set()
 
     protected $_core: NetV

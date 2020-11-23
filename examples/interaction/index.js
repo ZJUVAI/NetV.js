@@ -113,9 +113,9 @@ netv.nodes()[0].on('mouseup', (e) => {
     netv.draw()
 })
 
-netv.nodes()[0].on('hover', (e) => {
+netv.nodes()[0].on('mouseover', (e) => {
     const node = e.element
-    console.log(`${node.id()} hovered`)
+    console.log(`${node.id()} mouseover`)
 })
 
 netv.nodes().forEach((node) => {
@@ -130,9 +130,9 @@ netv.links()[0].on('click', (e) => {
     console.log(`${link.source().id()}-${link.target().id()} clicked`)
 })
 
-netv.links()[1].on('hover', (e) => {
+netv.links()[1].on('mouseout', (e) => {
     const link = e.element
-    console.log(`${link.source().id()}-${link.target().id()} hovered`)
+    console.log(`${link.source().id()}-${link.target().id()} mouseout`)
 })
 
 netv.draw()
