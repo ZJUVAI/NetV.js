@@ -27,7 +27,7 @@ declare class Node {
     /**
      * get neighbor nodes for current node
      */
-    neighborNodes(): unknown[];
+    neighborNodes(): Node[];
     /**
      * get neighbor links for current node
      */
