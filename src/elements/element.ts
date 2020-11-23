@@ -1,6 +1,7 @@
 import * as interfaces from '../interfaces'
 import NetV from '../index'
 import { override } from '../utils/utils'
+import { EMPTY_FUNCTION } from 'src/utils/const'
 
 export default class Element {
     public $_style: interfaces.NodeStyle | interfaces.LinkStyle = {}
@@ -39,13 +40,13 @@ export default class Element {
      * @param {(e: any) => any} callback
      * @memberof Element
      */
-    public on(eventName: string, callback: (e: any) => any) {
+    public on(eventName: string, callback?: (e: any) => any) {
         if (
             eventName.slice(0, 4) !== 'drag' ||
             (eventName.slice(0, 4) === 'drag' && this.constructor.name === 'Node') // only node can be dragged
         ) {
             const callbackSetName = `$_${eventName}CallbackSet`
-            this[callbackSetName]?.add(callback)
+            this[callbackSetName]?.add(callback ? callback : EMPTY_FUNCTION)
             if (this[callbackSetName]) {
                 this.$_core.$_interactionManager.increaseMouseEventCallbackCountBy(1)
             }
@@ -63,7 +64,7 @@ export default class Element {
             (eventName.slice(0, 4) === 'drag' && this.constructor.name === 'Node') // only node can be dragged
         ) {
             const callbackSetName = `$_${eventName}CallbackSet`
-            this[callbackSetName]?.delete(callback)
+            this[callbackSetName]?.delete(callback ? callback : EMPTY_FUNCTION)
             if (this[callbackSetName]) {
                 this.$_core.$_interactionManager.decreaseMouseEventCallbackCountBy(1)
             }
