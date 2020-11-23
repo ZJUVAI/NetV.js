@@ -1,7 +1,6 @@
 import * as interfaces from '../interfaces'
 import NetV from '../index'
 import { override } from '../utils/utils'
-import { elementReservedKeys } from '../configs'
 
 export default class Element {
     public $_style: interfaces.NodeStyle | interfaces.LinkStyle = {}
@@ -21,13 +20,6 @@ export default class Element {
         const type = this.constructor.name.toLowerCase()
         this.$_core = core
         const defaultConfigs = this.$_core.$_configs
-
-        // set attributes
-        for (const key in data) {
-            if (!elementReservedKeys.has(key)) {
-                this.$_attributes[key] = data[key]
-            }
-        }
 
         // override default style with user specified style in data
         this.$_style = override(defaultConfigs[type].style, data.style)

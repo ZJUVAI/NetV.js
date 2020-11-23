@@ -16,8 +16,17 @@ class Link extends Element {
     public $_source: Node
     public $_target: Node
 
+    private $_elementReservedKeys = new Set(['source', 'target', 'label', 'text', 'style'])
+
     public constructor(core, linkData: interfaces.LinkData) {
         super(core, linkData)
+
+        // set attributes
+        for (const key in linkData) {
+            if (!this.$_elementReservedKeys.has(key)) {
+                this.$_attributes[key] = linkData[key]
+            }
+        }
 
         const sourceNode = this.$_core.getNodeById(linkData.source)
         const targetNode = this.$_core.getNodeById(linkData.target)

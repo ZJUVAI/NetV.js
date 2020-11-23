@@ -48,14 +48,3 @@ export const label = {
     fontSize: 18,
     strokeWidth: 0.5
 }
-
-export const elementReservedKeys = new Set([
-    'id',
-    'x',
-    'y',
-    'label',
-    'text',
-    'style',
-    'clickCallback',
-    'hoverCallback'
-])
