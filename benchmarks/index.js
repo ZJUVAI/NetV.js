@@ -22,6 +22,10 @@ const density = 20
 
 const testFuncs = [
     {
+        name: 'NetV',
+        func: testNetV
+    },
+    {
         name: 'D3SVG',
         func: testD3SVG
     },
@@ -36,10 +40,6 @@ const testFuncs = [
     {
         name: 'Sigma.js (webgl)',
         func: testSigma
-    },
-    {
-        name: 'NetV',
-        func: testNetV
     },
     {
         name: 'Stardust',

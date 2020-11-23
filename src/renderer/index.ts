@@ -4,17 +4,22 @@
  */
 
 import { RenderNodeManager } from './elements/node/render-node'
-import Node from '../node'
-import Link from 'src/link'
+import Node from '../elements/node'
+import Link from 'src/elements/link'
 import { RenderLinkManager } from './elements/link/render-link'
 import { Transform, Position } from '../interfaces'
 import { RendererConfigs } from './interfaces'
 import { Color } from 'src/interfaces'
 import { decodeRenderId } from './utils'
 
+const MODIFIED_ELEMENTS_COUNT_UPPER_THRESHOLD = 100 // when modifiedElementCount is larger than it, $_shouldLazyUpdate will be true
+
 export class Renderer {
     public nodeManager: RenderNodeManager
     public linkManager: RenderLinkManager
+
+    public modifiedElementsCount = 0 // record modified link num to control lazy update
+    public shouldLazyUpdate = false // flag to control lazy update
 
     private gl: WebGL2RenderingContext
     private backgroundColor: Color
@@ -22,20 +27,37 @@ export class Renderer {
     private height: number
     private idTexture: WebGLTexture
 
+    private getAllNodes: () => Node[]
+    private getAllLinks: () => Link[]
+
     /**
      * create renderer object
      * @param configs {canvas: HTMLCanvasElement, width: number, height: number, backgroundColor: Color, defaultConfigs: Object} configs passed to renderer
      */
     public constructor(configs: RendererConfigs) {
-        const { canvas, width, height, backgroundColor, nodeLimit, linkLimit } = configs
+        const {
+            canvas,
+            width,
+            height,
+            backgroundColor,
+            nodeLimit,
+            linkLimit,
+            getAllNodes,
+            getAllLinks
+        } = configs
+
         try {
             this.gl = canvas.getContext('webgl2')
         } catch {
             throw new Error('NetV requires WebGL2 supported by your browser')
         }
+
         this.backgroundColor = backgroundColor
         this.width = width
         this.height = height
+
+        this.getAllNodes = getAllNodes
+        this.getAllLinks = getAllLinks
 
         this.initIdTexture()
 
@@ -112,6 +134,15 @@ export class Renderer {
      * draw all elements
      */
     public draw() {
+        if (this.shouldLazyUpdate) {
+            // TODO: not only position needs to be refreshed, but also other styles
+            this.nodeManager.refreshPosition(this.getAllNodes())
+
+            this.linkManager.refreshPosition(this.getAllLinks())
+            this.shouldLazyUpdate = false
+            this.modifiedElementsCount = 0
+        }
+
         this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.idTexture)
         this.gl.clearColor(1, 1, 1, 1)
         this.gl.clear(this.gl.COLOR_BUFFER_BIT)
@@ -138,11 +169,12 @@ export class Renderer {
         if (renderId >= 0) {
             if (renderId % 2 === 0) {
                 // NOTE: node has even render id, link has odd render id
-                const nodeId = this.nodeManager.getIdByRenderId(renderId)
-                return nodeId
+                const node = this.nodeManager.getElementByRenderId(renderId) as Node
+                return node.id()
             } else {
-                const linkIds = this.linkManager.getIdsByRenderId(renderId)
-                return linkIds
+                const link = this.linkManager.getElementByRenderId(renderId) as Link
+                const sourceTarget = link.sourceTarget()
+                return [sourceTarget.source.id(), sourceTarget.target.id()]
             }
         }
     }
@@ -169,6 +201,17 @@ export class Renderer {
         const objectID = decodeRenderId(readPixelBuffer)
 
         return objectID
+    }
+
+    /**
+     * increase modified elements count
+     * When it is larger than a threshold, the lazy update mode will be turned on.
+     */
+    public increaseModifiedElementsCountBy(n: number) {
+        this.modifiedElementsCount += n
+        if (this.modifiedElementsCount > MODIFIED_ELEMENTS_COUNT_UPPER_THRESHOLD) {
+            this.shouldLazyUpdate = true
+        }
     }
 
     /**

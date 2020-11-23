@@ -4,45 +4,53 @@
  * @dependences interfaces.ts, utils/is.ts
  */
 
-import * as interfaces from './interfaces'
-import { isValidId } from './utils/is'
-import { NetV } from './index'
-import { LinkAttr } from './renderer/interfaces'
+import * as interfaces from '../interfaces'
+import { isValidId } from '../utils/is'
+import { LinkAttr } from '../renderer/interfaces'
 import Link from './link'
+import Element from './element'
 
-class Node {
-    public $_clickCallback: (node: Node) => void
-    public $_hoverCallback: (node: Node) => void
+class Node extends Element {
+    // style getter/setter
+    public shape: (value?: interfaces.NodeShape) => interfaces.NodeShape
+    public offset: (value?: interfaces.Position) => interfaces.Position
+    public strokeWidth: (value?: number) => number
+    public strokeColor: (value?: interfaces.Color) => interfaces.Color
+    public fill: (value?: interfaces.Color) => interfaces.Color
+    /* circle shape styles */
+    public r?: (value?: number) => number
+    /* rect shape styles */
+    public width?: (value?: number) => number
+    public height?: (value?: number) => number
+    public rotate?: (value?: number) => number
+    /* triangle shape styles */
+    public vertexAlpha: (value?: interfaces.Position) => interfaces.Position
+    public vertexBeta: (value?: interfaces.Position) => interfaces.Position
+    public vertexGamma: (value?: interfaces.Position) => interfaces.Position
 
-    private $_core: NetV
+    public $_dragstartCallbackSet: Set<(e: any) => void> = new Set()
+    public $_draggingCallbackSet: Set<(e: any) => void> = new Set()
+    public $_dragendCallbackSet: Set<(e: any) => void> = new Set()
+
     private $_id: string
     private $_position = {
         x: 0,
         y: 0
     }
-    private $_strokeWidth: number
-    private $_strokeColor: interfaces.Color
-    private $_fill: interfaces.Color
-    private $_r: number // radius
+
     private $_showLabel: boolean
     private $_text: string
     private $_textOffset: { x: number; y: number } // NOTE: deprecated, current not used
 
     public constructor(core, nodeData: interfaces.NodeData) {
-        this.$_core = core
+        super(core, nodeData)
         const defaultConfigs = this.$_core.$_configs
         const data = {
             ...{
                 x: this.$_position.x,
                 y: this.$_position.y,
-                strokeWidth: defaultConfigs.node.strokeWidth,
-                strokeColor: defaultConfigs.node.strokeColor,
-                r: defaultConfigs.node.r,
-                fill: defaultConfigs.node.fill,
                 showLabel: defaultConfigs.node.showLabel,
-                text: defaultConfigs.node.text,
-                clickCallback: defaultConfigs.node.clickCallback,
-                hoverCallback: defaultConfigs.node.hoverCallback
+                text: defaultConfigs.node.text
             },
             ...nodeData
         }
@@ -52,19 +60,13 @@ class Node {
             x: data.x,
             y: data.y
         }
-        this.$_strokeWidth = data.strokeWidth
-        this.$_strokeColor = data.strokeColor
-        this.$_fill = data.fill
-        this.$_r = data.r
+
         this.$_showLabel = data.showLabel
         this.$_text = data.text
 
         if (this.$_showLabel) {
             this.showLabel(true)
         }
-
-        this.setClickCallback(data.clickCallback)
-        this.setHoverCallback(data.hoverCallback)
     }
 
     /**
@@ -142,97 +144,42 @@ class Node {
     public position(position?: interfaces.Position) {
         let linkSets = {}
 
-        // e.g. setOnePosition('x', 1) means set x position with value 1
-        const setOnePosition = (key, value) => {
-            this.$_position[key] = value // key: 'x' or 'y'
-            Object.entries(linkSets).forEach((entry) => {
-                // entry[0]: 'source' / 'target'
-                // entry[1]: the link set
-                const key = entry[0] as LinkAttr
-                const set = entry[1] as Set<Link>
-                if (set) {
-                    this.$_core.$_addModifiedLinkCount(set.size)
-                    for (const link of set) {
-                        this.$_core.$_renderer.linkManager.changeAttribute(link, key)
-                    }
-                }
-            })
-        }
-
         if (arguments.length > 0 && ('x' in position || 'y' in position)) {
-            if (this.$_core.$_lazyUpdate) {
-                if ('x' in position) {
-                    this.$_position['x'] = position.x
-                }
-                if ('y' in position) {
-                    this.$_position['y'] = position.y
-                }
-                return this.$_position
-            }
-            linkSets = {
-                // find links from/to this node
-                source: this.$_core.$_sourceId2links.get(this.$_id),
-                target: this.$_core.$_targetId2links.get(this.$_id)
-            }
             if ('x' in position) {
-                setOnePosition('x', position.x)
+                this.$_position['x'] = position.x
             }
             if ('y' in position) {
-                setOnePosition('y', position.y)
+                this.$_position['y'] = position.y
             }
-            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
+
+            if (this.$_core.$_renderer.shouldLazyUpdate) {
+                return this.$_position
+            } else {
+                linkSets = {
+                    // find links from/to this node
+                    source: this.$_core.$_sourceId2links.get(this.$_id),
+                    target: this.$_core.$_targetId2links.get(this.$_id)
+                }
+
+                Object.entries(linkSets).forEach((entry) => {
+                    // entry[0]: 'source' / 'target'
+                    // entry[1]: the link set
+                    const key = entry[0] as LinkAttr
+                    const set = entry[1] as Set<Link>
+                    if (set) {
+                        this.$_core.$_renderer.increaseModifiedElementsCountBy(set.size)
+                        for (const link of set) {
+                            this.$_core.$_renderer.linkManager.changeAttribute(link, key)
+                        }
+                    }
+                })
+
+                this.$_core.$_renderer.increaseModifiedElementsCountBy(1)
+                this.$_core.$_renderer.nodeManager.changeAttribute(this, 'position')
+            }
         }
 
         return this.$_position
-    }
-
-    /**
-     * set/get stroke width of a node
-     * @param {number} [value]
-     * @memberof Node
-     */
-    public strokeWidth(value?: number) {
-        if (arguments.length === 1) {
-            this.$_strokeWidth = value
-            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'strokeWidth')
-        }
-        return this.$_strokeWidth
-    }
-
-    /**
-     * set/get stroke color of a node
-     * @param {Color} [value]
-     */
-    public strokeColor(value?: interfaces.Color) {
-        if (arguments.length === 1) {
-            this.$_strokeColor = value
-            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'strokeColor')
-        }
-        return this.$_strokeColor
-    }
-
-    /**
-     * set/get fill color of a node
-     * @param {Color} [value]
-     */
-    public fill(value?: interfaces.Color) {
-        if (arguments.length === 1) {
-            this.$_fill = value
-            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'fill')
-        }
-        return this.$_fill
-    }
-
-    /**
-     * set/get radius of a node
-     * @param {number} [r]
-     */
-    public r(value?: number) {
-        if (arguments.length === 1) {
-            this.$_r = value
-            this.$_core.$_renderer.nodeManager.changeAttribute(this, 'radius')
-        }
-        return this.$_r
     }
 
     /**
@@ -293,22 +240,6 @@ class Node {
         } else {
             throw new Error(`Invalid ID ${value}`)
         }
-    }
-
-    /**
-     * set hover callback function
-     * @param callback hover callback function
-     */
-    private setHoverCallback(callback: (node: Node) => void) {
-        this.$_hoverCallback = callback
-    }
-
-    /**
-     * set click callback function
-     * @param callback click callback function
-     */
-    private setClickCallback(callback: (node: Node) => void) {
-        this.$_clickCallback = callback
     }
 }
 

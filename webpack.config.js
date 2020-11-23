@@ -27,7 +27,7 @@ module.exports = (env, argv) => {
         module: {
             rules: [
                 {
-                    test: /\.glsl$/,
+                    test: /\.hlsl$/,
                     loader: 'raw-loader'
                 },
                 // all files with a `.ts` or `.tsx` extension will be handled by `ts-loader`
