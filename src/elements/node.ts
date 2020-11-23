@@ -41,9 +41,18 @@ class Node extends Element {
     private $_showLabel: boolean
     private $_text: string
     private $_textOffset: { x: number; y: number } // NOTE: deprecated, current not used
+    private $_elementReservedKeys = new Set(['id', 'x', 'y', 'label', 'text', 'style'])
 
     public constructor(core, nodeData: interfaces.NodeData) {
         super(core, nodeData)
+
+        // set attributes
+        for (const key in nodeData) {
+            if (!this.$_elementReservedKeys.has(key)) {
+                this.$_attributes[key] = nodeData[key]
+            }
+        }
+
         const defaultConfigs = this.$_core.$_configs
         const data = {
             ...{
