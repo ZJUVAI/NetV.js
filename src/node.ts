@@ -80,14 +80,15 @@ class Node {
      */
     public neighborNodes() {
         // NOTE: currently API not intent to support directed graph
-        const nodeSet = new Set()
-        this.$_core.$_sourceId2links.get(this.$_id)?.forEach((link) => {
-            nodeSet.add(link.$_target)
-        })
+        let sourceLinks = this.$_core.$_sourceId2links.get(this.$_id)
+        if (!sourceLinks) sourceLinks = new Set()
+        let targetLinks = this.$_core.$_targetId2links.get(this.$_id)
+        if (!targetLinks) targetLinks = new Set()
 
-        this.$_core.$_targetId2links.get(this.$_id)?.forEach((link) => {
-            nodeSet.add(link.$_source)
-        })
+        const nodeSet = new Set([
+            ...[...sourceLinks].map((link) => link.$_source),
+            ...[...targetLinks].map((link) => link.$_target)
+        ])
 
         return Array.from(nodeSet)
     }
@@ -97,15 +98,12 @@ class Node {
      */
     public neighborLinks() {
         // NOTE: currently API not intent to support directed graph
-        const linkSet = new Set()
-        this.$_core.$_sourceId2links.get(this.$_id)?.forEach((link) => {
-            linkSet.add(link)
-        })
+        let sourceLinks = this.$_core.$_sourceId2links.get(this.$_id)
+        if (!sourceLinks) sourceLinks = new Set()
+        let targetLinks = this.$_core.$_targetId2links.get(this.$_id)
+        if (!targetLinks) targetLinks = new Set()
 
-        this.$_core.$_targetId2links.get(this.$_id)?.forEach((link) => {
-            linkSet.add(link)
-        })
-
+        const linkSet = new Set([...sourceLinks, ...targetLinks])
         return Array.from(linkSet)
     }
 
