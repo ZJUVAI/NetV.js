@@ -81,11 +81,11 @@ class Node {
     public neighborNodes() {
         // NOTE: currently API not intent to support directed graph
         const nodeSet = new Set()
-        this.$_core.$_sourceId2links.get(this.$_id).forEach((link) => {
+        this.$_core.$_sourceId2links.get(this.$_id)?.forEach((link) => {
             nodeSet.add(link.$_target)
         })
 
-        this.$_core.$_targetId2links.get(this.$_id).forEach((link) => {
+        this.$_core.$_targetId2links.get(this.$_id)?.forEach((link) => {
             nodeSet.add(link.$_source)
         })
 
@@ -97,10 +97,15 @@ class Node {
      */
     public neighborLinks() {
         // NOTE: currently API not intent to support directed graph
-        const linkSet = new Set([
-            ...this.$_core.$_sourceId2links.get(this.$_id),
-            ...this.$_core.$_targetId2links.get(this.$_id)
-        ])
+        const linkSet = new Set()
+        this.$_core.$_sourceId2links.get(this.$_id)?.forEach((link) => {
+            linkSet.add(link)
+        })
+
+        this.$_core.$_targetId2links.get(this.$_id)?.forEach((link) => {
+            linkSet.add(link)
+        })
+
         return Array.from(linkSet)
     }
 
