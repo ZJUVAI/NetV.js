@@ -84,10 +84,13 @@ export default class Element {
      * @param value
      */
     public attr(key: string, value?: any) {
-        if (value !== undefined) {
+        if (arguments.length === 2) {
             this.$_attributes[key] = value
+        } else if (arguments.length === 1) {
+            return this.$_attributes[key]
+        } else if (arguments.length === 0) {
+            return JSON.parse(JSON.stringify(this.$_attributes))
         }
-        return this.$_attributes[key]
     }
 
     private generateElementStyleGetterSetter(key: string) {
