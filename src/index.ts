@@ -277,7 +277,7 @@ export default class NetV {
             if (index >= transforms.length - 1) {
                 return
             }
-            const TOTAL_STEPS = STEPS_PER_MS * durationsMS[index]
+            const TOTAL_STEPS = Math.max(STEPS_PER_MS * durationsMS[index], 1)
             const newTransform = {
                 ...transforms[index]
             }
