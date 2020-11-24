@@ -97,8 +97,8 @@ class Node extends Element {
         if (!targetLinks) targetLinks = new Set()
 
         const nodeSet = new Set([
-            ...[...sourceLinks].map((link) => link.$_source),
-            ...[...targetLinks].map((link) => link.$_target)
+            ...[...sourceLinks].map((link) => link.$_target),
+            ...[...targetLinks].map((link) => link.$_source)
         ])
 
         return Array.from(nodeSet)
