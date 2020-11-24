@@ -52,6 +52,7 @@ export class InteractionManager {
         newTransform.x += x
         newTransform.y += y
         this.netv.transform(newTransform)
+        this.netv.draw()
     }
 
     /**
@@ -73,6 +74,7 @@ export class InteractionManager {
         newTransform.k *= factor
 
         this.netv.transform(newTransform)
+        this.netv.draw()
     }
 
     /**
@@ -83,38 +85,15 @@ export class InteractionManager {
         const newTransform = { ...this.netv.$_transform }
         const x = pos.x * newTransform.k + newTransform.x
         const y = pos.y * newTransform.k + newTransform.y
+
         const center = {
             x: this.netv.$_configs.width / 2,
             y: this.netv.$_configs.height / 2
         }
-        // newTransform.x += center.x - x
-        // newTransform.y += center.y - y
-        // interpolation
-        const stepCount = 20
-        const difference = {
-            x: center.x - x,
-            y: center.y - y
-        }
-        const originTranslate = {
-            x: newTransform.x,
-            y: newTransform.y
-        }
-
-        const ease = (x) => {
-            return x * x
-        }
-
-        let steps = 1
-
-        const animation = setInterval(() => {
-            newTransform.x = originTranslate.x + difference.x * ease(steps / stepCount)
-            newTransform.y = originTranslate.y + difference.y * ease(steps / stepCount)
-
-            this.netv.transform(newTransform)
-
-            steps += 1
-            if (steps > stepCount) clearInterval(animation)
-        }, 500 / stepCount)
+        newTransform.x += center.x - x
+        newTransform.y += center.y - y
+        this.netv.transform(newTransform)
+        return newTransform
     }
 
     /**
@@ -214,6 +193,7 @@ export class InteractionManager {
             newTransform.k *= k
 
             this.netv.transform(newTransform)
+            this.netv.draw()
 
             this.zoomCallbackSet.forEach((callback) =>
                 callback({
@@ -335,6 +315,7 @@ export class InteractionManager {
                 newTransform.y = this.dragStartTransform.y + y - this.mouseDownPos.y
                 if (this.panCallbackSet.size) {
                     this.netv.transform(newTransform)
+                    this.netv.draw()
                     this.panCallbackSet.forEach((callback) =>
                         callback({
                             event: evt,
