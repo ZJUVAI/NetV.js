@@ -3,8 +3,8 @@
  * @description graph label related class or method
  */
 
-import NetV from 'src'
-import Node from 'src/elements/node'
+import NetV from '../index'
+import Node from '../elements/node'
 import { Transform } from '../interfaces'
 
 export class LabelManager {

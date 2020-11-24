@@ -3,7 +3,7 @@
  * @description some utility functions
  */
 
-import { NodeLinkData } from 'src/interfaces'
+import { NodeLinkData } from '../interfaces'
 
 /**
  * given a graph data with position, return a copy of graph, with position transformed to center of given size

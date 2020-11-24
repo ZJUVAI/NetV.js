@@ -3,11 +3,9 @@
  * @description some interfaces for webglrenderer
  */
 
-import Node from 'src/elements/node'
-import Link from 'src/elements/link'
-import Element from 'src/elements/element'
-
-import { Color } from 'src/interfaces'
+import Node from '../elements/node'
+import Link from '../elements/link'
+import { Color } from '../interfaces'
 
 export interface RendererConfigs {
     canvas: HTMLCanvasElement
