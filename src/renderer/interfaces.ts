@@ -3,7 +3,7 @@
  * @description some interfaces for webglrenderer
  */
 
-import { Color } from 'src/interfaces'
+import { Color } from '../interfaces'
 
 export interface RendererConfigs {
     canvas: HTMLCanvasElement
