@@ -2,7 +2,7 @@
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
  * @description handle all interaction in NetV
  */
-import { NetV } from 'src';
+import { NetV } from '../index';
 import { Position } from '../interfaces';
 export declare class InteractionManager {
     private netv;

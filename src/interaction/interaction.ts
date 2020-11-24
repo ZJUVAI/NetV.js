@@ -3,7 +3,7 @@
  * @description handle all interaction in NetV
  */
 
-import { NetV } from 'src'
+import { NetV } from '../index'
 import { Position, Transform } from '../interfaces'
 export class InteractionManager {
     private netv: NetV

@@ -2,8 +2,8 @@
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
  * @description graph label related class or method
  */
-import { NetV } from 'src';
-import Node from 'src/node';
+import { NetV } from '../index';
+import Node from '../node';
 import { Transform } from '../interfaces';
 export declare class LabelManager {
     private $_core;
