@@ -266,24 +266,30 @@ export default class NetV {
     public transition(
         transforms: interfaces.Transform[],
         durationsMS: number[],
-        calback?: (e: any) => {}
+        callback?: (e: any) => {}
     ) {
         // interpolation
-        const TOTAL_STEPS = 24
+        const STEPS_PER_SECOND = 60
+        const MS_PER_SECOND = 1000
+        const STEPS_PER_MS = STEPS_PER_SECOND / MS_PER_SECOND
+        const MS_PER_STEP = 1 / STEPS_PER_MS
         const transitionFromTransforms = (index: number) => {
             if (index >= transforms.length - 1) {
                 return
             }
+            const TOTAL_STEPS = STEPS_PER_MS * durationsMS[index]
             const newTransform = {
                 ...transforms[index]
             }
             const difference = {
                 x: transforms[index + 1].x - transforms[index].x,
-                y: transforms[index + 1].y - transforms[index].y
+                y: transforms[index + 1].y - transforms[index].y,
+                k: transforms[index + 1].k - transforms[index].k
             }
             const originTranslate = {
                 x: transforms[index].x,
-                y: transforms[index].y
+                y: transforms[index].y,
+                k: transforms[index].k
             }
             const ease = (x: number) => {
                 return x * x
@@ -292,15 +298,16 @@ export default class NetV {
             const animation = setInterval(() => {
                 newTransform.x = originTranslate.x + difference.x * ease(step / TOTAL_STEPS)
                 newTransform.y = originTranslate.y + difference.y * ease(step / TOTAL_STEPS)
+                newTransform.k = originTranslate.k + difference.k * ease(step / TOTAL_STEPS)
                 this.transform(newTransform)
                 this.draw()
-                calback({ transform: newTransform })
+                if (callback) callback({ transform: newTransform })
                 step += 1
-                if (step > TOTAL_STEPS) {
+                if (step >= TOTAL_STEPS) {
                     clearInterval(animation)
                     transitionFromTransforms(index + 1)
                 }
-            }, (durationsMS[index] ? durationsMS[index] : 1) / TOTAL_STEPS)
+            }, MS_PER_STEP)
         }
         transitionFromTransforms(0)
     }
