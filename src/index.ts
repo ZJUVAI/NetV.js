@@ -327,8 +327,7 @@ export default class NetV {
      * @param y
      */
     public panBy(x: number, y: number) {
-        this.$_interactionManager.panBy(x, y)
-        this.draw()
+        return this.$_interactionManager.panBy(x, y)
     }
 
     /**
@@ -337,8 +336,7 @@ export default class NetV {
      * @param center optional, zoom center position
      */
     public zoomBy(factor: number, center?: Position) {
-        this.$_interactionManager.zoomBy(factor, center)
-        this.draw()
+        return this.$_interactionManager.zoomBy(factor, center)
     }
 
     /**
@@ -352,6 +350,7 @@ export default class NetV {
         this.$_transform = value
         this.$_renderer.setTransform(this.$_transform)
         this.labelManager.setTransform(this.$_transform)
+        return this.$_transform
     }
     /**
      * @description event listener
