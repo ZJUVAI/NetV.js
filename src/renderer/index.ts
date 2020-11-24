@@ -127,7 +127,6 @@ export class Renderer {
     public setTransform(transform: Transform) {
         this.nodeManager.setTransform(transform)
         this.linkManager.setTransform(transform)
-        this.draw()
     }
 
     /**

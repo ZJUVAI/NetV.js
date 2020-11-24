@@ -261,12 +261,57 @@ export default class NetV {
     }
 
     /**
+     * @description transition between different transforms
+     */
+    public transition(
+        transforms: interfaces.Transform[],
+        durationsMS: number[],
+        calback?: (e: any) => {}
+    ) {
+        // interpolation
+        const TOTAL_STEPS = 24
+        const transitionFromTransforms = (index: number) => {
+            if (index >= transforms.length - 1) {
+                return
+            }
+            const newTransform = {
+                ...transforms[index]
+            }
+            const difference = {
+                x: transforms[index + 1].x - transforms[index].x,
+                y: transforms[index + 1].y - transforms[index].y
+            }
+            const originTranslate = {
+                x: transforms[index].x,
+                y: transforms[index].y
+            }
+            const ease = (x: number) => {
+                return x * x
+            }
+            let step = 1
+            const animation = setInterval(() => {
+                newTransform.x = originTranslate.x + difference.x * ease(step / TOTAL_STEPS)
+                newTransform.y = originTranslate.y + difference.y * ease(step / TOTAL_STEPS)
+                this.transform(newTransform)
+                this.draw()
+                calback({ transform: newTransform })
+                step += 1
+                if (step > TOTAL_STEPS) {
+                    clearInterval(animation)
+                    transitionFromTransforms(index + 1)
+                }
+            }, (durationsMS[index] ? durationsMS[index] : 1) / TOTAL_STEPS)
+        }
+        transitionFromTransforms(0)
+    }
+
+    /**
      * pan on canvas to get given node centered
      * @param node
      */
-    public centerOn(node: Node) {
+    public centerOn(node: Node): interfaces.Transform {
         const pos = node.position()
-        this.$_interactionManager.centerPosition(pos)
+        return this.$_interactionManager.centerPosition(pos)
     }
 
     /**
@@ -300,7 +345,6 @@ export default class NetV {
         this.$_transform = value
         this.$_renderer.setTransform(this.$_transform)
         this.labelManager.setTransform(this.$_transform)
-        this.draw()
     }
     /**
      * @description event listener
