@@ -2,10 +2,6 @@
  * @description default configurations in NetV
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
  */
-
-import Node from './elements/node'
-import Link from './elements/link'
-
 export const width = 800
 export const height = 600
 export const backgroundColor = { r: 1, g: 1, b: 1, a: 1 }

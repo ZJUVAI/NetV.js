@@ -15,6 +15,7 @@ import { InteractionManager } from './interaction/interaction'
 import * as Utils from './utils/utils'
 import { LabelManager } from './label/label'
 import { Position } from './interfaces'
+import { EMPTY_FUNCTION } from './utils/const'
 
 export default class NetV {
     public static Utils = Utils
@@ -349,17 +350,17 @@ export default class NetV {
      * @description event listener
      * @memberof NetV
      */
-    public on(eventName: string, callback?: (e: any) => any) {
+    public on(eventName: string, callback: (e: any) => any) {
         if (eventName.toLowerCase() === 'zoom') {
-            this.$_interactionManager.onZoom(callback)
+            this.$_interactionManager.onZoom(callback ? callback : EMPTY_FUNCTION)
         } else if (eventName.toLowerCase() === 'pan') {
-            this.$_interactionManager.onPan(callback)
+            this.$_interactionManager.onPan(callback ? callback : EMPTY_FUNCTION)
         } else if (eventName.toLowerCase() === 'mousedown') {
-            this.$_interactionManager.onMousedown(callback)
+            this.$_interactionManager.onMousedown(callback ? callback : EMPTY_FUNCTION)
         } else if (eventName.toLowerCase() === 'mouseup') {
-            this.$_interactionManager.onMouseup(callback)
+            this.$_interactionManager.onMouseup(callback ? callback : EMPTY_FUNCTION)
         } else if (eventName.toLowerCase() === 'click') {
-            this.$_interactionManager.onClick(callback)
+            this.$_interactionManager.onClick(callback ? callback : EMPTY_FUNCTION)
         }
     }
 
@@ -370,7 +371,15 @@ export default class NetV {
      */
     public off(eventName: string, callback?: (e: any) => any) {
         if (eventName.toLowerCase() === 'zoom') {
-            this.$_interactionManager.offZoom(callback)
+            this.$_interactionManager.offZoom(callback ? callback : EMPTY_FUNCTION)
+        } else if (eventName.toLowerCase() === 'pan') {
+            this.$_interactionManager.offPan(callback ? callback : EMPTY_FUNCTION)
+        } else if (eventName.toLowerCase() === 'mousedown') {
+            this.$_interactionManager.offMousedown(callback ? callback : EMPTY_FUNCTION)
+        } else if (eventName.toLowerCase() === 'mouseup') {
+            this.$_interactionManager.offMouseup(callback ? callback : EMPTY_FUNCTION)
+        } else if (eventName.toLowerCase() === 'click') {
+            this.$_interactionManager.offClick(callback ? callback : EMPTY_FUNCTION)
         }
     }
 }

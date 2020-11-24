@@ -4,7 +4,7 @@
  */
 
 import { Position } from '../interfaces'
-import NetV from 'src'
+import NetV from '../index'
 import Node from '../elements/node'
 import Element from '../elements/element'
 

@@ -5,11 +5,11 @@
 
 import { RenderNodeManager } from './elements/node/render-node'
 import Node from '../elements/node'
-import Link from 'src/elements/link'
+import Link from '../elements/link'
 import { RenderLinkManager } from './elements/link/render-link'
 import { Transform, Position } from '../interfaces'
 import { RendererConfigs } from './interfaces'
-import { Color } from 'src/interfaces'
+import { Color } from '../interfaces'
 import { decodeRenderId } from './utils'
 
 const MODIFIED_ELEMENTS_COUNT_UPPER_THRESHOLD = 100 // when modifiedElementCount is larger than it, $_shouldLazyUpdate will be true
