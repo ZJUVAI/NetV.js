@@ -51,8 +51,7 @@ export class InteractionManager {
         const newTransform = { ...this.netv.$_transform }
         newTransform.x += x
         newTransform.y += y
-        this.netv.transform(newTransform)
-        this.netv.draw()
+        return this.netv.transform(newTransform)
     }
 
     /**
@@ -73,8 +72,7 @@ export class InteractionManager {
 
         newTransform.k *= factor
 
-        this.netv.transform(newTransform)
-        this.netv.draw()
+        return this.netv.transform(newTransform)
     }
 
     /**
