@@ -50,3 +50,7 @@ export interface ShaderSeries {
     idVertex: string
     idFragment: string
 }
+
+export interface Variable {
+    [index: string]: 'float' | 'vec2' | 'vec3' | 'vec4' | 'mat3'
+}

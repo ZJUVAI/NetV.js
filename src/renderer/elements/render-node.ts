@@ -3,13 +3,9 @@
  * @description Node using in Renderer
  */
 
-import vertShaderStr from './vertex.hlsl'
-import fragShaderStr from './fragment.hlsl'
-import idVertShaderStr from './id-vertex.hlsl'
-import idFragShaderStr from './id-fragment.hlsl'
-import { NodeManagerConfigs } from '../../interfaces'
-import Node from '../../../elements/node'
-import { RenderElementManager } from '../element/render-element'
+import { NodeManagerConfigs, ShaderSeries } from '../interfaces'
+import Node from '../../elements/node'
+import { RenderElementManager } from './render-element'
 
 export class RenderNodeManager extends RenderElementManager {
     // private idToIndex: { [key: string]: number }
@@ -23,6 +19,7 @@ export class RenderNodeManager extends RenderElementManager {
     public constructor(
         gl: WebGL2RenderingContext,
         params: NodeManagerConfigs,
+        shaders: ShaderSeries,
         idTexture: WebGLTexture
     ) {
         super(
@@ -35,10 +32,7 @@ export class RenderNodeManager extends RenderElementManager {
                 0.5, -0.5, 1.0,
             ]},
             /* shader series */ {
-                vertex: vertShaderStr,
-                fragment: fragShaderStr,
-                idVertex: idVertShaderStr,
-                idFragment: idFragShaderStr
+                ...shaders
             },
             /* idTexture */ idTexture
         )
