@@ -53,4 +53,6 @@ export declare const label: {
     };
     fontSize: number;
     strokeWidth: number;
+    fontFamily: string;
+    fontColor: string;
 };

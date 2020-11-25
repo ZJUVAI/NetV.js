@@ -9,6 +9,8 @@ export declare class LabelManager {
     private $_core;
     private $_svg;
     private $_offset;
+    private $_fontFamily;
+    private $_fontColor;
     private $_fontSize;
     private $_strokeWidth;
     constructor(core: NetV);

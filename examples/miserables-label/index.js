@@ -14,7 +14,11 @@ const netv = new NetV({
         offset: {
             x: 10,
             y: 0
-        }
+        },
+        fontFamily: 'monospace',
+        fontSize: 12,
+        fontColor: 'red',
+        strokeWidth: 0
     }
 })
 const data = netv.Utils.transformGraphPosition(netv.loadDataset('miserables'), 500, 400, 300)
