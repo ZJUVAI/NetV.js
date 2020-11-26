@@ -3,12 +3,14 @@ import { Shader } from '../utils'
 const vertex = new Shader()
 vertex.inputs = {
     inVertexPos: 'vec3',
+    in_shape: 'float',
     in_source: 'vec2',
     in_target: 'vec2',
     in_strokeWidth: 'float',
     in_strokeColor: 'vec4'
 }
 vertex.outputs = {
+    shape: 'float',
     strokeColor: 'vec4'
 }
 vertex.uniforms = {
@@ -19,7 +21,7 @@ vertex.uniforms = {
 vertex.main = [
     `void main(void) {`,
     `    strokeColor = in_strokeColor;`,
-    ``,
+    `    shape = in_shape;`,
     `    vec2 source = in_source * scale + translate;`,
     `    vec2 target = in_target * scale + translate;`,
     `    vec2 delta = source - target;`,

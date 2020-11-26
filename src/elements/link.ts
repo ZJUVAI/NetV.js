@@ -10,6 +10,7 @@ import Element from './element'
 
 class Link extends Element {
     // style getter/setter
+    public shape: (value?: interfaces.LinkShape) => interfaces.LinkShape
     public strokeWidth: (value?: number) => number
     public strokeColor: (value?: interfaces.Color) => interfaces.Color
 
