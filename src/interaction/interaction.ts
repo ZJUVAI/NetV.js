@@ -296,10 +296,6 @@ export class InteractionManager {
 
                 this.netv.draw()
 
-                // when dragging, dynamic change label's position. because only operate on single element, it's ok to remove and recreate
-                element.showLabel(false)
-                element.showLabel(true)
-
                 element.$_draggingCallbackSet.forEach((callback) => {
                     callback({
                         event: evt,
