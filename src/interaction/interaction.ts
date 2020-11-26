@@ -333,18 +333,18 @@ export class InteractionManager {
                     })
                 )
             } else {
-                element?.$_mouseoverCallbackSet.forEach((callback) =>
-                    callback({
-                        event: evt,
-                        name: 'mouseover',
-                        element
-                    })
-                )
                 lastMouseMoveElement?.$_mouseoutCallbackSet.forEach((callback) =>
                     callback({
                         event: evt,
                         name: 'mouseout',
                         element: lastMouseMoveElement
+                    })
+                )
+                element?.$_mouseoverCallbackSet.forEach((callback) =>
+                    callback({
+                        event: evt,
+                        name: 'mouseover',
+                        element
                     })
                 )
             }
