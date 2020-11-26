@@ -86,17 +86,17 @@ export class RenderNodeManager extends RenderElementManager {
                         return [0]
                     }
                 }
-            } else if (attr.name === 'in_vertex_alpha') {
+            } else if (attr.name === 'in_vertexAlpha') {
                 attr.extractAttributeValueFrom = (node: Node) => {
                     const vertexAlpha = node.vertexAlpha()
                     return [vertexAlpha.x, vertexAlpha.y]
                 }
-            } else if (attr.name === 'in_vertex_beta') {
+            } else if (attr.name === 'in_vertexBeta') {
                 attr.extractAttributeValueFrom = (node: Node) => {
                     const vertexAlpha = node.vertexBeta()
                     return [vertexAlpha.x, vertexAlpha.y]
                 }
-            } else if (attr.name === 'in_vertex_gamma') {
+            } else if (attr.name === 'in_vertexGamma') {
                 attr.extractAttributeValueFrom = (node: Node) => {
                     const vertexAlpha = node.vertexGamma()
                     return [vertexAlpha.x, vertexAlpha.y]

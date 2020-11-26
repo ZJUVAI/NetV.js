@@ -10,9 +10,9 @@ vertex.inputs = {
     in_height: 'float',
     in_rotate: 'float',
     in_r: 'float',
-    in_vertex_alpha: 'vec2',
-    in_vertex_beta: 'vec2',
-    in_vertex_gamma: 'vec2',
+    in_vertexAlpha: 'vec2',
+    in_vertexBeta: 'vec2',
+    in_vertexGamma: 'vec2',
     in_fill: 'vec4',
     in_strokeWidth: 'float',
     in_strokeColor: 'vec4'
@@ -24,9 +24,9 @@ vertex.outputs = {
     height: 'float', // rect
     rotate: 'float', // rect
     r: 'float', // circle
-    vertex_alpha: 'vec2', // triangle
-    vertex_beta: 'vec2', // triangle
-    vertex_gamma: 'vec2', // triangle
+    vertexAlpha: 'vec2', // triangle
+    vertexBeta: 'vec2', // triangle
+    vertexGamma: 'vec2', // triangle
     fill: 'vec4',
     strokeWidth: 'float',
     strokeColor: 'vec4'
@@ -73,9 +73,9 @@ vertex.main = [
     `   strokeWidth = in_strokeWidth;`,
     `   rotate = in_rotate;`,
     `   position = scale * (in_position + in_offset) + translate;`,
-    `   vertex_alpha = in_vertex_alpha * pixelRatio;`,
-    `   vertex_beta = in_vertex_beta * pixelRatio;`,
-    `   vertex_gamma = in_vertex_gamma * pixelRatio;`,
+    `   vertexAlpha = in_vertexAlpha * pixelRatio;`,
+    `   vertexBeta = in_vertexBeta * pixelRatio;`,
+    `   vertexGamma = in_vertexGamma * pixelRatio;`,
     `   mat3 scale_mat = mat3(`,
     `       1, 0, 0,`,
     `       0, 1, 0,`,
@@ -111,14 +111,14 @@ vertex.main = [
     `       );`,
     `   } else if (shape == 2.0) {`, // triangle shape
     // calculate the normal of the edge: alpha => beta
-    `       vec2 inner = calculate_inner_point(vertex_alpha, vertex_beta, vertex_gamma);`,
-    `       float stroke_scale = calculate_stroke_scale(vertex_alpha, vertex_beta, vertex_gamma);`,
-    `       vec2 outer_vertex_alpha = (vertex_alpha - inner) * stroke_scale + inner;`, // consider stroke in
-    `       vec2 outer_vertex_beta = (vertex_beta - inner) * stroke_scale + inner;`, // consider stroke in
-    `       vec2 outer_vertex_gamma = (vertex_gamma - inner) * stroke_scale + inner;`, // consider stroke in
+    `       vec2 inner = calculate_inner_point(vertexAlpha, vertexBeta, vertexGamma);`,
+    `       float stroke_scale = calculate_stroke_scale(vertexAlpha, vertexBeta, vertexGamma);`,
+    `       vec2 outer_vertexAlpha = (vertexAlpha - inner) * stroke_scale + inner;`, // consider stroke in
+    `       vec2 outer_vertexBeta = (vertexBeta - inner) * stroke_scale + inner;`, // consider stroke in
+    `       vec2 outer_vertexGamma = (vertexGamma - inner) * stroke_scale + inner;`, // consider stroke in
     // to ensure the fragment cutting is within the rectangle
-    `       width = 1.5 * (max(max(outer_vertex_alpha.x, outer_vertex_beta.x), outer_vertex_gamma.x) - min(min(outer_vertex_alpha.x, outer_vertex_beta.x), outer_vertex_gamma.x));`,
-    `       height = 1.5 * (max(max(outer_vertex_alpha.y, outer_vertex_beta.y), outer_vertex_gamma.y)- min(min(outer_vertex_alpha.y, outer_vertex_beta.y), outer_vertex_gamma.y));`,
+    `       width = 1.5 * (max(max(outer_vertexAlpha.x, outer_vertexBeta.x), outer_vertexGamma.x) - min(min(outer_vertexAlpha.x, outer_vertexBeta.x), outer_vertexGamma.x));`,
+    `       height = 1.5 * (max(max(outer_vertexAlpha.y, outer_vertexBeta.y), outer_vertexGamma.y)- min(min(outer_vertexAlpha.y, outer_vertexBeta.y), outer_vertexGamma.y));`,
     `       scale_mat = mat3(`,
     `           width, 0, 0,`,
     `           0, height, 0,`,
@@ -174,14 +174,14 @@ fragment.methods = [
     ],
     [
         `float inTriangle() {`,
-        `    float stroke_scale = calculate_stroke_scale(vertex_alpha, vertex_beta, vertex_gamma);`,
+        `    float stroke_scale = calculate_stroke_scale(vertexAlpha, vertexBeta, vertexGamma);`,
         `    vec2 flip_pos = vec2(position.x, viewport.y - position.y);`,
-        `    vec2 flip_vertex_alpha = vec2(vertex_alpha.x, - vertex_alpha.y) / stroke_scale;`,
-        `    vec2 flip_vertex_beta = vec2(vertex_beta.x, - vertex_beta.y) / stroke_scale;`,
-        `    vec2 flip_vertex_gamma = vec2(vertex_gamma.x, - vertex_gamma.y) / stroke_scale;`,
-        `    float d1 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertex_alpha, flip_vertex_beta);`,
-        `    float d2 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertex_beta, flip_vertex_gamma);`,
-        `    float d3 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertex_gamma, flip_vertex_alpha);`,
+        `    vec2 flip_vertexAlpha = vec2(vertexAlpha.x, - vertexAlpha.y) / stroke_scale;`,
+        `    vec2 flip_vertexBeta = vec2(vertexBeta.x, - vertexBeta.y) / stroke_scale;`,
+        `    vec2 flip_vertexGamma = vec2(vertexGamma.x, - vertexGamma.y) / stroke_scale;`,
+        `    float d1 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertexAlpha, flip_vertexBeta);`,
+        `    float d2 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertexBeta, flip_vertexGamma);`,
+        `    float d3 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertexGamma, flip_vertexAlpha);`,
         `    bool has_neg = (d1 <= 0.0) || (d2 <= 0.0) || (d3 <= 0.0);`,
         `    bool has_pos = (d1 >= 0.0) || (d2 >= 0.0) || (d3 >= 0.0);`,
         `    if (!(has_neg && has_pos)) {`,
@@ -193,15 +193,15 @@ fragment.methods = [
     ],
     [
         `float inTriangleBorder() {`,
-        `    float stroke_scale = calculate_stroke_scale(vertex_alpha, vertex_beta, vertex_gamma);`,
+        `    float stroke_scale = calculate_stroke_scale(vertexAlpha, vertexBeta, vertexGamma);`,
         `    vec2 flip_pos = vec2(position.x, viewport.y - position.y);`,
-        `    vec2 flip_vertex_alpha = stroke_scale * vec2(vertex_alpha.x, - vertex_alpha.y);`,
-        `    vec2 flip_vertex_beta = stroke_scale * vec2(vertex_beta.x, - vertex_beta.y);`,
-        `    vec2 flip_vertex_gamma = stroke_scale * vec2(vertex_gamma.x, - vertex_gamma.y);`,
+        `    vec2 flip_vertexAlpha = stroke_scale * vec2(vertexAlpha.x, - vertexAlpha.y);`,
+        `    vec2 flip_vertexBeta = stroke_scale * vec2(vertexBeta.x, - vertexBeta.y);`,
+        `    vec2 flip_vertexGamma = stroke_scale * vec2(vertexGamma.x, - vertexGamma.y);`,
         ``,
-        `    float d1 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertex_alpha, flip_vertex_beta);`,
-        `    float d2 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertex_beta, flip_vertex_gamma);`,
-        `    float d3 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertex_gamma, flip_vertex_alpha);`,
+        `    float d1 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertexAlpha, flip_vertexBeta);`,
+        `    float d2 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertexBeta, flip_vertexGamma);`,
+        `    float d3 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertexGamma, flip_vertexAlpha);`,
         ``,
         `    bool has_neg = (d1 <= 0.0) || (d2 <= 0.0) || (d3 <= 0.0);`,
         `    bool has_pos = (d1 >= 0.0) || (d2 >= 0.0) || (d3 >= 0.0);`,
