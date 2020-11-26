@@ -3,10 +3,12 @@
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
  */
 
-import { RenderNodeManager } from './elements/node/render-node'
+import * as nodeShaders from './shaders/node-shader'
+import * as linkShaders from './shaders/link-shader'
+import { RenderNodeManager } from './elements/render-node'
 import Node from '../elements/node'
 import Link from '../elements/link'
-import { RenderLinkManager } from './elements/link/render-link'
+import { RenderLinkManager } from './elements/render-link'
 import { Transform, Position } from '../interfaces'
 import { RendererConfigs } from './interfaces'
 import { Color } from '../interfaces'
@@ -61,14 +63,30 @@ export class Renderer {
 
         this.initIdTexture()
 
+        const nodeShaderSeriels = {
+            vertex: nodeShaders.vertex.connect(),
+            fragment: nodeShaders.fragment.connect(),
+            idVertex: nodeShaders.idVertex.connect(),
+            idFragment: nodeShaders.idFragment.connect()
+        }
+
+        const linkShaderSeriels = {
+            vertex: linkShaders.vertex.connect(),
+            fragment: linkShaders.fragment.connect(),
+            idVertex: linkShaders.idVertex.connect(),
+            idFragment: linkShaders.idFragment.connect()
+        }
+
         this.nodeManager = new RenderNodeManager(
             this.gl,
             { width, height, limit: nodeLimit },
+            nodeShaderSeriels,
             this.idTexture
         )
         this.linkManager = new RenderLinkManager(
             this.gl,
             { width, height, limit: linkLimit },
+            linkShaderSeriels,
             this.idTexture
         )
     }

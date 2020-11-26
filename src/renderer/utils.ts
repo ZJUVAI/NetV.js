@@ -4,7 +4,7 @@
  */
 
 import { Color } from '../interfaces'
-import { RenderAttribute } from './interfaces'
+import { Variable, RenderAttribute } from './interfaces'
 
 /**
  * compile webgl shader
@@ -127,4 +127,46 @@ export function decodeRenderId(pixelVal: Uint8Array): number {
     // parse normalized parts of id number, bit shift to origin position and concat
     const renderId = pixelVal[0] | (pixelVal[1] << 8) | (pixelVal[2] << 16) | (pixelVal[3] << 24)
     return renderId
+}
+
+export class Shader {
+    public inputs: Variable = {}
+    public outputs: Variable = {}
+    public uniforms: Variable = {}
+    public methods: string[][] = [[]]
+    public main: string[] = []
+    private header = `#version 300 es\nprecision highp float;\n`
+    public copy() {
+        const copyShader = new Shader()
+        copyShader.inputs = { ...this.inputs }
+        copyShader.outputs = { ...this.outputs }
+        copyShader.uniforms = { ...this.uniforms }
+        copyShader.main = this.main.map((str) => str)
+        copyShader.methods = this.methods.map((method) => method.map((str) => str))
+        return copyShader
+    }
+    public connect() {
+        const variablesPrefix = [
+            { prefix: 'in', variables: this.inputs },
+            { prefix: 'out', variables: this.outputs },
+            { prefix: 'uniform', variables: this.uniforms }
+        ]
+        const variableDefinitions = variablesPrefix
+            .map((variablePrefix) =>
+                Object.entries(variablePrefix.variables)
+                    .map(([name, type]) => {
+                        return `${variablePrefix.prefix} ${type} ${name};\n`
+                    })
+                    .join('')
+            )
+            .join('')
+
+        return (
+            this.header +
+            variableDefinitions +
+            this.methods.map((method) => method.join('\n')).join('\n') +
+            '\n' +
+            this.main.join('\n')
+        )
+    }
 }

@@ -3,13 +3,9 @@
  * @description Node using in Renderer
  */
 
-import vertShaderStr from './vertex.hlsl'
-import fragShaderStr from './fragment.hlsl'
-import idVertShaderStr from './id-vertex.hlsl'
-import idFragShaderStr from './id-fragment.hlsl'
-import { NodeManagerConfigs } from '../../interfaces'
-import Node from '../../../elements/node'
-import { RenderElementManager } from '../element/render-element'
+import { NodeManagerConfigs, ShaderSeries } from '../interfaces'
+import Node from '../../elements/node'
+import { RenderElementManager } from './render-element'
 
 export class RenderNodeManager extends RenderElementManager {
     // private idToIndex: { [key: string]: number }
@@ -23,6 +19,7 @@ export class RenderNodeManager extends RenderElementManager {
     public constructor(
         gl: WebGL2RenderingContext,
         params: NodeManagerConfigs,
+        shaders: ShaderSeries,
         idTexture: WebGLTexture
     ) {
         super(
@@ -35,10 +32,7 @@ export class RenderNodeManager extends RenderElementManager {
                 0.5, -0.5, 1.0,
             ]},
             /* shader series */ {
-                vertex: vertShaderStr,
-                fragment: fragShaderStr,
-                idVertex: idVertShaderStr,
-                idFragment: idFragShaderStr
+                ...shaders
             },
             /* idTexture */ idTexture
         )
@@ -92,17 +86,17 @@ export class RenderNodeManager extends RenderElementManager {
                         return [0]
                     }
                 }
-            } else if (attr.name === 'in_vertex_alpha') {
+            } else if (attr.name === 'in_vertexAlpha') {
                 attr.extractAttributeValueFrom = (node: Node) => {
                     const vertexAlpha = node.vertexAlpha()
                     return [vertexAlpha.x, vertexAlpha.y]
                 }
-            } else if (attr.name === 'in_vertex_beta') {
+            } else if (attr.name === 'in_vertexBeta') {
                 attr.extractAttributeValueFrom = (node: Node) => {
                     const vertexAlpha = node.vertexBeta()
                     return [vertexAlpha.x, vertexAlpha.y]
                 }
-            } else if (attr.name === 'in_vertex_gamma') {
+            } else if (attr.name === 'in_vertexGamma') {
                 attr.extractAttributeValueFrom = (node: Node) => {
                     const vertexAlpha = node.vertexGamma()
                     return [vertexAlpha.x, vertexAlpha.y]

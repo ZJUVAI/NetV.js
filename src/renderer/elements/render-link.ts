@@ -2,15 +2,9 @@
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
  * @description Link used in renderer
  */
-
-import vertShaderStr from './vertex.hlsl'
-import fragShaderStr from './fragment.hlsl'
-import idVertShaderStr from './id-vertex.hlsl'
-import idFragShaderStr from './id-fragment.hlsl'
-
-import { LinkManagerConfigs } from '../../interfaces'
-import Link from '../../../elements/link'
-import { RenderElementManager } from '../element/render-element'
+import { LinkManagerConfigs, ShaderSeries } from '../interfaces'
+import Link from '../../elements/link'
+import { RenderElementManager } from './render-element'
 
 export class RenderLinkManager extends RenderElementManager {
     /**
@@ -22,6 +16,7 @@ export class RenderLinkManager extends RenderElementManager {
     public constructor(
         gl: WebGL2RenderingContext,
         params: LinkManagerConfigs,
+        shaders: ShaderSeries,
         idTexture: WebGLTexture
     ) {
         super(
@@ -34,10 +29,7 @@ export class RenderLinkManager extends RenderElementManager {
                 0.5, -0.5, 1.0,
             ]},
             /* shader series */ {
-                vertex: vertShaderStr,
-                fragment: fragShaderStr,
-                idVertex: idVertShaderStr,
-                idFragment: idFragShaderStr
+                ...shaders
             },
             /* idTexture */ idTexture
         )
