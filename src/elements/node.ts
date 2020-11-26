@@ -38,10 +38,7 @@ class Node extends Element {
         y: 0
     }
 
-    private $_showLabel: boolean
-    private $_text: string
-    private $_textOffset: { x: number; y: number } // NOTE: deprecated, current not used
-    private $_elementReservedKeys = new Set(['id', 'x', 'y', 'label', 'text', 'style'])
+    private $_elementReservedKeys = new Set(['id', 'x', 'y', 'style'])
 
     public constructor(core, nodeData: interfaces.NodeData) {
         super(core, nodeData)
@@ -53,13 +50,10 @@ class Node extends Element {
             }
         }
 
-        const defaultConfigs = this.$_core.$_configs
         const data = {
             ...{
                 x: this.$_position.x,
-                y: this.$_position.y,
-                showLabel: defaultConfigs.node.showLabel,
-                text: defaultConfigs.node.text
+                y: this.$_position.y
             },
             ...nodeData
         }
@@ -68,13 +62,6 @@ class Node extends Element {
         this.$_position = {
             x: data.x,
             y: data.y
-        }
-
-        this.$_showLabel = data.showLabel
-        this.$_text = data.text
-
-        if (this.$_showLabel) {
-            this.showLabel(true)
         }
     }
 
@@ -189,42 +176,6 @@ class Node extends Element {
         }
 
         return this.$_position
-    }
-
-    /**
-     * control label show or not
-     * @param value
-     */
-    public showLabel(value: boolean) {
-        this.$_showLabel = value
-        if (value) {
-            this.$_core.labelManager.drawLabel(this)
-        } else {
-            this.$_core.labelManager.removeLabel(this)
-        }
-    }
-
-    /**
-     * get/set node's label
-     * @param value label text
-     */
-    public text(value?: string) {
-        if (value) {
-            this.$_text = value
-        }
-        return this.$_text
-    }
-
-    /**
-     * get/set offset value
-     * @param value offset value
-     * @deprecated not used currently, not support set node's label offset individually
-     */
-    public textOffset(value?: { x: number; y: number }) {
-        if (value) {
-            this.$_textOffset = value
-        }
-        return this.$_textOffset
     }
 
     /**

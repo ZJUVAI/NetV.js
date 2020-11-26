@@ -13,13 +13,11 @@ import * as dataset from './dataset'
 import { Renderer } from './renderer'
 import { InteractionManager } from './interaction/interaction'
 import * as Utils from './utils/utils'
-import { LabelManager } from './label/label'
 import { Position } from './interfaces'
 import { EMPTY_FUNCTION } from './utils/const'
 
 export default class NetV {
     public static Utils = Utils
-    public labelManager: LabelManager
 
     public $_id2node = new Map()
     public $_ends2link = new Map2()
@@ -69,8 +67,6 @@ export default class NetV {
             getAllNodes: this.nodes.bind(this),
             getAllLinks: this.links.bind(this)
         })
-
-        this.labelManager = new LabelManager(this)
 
         this.$_interactionManager = new InteractionManager(this)
     }
@@ -210,9 +206,6 @@ export default class NetV {
         this.wipe()
         this.$_renderer.dispose()
         this.$_canvas.remove()
-        // remove label canvas
-        // TODO: consider standalone interaction plugin
-        this.labelManager.dispose()
     }
 
     /**
@@ -349,7 +342,6 @@ export default class NetV {
         }
         this.$_transform = value
         this.$_renderer.setTransform(this.$_transform)
-        this.labelManager.setTransform(this.$_transform)
         return this.$_transform
     }
     /**

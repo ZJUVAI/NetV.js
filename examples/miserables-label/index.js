@@ -4,19 +4,9 @@
  */
 const netv = new NetV({
     container: document.getElementById('main'),
-    node: {
-        showLabel: true
-    },
     link: {
         style: {
-            shape: 'line',
             strokeWidth: 1
-        }
-    },
-    label: {
-        offset: {
-            x: 10,
-            y: 0
         }
     }
 })
@@ -37,8 +27,25 @@ const colorMap = [
 ]
 data.nodes.forEach((node) => {
     const { r, g, b, a } = colorMap[node.group]
-    node.style = { fill: { r: r / 255, g: g / 255, b: b / 255, a } }
-    node.text = node.id
+    node.style = {
+        fill: { r: r / 255, g: g / 255, b: b / 255, a }
+    }
 })
 netv.data(data)
 netv.draw()
+
+// label
+
+const labelManager = new Label(netv)
+labelManager.draw(netv.nodes(), (node) => Label.template.rightText(node.id()))
+const node = netv.getNodeById('Valjean')
+const element = document.createElementNS('http://www.w3.org/2000/svg', 'image')
+element.setAttribute('href', 'http://netv.zjuvag.org/logo.svg')
+element.setAttribute('width', '100')
+labelManager.draw(node, (node) => { return element })
+
+// interaction
+
+netv.on('pan', () => { labelManager.updatePosition(netv.nodes()) })
+netv.on('zoom', () => { labelManager.updatePosition(netv.nodes()) })
+node.on('dragging', () => { labelManager.updatePosition(node) })
