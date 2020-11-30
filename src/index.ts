@@ -15,6 +15,7 @@ import { InteractionManager } from './interaction/interaction'
 import * as Utils from './utils/utils'
 import { Position } from './interfaces'
 import { EMPTY_FUNCTION } from './utils/const'
+import { link } from 'build/NetV'
 
 export default class NetV {
     public static Utils = Utils
@@ -143,14 +144,15 @@ export default class NetV {
      * @memberof NetV
      */
     public addLinks(linksData: interfaces.LinkData[]) {
-        const newLinks = linksData.map((linkData) => {
+        const newLinks = new Array(linksData.length)
+        for (let i = 0; i < linksData.length; i++) {
+            const linkData = linksData[i]
             linkData.source = linkData.source.toString()
             linkData.target = linkData.target.toString()
 
             const link = new Link(this, linkData)
-            return link
-        })
-        // this.$_renderer.addLinks(newLinks)
+            newLinks[i] = link
+        }
         this.$_renderer.addLinks([...this.$_ends2link.values()]) // NOTE: preserve link order, not elegant
         return newLinks
     }

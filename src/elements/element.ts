@@ -23,7 +23,24 @@ export default class Element {
         const defaultConfigs = this.$_core.$_configs
 
         // override default style with user specified style in data
-        this.$_style = override(defaultConfigs[type].style, data.style)
+        // this.$_style = override(defaultConfigs[type].style, data.style)
+        this.$_style = defaultConfigs[type].style
+        if ('style' in data) {
+            for (let name of data.style as any) {
+                const style = data.style[name]
+                if (style !== Object(style)) {
+                    // style is not an object
+                    this.$_style[name] = style
+                } else {
+                    // ! if the depth of style is more than one, it can cause bugs
+                    // ! e.g. style = { xx: {...}, yy: ... }
+                    this.$_style[name] = {
+                        ...this.$_style[name],
+                        ...style
+                    }
+                }
+            }
+        }
 
         const renderManager = this.$_core.$_renderer[`${type}Manager`]
         this.$_changeRenderAttribute = renderManager.changeAttribute.bind(renderManager)
