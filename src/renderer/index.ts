@@ -176,7 +176,7 @@ export class Renderer {
 
             const links = this.getAllLinks()
             this.linkManager.refreshPosition(links)
-            this.linkManager.refreshPosition(links)
+            this.arrowManager.refreshPosition(links)
             this.shouldLazyUpdate = false
             this.modifiedElementsCount = 0
         }
