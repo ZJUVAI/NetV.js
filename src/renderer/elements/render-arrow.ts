@@ -26,7 +26,6 @@ export class RenderArrowManager extends RenderElementManager {
                 -0.5, 0.5, 1.0,
                 -0.5, -0.5, 1.0,
                 0.5, 0., 1.0,
-                0.5, 0., 1.0,
             ]},
             /* shader series */ {
                 ...shaders

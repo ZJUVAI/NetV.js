@@ -77,8 +77,8 @@ fragment.methods = [
 
 fragment.main = [
     `void main(void) {`,
-    `    fragmentColor = vec4(1., 0., 0., 1.);`,
-    `    //fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
+    // `    fragmentColor = vec4(1., 0., 0., 1.);`, // TODO: pass color
+    `    fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
     `}`
 ]
 

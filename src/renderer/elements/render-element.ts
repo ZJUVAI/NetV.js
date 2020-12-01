@@ -200,7 +200,14 @@ export class RenderElementManager {
             })
         }
 
-        this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
+        // TODO: need more proper way to get this attribute
+        const instanceAttribute = this.attributes.get('inVertexPos')
+        this.gl.drawArraysInstanced(
+            this.gl.TRIANGLE_STRIP,
+            0,
+            instanceAttribute.array.length / instanceAttribute.size,
+            this.count
+        )
 
         // draw id
         this.gl.blendFunc(this.gl.ONE, this.gl.ZERO)
