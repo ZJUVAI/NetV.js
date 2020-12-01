@@ -166,6 +166,7 @@ class Node extends Element {
                         this.$_core.$_renderer.increaseModifiedElementsCountBy(set.size)
                         for (const link of set) {
                             this.$_core.$_renderer.linkManager.changeAttribute(link, key)
+                            this.$_core.$_renderer.arrowManager.changeAttribute(link, key)
                         }
                     }
                 })

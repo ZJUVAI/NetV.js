@@ -163,6 +163,7 @@ export class Renderer {
     public setTransform(transform: Transform) {
         this.nodeManager.setTransform(transform)
         this.linkManager.setTransform(transform)
+        this.arrowManager.setTransform(transform)
     }
 
     /**
@@ -173,7 +174,9 @@ export class Renderer {
             // TODO: not only position needs to be refreshed, but also other styles
             this.nodeManager.refreshPosition(this.getAllNodes())
 
-            this.linkManager.refreshPosition(this.getAllLinks())
+            const links = this.getAllLinks()
+            this.linkManager.refreshPosition(links)
+            this.linkManager.refreshPosition(links)
             this.shouldLazyUpdate = false
             this.modifiedElementsCount = 0
         }

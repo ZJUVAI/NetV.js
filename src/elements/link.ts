@@ -18,7 +18,6 @@ class Link extends Element {
     public $_target: Node
 
     private $_elementReservedKeys = new Set(['source', 'target', 'style'])
-
     public constructor(core, linkData: interfaces.LinkData) {
         super(core, linkData)
 
