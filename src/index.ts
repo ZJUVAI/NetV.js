@@ -15,7 +15,6 @@ import { InteractionManager } from './interaction/interaction'
 import * as Utils from './utils/utils'
 import { Position } from './interfaces'
 import { EMPTY_FUNCTION } from './utils/const'
-import { link } from 'build/NetV'
 
 export default class NetV {
     public static Utils = Utils
