@@ -49,10 +49,20 @@ export class RenderArrowManager extends RenderElementManager {
                 attr.extractAttributeValueFrom = (link: Link) => {
                     return [link.strokeWidth() * this.pixelRatio]
                 }
-            } else if (attr.name === 'in_strokeColor') {
+            } else if (attr.name === 'in_color') {
                 attr.extractAttributeValueFrom = (link: Link) => {
-                    const strokeColor = link.strokeColor()
+                    const strokeColor = link.arrowColor()
                     return [strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a]
+                }
+            } else if (attr.name === 'in_size') {
+                attr.extractAttributeValueFrom = (link: Link) => {
+                    const arrowSize = link.arrowSize()
+                    return [arrowSize]
+                }
+            } else if (attr.name === 'in_offset') {
+                attr.extractAttributeValueFrom = (link: Link) => {
+                    const arrowOffset = link.arrowOffset()
+                    return [arrowOffset]
                 }
             }
         })

@@ -7,11 +7,14 @@ vertex.inputs = {
     in_source: 'vec2',
     in_target: 'vec2',
     in_strokeWidth: 'float',
-    in_strokeColor: 'vec4'
+    in_strokeColor: 'vec4',
+    in_color: 'vec4',
+    in_size: 'float',
+    in_offset: 'float',
 }
 vertex.outputs = {
     shape: 'float',
-    strokeColor: 'vec4'
+    strokeColor: 'vec4' // TODO: need change name
 }
 vertex.uniforms = {
     projection: 'mat3',
@@ -21,13 +24,13 @@ vertex.uniforms = {
 
 vertex.main = [
     `void main(void) {`,
-    `    strokeColor = in_strokeColor;`,
+    `    strokeColor = in_color;`,
     `    shape = in_shape;`,
     `    vec2 source = in_source * scale + translate;`,
     `    vec2 target = in_target * scale + translate;`,
     `    vec2 delta = target - source;`,
     // `    vec2 center = 0.5 * (source + target);`,
-    `    vec2 center = target - 15. * normalize(delta);`, // TODO: pass offset parameter
+    `    vec2 center = target - in_offset * normalize(delta);`,
     `    float len = length(delta);`,
     `    float phi = atan(delta.y / delta.x);`, // TODO: x is zero?
     `    if (delta.x < 0.) {`,
@@ -35,8 +38,8 @@ vertex.main = [
     `    }`,
     ``,
     `    mat3 line_scale = mat3(`,
-    `        3. * in_strokeWidth, 0, 0,`, // TODO: pass size parameter
-    `        0, 3. * in_strokeWidth, 0,`,
+    `        in_size * in_strokeWidth, 0, 0,`,
+    `        0, in_size * in_strokeWidth, 0,`,
     `        0, 0, 1`,
     `    );`,
     `    mat3 line_rotate = mat3(`,
@@ -77,7 +80,6 @@ fragment.methods = [
 
 fragment.main = [
     `void main(void) {`,
-    // `    fragmentColor = vec4(1., 0., 0., 1.);`, // TODO: pass color
     `    fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
     `}`
 ]
