@@ -24,10 +24,11 @@ export default class Element {
 
         // override default style with user specified style in data
         // this.$_style = override(defaultConfigs[type].style, data.style)
-        this.$_style = defaultConfigs[type].style
+        this.$_style = JSON.parse(JSON.stringify(defaultConfigs[type].style))
         if ('style' in data) {
-            for (let name of data.style as any) {
-                const style = data.style[name]
+            Object.entries(data.style).forEach(([key, value]) => {
+                const style = value
+                const name = key
                 if (style !== Object(style)) {
                     // style is not an object
                     this.$_style[name] = style
@@ -39,7 +40,7 @@ export default class Element {
                         ...style
                     }
                 }
-            }
+            })
         }
 
         const renderManager = this.$_core.$_renderer[`${type}Manager`]
