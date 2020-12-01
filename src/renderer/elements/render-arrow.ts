@@ -25,8 +25,8 @@ export class RenderArrowManager extends RenderElementManager {
             /* parameters */ {...params, instanceVerteces: [
                 -0.5, 0.5, 1.0,
                 -0.5, -0.5, 1.0,
-                0.5, 0.5, 1.0,
-                0.5, -0.5, 1.0,
+                0.5, 0., 1.0,
+                0.5, 0., 1.0,
             ]},
             /* shader series */ {
                 ...shaders

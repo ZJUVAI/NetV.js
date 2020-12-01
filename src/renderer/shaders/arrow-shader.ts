@@ -27,9 +27,12 @@ vertex.main = [
     `    vec2 target = in_target * scale + translate;`,
     `    vec2 delta = target - source;`,
     // `    vec2 center = 0.5 * (source + target);`,
-    `    vec2 center = target - 20. * normalize(delta);`, // TODO: pass offset parameter
+    `    vec2 center = target - 15. * normalize(delta);`, // TODO: pass offset parameter
     `    float len = length(delta);`,
-    `    float phi = atan(delta.y / delta.x);`,
+    `    float phi = atan(delta.y / delta.x);`, // TODO: x is zero?
+    `    if (delta.x < 0.) {`,
+    `       phi += 3.14159265359;`, // TODO: define PI
+    `    }`,
     ``,
     `    mat3 line_scale = mat3(`,
     `        3. * in_strokeWidth, 0, 0,`, // TODO: pass size parameter
