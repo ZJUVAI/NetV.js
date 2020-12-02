@@ -43,8 +43,19 @@ export default class Element {
             })
         }
 
-        const renderManager = this.$_core.$_renderer[`${type}Manager`]
-        this.$_changeRenderAttribute = renderManager.changeAttribute.bind(renderManager)
+        // TODO: Hard code. Is this OK? This's not OK.
+        let renderManagers = []
+        if (type === 'node') {
+            renderManagers = [this.$_core.$_renderer.nodeManager]
+        } else if (type === 'link') {
+            renderManagers = [
+                this.$_core.$_renderer.linkManager,
+                this.$_core.$_renderer.arrowManager
+            ]
+        }
+        this.$_changeRenderAttribute = (...args) => {
+            renderManagers.forEach((manager) => manager.changeAttribute(...args))
+        }
 
         // generate style methods, e.g.: node.r(), link.strokeWidth()
         Object.keys(this.$_style).forEach((key) => {

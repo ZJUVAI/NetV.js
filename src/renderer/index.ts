@@ -5,10 +5,12 @@
 
 import * as nodeShaders from './shaders/node-shader'
 import * as linkShaders from './shaders/link-shader'
+import * as arrowShaders from './shaders/arrow-shader'
 import { RenderNodeManager } from './elements/render-node'
 import Node from '../elements/node'
 import Link from '../elements/link'
 import { RenderLinkManager } from './elements/render-link'
+import { RenderArrowManager } from './elements/render-arrow'
 import { Transform, Position } from '../interfaces'
 import { RendererConfigs } from './interfaces'
 import { Color } from '../interfaces'
@@ -19,6 +21,7 @@ const MODIFIED_ELEMENTS_COUNT_UPPER_THRESHOLD = 100 // when modifiedElementCount
 export class Renderer {
     public nodeManager: RenderNodeManager
     public linkManager: RenderLinkManager
+    public arrowManager: RenderArrowManager
 
     public modifiedElementsCount = 0 // record modified link num to control lazy update
     public shouldLazyUpdate = false // flag to control lazy update
@@ -77,6 +80,13 @@ export class Renderer {
             idFragment: linkShaders.idFragment.connect()
         }
 
+        const arrowShaderSeriels = {
+            vertex: arrowShaders.vertex.connect(),
+            fragment: arrowShaders.fragment.connect(),
+            idVertex: arrowShaders.idVertex.connect(),
+            idFragment: arrowShaders.idFragment.connect()
+        }
+
         this.nodeManager = new RenderNodeManager(
             this.gl,
             { width, height, limit: nodeLimit },
@@ -87,6 +97,13 @@ export class Renderer {
             this.gl,
             { width, height, limit: linkLimit },
             linkShaderSeriels,
+            this.idTexture
+        )
+
+        this.arrowManager = new RenderArrowManager(
+            this.gl,
+            { width, height, limit: linkLimit },
+            arrowShaderSeriels,
             this.idTexture
         )
     }
@@ -140,11 +157,13 @@ export class Renderer {
      */
     public addLinks(links: Link[]) {
         this.linkManager.addData(links)
+        this.arrowManager.addData(links)
     }
 
     public setTransform(transform: Transform) {
         this.nodeManager.setTransform(transform)
         this.linkManager.setTransform(transform)
+        this.arrowManager.setTransform(transform)
     }
 
     /**
@@ -155,7 +174,9 @@ export class Renderer {
             // TODO: not only position needs to be refreshed, but also other styles
             this.nodeManager.refreshPosition(this.getAllNodes())
 
-            this.linkManager.refreshPosition(this.getAllLinks())
+            const links = this.getAllLinks()
+            this.linkManager.refreshPosition(links)
+            this.arrowManager.refreshPosition(links)
             this.shouldLazyUpdate = false
             this.modifiedElementsCount = 0
         }
@@ -173,6 +194,7 @@ export class Renderer {
         )
         this.gl.clear(this.gl.COLOR_BUFFER_BIT)
         this.linkManager.draw()
+        this.arrowManager.draw()
         this.nodeManager.draw()
     }
 

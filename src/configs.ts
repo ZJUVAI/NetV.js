@@ -33,6 +33,10 @@ export const link = {
     style: {
         shape: 'line',
         strokeColor: { r: 0.4, g: 0.6, b: 0.8, a: 0.5 },
-        strokeWidth: 2
+        strokeWidth: 2,
+        arrowType: '-', // '-', '->', '<-', '<->' bidirectional not supported now
+        arrowColor: { r: 0.4, g: 0.6, b: 0.8, a: 1 },
+        arrowSize: 3,
+        arrowOffset: 15
     }
 }

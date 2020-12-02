@@ -13,12 +13,15 @@ class Link extends Element {
     public shape: (value?: interfaces.LinkShape) => interfaces.LinkShape
     public strokeWidth: (value?: number) => number
     public strokeColor: (value?: interfaces.Color) => interfaces.Color
+    public arrowColor: (value?: interfaces.Color) => interfaces.Color
+    public arrowSize: (value?: number) => number
+    public arrowOffset: (value?: number) => number
+    public arrowType: (value?: interfaces.LinkArrowType) => interfaces.LinkArrowType
 
     public $_source: Node
     public $_target: Node
 
     private $_elementReservedKeys = new Set(['source', 'target', 'style'])
-
     public constructor(core, linkData: interfaces.LinkData) {
         super(core, linkData)
 

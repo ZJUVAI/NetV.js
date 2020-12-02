@@ -48,6 +48,7 @@ export interface NodeData {
 }
 
 export type LinkShape = 'line'
+export type LinkArrowType = '-' | '->' | '<-'
 
 export interface LinkStyle {
     shape?: LinkShape
