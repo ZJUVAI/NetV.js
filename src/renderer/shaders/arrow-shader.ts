@@ -11,9 +11,11 @@ vertex.inputs = {
     in_color: 'vec4',
     in_size: 'float',
     in_offset: 'float',
+    in_type: 'float',
 }
 vertex.outputs = {
     shape: 'float',
+    type: 'float',
     strokeColor: 'vec4' // TODO: need change name
 }
 vertex.uniforms = {
@@ -26,11 +28,18 @@ vertex.main = [
     `void main(void) {`,
     `    strokeColor = in_color;`,
     `    shape = in_shape;`,
+    `    type = in_type;`,
     `    vec2 source = in_source * scale + translate;`,
     `    vec2 target = in_target * scale + translate;`,
-    `    vec2 delta = target - source;`,
-    // `    vec2 center = 0.5 * (source + target);`,
-    `    vec2 center = target - in_offset * normalize(delta);`,
+    `    vec2 delta;`,
+    `    vec2 center;`,
+    `    if (in_type == 1.) {`,
+    `       delta = target - source;`,
+    `       center = target - in_offset * normalize(delta);`,
+    `    } else if (in_type == 2.) {`,
+    `       delta = source - target;`,
+    `       center = source - in_offset * normalize(delta);`,
+    `    }`,
     `    float len = length(delta);`,
     `    float phi = atan(delta.y / delta.x);`, // TODO: x is zero?
     `    if (delta.x < 0.) {`,
@@ -70,16 +79,9 @@ fragment.outputs = {
     fragmentColor: 'vec4'
 }
 
-fragment.methods = [
-    [
-        `float inArrow() {`,
-        `   return 0.;`,
-        `}`,
-    ]
-]
-
 fragment.main = [
     `void main(void) {`,
+    `    if (type == 0.) discard;`,
     `    fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
     `}`
 ]

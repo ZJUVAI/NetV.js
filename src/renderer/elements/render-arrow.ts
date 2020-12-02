@@ -64,6 +64,13 @@ export class RenderArrowManager extends RenderElementManager {
                     const arrowOffset = link.arrowOffset()
                     return [arrowOffset]
                 }
+            } else if (attr.name === 'in_type') {
+                attr.extractAttributeValueFrom = (link: Link) => {
+                    const arrowType = link.arrowType()
+                    if (arrowType === '->') return [1]
+                    else if (arrowType === '<-') return [2]
+                    else return [0]
+                }
             }
         })
     }
