@@ -8,9 +8,9 @@ import { RenderElementManager } from './render-element'
 
 export class RenderArrowManager extends RenderElementManager {
     /**
-     * create render link manager
+     * create render arrow manager
      * @param gl WebGL context
-     * @param params nessesary configs for link manager
+     * @param params nessesary configs for arrow manager
      * @param idTexture texture store elements id of each pixel
      */
     public constructor(

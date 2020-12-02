@@ -16,7 +16,7 @@ vertex.inputs = {
 vertex.outputs = {
     shape: 'float',
     type: 'float',
-    strokeColor: 'vec4' // TODO: need change name
+    color: 'vec4'
 }
 vertex.uniforms = {
     projection: 'mat3',
@@ -26,7 +26,7 @@ vertex.uniforms = {
 
 vertex.main = [
     `void main(void) {`,
-    `    strokeColor = in_color;`,
+    `    color = in_color;`,
     `    shape = in_shape;`,
     `    type = in_type;`,
     `    vec2 source = in_source * scale + translate;`,
@@ -82,7 +82,7 @@ fragment.outputs = {
 fragment.main = [
     `void main(void) {`,
     `    if (type == 0.) discard;`,
-    `    fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
+    `    fragmentColor = vec4(color.rgb * color.a, color.a);`,
     `}`
 ]
 
