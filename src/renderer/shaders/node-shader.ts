@@ -255,8 +255,7 @@ fragment.methods = [
         `    vec2 flip_pos = position;`,
         `    flip_pos.y = viewport.y - position.y;`,
         `    float dist = distance(gl_FragCoord.xy / pixelRatio, flip_pos);`,
-        `    float dist_in_r = step(dist, r - strokeWidth / 2.);`,
-        `    return dist_in_r;`,
+        `    return 1. - smoothstep((r - strokeWidth / 2.) - 2. * fwidth(dist), (r - strokeWidth / 2.), dist);`,
         `}`
     ],
 
@@ -269,8 +268,8 @@ fragment.methods = [
         `    flip_pos.y = viewport.y - position.y;`,
         ``,
         `    float dist = distance(gl_FragCoord.xy / pixelRatio, flip_pos);`,
-        `    float drawOuter = 1. - smoothstep((r + strokeWidth / 2.) * 0.95, (r + strokeWidth / 2.) * 1.05, dist);`,
-        `    float drawInner = 1. - step(r - strokeWidth / 2., dist);`,
+        `    float drawOuter = 1. - smoothstep((r + strokeWidth / 2.) - fwidth(dist), (r + strokeWidth / 2.), dist);`,
+        `    float drawInner = 1. - smoothstep((r - strokeWidth / 2.) - fwidth(dist), (r - strokeWidth / 2.), dist);`,
         `    return drawOuter * (1. - drawInner);`,
         `}`
     ]
@@ -280,7 +279,7 @@ fragment.main = [
     `    if (shape == 0.0) {`,
     `        // circle shape`,
     `        // border check, using 0.5(center of smoothstep)`,
-    `        if (inCircle() < 1. && (strokeWidth < 0.8 || inCircleBorder() < 0.5)) {`,
+    `        if (inCircle() < 0.0001 && (strokeWidth < 0.8 || inCircleBorder() < 0.5)) {`,
     `            discard;`,
     `        }`,
     `        fragmentColor = inCircleBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inCircle() * vec4(fill.rgb * fill.a, fill.a);`,
