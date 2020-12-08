@@ -57,6 +57,13 @@ export class RenderNodeManager extends RenderElementManager {
                 attr.extractAttributeValueFrom = (node: Node) => {
                     return [node.height() * this.pixelRatio]
                 }
+            } else if (attr.name === 'in_innerSize') {
+                attr.extractAttributeValueFrom = (node: Node) => {
+                    return [
+                        node.innerWidth() * this.pixelRatio,
+                        node.innerHeight() * this.pixelRatio
+                    ]
+                }
             } else if (attr.name === 'in_rotate') {
                 attr.extractAttributeValueFrom = (node: Node) => {
                     return [node.rotate()]
@@ -82,6 +89,8 @@ export class RenderNodeManager extends RenderElementManager {
                         return [1]
                     } else if (shape === 'triangle') {
                         return [2]
+                    } else if (shape === 'cross') {
+                        return [3]
                     } else {
                         return [0]
                     }

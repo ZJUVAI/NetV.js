@@ -19,7 +19,7 @@ export interface Position {
     y?: number
 }
 
-export type NodeShape = 'circle' | 'rect' | 'triangle'
+export type NodeShape = 'circle' | 'rect' | 'triangle' | 'cross'
 
 export interface NodeStyle {
     shape?: NodeShape

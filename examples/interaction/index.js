@@ -10,8 +10,11 @@ const testData = {
             x: 300,
             y: 100,
             style: {
-                shape: 'rect',
+                shape: 'cross',
                 // rotate: Math.PI / 4,
+                strokeWidth: 4,
+                innerWidth: 20,
+                innerHeight: 20,
                 fill: { r: 1, g: 0, b: 0, a: 1 },
                 strokeColor: { r: 1, g: 0, b: 1, a: 0.3 }
             }

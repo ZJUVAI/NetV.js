@@ -22,6 +22,8 @@ class Node extends Element {
     /* rect shape styles */
     public width?: (value?: number) => number
     public height?: (value?: number) => number
+    public innerWidth?: (value?: number) => number
+    public innerHeight?: (value?: number) => number
     public rotate?: (value?: number) => number
     /* triangle shape styles */
     public vertexAlpha: (value?: interfaces.Position) => interfaces.Position
