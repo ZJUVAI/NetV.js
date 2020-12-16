@@ -60,7 +60,7 @@ NetV.js is a `Powerful` engine driven by graph visualization and graph visual an
 It only supports rendering and is not a development driven library for graph data and graph visualization.
 It is almost [Stopped Maintenance](https://github.com/stardustjs/)。
 
-### D3.js
+### D3.js (D3-SVG, D3-Canvas)
 
 [D3.js](https://d3js.org/) is a JavaScript library for manipulating documents based on data. D3 helps you bring data to life using HTML, SVG, and CSS.
 It does not support the rendering of large-scale data, and it is not a development driven library for graph data and graph visualization.

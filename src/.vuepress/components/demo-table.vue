@@ -45,7 +45,7 @@ export default {
                             Try it!
                         </a-button>
                     </template>
-                    <a-card-meta :title="example">
+                    <a-card-meta v-bind:style="{ textTransform: 'capitalize' }" :title="example">
                         <!-- <a-avatar
 				slot="avatar"
 				src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"

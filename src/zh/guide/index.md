@@ -40,11 +40,11 @@ NetV.js: A Network Visualization Library.
 
 -   可视分析套件 -->
 
-## 为什么选择NetV.js？
+## 为什么选择 NetV.js？
 
 ### FPS 测试
 
-<img :src="$withBase('/fps-table.jpg')" alt="fps-table-zh">
+<img :src="$withBase('/fps-table-zh.jpg')" alt="fps-table-zh">
 <img :src="$withBase('/fps-line.jpg')" alt="fps-line">
 
 ### Sigma.js
@@ -58,7 +58,7 @@ NetV.js: A Network Visualization Library.
 但是它只支持渲染绘制，不是针对于图数据、图可视化的而进行开发驱动的库。
 同时他近乎[停止维护](https://github.com/stardustjs/)。
 
-### D3.js
+### D3.js (D3-SVG, D3-Canvas)
 
 [D3.js](https://d3js.org/)是一个基于数据操作`dom`的 JavaScript 库。
 在对于图的支持来讲，它并不支持大规模图数据的渲染，并不是为可视分析为最终目的而进行开发驱动的库。
