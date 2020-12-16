@@ -31,9 +31,9 @@ export default {
                         slot="cover"
                         alt="example"
                         v-if="example != 'external-layout'"
-                        :src="`/netv.js/${example}.jpg`"
+                        :src="`/${example}.jpg`"
                     />
-                    <img slot="cover" alt="example" v-else :src="`/netv.js/${example}.gif`" />
+                    <img slot="cover" alt="example" v-else :src="`/${example}.gif`" />
                     <template slot="actions" class="ant-card-actions">
                         <a-button
                             type="primary"
@@ -45,7 +45,7 @@ export default {
                             Try it!
                         </a-button>
                     </template>
-                    <a-card-meta :style="{ textTransform: 'capitalize' }" :title="example">
+                    <a-card-meta v-bind:style="{ textTransform: 'capitalize' }" :title="example">
                         <!-- <a-avatar
 				slot="avatar"
 				src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"

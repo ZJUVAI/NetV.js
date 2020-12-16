@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>开发指南 | NetV.js</title>
+    <meta name="generator" content="VuePress 1.7.1">
+    <script src="/NetV.js"></script>
+    <link rel="icon" href="/logo.svg">
+    <meta name="description" content="A High Performance large-scale Network Visualization JavaScript Library based on WebGL">
+    
+    <link rel="preload" href="/assets/css/0.styles.c6c4f785.css" as="style"><link rel="preload" href="/assets/js/app.c20592e3.js" as="script"><link rel="preload" href="/assets/js/3.692ba8f2.js" as="script"><link rel="preload" href="/assets/js/16.aa8f9971.js" as="script"><link rel="prefetch" href="/assets/js/10.9fc67eed.js"><link rel="prefetch" href="/assets/js/11.6694ad76.js"><link rel="prefetch" href="/assets/js/12.39f31148.js"><link rel="prefetch" href="/assets/js/13.00b9b36a.js"><link rel="prefetch" href="/assets/js/14.9905ef09.js"><link rel="prefetch" href="/assets/js/15.2313f235.js"><link rel="prefetch" href="/assets/js/17.5f6502a2.js"><link rel="prefetch" href="/assets/js/18.f69322fd.js"><link rel="prefetch" href="/assets/js/19.6cf0132d.js"><link rel="prefetch" href="/assets/js/20.f1b48301.js"><link rel="prefetch" href="/assets/js/21.36f9361e.js"><link rel="prefetch" href="/assets/js/22.d41b73d4.js"><link rel="prefetch" href="/assets/js/23.4cb0a23a.js"><link rel="prefetch" href="/assets/js/24.744ec454.js"><link rel="prefetch" href="/assets/js/25.0c73320e.js"><link rel="prefetch" href="/assets/js/26.4e5a168e.js"><link rel="prefetch" href="/assets/js/27.8230d211.js"><link rel="prefetch" href="/assets/js/4.e01127ec.js"><link rel="prefetch" href="/assets/js/5.827e08c3.js"><link rel="prefetch" href="/assets/js/6.22c0b644.js"><link rel="prefetch" href="/assets/js/7.3e823829.js"><link rel="prefetch" href="/assets/js/8.47ecd024.js"><link rel="prefetch" href="/assets/js/9.1adb2743.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.b9e40804.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.c6c4f785.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">NetV.js</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/guide/" class="nav-link router-link-active">
+  Guide
+</a></div><div class="nav-item"><a href="/API/" class="nav-link">
+  API
+</a></div><div class="nav-item"><a href="/component/" class="nav-link">
+  Demo
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Resources" class="dropdown-title"><span class="title">Resources</span> <span class="arrow down"></span></button> <button type="button" aria-label="Resources" class="mobile-dropdown-title"><span class="title">Resources</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://github.com/ZJUVAG/NetV.js" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="https://zjuvag.org/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  ZJU-VAG-Lab
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Languages" class="dropdown-title"><span class="title">选择语言</span> <span class="arrow down"></span></button> <button type="button" aria-label="Languages" class="mobile-dropdown-title"><span class="title">选择语言</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/guide/development-guide-chinese.html" aria-current="page" class="nav-link router-link-exact-active router-link-active">
+  English
+</a></li><li class="dropdown-item"><!----> <a href="/zh/guide/development-guide-chinese.html" class="nav-link">
+  简体中文
+</a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/guide/" class="nav-link router-link-active">
+  Guide
+</a></div><div class="nav-item"><a href="/API/" class="nav-link">
+  API
+</a></div><div class="nav-item"><a href="/component/" class="nav-link">
+  Demo
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Resources" class="dropdown-title"><span class="title">Resources</span> <span class="arrow down"></span></button> <button type="button" aria-label="Resources" class="mobile-dropdown-title"><span class="title">Resources</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://github.com/ZJUVAG/NetV.js" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="https://zjuvag.org/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  ZJU-VAG-Lab
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Languages" class="dropdown-title"><span class="title">选择语言</span> <span class="arrow down"></span></button> <button type="button" aria-label="Languages" class="mobile-dropdown-title"><span class="title">选择语言</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/guide/development-guide-chinese.html" aria-current="page" class="nav-link router-link-exact-active router-link-active">
+  English
+</a></li><li class="dropdown-item"><!----> <a href="/zh/guide/development-guide-chinese.html" class="nav-link">
+  简体中文
+</a></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><a href="/guide/" aria-current="page" class="sidebar-link">Guide</a></li><li><a href="/guide/getting-start.html" class="sidebar-link">Get Start</a></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"><h1 id="开发指南"><a href="#开发指南" class="header-anchor">#</a> 开发指南</h1> <p><a href="/guide/development-guide.html">English Version</a></p> <ul><li><ul><li>我们希望我们的开发人员和审阅者考虑如何编写漂亮的代码。 它与研究一样重要，因为出色的研究工作需要落地和应用才能使他人受益。 此外，出色的工程能力也有助于我们的职业发展。</li> <li>研究是科学，而工程更像艺术。 优秀的软件开发工程师应该从可用代码发展为健壮，可靠和宽容的代码。 <a href="https://zhuanlan.zhihu.com/p/25595871" target="_blank" rel="noopener noreferrer">推荐阅读:为什么你的前端工作经验不值钱？<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li></ul></li> <li><p>配置</p> <ul><li>我们使用了<a href="https://eslint.org/" target="_blank" rel="noopener noreferrer">ESLint<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a> 和 <a href="https://prettier.io/" target="_blank" rel="noopener noreferrer">Prettier<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>来统一代码风格，保证代码质量，但是<strong>我们希望开发者能够理解一些值得注意的规则</strong>。</li> <li>仍有一些规则不在我们的linter范围内，我们希望开发者和维护者都能努力执行这些规则。我们从<a href="https://google.github.io/styleguide/jsguide.html" target="_blank" rel="noopener noreferrer">Google JavaScript Style Guide<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a>中总结了一些规则如下。</li></ul></li></ul> <h2 id="_1-文件"><a href="#_1-文件" class="header-anchor">#</a> 1 文件</h2> <ol><li><p>文件名必须小写，可以包含虚线（<code>-</code>），但不要乱加其他标点符号（除非特殊需要）</p></li> <li><p>文件必须包括一个文件信息，包括：作者，描述，用途，文件依赖，示例：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">/**
+ * @fileoverview Utilities for handling textareas.
+ * Provide a series of functions.
+ * Based on d3.js, lodash.js.
+ * @author Ran Chen &lt;crcrcry.hello@gmail.com&gt;
+ */</span>
+</code></pre></div></li> <li><p>在<code>README.md</code>中提供组件组织结构。示例：</p> <div class="language-js extra-class"><pre class="language-js"><code>components<span class="token operator">/</span>
+<span class="token operator">|</span><span class="token operator">-</span> todolist<span class="token operator">/</span>
+  <span class="token operator">|</span><span class="token operator">-</span> index<span class="token punctuation">.</span>vue
+  <span class="token operator">|</span><span class="token operator">-</span> todolist<span class="token operator">-</span>item<span class="token punctuation">.</span>vue
+  <span class="token operator">|</span><span class="token operator">-</span> todolist<span class="token operator">-</span>item<span class="token operator">-</span>button<span class="token punctuation">.</span>vue
+  <span class="token operator">|</span><span class="token operator">-</span> index<span class="token punctuation">.</span>html
+  <span class="token operator">|</span><span class="token operator">-</span> <span class="token constant">README</span><span class="token punctuation">.</span>md
+<span class="token operator">|</span><span class="token operator">-</span> search<span class="token operator">-</span>bar<span class="token operator">/</span>
+  <span class="token operator">|</span><span class="token operator">-</span> index<span class="token punctuation">.</span>vue
+  <span class="token operator">|</span><span class="token operator">-</span> search<span class="token operator">-</span>bar<span class="token operator">-</span>navigation<span class="token punctuation">.</span>vue
+  <span class="token operator">|</span><span class="token operator">-</span> search<span class="token operator">-</span>bar<span class="token operator">-</span>button<span class="token punctuation">.</span>vue
+  <span class="token operator">|</span><span class="token operator">-</span> index<span class="token punctuation">.</span>html
+  <span class="token operator">|</span><span class="token operator">-</span> <span class="token constant">README</span><span class="token punctuation">.</span>md
+</code></pre></div></li></ol> <h2 id="_2-模块"><a href="#_2-模块" class="header-anchor">#</a> 2 模块</h2> <ol><li>引入模块时，需要有模块的扩展名；</li></ol> <ul><li>注意：当前的TypeScript (3.9.3) 不支持引入带拓展名的ts文件，所以引入<code>.ts</code>文件时不需要加拓展名。</li></ul> <ol start="2"><li>命名引入的模块
+<ol><li>使用<code>import * as name</code>时，<code>name</code>应该用首字母小写的驼峰规则（lowerCamelCase）对文件名进行重写。</li> <li>引入<code>default</code>模块时，命名应直接源自原模块，并且应该根据对象类型使命名符合[命名规则](# 4 命名)。</li> <li>引入带名字的模块时，应该保持原名。重命名的话需要最好打上警告。</li></ol></li> <li>不要循环引用</li></ol> <p>示例：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">import</span> <span class="token operator">*</span> <span class="token keyword">as</span> fileOne <span class="token keyword">from</span> <span class="token string">'../file-one.js'</span>
+
+<span class="token keyword">import</span> MyClass <span class="token keyword">from</span> <span class="token string">'../my-class.js'</span>
+<span class="token keyword">import</span> SimpleComponent <span class="token keyword">from</span> <span class="token string">'../simple-component.vue'</span>
+<span class="token keyword">import</span> SearchBar <span class="token keyword">from</span> <span class="token string">'../search-bar'</span>
+
+<span class="token keyword">import</span> <span class="token punctuation">{</span> addTwoNumbers<span class="token punctuation">,</span> mySqrt <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'../my-math.js'</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> <span class="token constant">SOME_CONSTANT</span> <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">'../constant.js'</span>
+</code></pre></div><h2 id="_3-语言"><a href="#_3-语言" class="header-anchor">#</a> 3 语言</h2> <ol><li><p>变量：为结构复杂的变量加上注释；</p></li> <li><p>对象：</p> <ol><li>对象的方法最好能够使用shorthand模式，但它并不适用于所有情况；</li> <li>在某些情形下可以用一个<code>const</code>对象来表达枚举变量</li></ol> <p>举例：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">const</span> myObject <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token function">shorthandMethod</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// ...</span>
+    <span class="token punctuation">}</span><span class="token punctuation">,</span>
+    <span class="token comment">// instead of</span>
+    <span class="token comment">// method: function () {</span>
+    <span class="token comment">//   ...</span>
+    <span class="token comment">// }</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment">// Method shorthand is worse herein.</span>
+<span class="token keyword">new</span> <span class="token class-name">Vue</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+    <span class="token function-variable function">render</span><span class="token operator">:</span> <span class="token punctuation">(</span><span class="token parameter">h</span><span class="token punctuation">)</span> <span class="token operator">=&gt;</span> <span class="token function">h</span><span class="token punctuation">(</span>App<span class="token punctuation">)</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">$mount</span><span class="token punctuation">(</span><span class="token string">'#app'</span><span class="token punctuation">)</span>
+
+<span class="token comment">// Enumerations</span>
+<span class="token keyword">const</span> Option <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token comment">// The option used shall have been the first.</span>
+    <span class="token constant">FIRST_OPTION</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    <span class="token comment">// The second among two options.</span>
+    <span class="token constant">SECOND_OPTION</span><span class="token operator">:</span> <span class="token number">2</span><span class="token punctuation">,</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li> <li><p>类型</p> <ol><li>私有域应该要以<code>$_</code>开头；</li> <li>在构造函数<code>constructor</code>完成后，不应该再添加或者删除属性；</li> <li>不要使用和操作 <code>prototype</code>，推荐使用<code>class</code></li> <li>不推荐使用<code>getter</code>和<code>setter</code>，原因很复杂，请使用普通方法；</li></ol> <p>举例：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token keyword">class</span> <span class="token class-name">Foo</span> <span class="token punctuation">{</span>
+    <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+    <span class="token comment">// private method</span>
+    <span class="token function">$_computeBar</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+
+    <span class="token comment">// public method</span>
+    <span class="token function">getBar</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span><span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li> <li><p>函数</p> <ol><li>推荐在大部分情况下使用箭头函数，因为箭头函数更简洁，并且简化了<code>this</code>的作用域；</li> <li>使用“剩余函数”（rest parameter）而非直接使用<code>arguments</code>。剩余函数可以用<code>...</code>进行解构。</li></ol></li> <li><p>流程控制</p> <ol><li>循环
+<ol><li>推荐使用<code>forEach</code>等一系列循环操作；</li> <li>需要提升性能时，使用<code>for ... of</code>操作是最高效的</li> <li><code>for ... in</code>循环只能在<code>dict</code>这一类的对象上用</li></ol></li> <li>异常（Exception）：自定义异常提供了一种传达其他错误信息的好方法。 应该在原生“错误”类型不足的地方定义和使用它们。</li></ol></li></ol> <h2 id="_4-命名"><a href="#_4-命名" class="header-anchor">#</a> 4 命名</h2> <ol><li>标识符：ASCII码字母和数字，下划线以及美元符号；</li> <li>给出一个描述性的名称。不要担心节省水平空间。</li> <li>不要使用你的项目之外的读者不熟悉的缩写，也不要删除单词中的字母。</li></ol> <p>举例：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// Bad</span>
+n <span class="token comment">// Meaningless.</span>
+nErr <span class="token comment">// Ambiguous abbreviation.</span>
+nCompConns <span class="token comment">// Ambiguous abbreviation.</span>
+wgcConnections <span class="token comment">// Only your group knows what this stands for.</span>
+pcReader <span class="token comment">// Lots of things can be abbreviated &quot;pc&quot;.</span>
+cstmrId <span class="token comment">// Deletes internal letters.</span>
+kSecondsPerDay <span class="token comment">// Do not use Hungarian notation.</span>
+
+<span class="token comment">// Good</span>
+errorCount <span class="token comment">// No abbreviation.</span>
+dnsConnectionIndex <span class="token comment">// Most people know what &quot;DNS&quot; stands for.</span>
+referrerUrl <span class="token comment">// Ditto for &quot;URL&quot;.</span>
+customerId <span class="token comment">// &quot;Id&quot; is both ubiquitous and unlikely to be misunderstood.</span>
+</code></pre></div><h3 id="_4-1-命名规则"><a href="#_4-1-命名规则" class="header-anchor">#</a> 4.1 命名规则</h3> <ol><li>类名：
+<ol><li>首字母大写的驼峰规则</li> <li>名称应该用名词或者名词短语</li></ol></li> <li>方法名：
+<ol><li>首字母小写的驼峰规则</li> <li>名称应该用动词或动词短语</li></ol></li> <li>枚举名：
+<ol><li>首字母大写的驼峰规则</li> <li>名称应该用单数名词，每个枚举变量中的枚举量应该被命名为这种风格：<code>CONSTANT_CASE</code></li></ol></li> <li>常量名：
+<ol><li><code>CONSTANT_CASE</code>，单词大写并用下划线分隔</li> <li>名称通常为名词，或者名词短语</li> <li>深度不变的变量是常量，类似<code>const array = []</code> 并不属于常量；</li> <li>推荐使用 <a href="https://immutable-js.github.io/immutable-js/" target="_blank" rel="noopener noreferrer">immutable-js<span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li></ol></li> <li>其他
+<ol><li>首字母小写的驼峰规则</li> <li>包括非常量、参数、局部变量等</li></ol></li></ol> <h3 id="_4-2-命名方法"><a href="#_4-2-命名方法" class="header-anchor">#</a> 4.2 命名方法</h3> <p>驼峰命名法</p> <ol><li>先将结果转化成多个词：比如<code>YouTube</code>先拆开为<code>You Tube</code></li> <li>除了第一个词以外，其余每个词的首字母为大写，其他字母都转化为小写。</li> <li>串联</li></ol> <div class="language-js extra-class"><pre class="language-js"><code><span class="token string">'XML HTTP request'</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token string">'XmlHttpRequest'</span><span class="token punctuation">,</span> not <span class="token string">'XMLHTTPRequest'</span>
+<span class="token string">'new customer ID'</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token string">'newCustomerId'</span><span class="token punctuation">,</span> not <span class="token string">'newCustomerID'</span>
+<span class="token string">'supports IPv6 on iOS'</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token string">'supportsIpv6OnIos'</span><span class="token punctuation">,</span> not <span class="token string">'supportsIPv6OnIOS'</span>
+<span class="token string">'YouTube importer'</span> <span class="token operator">-</span><span class="token operator">&gt;</span> <span class="token string">'YouTubeImporter'</span><span class="token punctuation">,</span> not <span class="token string">'YoutubeImporter'</span>
+</code></pre></div><h2 id="_5-注释"><a href="#_5-注释" class="header-anchor">#</a> 5 注释</h2> <ol><li><p>类/组件的注释风格：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">/**
+ * Description of class
+ * @implements {Iterable&lt;string&gt;}
+ */</span>
+<span class="token keyword">class</span> <span class="token class-name">MyFancyTarget</span> <span class="token keyword">extends</span> <span class="token class-name">EventTarget</span> <span class="token punctuation">{</span>
+    <span class="token comment">/**
+     * @param {string} arg1 An argument that makes this more interesting.
+     * @param {Array&lt;number&gt;} arg2 List of numbers to be processed.
+     */</span>
+    <span class="token function">constructor</span><span class="token punctuation">(</span><span class="token parameter">arg1<span class="token punctuation">,</span> arg2</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+        <span class="token comment">// ...</span>
+    <span class="token punctuation">}</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li> <li><p>函数注释风格：</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">/**
+ * Description of function
+ * @param {number} arg1 The first argument.
+ * @param {number} arg2 The second argument.
+ * @param {...number} rest The remainder of arguments are all numbers.
+ * @returns {number} The result
+ */</span>
+<span class="token keyword">function</span> <span class="token function">func</span><span class="token punctuation">(</span><span class="token parameter">arg1<span class="token punctuation">,</span> arg2<span class="token punctuation">,</span> <span class="token operator">...</span>rest</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment">// ...</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li> <li><p>块注释风格</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">// xxx</span>
+<span class="token comment">// yyy</span>
+<span class="token comment">// ...</span>
+</code></pre></div></li> <li><p>变量注释风格</p> <div class="language-js extra-class"><pre class="language-js"><code><span class="token comment">/**
+ * Some description.
+ * @type {Array&lt;number&gt;}
+ */</span>
+<span class="token keyword">const</span> data <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token punctuation">]</span>
+
+<span class="token comment">/**
+ * An enum with two options.
+ * @enum {number}
+ */</span>
+<span class="token keyword">const</span> Option <span class="token operator">=</span> <span class="token punctuation">{</span>
+    <span class="token constant">FIRST_OPTION</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    <span class="token constant">SECOND_OPTION</span><span class="token operator">:</span> <span class="token number">2</span>
+<span class="token punctuation">}</span>
+</code></pre></div></li> <li><p>弃用</p> <ol><li>弃用的类/接口应该用<code>@deprecated</code>进行标注</li> <li>弃用评论必须包含简单明了的指导，以便人们修复调用栈。</li></ol></li></ol> <h2 id="_6-pull-requests"><a href="#_6-pull-requests" class="header-anchor">#</a> 6 Pull Requests</h2> <p>在发起Pull Requests的同时，需要按照以下模板填写当前PR的描述：</p> <div class="language- extra-class"><pre class="language-text"><code>### This is a ...
+
+- [ ] New feature (addNodes/addLinks)
+- [ ] Other (documents)
+
+### Description
+
+
+### Self check
+- [x] Test passed or not need
+- [x] Doc is ready or not need
+- [x] Demo is provided or not need
+
+### Additional Plan?
+&gt; If this PR related with other PR or following info. You can type here.
+
+</code></pre></div></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated:</span> <span class="time">9/23/2020, 4:49:42 PM</span></div></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.c20592e3.js" defer></script><script src="/assets/js/3.692ba8f2.js" defer></script><script src="/assets/js/16.aa8f9971.js" defer></script>
+  </body>
+</html>
