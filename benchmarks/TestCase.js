@@ -21,7 +21,6 @@ export class TestCase {
         this.stats = Stats()
         this.stats.showPanel(0)
         this.stats.dom.setAttribute('class', 'status')
-        document.body.appendChild(this.stats.dom)
 
         // step means the index of numbersOfNodes
         this.step = localStorage.getItem(STEP)
@@ -48,20 +47,16 @@ export class TestCase {
 
         this.name = name
 
-        this.reportDiv = document.createElement('div')
-        this.reportDiv.setAttribute(
-            'style',
-            `display: inline-block; vertical-align: top; position: relative; left: 80px;`
-        )
-        document.body.appendChild(this.reportDiv)
-
-        this.container = document.createElement('div')
+        this.container = document.querySelector('div#container')
         this.container.setAttribute('style', `width:${this.width};height:${this.height}`)
-        document.body.appendChild(this.container)
 
         this.title = document.createElement('h3')
         this.title.textContent = `${name}, #nodes: ${this.numberOfNodes}, #edge: ${this.numberOfLinks}`
-        this.reportDiv.appendChild(this.title)
+
+        this.resultDiv = document.querySelector('div#result')
+        const svg = this.resultDiv.querySelector('svg')
+        this.resultDiv.insertBefore(this.title, svg)
+        this.resultDiv.insertBefore(this.stats.dom, this.title)
 
         this.testResult = localStorage.getItem(RESULT)
     }
@@ -79,6 +74,10 @@ export class TestCase {
         this.FPS = FPSHistory.pop() // d3.mean(FPSHistory)
         this.storeFPSResult()
         return this.FPS
+    }
+
+    getFPSHistory() {
+        return this.stats.getFPSHistory()
     }
 
     storeFPSResult() {
@@ -112,8 +111,8 @@ export class TestCase {
         Array.from(this.container.children).forEach((child) =>
             this.container.removeChild.bind(this.container)(child)
         )
-        document.body.removeChild(this.reportDiv)
-        document.body.removeChild(this.stats.dom)
+        this.resultDiv.removeChild.bind(this.resultDiv)(this.title)
+        this.resultDiv.removeChild.bind(this.resultDiv)(this.stats.dom)
 
         if (this.step + 1 < this.numberOfNodesList.length && this.FPS >= 3) {
             reloadPage()

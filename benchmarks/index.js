@@ -18,6 +18,23 @@ import { drawLineChart } from './lib/linechart'
 // does it need to clear local storage?
 initPage()
 
+const result = localStorage.getItem(RESULT) || '{}'
+const reportDiv = document.querySelector('div#result')
+drawLineChart(reportDiv, JSON.parse(result))
+createDownloadButton({
+    container: reportDiv,
+    text: 'Download JSON Result',
+    data: result,
+    type: 'json'
+})
+
+createDownloadButton({
+    container: reportDiv,
+    text: 'Download CSV Result',
+    data: json2csv(JSON.parse(result)),
+    type: 'csv'
+})
+
 const numbersOfNodes = [1e2, 5e2, 1e3, 2e3, 5e3, 1e4, 2e4, 5e4, 1e5, 2e5, 1e6] // ! NOTE: the array should be ascending
 const density = 20
 
@@ -77,29 +94,20 @@ const testCase = new TestCase({
 test(testCase, testFunc)
 
 async function test(testCase, testFunc) {
+    let isRefreshed = true
+    const timeout = setTimeout(function () {
+        if (document.querySelector('#container').childElementCount === 0) {
+            testCase.FPS = 0
+            reloadPage()
+        }
+    }, 7000)
     await testFunc(testCase)
-    const isRefreshed = testCase.finish()
+    clearTimeout(timeout)
+    isRefreshed = testCase.finish()
 
     // if not reload
     if (!isRefreshed && Number(testFuncsIndex) + 1 >= testFuncs.length) {
-        const result = localStorage.getItem(RESULT)
         localStorage.clear()
-
-        createDownloadButton({
-            container: testCase.container,
-            text: 'Download JSON Result',
-            data: result,
-            type: 'json'
-        })
-
-        createDownloadButton({
-            container: testCase.container,
-            text: 'Download CSV Result',
-            data: json2csv(JSON.parse(result)),
-            type: 'csv'
-        })
-
-        drawLineChart(testCase.container, JSON.parse(result))
     } else {
         reloadPage()
     }

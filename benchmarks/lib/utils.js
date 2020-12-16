@@ -48,20 +48,24 @@ export function download(content, fileName, contentType) {
 
 export function json2csv(json) {
     const rowHeaders = Object.keys(json)
-    const columnHeaders = Object.keys(Object.values(json)[0])
-    columnHeaders.unshift('Items')
-    let csv = columnHeaders.join(',')
+    if (rowHeaders.length > 0) {
+        const columnHeaders = Object.keys(Object.values(json)[0])
+        columnHeaders.unshift('Items')
+        let csv = columnHeaders.join(',')
 
-    csv += '\r\n'
+        csv += '\r\n'
 
-    csv += Object.values(json)
-        .map((row, i) => {
-            const cells = Object.values(row)
-            cells.unshift(rowHeaders[i])
-            return cells.join(',')
-        })
-        .join('\r\n')
+        csv += Object.values(json)
+            .map((row, i) => {
+                const cells = Object.values(row)
+                cells.unshift(rowHeaders[i])
+                return cells.join(',')
+            })
+            .join('\r\n')
 
-    console.log(csv)
-    return csv
+        console.log(csv)
+        return csv
+    } else {
+        return ''
+    }
 }

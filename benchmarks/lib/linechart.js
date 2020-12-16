@@ -29,6 +29,7 @@ export async function drawLineChart(container, data) {
     const svg = d3
         .select(container)
         .append('svg')
+        .attr('style', 'display: block;')
         .attr('width', width + margin.left + margin.right + legendsWidth)
         .attr('height', height + margin.top + margin.bottom + (fontSize + 2) * testCaseNames.length)
 
