@@ -96,11 +96,12 @@ test(testCase, testFunc)
 async function test(testCase, testFunc) {
     let isRefreshed = true
     const timeout = setTimeout(function () {
+        // wait 10 seconds if no response
         if (document.querySelector('#container').childElementCount === 0) {
             testCase.FPS = 0
             reloadPage()
         }
-    }, 7000)
+    }, 10000)
     await testFunc(testCase)
     clearTimeout(timeout)
     isRefreshed = testCase.finish()
