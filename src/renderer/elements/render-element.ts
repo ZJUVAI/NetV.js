@@ -21,6 +21,7 @@ export class RenderElementManager {
 
     protected program: WebGLProgram
     protected attributes: Map<string, RenderAttribute>
+    protected vao: WebGLVertexArrayObject
 
     // id shaders are design for mapping canvas pixels to elements
     protected idProgram: WebGLProgram
@@ -86,6 +87,36 @@ export class RenderElementManager {
                 this.idAttributes.set(name, this.attributes.get(name))
             }
         })
+
+        this.vao = this.gl.createVertexArray()
+        this.gl.bindVertexArray(this.vao)
+
+        this.attributes.forEach((attr, i) => {
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+            this.gl.enableVertexAttribArray(attr.location)
+            this.gl.vertexAttribPointer(
+                attr.location,
+                attr.size,
+                this.gl.FLOAT,
+                false,
+                attr.size * attr.array.BYTES_PER_ELEMENT,
+                0
+            )
+            if (!attr.isBuildIn) this.gl.vertexAttribDivisor(attr.location, 1)
+        })
+
+        const attr = this.idAttributes.get('in_id') // ! HARDCODE CHECK
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+        this.gl.enableVertexAttribArray(attr.location)
+        this.gl.vertexAttribPointer(
+            attr.location,
+            attr.size,
+            this.gl.FLOAT,
+            false,
+            attr.size * attr.array.BYTES_PER_ELEMENT,
+            0
+        )
+        this.gl.vertexAttribDivisor(attr.location, 1)
 
         // init uniforms
         this.gl.useProgram(this.program)
@@ -181,7 +212,10 @@ export class RenderElementManager {
             this.gl.enable(this.gl.BLEND)
             this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
 
+            this.gl.bindVertexArray(this.vao)
+
             this.gl.useProgram(this.program)
+            /*
             this.attributes.forEach((attr) => {
                 this.gl.enableVertexAttribArray(attr.location)
             })
@@ -198,6 +232,7 @@ export class RenderElementManager {
                 )
                 if (!attr.isBuildIn) this.gl.vertexAttribDivisor(attr.location, 1)
             })
+            */
         }
 
         this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
@@ -207,6 +242,7 @@ export class RenderElementManager {
         this.gl.useProgram(this.idProgram)
         this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.idTexture)
 
+        /*
         this.idAttributes.forEach((attr) => {
             this.gl.enableVertexAttribArray(attr.location)
         })
@@ -222,6 +258,7 @@ export class RenderElementManager {
             0
         )
         this.gl.vertexAttribDivisor(attr.location, 1)
+        */
 
         this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
         this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null)

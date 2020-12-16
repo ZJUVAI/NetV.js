@@ -35,7 +35,8 @@ createDownloadButton({
     type: 'csv'
 })
 
-const numbersOfNodes = [1e2, 5e2, 1e3, 2e3, 5e3, 1e4, 2e4, 5e4, 1e5, 2e5, 1e6] // ! NOTE: the array should be ascending
+// const numbersOfNodes = [1e2, 5e2, 1e3, 2e3, 5e3, 1e4, 2e4, 5e4, 1e5, 2e5, 1e6] // ! NOTE: the array should be ascending
+const numbersOfNodes = [5e3, 1e4, 2e4, 5e4, 1e5, 2e5] // ! NOTE: the array should be ascending
 const density = 20
 
 const testFuncs = [
@@ -48,20 +49,8 @@ const testFuncs = [
         func: testNetV
     },
     {
-        name: 'D3SVG',
-        func: testD3SVG
-    },
-    {
         name: 'D3Canvas',
         func: testD3Canvas
-    },
-    {
-        name: 'Cytoscape',
-        func: testCytoscape
-    },
-    {
-        name: 'Sigma.js (webgl)',
-        func: testSigma
     },
     {
         name: 'Stardust',

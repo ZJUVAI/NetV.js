@@ -50,6 +50,7 @@ export default class NetV {
 
         const canvas = document.createElement('canvas') // TODO: consider node enviroment, document not defined
         const pixelRatio = window.devicePixelRatio || 1
+        // const pixelRatio = 1
         canvas.style.width = this.$_configs.width + 'px'
         canvas.style.height = this.$_configs.height + 'px'
         canvas.setAttribute('width', String(this.$_configs.width * pixelRatio))
