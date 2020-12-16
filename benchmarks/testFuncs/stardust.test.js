@@ -34,9 +34,7 @@ export default async function test(testCase) {
         .attr('pos', 'Vector2Array', positions)
     snodes.attr(
         'center',
-        positionScale((d) => {
-            return d.id
-        })
+        positionScale((d) => d.id)
     )
     snodesBG.attr(
         'center',
@@ -44,9 +42,7 @@ export default async function test(testCase) {
     )
     sedges.attr(
         'p1',
-        positionScale((d) => {
-            return d.source
-        })
+        positionScale((d) => d.source)
     )
     sedges.attr(
         'p2',

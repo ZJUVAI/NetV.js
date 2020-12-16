@@ -10,6 +10,7 @@ import testSigma from './testFuncs/sigma.test'
 import testCytoscape from './testFuncs/cytoscape.test'
 import testD3Canvas from './testFuncs/d3.canvas.test'
 import testD3SVG from './testFuncs/d3.svg.test'
+import testG from './testFuncs/g.test'
 import { initPage, reloadPage, download, json2csv } from './lib/utils'
 import { TestCase } from './TestCase'
 import { drawLineChart } from './lib/linechart'
@@ -17,10 +18,14 @@ import { drawLineChart } from './lib/linechart'
 // does it need to clear local storage?
 initPage()
 
-const numbersOfNodes = [1e2, 5e2, 1e3, 2e3, 4e3, 8e3] // ! NOTE: the array should be ascending
+const numbersOfNodes = [1e2, 5e2, 1e3, 2e3, 5e3, 1e4, 2e4, 5e4, 1e5, 2e5, 1e6] // ! NOTE: the array should be ascending
 const density = 20
 
 const testFuncs = [
+    {
+        name: 'G',
+        func: testG
+    },
     {
         name: 'NetV',
         func: testNetV

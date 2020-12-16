@@ -76,7 +76,7 @@ export class TestCase {
         refresh(update)
         await sleep(TEST_DURATION_MS)
         const FPSHistory = this.stats.getFPSHistory()
-        this.FPS = d3.mean(FPSHistory)
+        this.FPS = FPSHistory.pop() // d3.mean(FPSHistory)
         this.storeFPSResult()
         return this.FPS
     }
@@ -115,7 +115,7 @@ export class TestCase {
         document.body.removeChild(this.reportDiv)
         document.body.removeChild(this.stats.dom)
 
-        if (this.step + 1 < this.numberOfNodesList.length && this.FPS >= 1) {
+        if (this.step + 1 < this.numberOfNodesList.length && this.FPS >= 3) {
             reloadPage()
             return true // is refreshed
         } else {
