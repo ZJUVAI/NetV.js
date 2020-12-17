@@ -228,7 +228,7 @@ export class InteractionManager {
 
         if (this.mouseDownElement?.element) {
             const element = this.mouseDownElement.element
-            if (element?.constructor.name === 'Node') {
+            if (element?.type === 'Node') {
                 // only node can be dragged
                 // record orgin position for drag
                 this.mouseDownElementOriginPos = { ...element.position() }
@@ -269,7 +269,7 @@ export class InteractionManager {
             // drag a node: 1. mousedown on a Node; and 2. the node is listened;
             // else pan
             if (
-                element?.constructor.name === 'Node' &&
+                element?.type === 'Node' &&
                 element.$_dragstartCallbackSet.size +
                     element.$_draggingCallbackSet.size +
                     element.$_dragendCallbackSet.size
