@@ -41,7 +41,7 @@ class Node extends Element {
     private $_elementReservedKeys = new Set(['id', 'x', 'y', 'style'])
 
     public constructor(core, nodeData: interfaces.NodeData) {
-        super(core, nodeData)
+        super(core, nodeData, /* type: */ 'Node')
 
         // set attributes
         for (const key in nodeData) {

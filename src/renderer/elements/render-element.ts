@@ -249,7 +249,7 @@ export class RenderElementManager {
                 }
             })
 
-            const offset = element.constructor.name === 'Node' ? 0 : 1 // NOTE: node render id, use even integer
+            const offset = element.type === 'Node' ? 0 : 1 // NOTE: node render id, use even integer
             const renderId = 2 * index + offset
             const renderIdColor = encodeRenderId(renderId)
             this.idAttributes.get('in_id').array[4 * index] = renderIdColor.r
@@ -297,9 +297,7 @@ export class RenderElementManager {
         const index = Math.floor(renderId / 2)
         const attr = this.attributes.get(`in_${attribute}`)
         if (attr === undefined) {
-            console.error(
-                `Attribute: ${attribute} is not supported in a ${element.constructor.name} instance.`
-            )
+            console.error(`Attribute: ${attribute} is not supported in a ${element.type} instance.`)
         }
         const data = attr.extractAttributeValueFrom(element)
         attr.array.set(data, attr.size * index)

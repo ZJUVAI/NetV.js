@@ -20,7 +20,7 @@ class Link extends Element {
     private $_elementReservedKeys = new Set(['source', 'target', 'style'])
 
     public constructor(core, linkData: interfaces.LinkData) {
-        super(core, linkData)
+        super(core, linkData, /* type: */ 'Link')
 
         // set attributes
         for (const key in linkData) {
