@@ -55,6 +55,19 @@ export class RenderLinkManager extends RenderElementManager {
                     const strokeColor = link.strokeColor()
                     return [strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a]
                 }
+            } else if (attr.name === 'in_curveness') {
+                attr.extractAttributeValueFrom = (link: Link) => {
+                    return [link.curveness()]
+                }
+            } else if (attr.name === 'in_shape') {
+                attr.extractAttributeValueFrom = (link: Link) => {
+                    const shape = link.shape()
+                    if (shape === 'curve') {
+                        return [1]
+                    } else {
+                        return [0]
+                    }
+                }
             }
         })
     }

@@ -47,7 +47,7 @@ export interface NodeData {
     hoverCallback?: (node: Node) => void
 }
 
-export type LinkShape = 'line'
+export type LinkShape = 'line' | 'curve'
 
 export interface LinkStyle {
     shape?: LinkShape

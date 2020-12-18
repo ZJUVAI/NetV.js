@@ -13,6 +13,7 @@ class Link extends Element {
     public shape: (value?: interfaces.LinkShape) => interfaces.LinkShape
     public strokeWidth: (value?: number) => number
     public strokeColor: (value?: interfaces.Color) => interfaces.Color
+    public curveness: (value?: number) => number
 
     public $_source: Node
     public $_target: Node
