@@ -36,7 +36,6 @@ vertex.main = [
     `    float len = length(delta);`,
     `    float phi = atan(delta.y / delta.x);`,
 
-    // `    float in_curveness = 0.3; // TODO: fixed curveness for test`,
     `    float containerWidth = in_strokeWidth;`,
     `    if (in_shape == 1.) {`, // circle shape need larger container
     `       containerWidth = 2. * (in_curveness * len + in_strokeWidth); // TODO: can optimize to half`,
@@ -45,15 +44,6 @@ vertex.main = [
     `    cpA = source;`,
     `    cpB = center + normal * len * in_curveness;`,
     `    cpC = target;`,
-    // `    cpA.x = 2. * cpA.x;`,
-    // `    cpA.y = viewport.y - 2. * cpA.y;`,
-    // `    cpA.y = cpA.y + viewport.y / 2.;`,
-    // `    cpB.x = 2. * cpB.x;`,
-    // `    cpB.y = viewport.y - 2. * cpB.y;`,
-    // `    cpB.y = cpB.y + viewport.y / 2.;`,
-    // `    cpC.x = 2. * cpC.x;`,
-    // `    cpC.y = viewport.y - 2. * cpC.y;`,
-    // `    cpC.y = cpC.y + viewport.y / 2.;`,
 
     ``,
     `    mat3 line_scale = mat3(`,
