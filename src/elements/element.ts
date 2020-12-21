@@ -4,6 +4,7 @@ import { override } from '../utils/utils'
 import { EMPTY_FUNCTION } from '../utils/const'
 
 export default class Element {
+    public readonly type: string
     public $_style: interfaces.NodeStyle | interfaces.LinkStyle = {}
     public $_mousedownCallbackSet: Set<(e: any) => void> = new Set()
     public $_mouseupCallbackSet: Set<(e: any) => void> = new Set()
@@ -17,14 +18,18 @@ export default class Element {
 
     protected $_attributes = {}
 
-    public constructor(core: NetV, data: interfaces.NodeData | interfaces.LinkData) {
-        const type = this.constructor.name.toLowerCase()
+    public constructor(
+        core: NetV,
+        data: interfaces.NodeData | interfaces.LinkData,
+        type: 'Node' | 'Link'
+    ) {
         this.$_core = core
+        this.type = type
         const defaultConfigs = this.$_core.$_configs
 
         // override default style with user specified style in data
         // this.$_style = override(defaultConfigs[type].style, data.style)
-        this.$_style = JSON.parse(JSON.stringify(defaultConfigs[type].style))
+        this.$_style = JSON.parse(JSON.stringify(defaultConfigs[this.type.toLowerCase()].style))
         if ('style' in data) {
             Object.entries(data.style).forEach(([key, value]) => {
                 const style = value
@@ -43,7 +48,7 @@ export default class Element {
             })
         }
 
-        const renderManager = this.$_core.$_renderer[`${type}Manager`]
+        const renderManager = this.$_core.$_renderer[`${this.type.toLowerCase()}Manager`]
         this.$_changeRenderAttribute = renderManager.changeAttribute.bind(renderManager)
 
         // generate style methods, e.g.: node.r(), link.strokeWidth()
@@ -61,7 +66,7 @@ export default class Element {
     public on(eventName: string, callback?: (e: any) => any) {
         if (
             eventName.slice(0, 4) !== 'drag' ||
-            (eventName.slice(0, 4) === 'drag' && this.constructor.name === 'Node') // only node can be dragged
+            (eventName.slice(0, 4) === 'drag' && this.type === 'Node') // only node can be dragged
         ) {
             const callbackSetName = `$_${eventName}CallbackSet`
             this[callbackSetName]?.add(callback ? callback : EMPTY_FUNCTION)
@@ -79,7 +84,7 @@ export default class Element {
     public off(eventName: string, callback: (e: any) => any) {
         if (
             eventName.slice(0, 4) !== 'drag' ||
-            (eventName.slice(0, 4) === 'drag' && this.constructor.name === 'Node') // only node can be dragged
+            (eventName.slice(0, 4) === 'drag' && this.type === 'Node') // only node can be dragged
         ) {
             const callbackSetName = `$_${eventName}CallbackSet`
             this[callbackSetName]?.delete(callback ? callback : EMPTY_FUNCTION)
