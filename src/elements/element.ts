@@ -52,9 +52,10 @@ export default class Element {
         this.$_changeRenderAttribute = renderManager.changeAttribute.bind(renderManager)
 
         // generate style methods, e.g.: node.r(), link.strokeWidth()
+        const exceptionKeys = new Set(['innerWidth', 'innerHeight']) // NOTE: exception keys, use differenct mapping
         Object.keys(this.$_style).forEach((key) => {
             // generate style functions
-            this[key] = this.generateElementStyleGetterSetter(key)
+            if (!exceptionKeys.has(key)) this[key] = this.generateElementStyleGetterSetter(key)
         })
     }
 

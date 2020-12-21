@@ -22,8 +22,6 @@ class Node extends Element {
     /* rect shape styles */
     public width?: (value?: number) => number
     public height?: (value?: number) => number
-    public innerWidth?: (value?: number) => number
-    public innerHeight?: (value?: number) => number
     public rotate?: (value?: number) => number
     /* triangle shape styles */
     public vertexAlpha: (value?: interfaces.Position) => interfaces.Position
@@ -133,6 +131,30 @@ class Node extends Element {
             })
         }
         return this.$_position.y
+    }
+
+    /**
+     * custom getter/setter for innerWidth
+     * @param value 
+     */
+    public innerWidth(value?: number) {
+        if (value !== undefined) {
+            this.$_style['innerWidth'] = value
+            this.$_changeRenderAttribute(this, 'innerSize')
+        }
+        return this.$_style['innerWidth']
+    }
+
+    /**
+     * custom getter/setter for innerHeight
+     * @param value 
+     */
+    public innerHeight(value?: number) {
+        if (value !== undefined) {
+            this.$_style['innerHeight'] = value
+            this.$_changeRenderAttribute(this, 'innerSize')
+        }
+        return this.$_style['innerHeight']
     }
 
     /**
