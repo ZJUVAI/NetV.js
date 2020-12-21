@@ -8,6 +8,7 @@ vertex.inputs = {
     in_offset: 'vec2',
     in_width: 'float',
     in_height: 'float',
+    in_innerSize: 'vec2',
     in_rotate: 'float',
     in_r: 'float',
     in_vertexAlpha: 'vec2',
@@ -22,6 +23,7 @@ vertex.outputs = {
     shape: 'float',
     width: 'float', // rect
     height: 'float', // rect
+    innerSize: 'vec2',
     rotate: 'float', // rect
     r: 'float', // circle
     vertexAlpha: 'vec2', // triangle
@@ -67,6 +69,7 @@ vertex.main = [
     `   r = in_r;`,
     `   width = in_width;`,
     `   height = in_height;`,
+    `   innerSize = in_innerSize;`,
     `   shape = in_shape;`,
     `   fill = in_fill;`,
     `   strokeColor = in_strokeColor;`,
@@ -98,7 +101,7 @@ vertex.main = [
     `           0, size, 0,`,
     `           0, 0, 1`,
     `           );`,
-    `   } else if (shape == 1.0) {`, // rect shape
+    `   } else if (shape == 1.0 || shape == 3.0) {`, // rect shape
     `       scale_mat = mat3(`,
     `           width + strokeWidth, 0, 0,`,
     `           0, height + strokeWidth, 0,`,
@@ -251,6 +254,53 @@ fragment.methods = [
     ],
 
     [
+        `float inCross() {`,
+        `    vec2 flip_pos = position;`,
+        `    flip_pos.y = viewport.y - position.y;`,
+        `    mat2 rotate_mat = mat2(`,
+        `        cos(rotate), sin(rotate),`,
+        `        -sin(rotate), cos(rotate)`,
+        `    );`,
+        `    vec2 rotate_related_FragCoord = rotate_mat * (gl_FragCoord.xy / pixelRatio - flip_pos);`,
+        `    float innerWidth = innerSize.x;`,
+        `    float innerHeight = innerSize.y;`,
+        `    float x_in1 = step(rotate_related_FragCoord.x, width / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - width / 2.0 + strokeWidth / 2.0));`,
+        `    float y_in1 = step(rotate_related_FragCoord.y, innerHeight / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - innerHeight / 2.0 + strokeWidth / 2.0));`,
+        `    float x_in2 = step(rotate_related_FragCoord.x, innerWidth / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - innerWidth / 2.0 + strokeWidth / 2.0));`,
+        `    float y_in2 = step(rotate_related_FragCoord.y, height / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - height / 2.0 + strokeWidth / 2.0));`,
+        `    return min(1., x_in1 * y_in1 + x_in2 * y_in2);`,
+        `}`
+    ],
+
+    [
+        `float inCrossBorder() {`,
+        `    vec2 flip_pos = position;`,
+        `    flip_pos.y = viewport.y - position.y;`,
+        `    mat2 rotate_mat = mat2(`,
+        `        cos(rotate), sin(rotate),`,
+        `        -sin(rotate), cos(rotate)`,
+        `    );`,
+        `    vec2 rotate_related_FragCoord = rotate_mat * (gl_FragCoord.xy / pixelRatio - flip_pos);`,
+        `    float innerWidth = innerSize.x;`,
+        `    float innerHeight = innerSize.y;`,
+
+        // TODO: need refactor
+        `    float x_in1 = step(rotate_related_FragCoord.x, width / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - width / 2.0 + strokeWidth / 2.0));`,
+        `    float y_in1 = step(rotate_related_FragCoord.y, innerHeight / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - innerHeight / 2.0 + strokeWidth / 2.0));`,
+        `    float x_in2 = step(rotate_related_FragCoord.x, innerWidth / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - innerWidth / 2.0 + strokeWidth / 2.0));`,
+        `    float y_in2 = step(rotate_related_FragCoord.y, height / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - height / 2.0 + strokeWidth / 2.0));`,
+        `    float outCross = 1. - min(1., x_in1 * y_in1 + x_in2 * y_in2);`,
+        ``,
+        `    float x_out1 = step(rotate_related_FragCoord.x, width / 2.0 + strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - width / 2.0 - strokeWidth / 2.0));`,
+        `    float y_out1 = step(rotate_related_FragCoord.y, innerHeight / 2.0 + strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - innerHeight / 2.0 - strokeWidth / 2.0));`,
+        `    float x_out2 = step(rotate_related_FragCoord.x, innerWidth / 2.0 + strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - innerWidth / 2.0 - strokeWidth / 2.0));`,
+        `    float y_out2 = step(rotate_related_FragCoord.y, height / 2.0 + strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - height / 2.0 - strokeWidth / 2.0));`,
+        `    float inCrossBorder = min(1., x_out1 * y_out1 + x_out2 * y_out2);`,
+        `    return inCrossBorder * outCross;`,
+        `}`
+    ],
+
+    [
         `float inCircle() {`,
         `    vec2 flip_pos = position;`,
         `    flip_pos.y = viewport.y - position.y;`,
@@ -289,6 +339,9 @@ fragment.main = [
     `    } else if (shape == 2.0) {`,
     `        // triangle shape`,
     `        fragmentColor = inTriangleBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inTriangle() * vec4(fill.rgb * fill.a, fill.a);`,
+    `    } else if (shape == 3.0) {`,
+    `        // cross shape`,
+    `        fragmentColor = inCrossBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inCross() * vec4(fill.rgb * fill.a, fill.a);`,
     `    }`,
     `}`
 ]
@@ -299,6 +352,7 @@ idFragment.inputs['id'] = 'vec4'
 idFragment.main.splice(7, 1)
 idFragment.main.splice(9, 1)
 idFragment.main.splice(11, 1)
+idFragment.main.splice(13, 1)
 // add new fragmentColor
 idFragment.main.splice(-1, 0, `fragmentColor = id;`)
 
