@@ -35,6 +35,7 @@ export const link = {
     style: {
         shape: 'line',
         strokeColor: { r: 0.4, g: 0.6, b: 0.8, a: 0.5 },
+        curveness: 0.2, // curve parameter
         strokeWidth: 2
     }
 }
