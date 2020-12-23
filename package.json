@@ -5,7 +5,7 @@
     "main": "build/NetV.js",
     "scripts": {
         "start": "vuepress dev src --no-cache -p 6001",
-        "build": "vuepress build src",
+        "build": "mv docs/examples/ examples && vuepress build src && mv examples/ docs/examples",
         "deploy": "echo netv.zjuvag.org>docs/CNAME && git add . && git commit -m 'DeployedAutomatically' && git push origin docs"
     },
     "author": "",
