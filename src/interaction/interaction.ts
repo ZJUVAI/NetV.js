@@ -3,10 +3,10 @@
  * @description handle all interaction in NetV
  */
 
-import { Position } from '../interfaces'
 import NetV from '../index'
 import Node from '../elements/node'
 import Element from '../elements/element'
+import { Position } from '../interfaces'
 
 export class InteractionManager {
     private netv: NetV

@@ -5,9 +5,9 @@
 
 import * as nodeShaders from './shaders/node-shader'
 import * as linkShaders from './shaders/link-shader'
-import { RenderNodeManager } from './elements/render-node'
 import Node from '../elements/node'
 import Link from '../elements/link'
+import { RenderNodeManager } from './elements/render-node'
 import { RenderLinkManager } from './elements/render-link'
 import { Transform, Position } from '../interfaces'
 import { RendererConfigs } from './interfaces'
