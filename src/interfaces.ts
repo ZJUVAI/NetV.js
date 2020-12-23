@@ -4,8 +4,8 @@
  * @dependences None
  */
 
-import Node from './node'
-import Link from './link'
+import Node from './elements/node'
+import Link from './elements/link'
 
 export interface Color {
     r: number
@@ -19,23 +19,48 @@ export interface Position {
     y?: number
 }
 
+export type NodeShape = 'circle' | 'rect' | 'triangle' | 'cross'
+
+export interface NodeStyle {
+    shape?: NodeShape
+    offset?: Position
+    fill?: Color
+    strokeWidth?: number
+    strokeColor?: Color
+    /* circle shape styles */
+    r?: number
+    /* rect shape styles */
+    width?: number
+    height?: number
+    /* triangle shape styles */
+    vertexAlpha?: Position
+    vertexBeta?: Position
+    vertexGamma?: Position
+}
+
 export interface NodeData {
     id: string
     x?: number
     y?: number
-    r?: number
-    fill?: Color
+    style?: NodeStyle
+    clickCallback?: (node: Node) => void
+    hoverCallback?: (node: Node) => void
+}
+
+export type LinkShape = 'line' | 'curve'
+
+export interface LinkStyle {
+    shape?: LinkShape
     strokeWidth?: number
     strokeColor?: Color
-    clickCallback?: (node: Node) => void
 }
 
 export interface LinkData {
     source: string
     target: string
-    strokeColor?: Color
-    strokeWidth?: number
+    style?: LinkStyle
     clickCallback?: (link: Link) => void
+    hoverCallback?: (link: Link) => void
 }
 
 export interface NodeLinkData {

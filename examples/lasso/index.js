@@ -1,6 +1,6 @@
 /**
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
- * @description miserables dataset with name label
+ * @description lasso operation
  */
 const netv = new NetV({
     container: document.getElementById('main'),
@@ -34,18 +34,10 @@ data.nodes.forEach((node) => {
 netv.data(data)
 netv.draw()
 
-// label
+netv.on('pan', () => { })
+netv.on('zoom', () => { })
 
-const labelManager = new Label(netv)
-labelManager.draw(netv.nodes(), (node) => Label.template.rightText(node.id()))
-const node = netv.getNodeById('Valjean')
-const element = document.createElementNS('http://www.w3.org/2000/svg', 'image')
-element.setAttribute('href', 'http://netv.zjuvag.org/logo.svg')
-element.setAttribute('width', '100')
-labelManager.draw(node, (node) => { return element })
-
-// interaction
-
-netv.on('pan', () => { labelManager.updatePosition(netv.nodes()) })
-netv.on('zoom', () => { labelManager.updatePosition(netv.nodes()) })
-node.on('dragging', () => { labelManager.updatePosition(node) })
+const lasso = new Lasso(netv, { enable: true })
+lasso.onSelected((selectedItems) => {
+    console.log(selectedItems)
+})

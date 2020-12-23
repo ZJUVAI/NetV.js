@@ -1,12 +1,13 @@
 /**
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
- * @description build-in miserables dataset load and draw
+ * @description curve example
  */
 const netv = new NetV({
     container: document.getElementById('main'),
     link: {
         style: {
-            strokeWidth: 1
+            strokeWidth: 1,
+            shape: 'curve'
         }
     }
 })

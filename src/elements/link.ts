@@ -5,44 +5,37 @@
  */
 
 import Node from './node'
-import * as interfaces from './interfaces'
-import { NetV } from './index'
+import * as interfaces from '../interfaces'
+import Element from './element'
 
-class Link {
-    public $_clickCallback: (link: Link) => void
-    public $_hoverCallback: (link: Link) => void
+class Link extends Element {
+    // style getter/setter
+    public shape: (value?: interfaces.LinkShape) => interfaces.LinkShape
+    public strokeWidth: (value?: number) => number
+    public strokeColor: (value?: interfaces.Color) => interfaces.Color
+    public curveness: (value?: number) => number
+
     public $_source: Node
     public $_target: Node
 
-    private $_core: NetV
-    private $_strokeWidth: number
-    private $_strokeColor: interfaces.Color
+    private $_elementReservedKeys = new Set(['source', 'target', 'style'])
 
     public constructor(core, linkData: interfaces.LinkData) {
-        this.$_core = core
-        const defaultConfigs = this.$_core.$_configs
-        const data = {
-            ...{
-                strokeWidth: defaultConfigs.link.strokeWidth,
-                strokeColor: defaultConfigs.link.strokeColor,
-                clickCallback: defaultConfigs.link.clickCallback,
-                hoverCallback: defaultConfigs.link.hoverCallback
-            },
-            ...linkData
+        super(core, linkData, /* type: */ 'Link')
+
+        // set attributes
+        for (const key in linkData) {
+            if (!this.$_elementReservedKeys.has(key)) {
+                this.$_attributes[key] = linkData[key]
+            }
         }
 
-        const sourceNode = this.$_core.getNodeById(data.source)
-        const targetNode = this.$_core.getNodeById(data.target)
+        const sourceNode = this.$_core.getNodeById(linkData.source)
+        const targetNode = this.$_core.getNodeById(linkData.target)
         this.sourceTarget({
             source: sourceNode,
             target: targetNode
         })
-
-        this.$_strokeWidth = data.strokeWidth
-        this.$_strokeColor = data.strokeColor
-
-        this.setClickCallback(data.clickCallback)
-        this.setHoverCallback(data.hoverCallback)
     }
 
     /**
@@ -51,7 +44,7 @@ class Link {
      * @returns {Node} a source Node Object
      * @memberof Link
      */
-    public source(node?: Node) {
+    public source(node?: Node): Node {
         if (arguments.length === 1) {
             // setter
             this.sourceTarget({
@@ -68,7 +61,7 @@ class Link {
      * @returns {Node} a target Node Object
      * @memberof Link
      */
-    public target(node?: Node) {
+    public target(node?: Node): Node {
         if (arguments.length === 1) {
             // setter
             this.sourceTarget({
@@ -132,47 +125,6 @@ class Link {
             source: this.$_source,
             target: this.$_target
         }
-    }
-
-    /**
-     * set/get stroke width of a node
-     * @param {number} [value]
-     * @memberof Node
-     */
-    public strokeWidth(value?: number) {
-        if (arguments.length === 1) {
-            this.$_strokeWidth = value
-            this.$_core.$_renderer.linkManager.changeAttribute(this, 'strokeWidth')
-        }
-        return this.$_strokeWidth
-    }
-
-    /**
-     * set/get stroke color of a node
-     * @param {Color} [value]
-     */
-    public strokeColor(value?: interfaces.Color) {
-        if (arguments.length === 1) {
-            this.$_strokeColor = value
-            this.$_core.$_renderer.linkManager.changeAttribute(this, 'strokeColor')
-        }
-        return this.$_strokeColor
-    }
-
-    /**
-     * set hover callback function
-     * @param callback hover callback function
-     */
-    private setHoverCallback(callback: (link: Link) => void) {
-        this.$_hoverCallback = callback
-    }
-
-    /**
-     * set click callback function
-     * @param callback click callback function
-     */
-    private setClickCallback(callback: (link: Link) => void) {
-        this.$_clickCallback = callback
     }
 }
 

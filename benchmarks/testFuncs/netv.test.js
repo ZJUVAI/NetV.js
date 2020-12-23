@@ -2,7 +2,7 @@
  * @author Xiaodong Zhao<zhaoxiaodong@zju.edu.cn> and Jiacheng Pan <panjiacheng@zju.edu.cn>
  * @description benchmark, FPS of NetV.js
  */
-import { NetV } from '../../build/NetV'
+import NetV from '../../build/NetV'
 
 export default async function test(testCase) {
     const netv = new NetV({

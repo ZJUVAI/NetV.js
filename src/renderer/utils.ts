@@ -4,6 +4,7 @@
  */
 
 import { Color } from '../interfaces'
+import { Variable, RenderAttribute } from './interfaces'
 
 /**
  * compile webgl shader
@@ -37,7 +38,7 @@ export function createProgram(
     gl: WebGL2RenderingContext,
     vertShaderStr: string,
     fragShaderStr: string,
-    attributes: { name: string; index: number }[]
+    attributes: Map<string, RenderAttribute>
 ): WebGLProgram {
     const vertShader = compileShader(gl, vertShaderStr, gl.VERTEX_SHADER)
     const fragShader = compileShader(gl, fragShaderStr, gl.FRAGMENT_SHADER)
@@ -45,7 +46,7 @@ export function createProgram(
     const program = gl.createProgram()
 
     attributes.forEach((attr) => {
-        gl.bindAttribLocation(program, attr.index, attr.name)
+        gl.bindAttribLocation(program, attr.location, attr.name)
     })
 
     gl.attachShader(program, vertShader)
@@ -77,9 +78,10 @@ export function createArrayBuffer(gl: WebGL2RenderingContext, data: Float32Array
  * @param {string} shaderStr
  * @returns {RenderAttribute[]} attributes array
  */
-export function extractAttributesFromShader(shaderStr: string) {
+export function extractAttributesFromShader(shaderStr: string): Map<string, RenderAttribute> {
     const matchings = shaderStr.match(/in\s.*;/g)
-    return matchings.map((match, index) => {
+    const attributesMap = new Map()
+    matchings.forEach((match, location) => {
         const name = match.split(' ')[2].slice(0, -1)
         const type = match.split(' ')[1]
         let size = 1
@@ -88,15 +90,20 @@ export function extractAttributesFromShader(shaderStr: string) {
         }
         let isBuildIn = false
         if (name === 'inVertexPos') {
+            // an instance is formed by two triangles,
+            // thus we need four point positions to initial the instance
+            // more details: https://panjiacheng.site/wiki/2019/06/06/webGL/WebGL-BatchDraw%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB+%E7%90%86%E8%A7%A3/
             isBuildIn = true
         }
-        return {
+        attributesMap.set(name, {
             name,
-            size,
-            index,
-            isBuildIn
-        }
+            size, // the space of one attribute, e.g. vec3 ocuppies 3 units of space
+            location, // the appearance order of one attribute in the shader code, which is equal to the result of getAttribLocation
+            isBuildIn, // which means four vertices in one element: inVertexPos
+            extractAttributeValueFrom: () => [] // a function which is use to append an element into the array of this attribute
+        })
     })
+    return attributesMap
 }
 
 /**
@@ -120,4 +127,46 @@ export function decodeRenderId(pixelVal: Uint8Array): number {
     // parse normalized parts of id number, bit shift to origin position and concat
     const renderId = pixelVal[0] | (pixelVal[1] << 8) | (pixelVal[2] << 16) | (pixelVal[3] << 24)
     return renderId
+}
+
+export class Shader {
+    public inputs: Variable = {}
+    public outputs: Variable = {}
+    public uniforms: Variable = {}
+    public methods: string[][] = [[]]
+    public main: string[] = []
+    private header = `#version 300 es\nprecision highp float;\n`
+    public copy() {
+        const copyShader = new Shader()
+        copyShader.inputs = { ...this.inputs }
+        copyShader.outputs = { ...this.outputs }
+        copyShader.uniforms = { ...this.uniforms }
+        copyShader.main = this.main.map((str) => str)
+        copyShader.methods = this.methods.map((method) => method.map((str) => str))
+        return copyShader
+    }
+    public connect() {
+        const variablesPrefix = [
+            { prefix: 'in', variables: this.inputs },
+            { prefix: 'out', variables: this.outputs },
+            { prefix: 'uniform', variables: this.uniforms }
+        ]
+        const variableDefinitions = variablesPrefix
+            .map((variablePrefix) =>
+                Object.entries(variablePrefix.variables)
+                    .map(([name, type]) => {
+                        return `${variablePrefix.prefix} ${type} ${name};\n`
+                    })
+                    .join('')
+            )
+            .join('')
+
+        return (
+            this.header +
+            variableDefinitions +
+            this.methods.map((method) => method.join('\n')).join('\n') +
+            '\n' +
+            this.main.join('\n')
+        )
+    }
 }
