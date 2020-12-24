@@ -3,9 +3,9 @@ title: API
 sidebar: auto
 ---
 
-## NetV
+# NetV
 
-### Initialization
+## Initialization
 
 `NetV` is a class, an instance of `NetV` can be created as follows:
 
@@ -25,9 +25,21 @@ const netV = new NetV({
 
 The entire initialization configuration interface can be referred in: [InitializationConfigurations](#InitializationConfigurations)
 
-### Manipulation
+## Manipulation
 
-#### `NetV.data()`
+### `netv.backgroundColor()`
+
+Get/Set NetV's background color.
+
+* `netv.backgroundColor()`: return NetV's background color in [Color](#color).
+
+* `netv.backgroundColor(color)`: set NetV's background color in [Color](#color).
+
+### `netv.dispose()`
+
+Dispose NetV instance. Wipe data and clear all related DOM elements and allocated memory.
+
+### `NetV.data()`
 
 Add data into the `NetV` instance or return added data.
 
@@ -49,15 +61,15 @@ Add data into the `NetV` instance or return added data.
     })
     ```
 
-#### `NetV.nodes()`
+### `NetV.nodes()`
 
 `NetV.nodes()`: return a [`Node`](#node) array which contains all the nodes in the `NetV` instance.
 
-#### `NetV.links()`
+### `NetV.links()`
 
 `NetV.links()`: return a [`Link`](#link) array which contains all the links in the `NetV` instance.
 
-#### `NetV.addNode()`
+### `NetV.addNode()`
 
 `NetV.addNode(`[`NodeData`](#nodedata)`)`: add a new node with its data (Interface: [`NodeData`](#nodedata)), return the added [`Node`](#node) object.
 
@@ -71,7 +83,7 @@ const newNode = netV.addNode({
 })
 ```
 
-#### `NetV.addLink()`
+### `NetV.addLink()`
 
 `NetV.addLink(`[`LinkData`](#linkdata)`)`: add a new link with its data (Interface: [`LinkData`](#linkdata)), return the added [`Link`](#link) object.
 
@@ -83,7 +95,7 @@ const newLink = netV.addLink({
 })
 ```
 
-#### `NetV.addNodes()`
+### `NetV.addNodes()`
 
 `NetV.addNodes(`[`NodeData`](#nodedata)`[] )`: add a list of new nodes with their data, no return value.
 
@@ -95,7 +107,7 @@ netV.addNodes([
 ])
 ```
 
-#### `NetV.addLinks()`
+### `NetV.addLinks()`
 
 `NetV.addLinks(`[`LinkData`](#linkdata)`[] )`: add a list of new links with their data, no return value.
 
@@ -106,7 +118,7 @@ netV.addLinks([
 ])
 ```
 
-#### `NetV.getNodeById()`
+### `NetV.getNodeById()`
 
 `NetV.getNodeById( string )`: get a node from its ID, return a [`Node`](#node) object.
 
@@ -114,16 +126,15 @@ netV.addLinks([
 const nodeOne = netV.getNodeById("1")
 ```
 
-#### `NetV.getLinkByEnds()`
+### `NetV.getLinkByEnds()`
 
-`NetV.getLinkByEnds( string[] )`: get a link from its source node's ID and target node's ID, return a [`Link`](#link) object. The parameter is an array with two nodes' ID, and their order is no matter.
+`NetV.getLinkByEnds(endId1: stirng, endId2: string)`: get a link from its source node's ID and target node's ID, return a [`Link`](#link) object. The parameter is an array with two nodes' ID, and their order is no matter.
 
 ```typescript
-// it is same to getLinkByEnds(['2', '1'])
-const linkOneTwo = netV.getLinkByEnds(["1", "2"])
+const linkOneTwo = netV.getLinkByEnds("1", "2")
 ```
 
-#### `NetV.getElementByPosition()`
+### `NetV.getElementByPosition()`
 
 `NetV.getElementByPosition( {x: number, y: number} )`: get an element (node/link) by a 2D position. Two numerical parameters are the 2D position (x and y). Return an object includes the Id
 and the object of the element : `{type: string, element: Node/Link}`
@@ -144,11 +155,11 @@ if (!obj) {
 }
 ```
 
-#### `NetV.wipe()`
+### `NetV.wipe()`
 
 `NetV.wipe()`: empty all the data in the `NetV` instance, no return value.
 
-#### `NetV.loadDataset()`
+### `NetV.loadDataset()`
 
 `NetV.loadDataset( string )`: get an integrated dataset in _NetV.js_, return a [`NodeLinkData`](#nodelinkdata) object. Several datasets are supported:
 
@@ -159,34 +170,92 @@ const miserables = netV.loadDataset("miserables")
 netV.data(miserables)
 ```
 
-### Render
+## Interactions
 
-#### `NetV.draw()`
+### `netv.on()`
+
+Add event listener for NetV. Note that it's bound to whole canvas instead of single element.
+
+`netv.on(eventName: string, callback: (e: Event) => void)`
+
+* `eventName`: event type, support `zoom`, `pan`, `mousedown`, `mouseup`, `click`
+* `callback`: function to call when trigger corresponding event.
+
+### `netv.off()`
+
+Remove event listener for NetV. Note that it's bound to whole canvas instead of single element.
+
+`netv.on(eventName: string, callback: (e: Event) => void)`
+
+* `eventName`: event type, support `zoom`, `pan`, `mousedown`, `mouseup`, `click`
+* `callback`: function to call when trigger corresponding event.
+
+
+### `netv.panBy()`
+
+Manually pan NetV's canvas.
+
+`netv.panBy(x: number, y: number)`: pan by (x, y) offset.
+
+### `netv.zoomBy()`
+
+Manually zoom NetV's canvas.
+
+`netv.zoomBy(k: number, center?: Position)`: zoom by k with `center` as the center. `center` will be canvas middle position if not specified.
+
+### `netv.centerOn()`
+
+manually pan to move node to center.
+
+`netv.centerOn(node: Node)`: pan whole canvas to get given node at center of canvas.
+
+
+### `netv.transform()`
+
+Get/Set NetV's transform. This can be used for programmatically set canvas's pan offset and zoom factor.
+
+* `netv.transform()`: return NetV's canvas transform in [Transform](#transform).
+* `netv.transform(value)`: set NetV's transform.
+
+### `netv.transition()`
+
+Easing from current transform to given transforms in array one by one.
+
+`netv.transition(transforms: Transform[], durationMS: number[], callback?:({transform: Transform}) => void)`
+
+* `transforms`: transforms waiting for changing to, each element is a [Transform](#transform).
+* `durationMS`: duration for each easing.
+* `callback`: *optional*, function to call during each easing step. The callback function can get current transform as parameter: `{ transform: Transform}`
+
+
+## Render
+
+### `NetV.draw()`
 
 `NetV.draw()`: draw/refresh all graphs on the canvas. **Note that** the visualization result will only be refreshed after calling `NetV.draw()`
 
-## Node
+# Node
 
 [`Node`](#node) is a basic element in _NetV.js_. It is visualized as a circle in default.
 
-### Manipulation
+## Manipulation
 
-#### `Node.id()`
+### `Node.id()`
 
 `Node.id()`: return the ID of the node (a string).
 
-#### `Node.x()`
+### `Node.x()`
 
 Get the x position of the node or set it.
 
 -   `Node.x()`: return the x position (a number) of the node;
 -   `Node.x( number )`: set the x position of the node;
 
-#### `Node.y()`
+### `Node.y()`
 
 Same to `Node.x()`
 
-#### `Node.position()`
+### `Node.position()`
 
 Get the position (x and y) of the node or set it.
 
@@ -202,7 +271,7 @@ Get the position (x and y) of the node or set it.
     // note that only after netV.draw(), the visualization will be refreshed
     ```
 
-### Style
+## Style
 
 <img :src="$withBase('/node-style.svg')" alt="node-style">
 
@@ -215,52 +284,52 @@ node.strokeColor({ r: 0, g: 0.44, b: 0.74, a: 1 })
 netV.draw()
 ```
 
-#### `Node.r()`
+### `Node.r()`
 
 Get or set the radius of the node.
 
 -   `Node.r()`: return the radius of the node (a number).
 -   `Node.r( number )`: set the radius of the node.
 
-#### `Node.fiil()`
+### `Node.fiil()`
 
 Get or set the fill color of the node.
 
 -   `Node.fill()`: return the fill color of the node (a [`Color`](#color) object)
 -   `Node.fill(`[`Color`](#color)`)`: set the the fill color of the node.
 
-#### `Node.strokeColor()`
+### `Node.strokeColor()`
 
 Get or set the border color of the node.
 
 -   `Node.strokeColor()`: return the border color of the node (a [`Color`](#color) object)
 -   `Node.strokeColor(`[`Color`](#color)`)`: set the the border color of the node.
 
-#### `Node.strokeWidth()`
+### `Node.strokeWidth()`
 
 Get or set the border width of the node.
 
 -   `Node.strokeWidth()`: return the border width of the node (a number).
 -   `Node.strokeWidth( number )`: set the border width of the node.
 
-## Link
+# Link
 
 [`Link`](#link) is a basic element in _NetV.js_. It is visualized as a straight line (without an arrow) in default.
 
-### Manipulation
+## Manipulation
 
-#### `Link.source()`
+### `Link.source()`
 
 Get or set the source node of the link.
 
 -   `Link.source()`: return the source node (a [`Node`](#node) object).
 -   `Link.source(`[`Node`](#node)`)`: set the source node of the link.
 
-#### `Link.target()`
+### `Link.target()`
 
 Same to `Link.source()`
 
-#### `Link.sourceTarget()`
+### `Link.sourceTarget()`
 
 Get or set both the source and the target nodes of the link.
 
@@ -278,7 +347,7 @@ Get or set both the source and the target nodes of the link.
     }) // change linkOneTwo's target into nodeThree
     ```
 
-### Style
+## Style
 
 <img :src="$withBase('/link-style.svg')" alt="link-style">
 
@@ -289,25 +358,25 @@ link.strokeColor({ r: 0, g: 0.44, b: 0.74, a: 1 })
 netV.draw()
 ```
 
-#### `Link.strokeColor()`
+### `Link.strokeColor()`
 
 Get or set the color of the link.
 
 -   `Link.strokeColor()`: return the color of the link (a [`Color`](#color) object ).
 -   `Link.strokeColor(`[`Color`](#color)`)`: set the color of the link.
 
-#### `Link.strokeWidth()`
+### `Link.strokeWidth()`
 
 Get or set the width of the link
 
 -   `Link.strokeWidth()`: return the width of the link (a number).
 -   `Link.strokeWidth( number )`: set the width of the link.
 
-## Utils
+# Utils
 
 Some utilities are provided in _NetV.js_.
 
-### `Utils.transformGraphPosition()`
+## `Utils.transformGraphPosition()`
 
 `Utils.transformGraphPosition(`[`NodeLinkData`](#nodelinkdata)`, number, number, number)`: transform the nodes' positions into a given square area. The first parameter is the data that will be imported into a `NetV` instance. The second parameter defines the length of the square's side. The third and fourth parameters define the center position of the square.
 
@@ -333,9 +402,9 @@ const dataAfterTransform = netV.Utils.transformGraphPosition(data, 1, 0.5, 0.5)
 // node with id '2' will be located on (0.75, 1)
 ```
 
-## Interfaces
+# Interfaces
 
-### `InitializationConfigurations`
+## `InitializationConfigurations`
 
 ```typescript
 interface InitializationConfigurations {
@@ -379,7 +448,7 @@ The [initializationConfigurations](#initializationconfigurations) is the interfa
 -   `nodeLimit` is a number. It is used to allocate a fixed space in WebGL for rendering nodes. It is recommended to set to be the upper limit of the number of nodes you need to load. Its default value is `100`. **Note that** you need to reset it if you want to load more than 100 nodes.
 -   `linkLimit` is a number. It is used to allocate a fixed space in WebGL for rendering links. It is recommended to set to be the upper limit of the number of links you need to load. Its default value is `1000`. **Note that** you need to reset it if you want to load more than 1000 links.
 
-### `Color`
+## `Color`
 
 ```typescript
 interface Color {
@@ -392,7 +461,7 @@ interface Color {
 
 -   `r`, `g`, `b`, and `a` are four channels of the RGBA color model. Their range is `[0, 1]`.
 
-### `NodeData`
+## `NodeData`
 
 ```typescript
 interface NodeData {
@@ -416,7 +485,7 @@ The [`NodeData`](#nodedata) interface specifies the data format of the input nod
 -   `strokeColor` is a [Color](#color) object. It configures the border color of a node. It is optional.
 -   `clickCallback` is a function. It is the callback function while the cursor clicks on a node. It is optional.
 
-### `LinkData`
+## `LinkData`
 
 ```typescript
 interface LinkData {
@@ -435,7 +504,7 @@ The [`LinkData`](#linkdata) interface specifies the data format of the input lin
 -   `strokeColor` is a [Color](#color) object. It configures the color of a link. It is optional.
 -   `clickCallback` is a function. It is the callback function while the cursor clicks on a link. It is optional.
 
-### `NodeLinkData`
+## `NodeLinkData`
 
 ```typescript
 interface NodeLinkData {
@@ -449,3 +518,15 @@ The [NodeLinkData](#nodelinkdata) interface specifies the data format of the inp
 -   `nodes` is a list of [`NodeData`](#nodedata) objects.
 
 -   `links` is a list of [`LinkData`](#linkdata) objects. The `links` can be an empty array so that only nodes will be rendered.
+
+## `Transform`
+
+```typescript
+interface Transform {
+    x: number,
+    y: number,
+    k: number
+}
+```
+
+The [Transform](#transform) specifies transformation applied on all positions. For example, a node with position `(px, py)` will be shown on canvas at `(px * k + x, py * k + y)`
