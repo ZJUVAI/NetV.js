@@ -1,3 +1,4 @@
+import * as interfaces from '../../interfaces'
 import { RenderAttribute, ShaderSeries } from '../interfaces'
 import {
     createProgram,
@@ -10,6 +11,9 @@ import Node from '../../elements/node'
 import Link from '../../elements/link'
 
 export class RenderElementManager {
+    public attributes: Map<string, RenderAttribute>
+    public pixelRatio: number
+
     protected gl: WebGL2RenderingContext
     // the capablity of the render manager,
     // which means how many elements can be rendered
@@ -17,10 +21,8 @@ export class RenderElementManager {
     protected count = 0
     protected width: number
     protected height: number
-    protected pixelRatio: number
 
     protected program: WebGLProgram
-    protected attributes: Map<string, RenderAttribute>
 
     // id shaders are design for mapping canvas pixels to elements
     protected idProgram: WebGLProgram
@@ -241,8 +243,11 @@ export class RenderElementManager {
             // link attribute => webgl attribute
             this.attributes.forEach((attr) => {
                 if (!attr.isBuildIn) {
-                    const value = attr.extractAttributeValueFrom(element)
-                    value.forEach((v, j) => {
+                    // const value = attr.extractAttributeValueFrom(element)
+                    const value = this.getAttributeByNodeWithName(element, attr.name)
+                    const array = value.value as number[]
+
+                    array.forEach((v, j) => {
                         // inject into the Buffer Array
                         attr.array[attr.size * index + j] = v
                     })
@@ -295,12 +300,15 @@ export class RenderElementManager {
     public changeAttribute(element: Node | Link, attribute: string) {
         const renderId = this.getRenderIdOf(element)
         const index = Math.floor(renderId / 2)
-        const attr = this.attributes.get(`in_${attribute}`)
+        const shaderAttr = this.getAttributeByNodeWithName(element, attribute)
+        const shaderVariableName = shaderAttr.name
+        const shaderVariableValue = shaderAttr.value as number[]
+        const attr = this.attributes.get(shaderVariableName)
         if (attr === undefined) {
             console.error(`Attribute: ${attribute} is not supported in a ${element.type} instance.`)
         }
-        const data = attr.extractAttributeValueFrom(element)
-        attr.array.set(data, attr.size * index)
+        // const data = attr.extractAttributeValueFrom(element)
+        attr.array.set(shaderVariableValue, attr.size * index)
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
         this.gl.bufferSubData(
             this.gl.ARRAY_BUFFER,
@@ -317,5 +325,151 @@ export class RenderElementManager {
      */
     public clearData() {
         this.count = 0
+    }
+
+    private getAttributeByNodeWithName(element: Link | Node, attributeName: string) {
+        const pixelRatio = this.pixelRatio
+        let map
+        if (element.type === 'Link') {
+            const link = element as Link
+            const style = link.$_style as interfaces.LinkStyle
+
+            map = {
+                source: {
+                    name: 'in_source',
+                    value: [
+                        link.$_source.$_position.x * pixelRatio,
+                        link.$_source.$_position.y * pixelRatio
+                    ]
+                },
+                target: {
+                    name: 'in_target',
+                    value: [
+                        link.$_target.$_position.x * pixelRatio,
+                        link.$_target.$_position.y * pixelRatio
+                    ]
+                },
+                shape: {
+                    name: 'in_shape',
+                    value: [style.shape === 'curve' ? 1 : 0]
+                },
+                strokeWidth: {
+                    name: 'in_strokeWidth',
+                    value: [style.strokeWidth * pixelRatio]
+                },
+                strokeColor: {
+                    name: 'in_strokeColor',
+                    value: [
+                        style.strokeColor.r,
+                        style.strokeColor.g,
+                        style.strokeColor.b,
+                        style.strokeColor.a
+                    ]
+                },
+                curveness: {
+                    name: 'in_curveness',
+                    value: [style.curveness]
+                }
+            }
+        } else {
+            const node = element as Node
+            const style = node.$_style as interfaces.NodeStyle
+
+            map = {
+                position: {
+                    name: 'in_position',
+                    value: [node.$_position.x * pixelRatio, node.$_position.y * pixelRatio]
+                },
+                shape: {
+                    name: 'in_shape',
+                    value: [
+                        style.shape === 'rect'
+                            ? 1
+                            : style.shape === 'triangle'
+                            ? 2
+                            : style.shape === 'cross'
+                            ? 3
+                            : 0
+                    ]
+                },
+                offset: {
+                    name: 'in_offset',
+                    value: [style.offset.x * pixelRatio, style.offset.y * pixelRatio]
+                },
+                fill: {
+                    name: 'in_fill',
+                    value: [style.fill.r, style.fill.g, style.fill.b, style.fill.a]
+                },
+                strokeWidth: {
+                    name: 'in_strokeWidth',
+                    value: [style.strokeWidth * pixelRatio]
+                },
+                strokeColor: {
+                    name: 'in_strokeColor',
+                    value: [
+                        style.strokeColor.r,
+                        style.strokeColor.g,
+                        style.strokeColor.b,
+                        style.strokeColor.a
+                    ]
+                },
+                rotate: {
+                    name: 'in_rotate',
+                    value: [style.rotate]
+                },
+                /* circle */
+                r: {
+                    name: 'in_r',
+                    value: [style.r * pixelRatio]
+                },
+                /* rect */
+                width: {
+                    name: 'in_width',
+                    value: [style.width * pixelRatio]
+                },
+                height: {
+                    name: 'in_height',
+                    value: [style.height * pixelRatio]
+                },
+                /* triangle */
+                vertexAlpha: {
+                    name: 'in_vertexAlpha',
+                    value: [style.vertexAlpha.x * pixelRatio, style.vertexAlpha.y * pixelRatio]
+                },
+                vertexBeta: {
+                    name: 'in_vertexBeta',
+                    value: [style.vertexBeta.x * pixelRatio, style.vertexBeta.y * pixelRatio]
+                },
+                vertexGamma: {
+                    name: 'in_vertexGamma',
+                    value: [style.vertexGamma.x * pixelRatio, style.vertexGamma.y * pixelRatio]
+                },
+                /* cross */
+                innerWidth: {
+                    name: 'in_innerSize',
+                    value: [style.innerWidth * pixelRatio, style.innerHeight * pixelRatio]
+                },
+                innerHeight: {
+                    name: 'in_innerSize',
+                    value: [style.innerWidth * pixelRatio, style.innerHeight * pixelRatio]
+                }
+            }
+        }
+
+        if (attributeName in map) {
+            return map[attributeName]
+        }
+
+        const reversed_map = {}
+        Object.entries(map).forEach(([k, v]) => {
+            const value = v as any
+            const key = k as string
+            reversed_map[value.name] = {
+                name: key,
+                value: value.value
+            }
+        })
+
+        return reversed_map[attributeName]
     }
 }

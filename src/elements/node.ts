@@ -28,15 +28,16 @@ class Node extends Element {
     public vertexBeta: (value?: interfaces.Position) => interfaces.Position
     public vertexGamma: (value?: interfaces.Position) => interfaces.Position
 
+    public $_position = {
+        x: 0,
+        y: 0
+    }
+
     public $_dragstartCallbackSet: Set<(e: any) => void> = new Set()
     public $_draggingCallbackSet: Set<(e: any) => void> = new Set()
     public $_dragendCallbackSet: Set<(e: any) => void> = new Set()
 
     private $_id: string
-    private $_position = {
-        x: 0,
-        y: 0
-    }
 
     private $_elementReservedKeys = new Set(['id', 'x', 'y', 'style'])
 
@@ -133,29 +134,29 @@ class Node extends Element {
         return this.$_position.y
     }
 
-    /**
-     * custom getter/setter for innerWidth
-     * @param value 
-     */
-    public innerWidth(value?: number) {
-        if (value !== undefined) {
-            this.$_style['innerWidth'] = value
-            this.$_changeRenderAttribute(this, 'innerSize')
-        }
-        return this.$_style['innerWidth']
-    }
+    // /**
+    //  * custom getter/setter for innerWidth
+    //  * @param value
+    //  */
+    // public innerWidth(value?: number) {
+    //     if (value !== undefined) {
+    //         this.$_style['innerWidth'] = value
+    //         this.$_changeRenderAttribute(this, 'innerSize')
+    //     }
+    //     return this.$_style['innerWidth']
+    // }
 
-    /**
-     * custom getter/setter for innerHeight
-     * @param value 
-     */
-    public innerHeight(value?: number) {
-        if (value !== undefined) {
-            this.$_style['innerHeight'] = value
-            this.$_changeRenderAttribute(this, 'innerSize')
-        }
-        return this.$_style['innerHeight']
-    }
+    // /**
+    //  * custom getter/setter for innerHeight
+    //  * @param value
+    //  */
+    // public innerHeight(value?: number) {
+    //     if (value !== undefined) {
+    //         this.$_style['innerHeight'] = value
+    //         this.$_changeRenderAttribute(this, 'innerSize')
+    //     }
+    //     return this.$_style['innerHeight']
+    // }
 
     /**
      * set/get postion

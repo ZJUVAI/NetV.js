@@ -2,6 +2,8 @@
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
  * @description Link used in renderer
  */
+
+import * as interfaces from '../../interfaces'
 import { LinkManagerConfigs, ShaderSeries } from '../interfaces'
 import Link from '../../elements/link'
 import { RenderElementManager } from './render-element'
@@ -35,41 +37,41 @@ export class RenderLinkManager extends RenderElementManager {
         )
         this.renderIdToElement = {}
 
-        this.attributes.forEach((attr) => {
-            if (attr.name === 'in_source') {
-                attr.extractAttributeValueFrom = (link: Link) => {
-                    const sourcePosition = link.source().position()
-                    return [sourcePosition.x, sourcePosition.y]
-                }
-            } else if (attr.name === 'in_target') {
-                attr.extractAttributeValueFrom = (link: Link) => {
-                    const targetPosition = link.target().position()
-                    return [targetPosition.x, targetPosition.y]
-                }
-            } else if (attr.name === 'in_strokeWidth') {
-                attr.extractAttributeValueFrom = (link: Link) => {
-                    return [link.strokeWidth() * this.pixelRatio]
-                }
-            } else if (attr.name === 'in_strokeColor') {
-                attr.extractAttributeValueFrom = (link: Link) => {
-                    const strokeColor = link.strokeColor()
-                    return [strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a]
-                }
-            } else if (attr.name === 'in_curveness') {
-                attr.extractAttributeValueFrom = (link: Link) => {
-                    return [link.curveness()]
-                }
-            } else if (attr.name === 'in_shape') {
-                attr.extractAttributeValueFrom = (link: Link) => {
-                    const shape = link.shape()
-                    if (shape === 'curve') {
-                        return [1]
-                    } else {
-                        return [0]
-                    }
-                }
-            }
-        })
+        // this.attributes.forEach((attr) => {
+        //     if (attr.name === 'in_source') {
+        //         attr.extractAttributeValueFrom = (link: Link) => {
+        //             const sourcePosition = link.source().position()
+        //             return [sourcePosition.x, sourcePosition.y]
+        //         }
+        //     } else if (attr.name === 'in_target') {
+        //         attr.extractAttributeValueFrom = (link: Link) => {
+        //             const targetPosition = link.target().position()
+        //             return [targetPosition.x, targetPosition.y]
+        //         }
+        //     } else if (attr.name === 'in_strokeWidth') {
+        //         attr.extractAttributeValueFrom = (link: Link) => {
+        //             return [link.strokeWidth() * this.pixelRatio]
+        //         }
+        //     } else if (attr.name === 'in_strokeColor') {
+        //         attr.extractAttributeValueFrom = (link: Link) => {
+        //             const strokeColor = link.strokeColor()
+        //             return [strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a]
+        //         }
+        //     } else if (attr.name === 'in_curveness') {
+        //         attr.extractAttributeValueFrom = (link: Link) => {
+        //             return [link.curveness()]
+        //         }
+        //     } else if (attr.name === 'in_shape') {
+        //         attr.extractAttributeValueFrom = (link: Link) => {
+        //             const shape = link.shape()
+        //             if (shape === 'curve') {
+        //                 return [1]
+        //             } else {
+        //                 return [0]
+        //             }
+        //         }
+        //     }
+        // })
     }
 
     /**
