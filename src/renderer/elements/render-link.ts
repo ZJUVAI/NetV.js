@@ -82,15 +82,29 @@ export class RenderLinkManager extends RenderElementManager {
         let count = 0 // TODO: useless count
         links.forEach((link, i) => {
             // TODO: consider link and render link attribute mapping
-            const source = link.source()
-            const sourcePosition = source.position()
-            this.attributes.get('in_source').array[2 * (count + i)] = sourcePosition.x
-            this.attributes.get('in_source').array[2 * (count + i) + 1] = sourcePosition.y
+            const sourceName = 'in_source'
+            const sourceAttribute = this.attributes.get(sourceName)
+            const sourceValue = this.getAttributeByNodeWithName(link, sourceName)
+            const sourceArray = sourceValue.value as number[]
+            sourceAttribute.array[2 * i] = sourceArray[0]
+            sourceAttribute.array[2 * i + 1] = sourceArray[1]
 
-            const target = link.target()
-            const targetPosition = target.position()
-            this.attributes.get('in_target').array[2 * (count + i)] = targetPosition.x
-            this.attributes.get('in_target').array[2 * (count + i) + 1] = targetPosition.y
+            const targetName = 'in_target'
+            const targetAttribute = this.attributes.get(targetName)
+            const targetValue = this.getAttributeByNodeWithName(link, targetName)
+            const targetArray = targetValue.value as number[]
+            targetAttribute.array[2 * i] = targetArray[0]
+            targetAttribute.array[2 * i + 1] = targetArray[1]
+
+            // const source = link.source()
+            // const sourcePosition = source.position()
+            // this.attributes.get('in_source').array[2 * (count + i)] = sourcePosition.x
+            // this.attributes.get('in_source').array[2 * (count + i) + 1] = sourcePosition.y
+
+            // const target = link.target()
+            // const targetPosition = target.position()
+            // this.attributes.get('in_target').array[2 * (count + i)] = targetPosition.x
+            // this.attributes.get('in_target').array[2 * (count + i) + 1] = targetPosition.y
 
             // currently no need for color&renderId change
             /*

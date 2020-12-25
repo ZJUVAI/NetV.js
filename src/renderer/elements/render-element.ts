@@ -327,7 +327,7 @@ export class RenderElementManager {
         this.count = 0
     }
 
-    private getAttributeByNodeWithName(element: Link | Node, attributeName: string) {
+    protected getAttributeByNodeWithName(element: Link | Node, attributeName: string) {
         const pixelRatio = this.pixelRatio
         let map
         if (element.type === 'Link') {
