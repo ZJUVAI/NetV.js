@@ -328,7 +328,6 @@ export class RenderElementManager {
     }
 
     protected getAttributeByElement(element: Link | Node, attributeName: string) {
-        const pixelRatio = this.pixelRatio
         let map
         if (element.type === 'Link') {
             const link = element as Link
@@ -337,17 +336,11 @@ export class RenderElementManager {
             map = {
                 source: {
                     name: 'in_source',
-                    value: [
-                        link.$_source.$_position.x * pixelRatio,
-                        link.$_source.$_position.y * pixelRatio
-                    ]
+                    value: [link.$_source.$_position.x, link.$_source.$_position.y]
                 },
                 target: {
                     name: 'in_target',
-                    value: [
-                        link.$_target.$_position.x * pixelRatio,
-                        link.$_target.$_position.y * pixelRatio
-                    ]
+                    value: [link.$_target.$_position.x, link.$_target.$_position.y]
                 },
                 shape: {
                     name: 'in_shape',
@@ -355,7 +348,7 @@ export class RenderElementManager {
                 },
                 strokeWidth: {
                     name: 'in_strokeWidth',
-                    value: [style.strokeWidth * pixelRatio]
+                    value: [style.strokeWidth]
                 },
                 strokeColor: {
                     name: 'in_strokeColor',
@@ -378,7 +371,7 @@ export class RenderElementManager {
             map = {
                 position: {
                     name: 'in_position',
-                    value: [node.$_position.x * pixelRatio, node.$_position.y * pixelRatio]
+                    value: [node.$_position.x, node.$_position.y]
                 },
                 shape: {
                     name: 'in_shape',
@@ -394,7 +387,7 @@ export class RenderElementManager {
                 },
                 offset: {
                     name: 'in_offset',
-                    value: [style.offset.x * pixelRatio, style.offset.y * pixelRatio]
+                    value: [style.offset.x, style.offset.y]
                 },
                 fill: {
                     name: 'in_fill',
@@ -402,7 +395,7 @@ export class RenderElementManager {
                 },
                 strokeWidth: {
                     name: 'in_strokeWidth',
-                    value: [style.strokeWidth * pixelRatio]
+                    value: [style.strokeWidth]
                 },
                 strokeColor: {
                     name: 'in_strokeColor',
@@ -420,38 +413,38 @@ export class RenderElementManager {
                 /* circle */
                 r: {
                     name: 'in_r',
-                    value: [style.r * pixelRatio]
+                    value: [style.r]
                 },
                 /* rect */
                 width: {
                     name: 'in_size',
-                    value: [style.width * pixelRatio, style.height * pixelRatio]
+                    value: [style.width, style.height]
                 },
                 height: {
                     name: 'in_size',
-                    value: [style.width * pixelRatio, style.height * pixelRatio]
+                    value: [style.width, style.height]
                 },
                 /* triangle */
                 vertexAlpha: {
                     name: 'in_vertexAlpha',
-                    value: [style.vertexAlpha.x * pixelRatio, style.vertexAlpha.y * pixelRatio]
+                    value: [style.vertexAlpha.x, style.vertexAlpha.y]
                 },
                 vertexBeta: {
                     name: 'in_vertexBeta',
-                    value: [style.vertexBeta.x * pixelRatio, style.vertexBeta.y * pixelRatio]
+                    value: [style.vertexBeta.x, style.vertexBeta.y]
                 },
                 vertexGamma: {
                     name: 'in_vertexGamma',
-                    value: [style.vertexGamma.x * pixelRatio, style.vertexGamma.y * pixelRatio]
+                    value: [style.vertexGamma.x, style.vertexGamma.y]
                 },
                 /* cross */
                 innerWidth: {
                     name: 'in_innerSize',
-                    value: [style.innerWidth * pixelRatio, style.innerHeight * pixelRatio]
+                    value: [style.innerWidth, style.innerHeight]
                 },
                 innerHeight: {
                     name: 'in_innerSize',
-                    value: [style.innerWidth * pixelRatio, style.innerHeight * pixelRatio]
+                    value: [style.innerWidth, style.innerHeight]
                 }
             }
         }

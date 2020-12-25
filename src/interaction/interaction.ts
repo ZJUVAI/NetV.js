@@ -287,16 +287,11 @@ export class InteractionManager {
                 }
 
                 // change node position
-                const pixelRatio = window.devicePixelRatio || 1
                 element.position({
                     x:
-                        (this.mouseDownElementOriginPos.x * pixelRatio +
-                            (x - this.mouseDownPos.x) / newTransform.k) /
-                        pixelRatio,
-                    y:
-                        (this.mouseDownElementOriginPos.y * pixelRatio +
-                            (y - this.mouseDownPos.y) / newTransform.k) /
-                        pixelRatio
+                        this.mouseDownElementOriginPos.x +
+                        (x - this.mouseDownPos.x) / newTransform.k,
+                    y: this.mouseDownElementOriginPos.y + (y - this.mouseDownPos.y) / newTransform.k
                 })
 
                 this.netv.draw()
