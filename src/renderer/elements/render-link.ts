@@ -36,42 +36,6 @@ export class RenderLinkManager extends RenderElementManager {
             /* idTexture */ idTexture
         )
         this.renderIdToElement = {}
-
-        // this.attributes.forEach((attr) => {
-        //     if (attr.name === 'in_source') {
-        //         attr.extractAttributeValueFrom = (link: Link) => {
-        //             const sourcePosition = link.source().position()
-        //             return [sourcePosition.x, sourcePosition.y]
-        //         }
-        //     } else if (attr.name === 'in_target') {
-        //         attr.extractAttributeValueFrom = (link: Link) => {
-        //             const targetPosition = link.target().position()
-        //             return [targetPosition.x, targetPosition.y]
-        //         }
-        //     } else if (attr.name === 'in_strokeWidth') {
-        //         attr.extractAttributeValueFrom = (link: Link) => {
-        //             return [link.strokeWidth() * this.pixelRatio]
-        //         }
-        //     } else if (attr.name === 'in_strokeColor') {
-        //         attr.extractAttributeValueFrom = (link: Link) => {
-        //             const strokeColor = link.strokeColor()
-        //             return [strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a]
-        //         }
-        //     } else if (attr.name === 'in_curveness') {
-        //         attr.extractAttributeValueFrom = (link: Link) => {
-        //             return [link.curveness()]
-        //         }
-        //     } else if (attr.name === 'in_shape') {
-        //         attr.extractAttributeValueFrom = (link: Link) => {
-        //             const shape = link.shape()
-        //             if (shape === 'curve') {
-        //                 return [1]
-        //             } else {
-        //                 return [0]
-        //             }
-        //         }
-        //     }
-        // })
     }
 
     /**
@@ -95,16 +59,6 @@ export class RenderLinkManager extends RenderElementManager {
             const targetArray = targetValue.value as number[]
             targetAttribute.array[2 * i] = targetArray[0]
             targetAttribute.array[2 * i + 1] = targetArray[1]
-
-            // const source = link.source()
-            // const sourcePosition = source.position()
-            // this.attributes.get('in_source').array[2 * (count + i)] = sourcePosition.x
-            // this.attributes.get('in_source').array[2 * (count + i) + 1] = sourcePosition.y
-
-            // const target = link.target()
-            // const targetPosition = target.position()
-            // this.attributes.get('in_target').array[2 * (count + i)] = targetPosition.x
-            // this.attributes.get('in_target').array[2 * (count + i) + 1] = targetPosition.y
 
             // currently no need for color&renderId change
             /*
