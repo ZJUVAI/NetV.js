@@ -3,7 +3,6 @@
  * @description Node using in Renderer
  */
 
-import * as interfaces from '../../interfaces'
 import { NodeManagerConfigs, ShaderSeries } from '../interfaces'
 import Node from '../../elements/node'
 import { RenderElementManager } from './render-element'

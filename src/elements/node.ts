@@ -134,30 +134,6 @@ class Node extends Element {
         return this.$_position.y
     }
 
-    // /**
-    //  * custom getter/setter for innerWidth
-    //  * @param value
-    //  */
-    // public innerWidth(value?: number) {
-    //     if (value !== undefined) {
-    //         this.$_style['innerWidth'] = value
-    //         this.$_changeRenderAttribute(this, 'innerSize')
-    //     }
-    //     return this.$_style['innerWidth']
-    // }
-
-    // /**
-    //  * custom getter/setter for innerHeight
-    //  * @param value
-    //  */
-    // public innerHeight(value?: number) {
-    //     if (value !== undefined) {
-    //         this.$_style['innerHeight'] = value
-    //         this.$_changeRenderAttribute(this, 'innerSize')
-    //     }
-    //     return this.$_style['innerHeight']
-    // }
-
     /**
      * set/get postion
      * @memberof Node

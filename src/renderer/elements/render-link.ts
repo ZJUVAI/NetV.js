@@ -3,7 +3,6 @@
  * @description Link used in renderer
  */
 
-import * as interfaces from '../../interfaces'
 import { LinkManagerConfigs, ShaderSeries } from '../interfaces'
 import Link from '../../elements/link'
 import { RenderElementManager } from './render-element'
