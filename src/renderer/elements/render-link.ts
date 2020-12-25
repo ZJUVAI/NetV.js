@@ -47,14 +47,14 @@ export class RenderLinkManager extends RenderElementManager {
             // TODO: consider link and render link attribute mapping
             const sourceName = 'in_source'
             const sourceAttribute = this.attributes.get(sourceName)
-            const sourceValue = this.getAttributeByNodeWithName(link, sourceName)
+            const sourceValue = this.getAttributeByElement(link, sourceName)
             const sourceArray = sourceValue.value as number[]
             sourceAttribute.array[2 * i] = sourceArray[0]
             sourceAttribute.array[2 * i + 1] = sourceArray[1]
 
             const targetName = 'in_target'
             const targetAttribute = this.attributes.get(targetName)
-            const targetValue = this.getAttributeByNodeWithName(link, targetName)
+            const targetValue = this.getAttributeByElement(link, targetName)
             const targetArray = targetValue.value as number[]
             targetAttribute.array[2 * i] = targetArray[0]
             targetAttribute.array[2 * i + 1] = targetArray[1]

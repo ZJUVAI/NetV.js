@@ -244,7 +244,7 @@ export class RenderElementManager {
             this.attributes.forEach((attr) => {
                 if (!attr.isBuildIn) {
                     // const value = attr.extractAttributeValueFrom(element)
-                    const value = this.getAttributeByNodeWithName(element, attr.name)
+                    const value = this.getAttributeByElement(element, attr.name)
                     const array = value.value as number[]
 
                     array.forEach((v, j) => {
@@ -300,7 +300,7 @@ export class RenderElementManager {
     public changeAttribute(element: Node | Link, attribute: string) {
         const renderId = this.getRenderIdOf(element)
         const index = Math.floor(renderId / 2)
-        const shaderAttr = this.getAttributeByNodeWithName(element, attribute)
+        const shaderAttr = this.getAttributeByElement(element, attribute)
         const shaderVariableName = shaderAttr.name
         const shaderVariableValue = shaderAttr.value as number[]
         const attr = this.attributes.get(shaderVariableName)
@@ -327,7 +327,7 @@ export class RenderElementManager {
         this.count = 0
     }
 
-    protected getAttributeByNodeWithName(element: Link | Node, attributeName: string) {
+    protected getAttributeByElement(element: Link | Node, attributeName: string) {
         const pixelRatio = this.pixelRatio
         let map
         if (element.type === 'Link') {

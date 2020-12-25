@@ -49,7 +49,7 @@ export class RenderNodeManager extends RenderElementManager {
             // TODO: consider node and render node attribute mapping
             const name = 'in_position'
             const attribute = this.attributes.get(name)
-            const value = this.getAttributeByNodeWithName(node, name)
+            const value = this.getAttributeByElement(node, name)
             const array = value.value as number[]
             attribute.array[2 * i] = array[0]
             attribute.array[2 * i + 1] = array[1]
