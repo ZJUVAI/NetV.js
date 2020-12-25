@@ -424,12 +424,12 @@ export class RenderElementManager {
                 },
                 /* rect */
                 width: {
-                    name: 'in_width',
-                    value: [style.width * pixelRatio]
+                    name: 'in_size',
+                    value: [style.width * pixelRatio, style.height * pixelRatio]
                 },
                 height: {
-                    name: 'in_height',
-                    value: [style.height * pixelRatio]
+                    name: 'in_size',
+                    value: [style.width * pixelRatio, style.height * pixelRatio]
                 },
                 /* triangle */
                 vertexAlpha: {
