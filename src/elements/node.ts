@@ -20,13 +20,16 @@ class Node extends Element {
     /* circle shape styles */
     public r?: (value?: number) => number
     /* rect shape styles */
-    public width?: (value?: number) => number
-    public height?: (value?: number) => number
+    public width?: (value?: number) => number // also for cross shape
+    public height?: (value?: number) => number // also for cross shape
     public rotate?: (value?: number) => number
     /* triangle shape styles */
     public vertexAlpha: (value?: interfaces.Position) => interfaces.Position
     public vertexBeta: (value?: interfaces.Position) => interfaces.Position
     public vertexGamma: (value?: interfaces.Position) => interfaces.Position
+    /* cross shape styles */
+    public innerHeight: (value?: number) => number
+    public innerWidth: (value?: number) => number
 
     public $_position = {
         x: 0,
