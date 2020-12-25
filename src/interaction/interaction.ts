@@ -299,7 +299,6 @@ export class InteractionManager {
                         pixelRatio
                 })
 
-                console.log('mouse drag: ', element.id())
                 this.netv.draw()
 
                 element.$_draggingCallbackSet.forEach((callback) => {
