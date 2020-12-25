@@ -20,23 +20,27 @@ class Node extends Element {
     /* circle shape styles */
     public r?: (value?: number) => number
     /* rect shape styles */
-    public width?: (value?: number) => number
-    public height?: (value?: number) => number
+    public width?: (value?: number) => number // also for cross shape
+    public height?: (value?: number) => number // also for cross shape
     public rotate?: (value?: number) => number
     /* triangle shape styles */
     public vertexAlpha: (value?: interfaces.Position) => interfaces.Position
     public vertexBeta: (value?: interfaces.Position) => interfaces.Position
     public vertexGamma: (value?: interfaces.Position) => interfaces.Position
+    /* cross shape styles */
+    public innerHeight: (value?: number) => number
+    public innerWidth: (value?: number) => number
+
+    public $_position = {
+        x: 0,
+        y: 0
+    }
 
     public $_dragstartCallbackSet: Set<(e: any) => void> = new Set()
     public $_draggingCallbackSet: Set<(e: any) => void> = new Set()
     public $_dragendCallbackSet: Set<(e: any) => void> = new Set()
 
     private $_id: string
-    private $_position = {
-        x: 0,
-        y: 0
-    }
 
     private $_elementReservedKeys = new Set(['id', 'x', 'y', 'style'])
 
@@ -131,30 +135,6 @@ class Node extends Element {
             })
         }
         return this.$_position.y
-    }
-
-    /**
-     * custom getter/setter for innerWidth
-     * @param value 
-     */
-    public innerWidth(value?: number) {
-        if (value !== undefined) {
-            this.$_style['innerWidth'] = value
-            this.$_changeRenderAttribute(this, 'innerSize')
-        }
-        return this.$_style['innerWidth']
-    }
-
-    /**
-     * custom getter/setter for innerHeight
-     * @param value 
-     */
-    public innerHeight(value?: number) {
-        if (value !== undefined) {
-            this.$_style['innerHeight'] = value
-            this.$_changeRenderAttribute(this, 'innerSize')
-        }
-        return this.$_style['innerHeight']
     }
 
     /**

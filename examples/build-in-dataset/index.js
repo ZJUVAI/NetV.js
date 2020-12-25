@@ -4,6 +4,11 @@
  */
 const netv = new NetV({
     container: document.getElementById('main'),
+    node: {
+        style: {
+            r: 8,
+        }
+    },
     link: {
         style: {
             strokeWidth: 1

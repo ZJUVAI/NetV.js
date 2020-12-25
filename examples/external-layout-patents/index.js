@@ -24,7 +24,7 @@ const colorMap = {
     assignee: { r: 141, g: 160, b: 203, a: 1 }
 }
 const radius = (x) => {
-    const transformer = (n, k) => 0.5 * Math.max(3, k * n ** 0.5)
+    const transformer = (n, k) => Math.max(3, k * n ** 0.5)
     switch (x.type) {
         case 'patent':
             return transformer(x.numCitations, 0.15)
