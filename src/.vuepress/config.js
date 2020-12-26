@@ -56,7 +56,7 @@ module.exports = {
                 nav: [
                     { text: 'Guide', link: '/guide/' }, // 外部链接
                     { text: 'API', link: '/API/' }, // 外部链接
-                    { text: 'Demo', link: '/component/' }, // 外部链接
+                    { text: 'Examples', link: '/component/' }, // 外部链接
                     // 下拉列表
                     {
                         text: 'Resources',
@@ -80,7 +80,7 @@ module.exports = {
                         // 'development-guide-chinese',
                     ],
                     '/API/': [''],
-                    '/component/': ['']
+                    '/component/': ['example-basic']
                 },
                 lastUpdated: 'Last Updated' // 文档更新时间：每个文件git最后提交的时间
             },

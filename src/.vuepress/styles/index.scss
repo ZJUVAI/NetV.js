@@ -180,6 +180,10 @@ html {
                 }
             }
         }
+        .language-js,
+        .language-javascript {
+            background-color: $offset_color;
+        }
     }
 }
 .theme-container.sidebar-open .sidebar {
