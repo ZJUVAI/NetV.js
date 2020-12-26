@@ -1,98 +1,281 @@
+html {
+    $background_color: #111;
+    $middle_color: #333;
+    $front_color: white;
+    $theme_color: #c2185b;
+    $offset_color: #444;
+    background-color: $background_color !important;
+    body {
+        background-color: $background_color !important;
+        #app {
+            height: 100%;
+            .theme-container.homeOverwrite {
+                .sidebar {
+                    background-color: $background_color;
+                }
+            }
+            .theme-container {
+                background-color: $background_color;
+                height: 100%;
+                .navbar {
+                    background-color: $background_color;
+                    border-bottom: 0;
+                    .sidebar-button {
+                        svg {
+                            path {
+                                fill: $front_color;
+                            }
+                        }
+                    }
+                    .home-link {
+                        .site-name {
+                            color: $front_color;
+                        }
+                    }
+                    .links {
+                        background-color: $background_color;
+                        color: $front_color;
+                        .nav-links {
+                            .nav-item {
+                                .nav-link:hover {
+                                    color: $theme_color;
+                                }
+                                a.nav-link.router-link-active {
+                                    color: $theme_color;
+                                }
+                                .dropdown-wrapper {
+                                    .dropdown-title {
+                                        .title {
+                                            color: $front_color;
+                                        }
+                                        .title:hover {
+                                            color: $theme_color;
+                                        }
+                                    }
+                                    .nav-dropdown {
+                                        background-color: $middle_color;
+                                        border: 0;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                aside.sidebar {
+                    background-color: $middle_color - #111;
+                    -ms-overflow-style: none;
+                    overflow: -moz-scrollbars-none;
+                    border: 0;
+                    color: white;
+                    .nav-links {
+                        color: $front_color;
+                        border: 0;
+                        .nav-item {
+                            .nav-link:hover {
+                                color: $theme_color;
+                            }
+                            .dropdown-wrapper {
+                                .mobile-dropdown-title {
+                                    .title {
+                                        color: $front_color;
+                                    }
+                                    .title:hover {
+                                        color: $theme_color;
+                                    }
+                                }
+                                .nav-dropdown {
+                                    background-color: $background_color;
+                                    border: 0;
+                                }
+                            }
+                        }
+                    }
+                    .sidebar-links {
+                        li {
+                            .sidebar-group {
+                                .sidebar-heading {
+                                    color: $front_color;
+                                }
+                                .sidebar-group-items {
+                                    color: $front_color;
+                                    li {
+                                        a.sidebar-link {
+                                            color: $front_color;
+                                        }
+                                        a.sidebar-link.active {
+                                            color: $theme_color;
+                                        }
+                                    }
+                                }
+                            }
+                            .sidebar-sub-header {
+                                a.sidebar-link {
+                                    color: $front_color;
+                                }
+                                a.sidebar-link.active {
+                                    color: $theme_color;
+                                }
+                            }
+                            a.sidebar-link {
+                                color: $front_color;
+                            }
+                        }
+                    }
+                }
+                aside.sidebar::-webkit-scrollbar {
+                    width: 0 !important;
+                }
+                main.home {
+                    header.hero {
+                        p.action {
+                            margin-top: 70px;
+                        }
+                    }
+                    .features {
+                        border: 0;
+                        margin-top: 50px;
+                        .feature {
+                            h2,
+                            p {
+                                color: $front_color;
+                                cursor: text;
+                                user-select: text;
+                            }
+                            p {
+                                color: $front_color - $offset_color;
+                            }
+                        }
+                    }
+                    .footer {
+                        border: 0;
+                        color: $front_color - $offset_color;
+                    }
+                }
+                main.page {
+                    background-color: $middle_color;
+                    color: $front_color - $offset_color;
+                    h1,
+                    h2,
+                    h3,
+                    h4,
+                    h5,
+                    h6 {
+                        color: $front_color;
+                        code {
+                            color: #0e89ff;
+                        }
+                    }
+                    code {
+                        color: #84c3ff;
+                    }
+                    a > code {
+                        color: $theme_color;
+                    }
+                    a:hover {
+                        color: $theme_color;
+                    }
+                    h2 {
+                        border-bottom: 1px solid $middle_color + $offset_color;
+                    }
+                }
+            }
+        }
+    }
+}
 .theme-container.sidebar-open .sidebar {
-	box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
-	border: 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    border: 0;
 }
 .demo div.theme-default-content {
-	max-width: 40%;
+    max-width: 40%;
 }
-.theme-default-content #demo-background{
+.theme-default-content #demo-background {
     width: 100%;
     position: absolute;
     left: 0;
-    top:0;
+    top: 0;
 }
 
 .homeOverwrite {
-    user-select:none;
+    user-select: none;
 }
-.homeOverwrite .hero{
+.homeOverwrite .hero {
     z-index: 2;
-    height: 690px;
+    // height: 690px;
     position: relative;
-    pointer-events:none;
+    pointer-events: none;
 }
-.homeOverwrite .hero .action{
+.homeOverwrite .hero .action {
     pointer-events: all;
 }
-.homeOverwrite .hero #main-title{
+.homeOverwrite .hero #main-title {
     color: white;
-    font-size:2.5rem;
+    font-size: 2.5rem;
 }
-.homeOverwrite .home .hero .description{
+.homeOverwrite .home .hero .description {
     color: white;
 }
-.homeOverwrite .home .hero .action-button{
-    background-color:#c2185b;
-    border-bottom:1px solid #c2185b;
+.homeOverwrite .home .hero .action-button {
+    background-color: #c2185b;
+    border-bottom: 1px solid #c2185b;
 }
-.homeOverwrite .home .hero img{
-    width:40rem
+.homeOverwrite .home .hero img {
+    width: 40rem;
 }
-.homeOverwrite .home .hero .action-button:hover{
-    background-color:#e61c58
+.homeOverwrite .home .hero .action-button:hover {
+    background-color: #e61c58;
 }
 
 .homeOverwriteZh {
-    user-select:none;
+    user-select: none;
 }
-.homeOverwriteZh .hero{
+.homeOverwriteZh .hero {
     z-index: 2;
     height: 690px;
     position: relative;
-    pointer-events:none;
+    pointer-events: none;
 }
-.homeOverwriteZh .hero .action{
+.homeOverwriteZh .hero .action {
     pointer-events: all;
 }
-.homeOverwriteZh .hero #main-title{
+.homeOverwriteZh .hero #main-title {
     color: white;
-    font-size:2.5rem;
+    font-size: 2.5rem;
 }
-.homeOverwriteZh .home .hero .description{
+.homeOverwriteZh .home .hero .description {
     color: white;
 }
-.homeOverwriteZh .home .hero .action-button{
-    background-color:#c2185b;
-    border-bottom:1px solid #c2185b;
+.homeOverwriteZh .home .hero .action-button {
+    background-color: #c2185b;
+    border-bottom: 1px solid #c2185b;
 }
-.homeOverwriteZh .home .hero .action-button:hover{
-    background-color:#e61c58
+.homeOverwriteZh .home .hero .action-button:hover {
+    background-color: #e61c58;
 }
-.homeOverwriteZh .home .hero img{
-    width:40rem
+.homeOverwriteZh .home .hero img {
+    width: 40rem;
 }
 
 .sidebar,
 .navbar {
-	z-index: 10000;
+    z-index: 10000;
 }
 
-
 ::-webkit-scrollbar {
-	width: 8px;
-	background-color: #f5f5f5;
+    width: 8px;
+    background-color: #f5f5f5;
 }
 
 ::-webkit-scrollbar-thumb {
-	border-radius: 6px;
-	background-color: #ccc;
+    border-radius: 6px;
+    background-color: #ccc;
 }
 
 ::-webkit-scrollbar-track {
-	border-radius: 6px;
-	background-color: #f5f5f5;
+    border-radius: 6px;
+    background-color: #f5f5f5;
 }
 
 .theme-default-content a > code {
-	color: #3eaf7c;
+    color: #3eaf7c;
 }

@@ -261,60 +261,61 @@ export default function demo(id) {
     //     })
     // }
 
-    fetch('/airlines.json')
-        .then((res) => res.json())
-        .then((graph) => {
-            const div = document.getElementById(id)
-            div.style = 'background: black;'
-            const width = div.clientWidth
-            const height = document.getElementsByClassName('features')[0].offsetTop
-            const data = graph
-            graph.nodes.forEach((node) => {
-                node.x *= Math.min(width / 360, height / 180) * 0.8
-                node.y *= Math.min(width / 360, height / 180) * 0.8
-                node.x += width / 2
-                node.y += (height * 7) / 10
-            })
-            const netv = new NetV({
-                container: div,
-                width,
-                height,
-                link: {
-                    style: {
-                        strokeWidth: 1
-                    }
-                },
-                nodeLimit: 1e5,
-                linkLimit: 1e7,
-                backgroundColor: { r: 0, g: 0, b: 0, a: 1 },
-                node: {
-                    style: {
-                        strokeWidth: 0,
-                        // fill: { r: 0.05, g: 0.6, b: 1, a: 1 },
-                        fill: { r: 0.6, g: 0.6, b: 0.6, a: 1 },
-                        r: 1
-                    }
-                },
-                link: {
-                    style: {
-                        strokeWidth: 0,
-                        strokeColor: { r: 1, g: 0.4, b: 0, a: 0.2 } // { r: 0, g: 0.6, b: 1, a: 1 }
-                    }
-                }
-            })
-            function IsPC() {
-                var userAgentInfo = navigator.userAgent
-                var Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod']
-                var flag = true
-                for (var v = 0; v < Agents.length; v++) {
-                    if (userAgentInfo.indexOf(Agents[v]) > 0) {
-                        flag = false
-                        break
-                    }
-                }
-                return flag
+    const div = document.getElementById(id)
+    div.style = 'background: #111;'
+    const width = div.clientWidth
+    const height = document.getElementsByClassName('features')[0].offsetTop
+
+    function IsPC() {
+        var userAgentInfo = navigator.userAgent
+        var Agents = ['Android', 'iPhone', 'SymbianOS', 'Windows Phone', 'iPad', 'iPod']
+        var flag = true
+        for (var v = 0; v < Agents.length; v++) {
+            if (userAgentInfo.indexOf(Agents[v]) > 0) {
+                flag = false
+                break
             }
-            if (IsPC()) {
+        }
+        return flag
+    }
+    if (IsPC()) {
+        fetch('/airlines.json')
+            .then((res) => res.json())
+            .then((graph) => {
+                const data = graph
+                graph.nodes.forEach((node) => {
+                    node.x *= Math.min(width / 360, height / 180) * 0.8
+                    node.y *= Math.min(width / 360, height / 180) * 0.8
+                    node.x += width / 2
+                    node.y += (height * 7) / 10
+                })
+                const netv = new NetV({
+                    container: div,
+                    width,
+                    height,
+                    link: {
+                        style: {
+                            strokeWidth: 1
+                        }
+                    },
+                    nodeLimit: 1e5,
+                    linkLimit: 1e7,
+                    backgroundColor: { r: 0.063, g: 0.063, b: 0.063, a: 1 },
+                    node: {
+                        style: {
+                            strokeWidth: 0,
+                            // fill: { r: 0.05, g: 0.6, b: 1, a: 1 },
+                            fill: { r: 0.6, g: 0.6, b: 0.6, a: 1 },
+                            r: 1
+                        }
+                    },
+                    link: {
+                        style: {
+                            strokeWidth: 0,
+                            strokeColor: { r: 1, g: 0.4, b: 0, a: 0.2 } // { r: 0, g: 0.6, b: 1, a: 1 }
+                        }
+                    }
+                })
                 netv.data(data)
 
                 const n = netv.nodes().length
@@ -413,6 +414,6 @@ export default function demo(id) {
                     })
                     netv.draw()
                 }, interval)
-            }
-        })
+            })
+    }
 }

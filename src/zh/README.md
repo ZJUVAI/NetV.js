@@ -1,7 +1,7 @@
 ---
 pageClass: homeOverwriteZh
 home: true
-heroImage: /logo.svg
+heroImage: /title.svg
 heroText: A Large-scale Network Visualization Library
 tagline: 基于WebGL的大规模图可视化引擎
 actionText: 快速上手 →
@@ -15,5 +15,6 @@ features:
       details: 提供多种图可视化组件、图可视分析技术
 footer: MIT License | Copyright © 2019-present VAG in Zhejiang University
 ---
+
 <demo-background/>
-<demo-table/>
+<!-- <demo-table/> -->
