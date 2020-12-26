@@ -23,6 +23,7 @@ export class Renderer {
     public modifiedElementsCount = 0 // record modified link num to control lazy update
     public shouldLazyUpdate = false // flag to control lazy update
 
+    public pixelRatio: number
     private gl: WebGL2RenderingContext
     private backgroundColor: Color
     private width: number
@@ -57,6 +58,8 @@ export class Renderer {
         this.backgroundColor = backgroundColor
         this.width = width
         this.height = height
+
+        this.pixelRatio = window.devicePixelRatio || 1
 
         this.getAllNodes = getAllNodes
         this.getAllLinks = getAllLinks
@@ -202,7 +205,7 @@ export class Renderer {
      * @param y y pos
      */
     public readIdTexture(position: Position): number {
-        const ratio = window.devicePixelRatio || 1
+        const ratio = this.pixelRatio
         this.gl.bindFramebuffer(this.gl.READ_FRAMEBUFFER, this.idTexture)
         const readPixelBuffer = new Uint8Array([255, 255, 255, 255]) // -1
         this.gl.readPixels(
@@ -236,7 +239,7 @@ export class Renderer {
      */
     private initIdTexture() {
         const gl = this.gl
-        const pixelRatio = window.devicePixelRatio || 1
+        const pixelRatio = this.pixelRatio
         const screenWidth = this.width * pixelRatio
         const screenHeight = this.height * pixelRatio
 

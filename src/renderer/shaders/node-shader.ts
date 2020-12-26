@@ -6,8 +6,7 @@ vertex.inputs = {
     in_shape: 'float',
     in_position: 'vec2',
     in_offset: 'vec2',
-    in_width: 'float',
-    in_height: 'float',
+    in_size: 'vec2', // width & height
     in_innerSize: 'vec2',
     in_rotate: 'float',
     in_r: 'float',
@@ -21,8 +20,7 @@ vertex.inputs = {
 vertex.outputs = {
     position: 'vec2',
     shape: 'float',
-    width: 'float', // rect
-    height: 'float', // rect
+    size: 'vec2', // width & height
     innerSize: 'vec2',
     rotate: 'float', // rect
     r: 'float', // circle
@@ -59,7 +57,7 @@ vertex.methods = [
         `   float cos_alpha = (pow(b, 2.0) + pow(c, 2.0) - pow(a, 2.0)) / (2.0 * b * c);`,
         `   float sin_alpha = sqrt(1.0 - pow(cos_alpha, 2.0));`,
         `   float normal_length = sin_alpha * a;`,
-        `   float stroke_scale = 1.0 + strokeWidth / 2.0 * pixelRatio / normal_length;`,
+        `   float stroke_scale = 1.0 + strokeWidth / 2.0 / normal_length;`,
         `   return stroke_scale;`,
         `}`
     ]
@@ -67,8 +65,9 @@ vertex.methods = [
 vertex.main = [
     `void main(void) {`,
     `   r = in_r;`,
-    `   width = in_width;`,
-    `   height = in_height;`,
+    `   size = in_size;`,
+    `   float width = size.x;`,
+    `   float height = size.y;`,
     `   innerSize = in_innerSize;`,
     `   shape = in_shape;`,
     `   fill = in_fill;`,
@@ -76,9 +75,9 @@ vertex.main = [
     `   strokeWidth = in_strokeWidth;`,
     `   rotate = in_rotate;`,
     `   position = scale * (in_position + in_offset) + translate;`,
-    `   vertexAlpha = in_vertexAlpha * pixelRatio;`,
-    `   vertexBeta = in_vertexBeta * pixelRatio;`,
-    `   vertexGamma = in_vertexGamma * pixelRatio;`,
+    `   vertexAlpha = in_vertexAlpha;`,
+    `   vertexBeta = in_vertexBeta;`,
+    `   vertexGamma = in_vertexGamma;`,
     `   mat3 scale_mat = mat3(`,
     `       1, 0, 0,`,
     `       0, 1, 0,`,
@@ -166,7 +165,7 @@ fragment.methods = [
         `    float cos_alpha = (pow(b, 2.0) + pow(c, 2.0) - pow(a, 2.0)) / (2.0 * b * c);`,
         `    float sin_alpha = sqrt(1.0 - pow(cos_alpha, 2.0));`,
         `    float normal_length = sin_alpha * a;`,
-        `    float stroke_scale = 1.0 + strokeWidth / 2.0 * pixelRatio / normal_length;`,
+        `    float stroke_scale = 1.0 + strokeWidth / 2.0 / normal_length;`,
         `    return stroke_scale;`,
         `}`
     ],
@@ -222,6 +221,8 @@ fragment.methods = [
 
     [
         `float inRect() {`,
+        `    float width = size.x;`,
+        `    float height = size.y;`,
         `    vec2 flip_pos = position;`,
         `    flip_pos.y = viewport.y - position.y;`,
         `    mat2 rotate_mat = mat2(`,
@@ -237,6 +238,8 @@ fragment.methods = [
 
     [
         `float inRectBorder() {`,
+        `    float width = size.x;`,
+        `    float height = size.y;`,
         `    vec2 flip_pos = position;`,
         `    flip_pos.y = viewport.y - position.y;`,
         `    mat2 rotate_mat = mat2(`,
@@ -264,6 +267,8 @@ fragment.methods = [
         `    vec2 rotate_related_FragCoord = rotate_mat * (gl_FragCoord.xy / pixelRatio - flip_pos);`,
         `    float innerWidth = innerSize.x;`,
         `    float innerHeight = innerSize.y;`,
+        `    float width = size.x;`,
+        `    float height = size.y;`,
         `    float x_in1 = step(rotate_related_FragCoord.x, width / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - width / 2.0 + strokeWidth / 2.0));`,
         `    float y_in1 = step(rotate_related_FragCoord.y, innerHeight / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - innerHeight / 2.0 + strokeWidth / 2.0));`,
         `    float x_in2 = step(rotate_related_FragCoord.x, innerWidth / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - innerWidth / 2.0 + strokeWidth / 2.0));`,
@@ -283,7 +288,8 @@ fragment.methods = [
         `    vec2 rotate_related_FragCoord = rotate_mat * (gl_FragCoord.xy / pixelRatio - flip_pos);`,
         `    float innerWidth = innerSize.x;`,
         `    float innerHeight = innerSize.y;`,
-
+        `    float width = size.x;`,
+        `    float height = size.y;`,
         // TODO: need refactor
         `    float x_in1 = step(rotate_related_FragCoord.x, width / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - width / 2.0 + strokeWidth / 2.0));`,
         `    float y_in1 = step(rotate_related_FragCoord.y, innerHeight / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - innerHeight / 2.0 + strokeWidth / 2.0));`,
