@@ -73,14 +73,9 @@ module.exports = {
                     }
                 ],
                 sidebar: {
-                    '/guide/': [
-                        '',
-                        'getting-start'
-                        // 'development-guide',
-                        // 'development-guide-chinese',
-                    ],
-                    '/API/': [''],
-                    '/component/': ['example-basic']
+                    '/guide/': ['', 'getting-start'],
+                    '/API/': ['', 'node', 'link', 'interfaces', 'utils'],
+                    '/component/': ['', 'example-basic']
                 },
                 lastUpdated: 'Last Updated' // 文档更新时间：每个文件git最后提交的时间
             },
@@ -126,7 +121,7 @@ module.exports = {
                         // 'development-guide',
                         // 'development-guide-chinese',
                     ],
-                    '/zh/API/': [''],
+                    '/zh/API/': ['', 'node', 'link', 'interfaces', 'utils'],
                     '/zh/component/': ['']
                 },
                 lastUpdated: 'Last Updated' // 文档更新时间：每个文件git最后提交的时间

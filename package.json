@@ -12,7 +12,7 @@
     "license": "MIT",
     "devDependencies": {
         "@vuepress/plugin-active-header-links": "^1.5.1",
-        "vuepress": "^1.5.1",
+        "vuepress": "^1.7.1",
         "vuepress-plugin-smooth-scroll": "0.0.9"
     },
     "dependencies": {

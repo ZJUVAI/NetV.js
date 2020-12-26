@@ -162,11 +162,11 @@ html {
                     h6 {
                         color: $front_color;
                         code {
-                            color: #0e89ff;
+                            color: $theme_color;
                         }
                     }
                     code {
-                        color: #84c3ff;
+                        color: #40a3ff;
                     }
                     a > code {
                         color: $theme_color;
@@ -181,6 +181,8 @@ html {
             }
         }
         .language-js,
+        .language-ts,
+        .language-typescript,
         .language-javascript {
             background-color: $offset_color;
         }
