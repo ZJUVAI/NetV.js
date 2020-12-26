@@ -20,6 +20,11 @@
                 style: {
                     strokeWidth: 1
                 }
+            },
+            node: {
+                style: {
+                    r: 5
+                }
             }
         })
         const data = NetV.Utils.transformGraphPosition(
@@ -56,7 +61,13 @@
 
         const lasso = new Lasso(netv, { enable: true })
         lasso.onSelected((selectedItems) => {
-            console.log(selectedItems)
+            netv.nodes().forEach((node) => {
+                node.r(5)
+            })
+            selectedItems.forEach((node) => {
+                node.r(10)
+            })
+            netv.draw()
         })
     </script>
 </html>
