@@ -6,6 +6,7 @@
 import Node from '../elements/node'
 import Link from '../elements/link'
 import { Color } from '../interfaces'
+import { Shader } from './utils'
 
 export interface RendererConfigs {
     canvas: HTMLCanvasElement
@@ -44,11 +45,8 @@ export interface ElementManagerConfigs {
 export type NodeManagerConfigs = ElementManagerConfigs
 export type LinkManagerConfigs = ElementManagerConfigs
 
-export interface ShaderSeries {
-    vertex: string
-    fragment: string
-    idVertex: string
-    idFragment: string
+export interface Shaders {
+    [index: string]: Shader
 }
 
 export interface Variable {
