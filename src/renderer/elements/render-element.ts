@@ -1,5 +1,5 @@
 import * as interfaces from '../../interfaces'
-import { RenderAttribute, ShaderSeries } from '../interfaces'
+import { RenderAttribute, Shaders } from '../interfaces'
 import {
     createProgram,
     createArrayBuffer,
@@ -35,7 +35,7 @@ export class RenderElementManager {
     public constructor(
         gl: WebGL2RenderingContext,
         params: any,
-        shaderSeries: ShaderSeries,
+        shaders: Shaders,
         idTexture: WebGLTexture
     ) {
         const { limit, width, height, instanceVerteces } = params
@@ -45,19 +45,19 @@ export class RenderElementManager {
         this.height = height
         this.pixelRatio = window.devicePixelRatio || 1
 
-        this.attributes = extractAttributesFromShader(shaderSeries.vertex)
+        this.attributes = extractAttributesFromShader(shaders.vertex)
         this.program = createProgram(
             this.gl,
-            shaderSeries.vertex,
-            shaderSeries.fragment,
+            shaders.vertex.connect(),
+            shaders.fragment.connect(),
             this.attributes
         )
 
-        this.idAttributes = extractAttributesFromShader(shaderSeries.idVertex)
+        this.idAttributes = extractAttributesFromShader(shaders.idVertex)
         this.idProgram = createProgram(
             this.gl,
-            shaderSeries.idVertex,
-            shaderSeries.idFragment,
+            shaders.idVertex.connect(),
+            shaders.idFragment.connect(),
             this.idAttributes
         )
 
@@ -200,36 +200,36 @@ export class RenderElementManager {
                 )
                 if (!attr.isBuildIn) this.gl.vertexAttribDivisor(attr.location, 1)
             })
+
+            this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
+
+            // draw id
+            this.gl.blendFunc(this.gl.ONE, this.gl.ZERO)
+            this.gl.useProgram(this.idProgram)
+            this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.idTexture)
+
+            this.idAttributes.forEach((attr) => {
+                this.gl.enableVertexAttribArray(attr.location)
+            })
+
+            const attr = this.idAttributes.get('in_id') // ! HARDCODE CHECK
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+            this.gl.vertexAttribPointer(
+                attr.location,
+                attr.size,
+                this.gl.FLOAT,
+                false,
+                attr.size * attr.array.BYTES_PER_ELEMENT,
+                0
+            )
+            this.gl.vertexAttribDivisor(attr.location, 1)
+
+            this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
+            this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null)
+
+            this.gl.enable(this.gl.BLEND)
+            this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
         }
-
-        this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
-
-        // draw id
-        this.gl.blendFunc(this.gl.ONE, this.gl.ZERO)
-        this.gl.useProgram(this.idProgram)
-        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.idTexture)
-
-        this.idAttributes.forEach((attr) => {
-            this.gl.enableVertexAttribArray(attr.location)
-        })
-
-        const attr = this.idAttributes.get('in_id') // ! HARDCODE CHECK
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
-        this.gl.vertexAttribPointer(
-            attr.location,
-            attr.size,
-            this.gl.FLOAT,
-            false,
-            attr.size * attr.array.BYTES_PER_ELEMENT,
-            0
-        )
-        this.gl.vertexAttribDivisor(attr.location, 1)
-
-        this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
-        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null)
-
-        this.gl.enable(this.gl.BLEND)
-        this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
     }
 
     /**

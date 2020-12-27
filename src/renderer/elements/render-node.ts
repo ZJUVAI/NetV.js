@@ -3,9 +3,10 @@
  * @description Node using in Renderer
  */
 
-import { NodeManagerConfigs, ShaderSeries } from '../interfaces'
+import { NodeManagerConfigs, Shaders } from '../interfaces'
 import Node from '../../elements/node'
 import { RenderElementManager } from './render-element'
+import { Shader } from '../utils'
 
 export class RenderNodeManager extends RenderElementManager {
     // private idToIndex: { [key: string]: number }
@@ -19,7 +20,8 @@ export class RenderNodeManager extends RenderElementManager {
     public constructor(
         gl: WebGL2RenderingContext,
         params: NodeManagerConfigs,
-        shaders: ShaderSeries,
+        shaders: Shaders,
+        // shaders: ShaderSeries,
         idTexture: WebGLTexture
     ) {
         super(
