@@ -263,8 +263,6 @@ export default function demo(id) {
 
     const div = document.getElementById(id)
     div.style = 'background: #111;'
-    const width = div.clientWidth
-    const height = document.getElementsByClassName('features')[0].offsetTop
 
     function IsPC() {
         var userAgentInfo = navigator.userAgent
@@ -282,6 +280,8 @@ export default function demo(id) {
         fetch('/airlines.json')
             .then((res) => res.json())
             .then((graph) => {
+                const width = div.clientWidth
+                const height = document.getElementsByClassName('features')[0].offsetTop
                 const data = graph
                 graph.nodes.forEach((node) => {
                     node.x *= Math.min(width / 360, height / 180) * 0.8
