@@ -244,3 +244,14 @@ node1.innerWidth(40)
 node1.innerHeight(30)
 node1.strokeWidth(10)
 ```
+
+## Interactions
+
+### `Node.on()`
+
+`Node.on(eventName: string, callback?: (e:Event) => {})`: add event listeners on a node.
+Supported eventName: `'mousedown'`, `'mouseup'`, `'click'`, `'dragstart'`, `'dragging'`, `'dragend'`, `'mouseover'`, and `'mouseout'`.
+
+### `Node.off()`
+
+`Node.off(eventName, callback?: (e:Event) => {})`: remove event listeners on a node according to the callback. Only the input callback will be removed. For example, `somenode.off('click', clickCallback)` only removes the `clickCallback` function from all `'click'` callbacks on `somenode`.

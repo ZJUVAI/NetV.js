@@ -10,16 +10,27 @@ sidebarDepth: 2
 interface InitializationConfigurations {
     container: HTMLDivElement
     node: {
-        r: number
-        fill: Color
-        strokeWidth: number
-        strokeColor: Color
-        clickCallback: (node: Node) => {}
+        style: {
+            shape: string
+            fill: Color
+            strokeWidth: number
+            strokeColor: Color
+            rotate: number
+            r: number
+            width: number
+            height: number
+            vertexAlpha: Position
+            vertexBeta: Position
+            vertexGamma: Position
+            innerWidth: number
+            innerHeight: number
+        }
     }
     link: {
-        strokeWidth: number
-        strokeColor: Color
-        clickCallback: (link: Link) => {}
+        style: {
+            strokeWidth: number
+            strokeColor: Color
+        }
     }
     width: number
     height: number
@@ -32,16 +43,27 @@ interface InitializationConfigurations {
 The [initializationConfigurations](interfaces.html#InitializationConfigurations) is the interface of the `NetV` initialization configurations.
 
 -   `container` configures the container of the visualization. It is a `<div>` element. Visualizations and interactions are supported within the container. It is **required**.
--   `node` configures the default node appearance and behaviors. The node is visualized as a circle in _NetV.js_.
-    -   `r` is a number. It configures the radius of a node. Its default value is `5`.
-    -   `fill` is a [Color](interfaces.html#color) object. It configures the fill color of a node. Its default value is `{r: 0.2, g: 0.6, b: 0.2, a: 0.8}`.
-    -   `strokeWidth` is a number. It configures the border width of a node. Its default value is `2`.
-    -   `strokeColor` is a [Color](interfaces.html#color) object. It configures the border color of a node. Its default value is `{ r: 0.9, g: 0.9, b: 0.9, a: 0.6 }`.
-    -   `clickCallback` is a function. It is the callback function while the cursor clicks on a node. Its default value is a void function: `(node: Node)=>{}`.
--   `link` configures the default link appearance and behaviors. The link is visualized as a straight line in _NetV.js_.
-    -   `strokeWidth` is a number. It configures the width of a link. Its default value is `2`.
-    -   `strokeColor` is a [Color](interfaces.html#color) object. It configures the color of a link. Its default value is `{ r: 0.4, g: 0.6, b: 0.8, a: 0.5 }`.
-    -   `clickCallback` is a function. It is the callback function while the cursor clicks on a link. Its default value is a void function: `(link: Link)=>{}`.
+-   `node` configures the default node appearance and behaviors.
+    -   `style` property configures the default node's appearance. In default, a node is visualized as a circle in _NetV.js_.
+        -   `shape`
+        -   `fill` is a [Color](interfaces.html#color) object. It configures the fill color of a node. Its default value is `{r: 0.2, g: 0.6, b: 0.2, a: 0.8}`.
+        -   `strokeWidth` is a number. It configures the border width of a node. Its default value is `2`.
+        -   `strokeColor` is a [Color](interfaces.html#color) object. It configures the border color of a node. Its default value is `{ r: 0.9, g: 0.9, b: 0.9, a: 0.6 }`.
+        -   `rotate`
+        -   `r` is a number. It configures the radius of a node. Its default value is `5`.
+        -   `width`
+        -   `height`
+        -   `vertexAlpha`
+        -   `vertexBeta`
+        -   `vertexGamma`
+        -   `innerWidth`
+        -   `innerHeight`
+-   `link` configures the default link appearance and behaviors.
+
+    -   `style` property configures the default link's appearance. In default, a link is visualized as a straight line in _NetV.js_.
+        -   `strokeWidth` is a number. It configures the width of a link. Its default value is `2`.
+        -   `strokeColor` is a [Color](interfaces.html#color) object. It configures the color of a link. Its default value is `{ r: 0.4, g: 0.6, b: 0.8, a: 0.5 }`.
+
 -   `width` is a number. It configures the default container width. Its default value is `800`.
 -   `height` is a number. It configures the default container height. Its default value is `600`.
 -   `backgroundColor` is a [Color](interfaces.html#color) object. It configures the default container background color. Its default value is `{ r: 1, g: 1, b: 1, a: 1 }` (white).

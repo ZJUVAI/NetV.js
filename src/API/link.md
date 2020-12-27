@@ -4,7 +4,7 @@ sidebarDepth: 2
 
 # Link
 
-[`Link`](link.html) is a basic element in _NetV.js_. It is visualized as a straight line (without an arrow) in default.
+[`Link`](link.html) is a basic element in [_NetV.js_](/). It is visualized as a straight line (without an arrow) in default.
 
 ## Manipulation
 
@@ -39,15 +39,6 @@ Get or set both the source and the target nodes of the link.
 
 ## Style
 
-<img :src="$withBase('/link-style.svg')" alt="link-style">
-
-```typescript
-const linkOneTwo = netV.getLinkByEnds(['1', '2'])
-link.strokeWidth(4)
-link.strokeColor({ r: 0, g: 0.44, b: 0.74, a: 1 })
-netV.draw()
-```
-
 ### `Link.strokeColor()`
 
 Get or set the color of the link.
@@ -61,3 +52,14 @@ Get or set the width of the link
 
 -   `Link.strokeWidth()`: return the width of the link (a number).
 -   `Link.strokeWidth( number )`: set the width of the link.
+
+## Interactions
+
+### `Link.on()`
+
+`Link.on(eventName: string, callback?: (e:Event) => {})`: add event listeners on a link.
+Supported eventName: `'mousedown'`, `'mouseup'`, `'click'`, `'mouseover'`, and `'mouseout'`.
+
+### `Link.off()`
+
+`Link.off(eventName, callback?: (e:Event) => {})`: remove event listeners on a link according to the callback. Only the input callback will be removed. For example, `somelink.off('click', clickCallback)` only removes the `clickCallback` function from all `'click'` callbacks on `somelink`.
