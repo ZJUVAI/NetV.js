@@ -15,12 +15,12 @@ export default {
             nodes: [
                 {
                     id: '0',
-                    x: Math.round(width / 40) * 10,
+                    x: Math.round(width / 30) * 10,
                     y: 100
                 },
                 {
                     id: '1',
-                    x: Math.round(width / 40) * 30,
+                    x: Math.round(width / 30) * 20,
                     y: 100
                 }
             ]

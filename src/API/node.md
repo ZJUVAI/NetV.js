@@ -113,7 +113,14 @@ const netv = new NetV({
 -   `Node.strokeWidth()`: return the border width of the node (a number).
 -   `Node.strokeWidth( number )`: set the border width of the node.
 
-### Shape: `'circle'`
+#### `Node.rotate()`
+
+-   `Node.rotate()`: return the rotate angle (clockwise) of the node (a number).
+-   `Node.rotate( number )`: set the border width of the node.
+
+Note: the node will be rotated around the center of the node. For the triangle shape, it will be rotated around its relative origin.
+
+### 🟢 Shape: `'circle'`
 
 #### `Node.r()`
 
@@ -136,7 +143,7 @@ netv.getNodeById('3').r(40)
 netv.getNodeById('3').strokeWidth(40)
 ```
 
-### Shape: `'rect'`
+### 🟦 Shape: `'rect'`
 
 #### `Node.width()`
 
@@ -162,7 +169,7 @@ netv.getNodeById('1').height(40)
 netv.getNodeById('1').strokeWidth(20)
 ```
 
-### Shape: `'triangle'`
+### 🔺 Shape: `'triangle'`
 
 #### `Node.vertexAlpha()`
 
@@ -179,7 +186,25 @@ netv.getNodeById('1').strokeWidth(20)
 -   `Node.vertexGamma()`: return the gamma vertex of the triangle (a [`Position`](interfaces.html#position)).
 -   `Node.vertexGamma(`[`Position`](interfaces.html#position)`)`: set the gamma vertex of the triangle with a [`Position`](interfaces.html#position).
 
-### Shape: `'cross'`
+<node-triangle/>
+
+Note: The positions of the triangle's verteces is relative to its origin. The origin of the triangle is where its corresponding links departure or arrive.
+// 三角形的三个顶点的坐标都是相对于其原点而言的。三角形的原点指的是，它对应的边出发或到达的位置。
+
+```javascript
+netv.getNodeById('0').vertexAlpha({ x: 0, y: -40 })
+netv.getNodeById('0').vertexBeta({ x: 20 * Math.sqrt(3), y: 20 })
+netv.getNodeById('0').vertexGamma({ x: -20 * Math.sqrt(3), y: 20 })
+netv.getNodeById('0').strokeWidth(0)
+
+// if set strokeWidth to 20
+netv.getNodeById('1').vertexAlpha({ x: 0, y: -40 })
+netv.getNodeById('1').vertexBeta({ x: 20 * Math.sqrt(3), y: 20 })
+netv.getNodeById('1').vertexGamma({ x: -20 * Math.sqrt(3), y: 20 })
+netv.getNodeById('1').strokeWidth(20)
+```
+
+### ➕ Shape: `'cross'`
 
 #### `Node.width()`
 
@@ -200,3 +225,22 @@ netv.getNodeById('1').strokeWidth(20)
 
 -   `Node.innerHeight()`: return the vertical thickness of the rectangle (a number).
 -   `Node.innerHeight( number )`: set the vertical thickness of the rectangle.
+
+<node-cross/>
+
+```javascript
+const node0 = netv.getNodeById('0')
+node0.width(80)
+node0.height(60)
+node0.innerWidth(40)
+node0.innerHeight(30)
+node0.strokeWidth(0)
+
+// if set strokeWidth to 10
+const node1 = netv.getNodeById('1')
+node1.width(80)
+node1.height(60)
+node1.innerWidth(40)
+node1.innerHeight(30)
+node1.strokeWidth(10)
+```
