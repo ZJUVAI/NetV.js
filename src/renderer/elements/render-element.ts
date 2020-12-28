@@ -54,6 +54,7 @@ export class RenderElementManager {
         )
 
         this.idAttributes = extractAttributesFromShader(shaders.idVertex)
+        console.log(shaders.idFragment.connect())
         this.idProgram = createProgram(
             this.gl,
             shaders.idVertex.connect(),
