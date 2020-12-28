@@ -334,17 +334,26 @@ fragment.main = [
     `    if (shape == 0.0) {`,
     `        // circle shape`,
     `        // border check, using 0.5(center of smoothstep)`,
-    `        if (inCircle() < 0.0001 && (strokeWidth < 0.8 || inCircleBorder() < 0.5)) {`,
+    `        if (inCircle() < 0.1 && (inCircleBorder() < 0.1)) {`,
     `            discard;`,
     `        }`,
     `        fragmentColor = inCircleBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inCircle() * vec4(fill.rgb * fill.a, fill.a);`,
     `    } else if (shape == 1.0) {`,
+    `        if (inRect() < 0.5 && (inRectBorder() < 0.5)) {`,
+    `            discard;`,
+    `        }`,
     `        // rect shape`,
     `        fragmentColor = inRectBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inRect() * vec4(fill.rgb * fill.a, fill.a);`,
     `    } else if (shape == 2.0) {`,
+    `        if (inTriangle() < 0.5 && (inTriangleBorder() < 0.5)) {`,
+    `            discard;`,
+    `        }`,
     `        // triangle shape`,
     `        fragmentColor = inTriangleBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inTriangle() * vec4(fill.rgb * fill.a, fill.a);`,
     `    } else if (shape == 3.0) {`,
+    `        if (inCross() < 0.5 && (inCrossBorder() < 0.5)) {`,
+    `            discard;`,
+    `        }`,
     `        // cross shape`,
     `        fragmentColor = inCrossBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inCross() * vec4(fill.rgb * fill.a, fill.a);`,
     `    }`,
@@ -353,12 +362,15 @@ fragment.main = [
 
 const idFragment = fragment.copy()
 idFragment.inputs['id'] = 'vec4'
-// delete old fragmentColor
-idFragment.main.splice(7, 1)
-idFragment.main.splice(9, 1)
-idFragment.main.splice(11, 1)
-idFragment.main.splice(13, 1)
-// add new fragmentColor
-idFragment.main.splice(-1, 0, `fragmentColor = id;`)
+// delete old fragmentColor and add new fragmentColor
+const sentencesTobeReplaced = [
+    `        fragmentColor = inCircleBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inCircle() * vec4(fill.rgb * fill.a, fill.a);`,
+    `        fragmentColor = inRectBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inRect() * vec4(fill.rgb * fill.a, fill.a);`,
+    `        fragmentColor = inTriangleBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inTriangle() * vec4(fill.rgb * fill.a, fill.a);`,
+    `        fragmentColor = inCrossBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inCross() * vec4(fill.rgb * fill.a, fill.a);`
+]
+sentencesTobeReplaced.forEach((sentence) => {
+    idFragment.main[idFragment.main.indexOf(sentence)] = `fragmentColor = id;`
+})
 
 export { vertex, idVertex, fragment, idFragment }

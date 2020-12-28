@@ -134,7 +134,13 @@ fragment.main = [
 
 const idFragment = fragment.copy()
 idFragment.inputs['id'] = 'vec4'
-idFragment.main[3] = `fragmentColor = id;` // NOTE: for id fragment, change color to id.
-idFragment.main[14] = `fragmentColor = id;` // NOTE: for id fragment, change color to id.
+
+const sentencesTobeReplaced = [
+    `    fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
+    `      fragmentColor = inCurve * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`
+]
+sentencesTobeReplaced.forEach((sentence) => {
+    idFragment.main[idFragment.main.indexOf(sentence)] = `fragmentColor = id;`
+})
 
 export { vertex, idVertex, fragment, idFragment }
