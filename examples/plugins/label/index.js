@@ -6,7 +6,7 @@ const netv = new NetV({
     container: document.getElementById('main'),
     node: {
         style: {
-            r: 8,
+            r: 8
         }
     },
     link: {
@@ -59,6 +59,8 @@ netv.on('pan', () => {
 netv.on('zoom', () => {
     labelManager.updatePosition(netv.nodes())
 })
-node.on('dragging', () => {
-    labelManager.updatePosition(node)
-})
+netv.nodes().forEach((node) =>
+    node.on('dragging', () => {
+        labelManager.updatePosition(node)
+    })
+)
