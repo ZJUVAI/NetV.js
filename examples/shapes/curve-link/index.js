@@ -1,6 +1,11 @@
 const netv = new NetV({
     container: document.getElementById('main'),
     link: {
+        node: {
+            style: {
+                r: 8
+            }
+        },
         style: {
             strokeWidth: 1,
             shape: 'curve'
