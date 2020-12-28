@@ -1,6 +1,6 @@
 /**
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
- * @description lasso operation
+ * @description build-in miserables dataset load and draw
  */
 const netv = new NetV({
     container: document.getElementById('main'),
@@ -12,11 +12,6 @@ const netv = new NetV({
     link: {
         style: {
             strokeWidth: 1
-        }
-    },
-    node: {
-        style: {
-            r: 5
         }
     }
 })
@@ -44,16 +39,39 @@ data.nodes.forEach((node) => {
 netv.data(data)
 netv.draw()
 
-netv.on('pan', () => {})
-netv.on('zoom', () => {})
+netv.on('zoom', () => { })
+netv.on('pan', () => { })
+netv.nodes().forEach((node) => {
+    const unhighlightLink = (link) => {
+        link.strokeColor({
+            ...link.strokeColor(),
+            a: 0.01
+        })
+    }
 
-const lasso = new Lasso(netv, { enable: true })
-lasso.onSelected((selectedItems) => {
-    netv.nodes().forEach((node) => {
-        node.r(5)
+    const highlightLink = (link) => {
+        link.strokeColor({
+            ...link.strokeColor(),
+            a: 0.5
+        })
+    }
+
+    const neighborLinks = node.neighborLinks()
+
+    const mouseover = () => {
+        netv.links().forEach(unhighlightLink)
+        neighborLinks.forEach(highlightLink)
+        netv.draw()
+    }
+    const mouseout = () => {
+        netv.links().forEach(highlightLink)
+        netv.draw()
+    }
+    node.on('mouseover', mouseover)
+    node.on('mouseout', mouseout)
+    node.on('click', () => {
+        node.off('mouseover', mouseout)
+        node.off('mouseover', mouseover)
     })
-    selectedItems.forEach((node) => {
-        node.r(10)
-    })
-    netv.draw()
+    node.on('dragging', () => { })
 })

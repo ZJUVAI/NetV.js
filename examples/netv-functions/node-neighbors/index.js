@@ -4,6 +4,11 @@
  */
 const netv = new NetV({
     container: document.getElementById('main'),
+    node: {
+        style: {
+            r: 8,
+        }
+    },
     link: {
         style: {
             strokeWidth: 1
@@ -38,8 +43,8 @@ data.links.forEach((link) => {
 netv.data(data)
 netv.draw()
 
-netv.on('zoom', () => {})
-netv.on('pan', () => {})
+netv.on('zoom', () => { })
+netv.on('pan', () => { })
 netv.nodes().forEach((node) => {
     const unhighlightLink = (link) => {
         link.strokeColor({
@@ -72,7 +77,7 @@ netv.nodes().forEach((node) => {
         node.off('mouseover', mouseout)
         node.off('mouseover', mouseover)
     })
-    node.on('dragging', () => {})
+    node.on('dragging', () => { })
 })
 
 netv.nodes().forEach((node) =>
