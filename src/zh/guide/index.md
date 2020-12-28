@@ -47,8 +47,20 @@ NetV.js: A Network Visualization Library.
 
 ### FPS 测试
 
-<img :src="$withBase('/fps-table-zh.jpg')" alt="fps-table-zh">
-<img :src="$withBase('/fps-line.jpg')" alt="fps-line">
+| 节点数量 | 2e3 | 1e4 | 2e4 | 4e4 | 1e5 | 2e5 | 4e5 | 1e6 | 2e6 |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+NetV |	119 |	117 |	111 |	107 |	40 |	18 |	7 |	2 | -
+Stardust |	118	| 118 |	117 |	115 |	68 |	34 | - | - | -		
+D3SVG |	65 |	12 |	6 |	3 | - | - | -	| - | -
+D3Canvas |	116 |	117 |	116 |	60 |	23 |	11 |	5 |	2 | -
+Cytoscape |	30 |	5 |	2			| - | - | -	| - | -	| -
+Sigma.js (WebGL) |	116 |	58 |	29 |	14 |	5 |	2 | - | - | -
+
+
+<img :src="$withBase('/fps-compare-white.png')" alt="fps-compare">
+
+<!-- <img :src="$withBase('/fps-table-zh.jpg')" alt="fps-table-zh"> -->
+<!-- <img :src="$withBase('/fps-line.jpg')" alt="fps-line"> -->
 
 ### Sigma.js
 
