@@ -17,6 +17,9 @@ html {
             .theme-container {
                 background-color: $background_color;
                 height: 100%;
+                .navbar .homeOverwrite {
+                    background-color: transparent;
+                }
                 .navbar {
                     background-color: $background_color;
                     border-bottom: 0;
@@ -200,6 +203,7 @@ html {
     position: absolute;
     left: 0;
     top: 0;
+    overflow: hidden;
 }
 
 .homeOverwrite {
