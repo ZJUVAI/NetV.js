@@ -1,4 +1,5 @@
-import { RenderAttribute, ShaderSeries } from '../interfaces'
+import * as interfaces from '../../interfaces'
+import { RenderAttribute, Shaders } from '../interfaces'
 import {
     createProgram,
     createArrayBuffer,
@@ -10,6 +11,9 @@ import Node from '../../elements/node'
 import Link from '../../elements/link'
 
 export class RenderElementManager {
+    public attributes: Map<string, RenderAttribute>
+    public pixelRatio: number
+
     protected gl: WebGL2RenderingContext
     // the capablity of the render manager,
     // which means how many elements can be rendered
@@ -17,10 +21,8 @@ export class RenderElementManager {
     protected count = 0
     protected width: number
     protected height: number
-    protected pixelRatio: number
 
     protected program: WebGLProgram
-    protected attributes: Map<string, RenderAttribute>
 
     // id shaders are design for mapping canvas pixels to elements
     protected idProgram: WebGLProgram
@@ -33,7 +35,7 @@ export class RenderElementManager {
     public constructor(
         gl: WebGL2RenderingContext,
         params: any,
-        shaderSeries: ShaderSeries,
+        shaders: Shaders,
         idTexture: WebGLTexture
     ) {
         const { limit, width, height, instanceVerteces } = params
@@ -43,19 +45,19 @@ export class RenderElementManager {
         this.height = height
         this.pixelRatio = window.devicePixelRatio || 1
 
-        this.attributes = extractAttributesFromShader(shaderSeries.vertex)
+        this.attributes = extractAttributesFromShader(shaders.vertex)
         this.program = createProgram(
             this.gl,
-            shaderSeries.vertex,
-            shaderSeries.fragment,
+            shaders.vertex.connect(),
+            shaders.fragment.connect(),
             this.attributes
         )
 
-        this.idAttributes = extractAttributesFromShader(shaderSeries.idVertex)
+        this.idAttributes = extractAttributesFromShader(shaders.idVertex)
         this.idProgram = createProgram(
             this.gl,
-            shaderSeries.idVertex,
-            shaderSeries.idFragment,
+            shaders.idVertex.connect(),
+            shaders.idFragment.connect(),
             this.idAttributes
         )
 
@@ -198,36 +200,36 @@ export class RenderElementManager {
                 )
                 if (!attr.isBuildIn) this.gl.vertexAttribDivisor(attr.location, 1)
             })
+
+            this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
+
+            // draw id
+            this.gl.blendFunc(this.gl.ONE, this.gl.ZERO)
+            this.gl.useProgram(this.idProgram)
+            this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.idTexture)
+
+            this.idAttributes.forEach((attr) => {
+                this.gl.enableVertexAttribArray(attr.location)
+            })
+
+            const attr = this.idAttributes.get('in_id') // ! HARDCODE CHECK
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+            this.gl.vertexAttribPointer(
+                attr.location,
+                attr.size,
+                this.gl.FLOAT,
+                false,
+                attr.size * attr.array.BYTES_PER_ELEMENT,
+                0
+            )
+            this.gl.vertexAttribDivisor(attr.location, 1)
+
+            this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
+            this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null)
+
+            this.gl.enable(this.gl.BLEND)
+            this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
         }
-
-        this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
-
-        // draw id
-        this.gl.blendFunc(this.gl.ONE, this.gl.ZERO)
-        this.gl.useProgram(this.idProgram)
-        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.idTexture)
-
-        this.idAttributes.forEach((attr) => {
-            this.gl.enableVertexAttribArray(attr.location)
-        })
-
-        const attr = this.idAttributes.get('in_id') // ! HARDCODE CHECK
-        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
-        this.gl.vertexAttribPointer(
-            attr.location,
-            attr.size,
-            this.gl.FLOAT,
-            false,
-            attr.size * attr.array.BYTES_PER_ELEMENT,
-            0
-        )
-        this.gl.vertexAttribDivisor(attr.location, 1)
-
-        this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count)
-        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null)
-
-        this.gl.enable(this.gl.BLEND)
-        this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA)
     }
 
     /**
@@ -241,8 +243,11 @@ export class RenderElementManager {
             // link attribute => webgl attribute
             this.attributes.forEach((attr) => {
                 if (!attr.isBuildIn) {
-                    const value = attr.extractAttributeValueFrom(element)
-                    value.forEach((v, j) => {
+                    // const value = attr.extractAttributeValueFrom(element)
+                    const value = this.getAttributeByElement(element, attr.name)
+                    const array = value.value as number[]
+
+                    array.forEach((v, j) => {
                         // inject into the Buffer Array
                         attr.array[attr.size * index + j] = v
                     })
@@ -295,12 +300,15 @@ export class RenderElementManager {
     public changeAttribute(element: Node | Link, attribute: string) {
         const renderId = this.getRenderIdOf(element)
         const index = Math.floor(renderId / 2)
-        const attr = this.attributes.get(`in_${attribute}`)
+        const shaderAttr = this.getAttributeByElement(element, attribute)
+        const shaderVariableName = shaderAttr.name
+        const shaderVariableValue = shaderAttr.value as number[]
+        const attr = this.attributes.get(shaderVariableName)
         if (attr === undefined) {
             console.error(`Attribute: ${attribute} is not supported in a ${element.type} instance.`)
         }
-        const data = attr.extractAttributeValueFrom(element)
-        attr.array.set(data, attr.size * index)
+        // const data = attr.extractAttributeValueFrom(element)
+        attr.array.set(shaderVariableValue, attr.size * index)
         this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
         this.gl.bufferSubData(
             this.gl.ARRAY_BUFFER,
@@ -317,5 +325,144 @@ export class RenderElementManager {
      */
     public clearData() {
         this.count = 0
+    }
+
+    protected getAttributeByElement(element: Link | Node, attributeName: string) {
+        let map
+        if (element.type === 'Link') {
+            const link = element as Link
+            const style = link.$_style as interfaces.LinkStyle
+
+            map = {
+                source: {
+                    name: 'in_source',
+                    value: [link.$_source.$_position.x, link.$_source.$_position.y]
+                },
+                target: {
+                    name: 'in_target',
+                    value: [link.$_target.$_position.x, link.$_target.$_position.y]
+                },
+                shape: {
+                    name: 'in_shape',
+                    value: [style.shape === 'curve' ? 1 : 0]
+                },
+                strokeWidth: {
+                    name: 'in_strokeWidth',
+                    value: [style.strokeWidth]
+                },
+                strokeColor: {
+                    name: 'in_strokeColor',
+                    value: [
+                        style.strokeColor.r,
+                        style.strokeColor.g,
+                        style.strokeColor.b,
+                        style.strokeColor.a
+                    ]
+                },
+                curveness: {
+                    name: 'in_curveness',
+                    value: [style.curveness]
+                }
+            }
+        } else {
+            const node = element as Node
+            const style = node.$_style as interfaces.NodeStyle
+
+            map = {
+                position: {
+                    name: 'in_position',
+                    value: [node.$_position.x, node.$_position.y]
+                },
+                shape: {
+                    name: 'in_shape',
+                    value: [
+                        style.shape === 'rect'
+                            ? 1
+                            : style.shape === 'triangle'
+                            ? 2
+                            : style.shape === 'cross'
+                            ? 3
+                            : 0
+                    ]
+                },
+                offset: {
+                    name: 'in_offset',
+                    value: [style.offset.x, style.offset.y]
+                },
+                fill: {
+                    name: 'in_fill',
+                    value: [style.fill.r, style.fill.g, style.fill.b, style.fill.a]
+                },
+                strokeWidth: {
+                    name: 'in_strokeWidth',
+                    value: [style.strokeWidth]
+                },
+                strokeColor: {
+                    name: 'in_strokeColor',
+                    value: [
+                        style.strokeColor.r,
+                        style.strokeColor.g,
+                        style.strokeColor.b,
+                        style.strokeColor.a
+                    ]
+                },
+                rotate: {
+                    name: 'in_rotate',
+                    value: [style.rotate]
+                },
+                /* circle */
+                r: {
+                    name: 'in_r',
+                    value: [style.r]
+                },
+                /* rect */
+                width: {
+                    name: 'in_size',
+                    value: [style.width, style.height]
+                },
+                height: {
+                    name: 'in_size',
+                    value: [style.width, style.height]
+                },
+                /* triangle */
+                vertexAlpha: {
+                    name: 'in_vertexAlpha',
+                    value: [style.vertexAlpha.x, style.vertexAlpha.y]
+                },
+                vertexBeta: {
+                    name: 'in_vertexBeta',
+                    value: [style.vertexBeta.x, style.vertexBeta.y]
+                },
+                vertexGamma: {
+                    name: 'in_vertexGamma',
+                    value: [style.vertexGamma.x, style.vertexGamma.y]
+                },
+                /* cross */
+                innerWidth: {
+                    name: 'in_innerSize',
+                    value: [style.innerWidth, style.innerHeight]
+                },
+                innerHeight: {
+                    name: 'in_innerSize',
+                    value: [style.innerWidth, style.innerHeight]
+                }
+            }
+        }
+
+        if (attributeName in map) {
+            return map[attributeName]
+        }
+
+        const reversed_map = {}
+        Object.entries(map).forEach(([k, v]) => {
+            const value = v as any
+            const key = k as string
+            reversed_map[value.name] = {
+                name: key,
+                value: value.value
+            }
+        })
+
+        return reversed_map[attributeName]
     }
 }

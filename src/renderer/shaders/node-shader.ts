@@ -6,8 +6,7 @@ vertex.inputs = {
     in_shape: 'float',
     in_position: 'vec2',
     in_offset: 'vec2',
-    in_width: 'float',
-    in_height: 'float',
+    in_size: 'vec2', // width & height
     in_innerSize: 'vec2',
     in_rotate: 'float',
     in_r: 'float',
@@ -21,8 +20,7 @@ vertex.inputs = {
 vertex.outputs = {
     position: 'vec2',
     shape: 'float',
-    width: 'float', // rect
-    height: 'float', // rect
+    size: 'vec2', // width & height
     innerSize: 'vec2',
     rotate: 'float', // rect
     r: 'float', // circle
@@ -43,23 +41,25 @@ vertex.uniforms = {
 vertex.methods = [
     [
         `vec2 calculate_inner_point (vec2 p1, vec2 p2, vec2 p3) {`,
-        `   float inner_p1 = sqrt(dot(p1, p1));`,
-        `   float inner_p2 = sqrt(dot(p2, p2));`,
-        `   float inner_p3 = sqrt(dot(p3, p3));`,
-        `   vec2 inner = (p1 * inner_p1 + p2 * inner_p2 + p3 * inner_p3) / (inner_p1 + inner_p2 + inner_p3);`,
-        `   return inner;`,
+        `    float inner_p1 = distance(p2, p3);`,
+        `    float inner_p2 = distance(p1, p3);`,
+        `    float inner_p3 = distance(p1, p2);`,
+        `    vec2 inner = (p1 * inner_p1 + p2 * inner_p2 + p3 * inner_p3) / (inner_p1 + inner_p2 + inner_p3);`,
+        `    return inner;`,
+        `}`
+    ],
+    [
+        `float distance2line (vec2 point, vec2 line_begin, vec2 line_end) {`,
+        `   vec3 cross_product = cross(vec3(point - line_begin, 0), vec3(line_end - line_begin, 0));`,
+        `   float area = length(cross_product);`,
+        `   return area / length(line_begin - line_end);`,
         `}`
     ],
     [
         `float calculate_stroke_scale (vec2 p1, vec2 p2, vec2 p3) {`,
         `   vec2 inner = calculate_inner_point(p1, p2, p3);`,
-        `   float a = distance(p1, inner);`,
-        `   float b = distance(p2, inner);`,
-        `   float c = distance(p1, p2);`,
-        `   float cos_alpha = (pow(b, 2.0) + pow(c, 2.0) - pow(a, 2.0)) / (2.0 * b * c);`,
-        `   float sin_alpha = sqrt(1.0 - pow(cos_alpha, 2.0));`,
-        `   float normal_length = sin_alpha * a;`,
-        `   float stroke_scale = 1.0 + strokeWidth / 2.0 * pixelRatio / normal_length;`,
+        `   float radius = distance2line(inner, p1, p2);`,
+        `   float stroke_scale = strokeWidth / 2.0 / radius;`,
         `   return stroke_scale;`,
         `}`
     ]
@@ -67,8 +67,9 @@ vertex.methods = [
 vertex.main = [
     `void main(void) {`,
     `   r = in_r;`,
-    `   width = in_width;`,
-    `   height = in_height;`,
+    `   size = in_size;`,
+    `   float width = size.x;`,
+    `   float height = size.y;`,
     `   innerSize = in_innerSize;`,
     `   shape = in_shape;`,
     `   fill = in_fill;`,
@@ -76,17 +77,17 @@ vertex.main = [
     `   strokeWidth = in_strokeWidth;`,
     `   rotate = in_rotate;`,
     `   position = scale * (in_position + in_offset) + translate;`,
-    `   vertexAlpha = in_vertexAlpha * pixelRatio;`,
-    `   vertexBeta = in_vertexBeta * pixelRatio;`,
-    `   vertexGamma = in_vertexGamma * pixelRatio;`,
+    `   vertexAlpha = in_vertexAlpha;`,
+    `   vertexBeta = in_vertexBeta;`,
+    `   vertexGamma = in_vertexGamma;`,
     `   mat3 scale_mat = mat3(`,
     `       1, 0, 0,`,
     `       0, 1, 0,`,
     `       0, 0, 1`,
     `   );`,
     `   mat3 rotate_mat = mat3(`,
-    `       1, 0, 0,`,
-    `       0, 1, 0,`,
+    `       cos(rotate), sin(rotate), 0,`,
+    `       -sin(rotate), cos(rotate), 0,`,
     `       0, 0, 1`,
     `   );`,
     `   mat3 translate_mat = mat3(`,
@@ -107,21 +108,18 @@ vertex.main = [
     `           0, height + strokeWidth, 0,`,
     `           0, 0, 1`,
     `       );`,
-    `       rotate_mat = mat3(`,
-    `           cos(rotate), sin(rotate), 0,`,
-    `           -sin(rotate), cos(rotate), 0,`,
-    `           0, 0, 1`,
-    `       );`,
     `   } else if (shape == 2.0) {`, // triangle shape
     // calculate the normal of the edge: alpha => beta
     `       vec2 inner = calculate_inner_point(vertexAlpha, vertexBeta, vertexGamma);`,
     `       float stroke_scale = calculate_stroke_scale(vertexAlpha, vertexBeta, vertexGamma);`,
-    `       vec2 outer_vertexAlpha = (vertexAlpha - inner) * stroke_scale + inner;`, // consider stroke in
-    `       vec2 outer_vertexBeta = (vertexBeta - inner) * stroke_scale + inner;`, // consider stroke in
-    `       vec2 outer_vertexGamma = (vertexGamma - inner) * stroke_scale + inner;`, // consider stroke in
+    `       vec2 outer_vertexAlpha = (vertexAlpha - inner) * (1.0 + stroke_scale) + inner;`, // consider stroke in
+    `       vec2 outer_vertexBeta = (vertexBeta - inner) * (1.0 + stroke_scale) + inner;`, // consider stroke in
+    `       vec2 outer_vertexGamma = (vertexGamma - inner) * (1.0 + stroke_scale) + inner;`, // consider stroke in
     // to ensure the fragment cutting is within the rectangle
-    `       width = 1.5 * (max(max(outer_vertexAlpha.x, outer_vertexBeta.x), outer_vertexGamma.x) - min(min(outer_vertexAlpha.x, outer_vertexBeta.x), outer_vertexGamma.x));`,
-    `       height = 1.5 * (max(max(outer_vertexAlpha.y, outer_vertexBeta.y), outer_vertexGamma.y)- min(min(outer_vertexAlpha.y, outer_vertexBeta.y), outer_vertexGamma.y));`,
+    // `       width = 1.5 * (max(max(outer_vertexAlpha.x, outer_vertexBeta.x), outer_vertexGamma.x) - min(min(outer_vertexAlpha.x, outer_vertexBeta.x), outer_vertexGamma.x));`,
+    // `       height = 1.5 * (max(max(outer_vertexAlpha.y, outer_vertexBeta.y), outer_vertexGamma.y)- min(min(outer_vertexAlpha.y, outer_vertexBeta.y), outer_vertexGamma.y));`,
+    `       width = 2.0 * max(abs(max(max(outer_vertexAlpha.x, outer_vertexBeta.x), outer_vertexGamma.x)), abs(min(min(outer_vertexAlpha.x, outer_vertexBeta.x), outer_vertexGamma.x)));`,
+    `       height = 2.0 * max(abs(max(max(outer_vertexAlpha.y, outer_vertexBeta.y), outer_vertexGamma.y)), abs(min(min(outer_vertexAlpha.y, outer_vertexBeta.y), outer_vertexGamma.y)));`,
     `       scale_mat = mat3(`,
     `           width, 0, 0,`,
     `           0, height, 0,`,
@@ -148,28 +146,9 @@ fragment.uniforms = {
     pixelRatio: 'float'
 }
 fragment.methods = [
-    [
-        `vec2 calculate_inner_point (vec2 p1, vec2 p2, vec2 p3) {`,
-        `    float inner_p1 = sqrt(dot(p1, p1));`,
-        `    float inner_p2 = sqrt(dot(p2, p2));`,
-        `    float inner_p3 = sqrt(dot(p3, p3));`,
-        `    vec2 inner = (p1 * inner_p1 + p2 * inner_p2 + p3 * inner_p3) / (inner_p1 + inner_p2 + inner_p3);`,
-        `    return inner;`,
-        `}`
-    ],
-    [
-        `float calculate_stroke_scale (vec2 p1, vec2 p2, vec2 p3) {`,
-        `    vec2 inner = calculate_inner_point(p1, p2, p3);`,
-        `    float a = distance(p1, inner);`,
-        `    float b = distance(p2, inner);`,
-        `    float c = distance(p1, p2);`,
-        `    float cos_alpha = (pow(b, 2.0) + pow(c, 2.0) - pow(a, 2.0)) / (2.0 * b * c);`,
-        `    float sin_alpha = sqrt(1.0 - pow(cos_alpha, 2.0));`,
-        `    float normal_length = sin_alpha * a;`,
-        `    float stroke_scale = 1.0 + strokeWidth / 2.0 * pixelRatio / normal_length;`,
-        `    return stroke_scale;`,
-        `}`
-    ],
+    vertex.methods[0],
+    vertex.methods[1],
+    vertex.methods[2],
     [
         `float sign (vec2 p1, vec2 p2, vec2 p3) {`,
         `    return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);`,
@@ -177,16 +156,25 @@ fragment.methods = [
     ],
     [
         `float inTriangle() {`,
+        `    mat2 rotate_mat = mat2(`,
+        `        cos(rotate), sin(rotate),`,
+        `        -sin(rotate), cos(rotate)`,
+        `    );`,
+        `    vec2 inner = calculate_inner_point(vertexAlpha, vertexBeta, vertexGamma);`,
         `    float stroke_scale = calculate_stroke_scale(vertexAlpha, vertexBeta, vertexGamma);`,
         `    vec2 flip_pos = vec2(position.x, viewport.y - position.y);`,
-        `    vec2 flip_vertexAlpha = vec2(vertexAlpha.x, - vertexAlpha.y) / stroke_scale;`,
-        `    vec2 flip_vertexBeta = vec2(vertexBeta.x, - vertexBeta.y) / stroke_scale;`,
-        `    vec2 flip_vertexGamma = vec2(vertexGamma.x, - vertexGamma.y) / stroke_scale;`,
-        `    float d1 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertexAlpha, flip_vertexBeta);`,
-        `    float d2 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertexBeta, flip_vertexGamma);`,
-        `    float d3 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertexGamma, flip_vertexAlpha);`,
-        `    bool has_neg = (d1 <= 0.0) || (d2 <= 0.0) || (d3 <= 0.0);`,
-        `    bool has_pos = (d1 >= 0.0) || (d2 >= 0.0) || (d3 >= 0.0);`,
+        `    vec2 rotate_related_FragCoord = rotate_mat * (gl_FragCoord.xy / pixelRatio - flip_pos);`,
+        `    vec2 inner_vertexAlpha = (vertexAlpha - inner) * (1.0 - stroke_scale) + inner;`,
+        `    vec2 inner_vertexBeta = (vertexBeta - inner) * (1.0 - stroke_scale) + inner;`,
+        `    vec2 inner_vertexGamma = (vertexGamma - inner) * (1.0 - stroke_scale) + inner;`,
+        `    vec2 flip_vertexAlpha = vec2(inner_vertexAlpha.x, - inner_vertexAlpha.y);`,
+        `    vec2 flip_vertexBeta = vec2(inner_vertexBeta.x, - inner_vertexBeta.y);`,
+        `    vec2 flip_vertexGamma = vec2(inner_vertexGamma.x, - inner_vertexGamma.y);`,
+        `    float d1 = sign(rotate_related_FragCoord, flip_vertexAlpha, flip_vertexBeta);`,
+        `    float d2 = sign(rotate_related_FragCoord, flip_vertexBeta, flip_vertexGamma);`,
+        `    float d3 = sign(rotate_related_FragCoord, flip_vertexGamma, flip_vertexAlpha);`,
+        `    bool has_neg = (d1 < 0.0) || (d2 < 0.0) || (d3 < 0.0);`,
+        `    bool has_pos = (d1 > 0.0) || (d2 > 0.0) || (d3 > 0.0);`,
         `    if (!(has_neg && has_pos)) {`,
         `        return 1.0;`,
         `    } else {`,
@@ -196,20 +184,29 @@ fragment.methods = [
     ],
     [
         `float inTriangleBorder() {`,
+        `    mat2 rotate_mat = mat2(`,
+        `        cos(rotate), sin(rotate),`,
+        `        -sin(rotate), cos(rotate)`,
+        `    );`,
+        `    vec2 inner = calculate_inner_point(vertexAlpha, vertexBeta, vertexGamma);`,
         `    float stroke_scale = calculate_stroke_scale(vertexAlpha, vertexBeta, vertexGamma);`,
+        `    vec2 outer_vertexAlpha = (vertexAlpha - inner) * (1.0 + stroke_scale) + inner;`,
+        `    vec2 outer_vertexBeta = (vertexBeta - inner) * (1.0 + stroke_scale) + inner;`,
+        `    vec2 outer_vertexGamma = (vertexGamma - inner) * (1.0 + stroke_scale) + inner;`,
         `    vec2 flip_pos = vec2(position.x, viewport.y - position.y);`,
-        `    vec2 flip_vertexAlpha = stroke_scale * vec2(vertexAlpha.x, - vertexAlpha.y);`,
-        `    vec2 flip_vertexBeta = stroke_scale * vec2(vertexBeta.x, - vertexBeta.y);`,
-        `    vec2 flip_vertexGamma = stroke_scale * vec2(vertexGamma.x, - vertexGamma.y);`,
+        `    vec2 rotate_related_FragCoord = rotate_mat * (gl_FragCoord.xy / pixelRatio - flip_pos);`,
+        `    vec2 flip_vertexAlpha = vec2(outer_vertexAlpha.x, - outer_vertexAlpha.y);`,
+        `    vec2 flip_vertexBeta = vec2(outer_vertexBeta.x, - outer_vertexBeta.y);`,
+        `    vec2 flip_vertexGamma =vec2(outer_vertexGamma.x, - outer_vertexGamma.y);`,
         ``,
-        `    float d1 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertexAlpha, flip_vertexBeta);`,
-        `    float d2 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertexBeta, flip_vertexGamma);`,
-        `    float d3 = sign(gl_FragCoord.xy / pixelRatio - flip_pos, flip_vertexGamma, flip_vertexAlpha);`,
+        `    float d1 = sign(rotate_related_FragCoord, flip_vertexAlpha, flip_vertexBeta);`,
+        `    float d2 = sign(rotate_related_FragCoord, flip_vertexBeta, flip_vertexGamma);`,
+        `    float d3 = sign(rotate_related_FragCoord, flip_vertexGamma, flip_vertexAlpha);`,
         ``,
         `    bool has_neg = (d1 <= 0.0) || (d2 <= 0.0) || (d3 <= 0.0);`,
         `    bool has_pos = (d1 >= 0.0) || (d2 >= 0.0) || (d3 >= 0.0);`,
         ``,
-        `    bool inTriangle = inTriangle() == 1.0;`,
+        `    bool inTriangle = inTriangle() > 0.5;`,
         `    bool inTriangleBorder = !(has_neg && has_pos);`,
         ``,
         `    if (!inTriangle && inTriangleBorder) {`,
@@ -222,6 +219,8 @@ fragment.methods = [
 
     [
         `float inRect() {`,
+        `    float width = size.x;`,
+        `    float height = size.y;`,
         `    vec2 flip_pos = position;`,
         `    flip_pos.y = viewport.y - position.y;`,
         `    mat2 rotate_mat = mat2(`,
@@ -237,6 +236,8 @@ fragment.methods = [
 
     [
         `float inRectBorder() {`,
+        `    float width = size.x;`,
+        `    float height = size.y;`,
         `    vec2 flip_pos = position;`,
         `    flip_pos.y = viewport.y - position.y;`,
         `    mat2 rotate_mat = mat2(`,
@@ -264,6 +265,8 @@ fragment.methods = [
         `    vec2 rotate_related_FragCoord = rotate_mat * (gl_FragCoord.xy / pixelRatio - flip_pos);`,
         `    float innerWidth = innerSize.x;`,
         `    float innerHeight = innerSize.y;`,
+        `    float width = size.x;`,
+        `    float height = size.y;`,
         `    float x_in1 = step(rotate_related_FragCoord.x, width / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - width / 2.0 + strokeWidth / 2.0));`,
         `    float y_in1 = step(rotate_related_FragCoord.y, innerHeight / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - innerHeight / 2.0 + strokeWidth / 2.0));`,
         `    float x_in2 = step(rotate_related_FragCoord.x, innerWidth / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - innerWidth / 2.0 + strokeWidth / 2.0));`,
@@ -283,6 +286,8 @@ fragment.methods = [
         `    vec2 rotate_related_FragCoord = rotate_mat * (gl_FragCoord.xy / pixelRatio - flip_pos);`,
         `    float innerWidth = innerSize.x;`,
         `    float innerHeight = innerSize.y;`,
+        `    float width = size.x;`,
+        `    float height = size.y;`,
 
         // TODO: need refactor
         `    float x_in1 = step(rotate_related_FragCoord.x, width / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - width / 2.0 + strokeWidth / 2.0));`,

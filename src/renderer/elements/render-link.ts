@@ -2,7 +2,8 @@
  * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
  * @description Link used in renderer
  */
-import { LinkManagerConfigs, ShaderSeries } from '../interfaces'
+
+import { LinkManagerConfigs, Shaders } from '../interfaces'
 import Link from '../../elements/link'
 import { RenderElementManager } from './render-element'
 
@@ -16,7 +17,7 @@ export class RenderLinkManager extends RenderElementManager {
     public constructor(
         gl: WebGL2RenderingContext,
         params: LinkManagerConfigs,
-        shaders: ShaderSeries,
+        shaders: Shaders,
         idTexture: WebGLTexture
     ) {
         super(
@@ -34,42 +35,6 @@ export class RenderLinkManager extends RenderElementManager {
             /* idTexture */ idTexture
         )
         this.renderIdToElement = {}
-
-        this.attributes.forEach((attr) => {
-            if (attr.name === 'in_source') {
-                attr.extractAttributeValueFrom = (link: Link) => {
-                    const sourcePosition = link.source().position()
-                    return [sourcePosition.x, sourcePosition.y]
-                }
-            } else if (attr.name === 'in_target') {
-                attr.extractAttributeValueFrom = (link: Link) => {
-                    const targetPosition = link.target().position()
-                    return [targetPosition.x, targetPosition.y]
-                }
-            } else if (attr.name === 'in_strokeWidth') {
-                attr.extractAttributeValueFrom = (link: Link) => {
-                    return [link.strokeWidth() * this.pixelRatio]
-                }
-            } else if (attr.name === 'in_strokeColor') {
-                attr.extractAttributeValueFrom = (link: Link) => {
-                    const strokeColor = link.strokeColor()
-                    return [strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a]
-                }
-            } else if (attr.name === 'in_curveness') {
-                attr.extractAttributeValueFrom = (link: Link) => {
-                    return [link.curveness()]
-                }
-            } else if (attr.name === 'in_shape') {
-                attr.extractAttributeValueFrom = (link: Link) => {
-                    const shape = link.shape()
-                    if (shape === 'curve') {
-                        return [1]
-                    } else {
-                        return [0]
-                    }
-                }
-            }
-        })
     }
 
     /**
@@ -80,15 +45,19 @@ export class RenderLinkManager extends RenderElementManager {
         let count = 0 // TODO: useless count
         links.forEach((link, i) => {
             // TODO: consider link and render link attribute mapping
-            const source = link.source()
-            const sourcePosition = source.position()
-            this.attributes.get('in_source').array[2 * (count + i)] = sourcePosition.x
-            this.attributes.get('in_source').array[2 * (count + i) + 1] = sourcePosition.y
+            const sourceName = 'in_source'
+            const sourceAttribute = this.attributes.get(sourceName)
+            const sourceValue = this.getAttributeByElement(link, sourceName)
+            const sourceArray = sourceValue.value as number[]
+            sourceAttribute.array[2 * i] = sourceArray[0]
+            sourceAttribute.array[2 * i + 1] = sourceArray[1]
 
-            const target = link.target()
-            const targetPosition = target.position()
-            this.attributes.get('in_target').array[2 * (count + i)] = targetPosition.x
-            this.attributes.get('in_target').array[2 * (count + i) + 1] = targetPosition.y
+            const targetName = 'in_target'
+            const targetAttribute = this.attributes.get(targetName)
+            const targetValue = this.getAttributeByElement(link, targetName)
+            const targetArray = targetValue.value as number[]
+            targetAttribute.array[2 * i] = targetArray[0]
+            targetAttribute.array[2 * i + 1] = targetArray[1]
 
             // currently no need for color&renderId change
             /*
