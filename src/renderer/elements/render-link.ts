@@ -3,7 +3,7 @@
  * @description Link used in renderer
  */
 
-import { LinkManagerConfigs, ShaderSeries } from '../interfaces'
+import { LinkManagerConfigs, Shaders } from '../interfaces'
 import Link from '../../elements/link'
 import { RenderElementManager } from './render-element'
 
@@ -17,7 +17,7 @@ export class RenderLinkManager extends RenderElementManager {
     public constructor(
         gl: WebGL2RenderingContext,
         params: LinkManagerConfigs,
-        shaders: ShaderSeries,
+        shaders: Shaders,
         idTexture: WebGLTexture
     ) {
         super(

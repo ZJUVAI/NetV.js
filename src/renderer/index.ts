@@ -66,30 +66,16 @@ export class Renderer {
 
         this.initIdTexture()
 
-        const nodeShaderSeriels = {
-            vertex: nodeShaders.vertex.connect(),
-            fragment: nodeShaders.fragment.connect(),
-            idVertex: nodeShaders.idVertex.connect(),
-            idFragment: nodeShaders.idFragment.connect()
-        }
-
-        const linkShaderSeriels = {
-            vertex: linkShaders.vertex.connect(),
-            fragment: linkShaders.fragment.connect(),
-            idVertex: linkShaders.idVertex.connect(),
-            idFragment: linkShaders.idFragment.connect()
-        }
-
         this.nodeManager = new RenderNodeManager(
             this.gl,
             { width, height, limit: nodeLimit },
-            nodeShaderSeriels,
+            nodeShaders,
             this.idTexture
         )
         this.linkManager = new RenderLinkManager(
             this.gl,
             { width, height, limit: linkLimit },
-            linkShaderSeriels,
+            linkShaders,
             this.idTexture
         )
     }

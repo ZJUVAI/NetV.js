@@ -78,12 +78,11 @@ export function createArrayBuffer(gl: WebGL2RenderingContext, data: Float32Array
  * @param {string} shaderStr
  * @returns {RenderAttribute[]} attributes array
  */
-export function extractAttributesFromShader(shaderStr: string): Map<string, RenderAttribute> {
-    const matchings = shaderStr.match(/in\s.*;/g)
+export function extractAttributesFromShader(shader: Shader): Map<string, RenderAttribute> {
+    // const matchings = shaderStr.match(/in\s.*;/g)
+    const inputs = shader.inputs
     const attributesMap = new Map()
-    matchings.forEach((match, location) => {
-        const name = match.split(' ')[2].slice(0, -1)
-        const type = match.split(' ')[1]
+    Object.entries(inputs).forEach(([name, type], location) => {
         let size = 1
         if (type.slice(0, 3) === 'vec') {
             size = Number(type.slice(-1))
@@ -103,6 +102,28 @@ export function extractAttributesFromShader(shaderStr: string): Map<string, Rend
             extractAttributeValueFrom: () => [] // a function which is use to append an element into the array of this attribute
         })
     })
+    // matchings.forEach((match, location) => {
+    //     const name = match.split(' ')[2].slice(0, -1)
+    //     const type = match.split(' ')[1]
+    //     let size = 1
+    //     if (type.slice(0, 3) === 'vec') {
+    //         size = Number(type.slice(-1))
+    //     }
+    //     let isBuildIn = false
+    //     if (name === 'inVertexPos') {
+    //         // an instance is formed by two triangles,
+    //         // thus we need four point positions to initial the instance
+    //         // more details: https://panjiacheng.site/wiki/2019/06/06/webGL/WebGL-BatchDraw%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB+%E7%90%86%E8%A7%A3/
+    //         isBuildIn = true
+    //     }
+    //     attributesMap.set(name, {
+    //         name,
+    //         size, // the space of one attribute, e.g. vec3 ocuppies 3 units of space
+    //         location, // the appearance order of one attribute in the shader code, which is equal to the result of getAttribLocation
+    //         isBuildIn, // which means four vertices in one element: inVertexPos
+    //         extractAttributeValueFrom: () => [] // a function which is use to append an element into the array of this attribute
+    //     })
+    // })
     return attributesMap
 }
 
