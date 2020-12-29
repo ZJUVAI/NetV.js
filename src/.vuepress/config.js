@@ -118,7 +118,8 @@ module.exports = {
                 sidebar: {
                     '/zh/guide/': [
                         '',
-                        'getting-start'
+                        'getting-start',
+                        'others',
                         // 'development-guide',
                         // 'development-guide-chinese',
                     ],
