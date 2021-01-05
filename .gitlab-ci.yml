@@ -32,6 +32,8 @@ install:
         - npm config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass -g
         - npm install --registry=https://registry.npm.taobao.org
         - npm run build
+    only:
+        - docs
 
 build:
     stage: build
@@ -50,6 +52,8 @@ build:
     script:
         - docker build --cache-from $IMAGE:latest -t $IMAGE .
         - docker push $IMAGE
+    only:
+        - docs
 
 deploy:
     stage: deploy
@@ -61,3 +65,5 @@ deploy:
         - sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.tsinghua.edu.cn/g' /etc/apk/repositories && apk update --no-cache && apk add gettext curl
         - kubectl -n $KUBE_NAMESPACE create secret docker-registry ${CI_PROJECT_NAME}-pull-secret --docker-server="$CI_REGISTRY" --docker-username="$GITLAB_DEPLOY_USER" --docker-password="$GITLAB_DEPLOY_TOKEN" --docker-email="$GITLAB_USER_EMAIL" -o yaml --dry-run | kubectl apply -f -
         - envsubst < deployment.yaml | kubectl apply -f -
+    only:
+        - docs
