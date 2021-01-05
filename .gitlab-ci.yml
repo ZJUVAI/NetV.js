@@ -21,10 +21,6 @@ build:
     stage: build
     image: docker
     allow_failure: false
-    cache:
-        key: cache-key
-        paths:
-            - docs/
     variables:
         DOCKER_HOST: tcp://localhost:2375
     before_script:
