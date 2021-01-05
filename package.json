@@ -1,6 +1,6 @@
 {
     "name": "netv",
-    "version": "1.1.1",
+    "version": "1.1.2",
     "description": "A network visualization library based on WebGL",
     "main": "build/NetV.js",
     "files": [
