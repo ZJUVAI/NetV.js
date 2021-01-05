@@ -20,7 +20,7 @@ stages:
 
 # Lint and build test.
 test:
-    stage: test
+    stage: install
     image: node:10
     allow_failure: false
     cache:
