@@ -71,6 +71,19 @@ module.exports = {
                                 link: 'https://zjuvag.org/'
                             }
                         ]
+                    },
+                    {
+                        text: 'Access',
+                        items: [
+                            {
+                                text: 'International Access',
+                                link: 'http://netv.zjuvag.org/'
+                            },
+                            {
+                                text: 'China Access',
+                                link: 'https://netv.projects.zjvis.org/'
+                            }
+                        ]
                     }
                 ],
                 sidebar: {
@@ -113,13 +126,26 @@ module.exports = {
                                 link: 'https://zjuvag.org/'
                             }
                         ]
+                    },
+                    {
+                        text: '镜像访问',
+                        items: [
+                            {
+                                text: '国际镜像',
+                                link: 'http://netv.zjuvag.org/'
+                            },
+                            {
+                                text: '国内镜像',
+                                link: 'https://netv.projects.zjvis.org/'
+                            }
+                        ]
                     }
                 ],
                 sidebar: {
                     '/zh/guide/': [
                         '',
                         'getting-start',
-                        'others',
+                        'others'
                         // 'development-guide',
                         // 'development-guide-chinese',
                     ],
