@@ -11,16 +11,16 @@
     "author": "",
     "license": "MIT",
     "devDependencies": {
-        "@vuepress/plugin-active-header-links": "^1.5.1",
-        "node-sass": "4.14.1",
         "vuepress": "^1.7.1",
-        "vuepress-plugin-smooth-scroll": "0.0.9"
-    },
-    "dependencies": {
+        "@vuepress/plugin-active-header-links": "^1.5.1",
+        "vuepress-plugin-smooth-scroll": "0.0.9",
         "@vuepress/plugin-last-updated": "^1.7.1",
         "@vuepress/plugin-nprogress": "^1.5.2",
-        "ant-design-vue": "^1.6.2",
-        "moment": "^2.29.1",
+        "node-sass": "4.14.1",
         "sass-loader": "^8.0.2"
+    },
+    "dependencies": {
+        "ant-design-vue": "^1.6.2",
+        "moment": "^2.29.1"
     }
 }

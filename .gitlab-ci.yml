@@ -14,26 +14,8 @@ services:
           - 'https://vydcbpdf.mirror.aliyuncs.com'
           #   - 'https://dockerhub.azk8s.cn' # Use azure k8s mirror
 stages:
-    - install
     - build
     - deploy
-
-# Lint and build test.
-install:
-    stage: install
-    image: node:10
-    allow_failure: false
-    cache:
-        key: cache-key
-        paths:
-            - docs/
-    script:
-        - git config --global url."https://${GITLAB_DEPLOY_USER}:${GITLAB_DEPLOY_TOKEN}@git.zjvis.org/".insteadOf "https://git.zjvis.org/"
-        - npm config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass -g
-        - npm install --registry=https://registry.npm.taobao.org
-        - npm run build
-    only:
-        - docs
 
 build:
     stage: build
