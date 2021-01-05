@@ -26,7 +26,7 @@ test:
     cache:
         key: cache-key
         paths:
-            - build/
+            - docs/
     script:
         - git config --global url."https://${GITLAB_DEPLOY_USER}:${GITLAB_DEPLOY_TOKEN}@git.zjvis.org/".insteadOf "https://git.zjvis.org/"
         - npm config set sass_binary_site http://cdn.npm.taobao.org/dist/node-sass -g
@@ -41,7 +41,7 @@ build:
     cache:
         key: cache-key
         paths:
-            - build/
+            - docs/
     variables:
         DOCKER_HOST: tcp://localhost:2375
     before_script:
