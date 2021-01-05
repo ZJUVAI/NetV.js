@@ -6,7 +6,7 @@
     "scripts": {
         "start": "vuepress dev src --no-cache -p 6001",
         "build": "vuepress build src",
-        "deploy": "echo netv.zjuvag.org>docs/CNAME && git add . && git commit -m 'DeployedAutomatically' && git push origin docs"
+        "deploy": "echo netv.zjuvag.org>docs/CNAME && git add . && git commit -m 'DeployedAutomatically' && git push origin docs && git push zjvis docs"
     },
     "author": "",
     "license": "MIT",
