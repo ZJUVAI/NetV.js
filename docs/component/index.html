@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>NetV.js</title>
+    <meta name="generator" content="VuePress 1.7.1">
+    <script src="/NetV.js"></script>
+    <script src="/d3.v5.min.js"></script>
+    <script src="/ogdf.js"></script>
+    <link rel="icon" href="/logo.svg">
+    <meta name="description" content="A High Performance large-scale Network Visualization JavaScript Library based on WebGL">
+    
+    <link rel="preload" href="/assets/css/0.styles.411dc8cd.css" as="style"><link rel="preload" href="/assets/js/app.27b99fa7.js" as="script"><link rel="preload" href="/assets/js/3.b25797c6.js" as="script"><link rel="preload" href="/assets/js/22.d2fc3550.js" as="script"><link rel="prefetch" href="/assets/js/10.791abeff.js"><link rel="prefetch" href="/assets/js/11.690fea38.js"><link rel="prefetch" href="/assets/js/12.bb09a592.js"><link rel="prefetch" href="/assets/js/13.24bf515a.js"><link rel="prefetch" href="/assets/js/14.39f291f0.js"><link rel="prefetch" href="/assets/js/15.ae53f72a.js"><link rel="prefetch" href="/assets/js/16.ac549a1b.js"><link rel="prefetch" href="/assets/js/17.457a8959.js"><link rel="prefetch" href="/assets/js/18.35f55e58.js"><link rel="prefetch" href="/assets/js/19.89c260e9.js"><link rel="prefetch" href="/assets/js/20.7c3b6445.js"><link rel="prefetch" href="/assets/js/21.765ae3d9.js"><link rel="prefetch" href="/assets/js/23.13622483.js"><link rel="prefetch" href="/assets/js/24.4e8e5796.js"><link rel="prefetch" href="/assets/js/25.07c14fff.js"><link rel="prefetch" href="/assets/js/26.ad6d7445.js"><link rel="prefetch" href="/assets/js/27.31e56641.js"><link rel="prefetch" href="/assets/js/28.90bb49cc.js"><link rel="prefetch" href="/assets/js/29.98fb754b.js"><link rel="prefetch" href="/assets/js/30.14e16b27.js"><link rel="prefetch" href="/assets/js/31.27f68a0d.js"><link rel="prefetch" href="/assets/js/32.7d98621f.js"><link rel="prefetch" href="/assets/js/33.09c40662.js"><link rel="prefetch" href="/assets/js/34.85948145.js"><link rel="prefetch" href="/assets/js/35.c719e2e9.js"><link rel="prefetch" href="/assets/js/36.6d98db98.js"><link rel="prefetch" href="/assets/js/37.1e2aac9d.js"><link rel="prefetch" href="/assets/js/38.e228267a.js"><link rel="prefetch" href="/assets/js/4.3f4ce36e.js"><link rel="prefetch" href="/assets/js/5.1ee844a0.js"><link rel="prefetch" href="/assets/js/6.51297cee.js"><link rel="prefetch" href="/assets/js/7.64147185.js"><link rel="prefetch" href="/assets/js/8.337c9878.js"><link rel="prefetch" href="/assets/js/9.81ff1adb.js"><link rel="prefetch" href="/assets/js/vendors~docsearch.abfa50b4.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.411dc8cd.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">NetV.js</span></a> <div class="links"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <nav class="nav-links can-hide"><div class="nav-item"><a href="/guide/" class="nav-link">
+  Guide
+</a></div><div class="nav-item"><a href="/API/" class="nav-link">
+  API
+</a></div><div class="nav-item"><a href="/component/" aria-current="page" class="nav-link router-link-exact-active router-link-active">
+  Examples
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Resources" class="dropdown-title"><span class="title">Resources</span> <span class="arrow down"></span></button> <button type="button" aria-label="Resources" class="mobile-dropdown-title"><span class="title">Resources</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://github.com/ZJUVAG/NetV.js" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="https://zjuvag.org/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  ZJU-VAG-Lab
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Languages" class="dropdown-title"><span class="title">选择语言</span> <span class="arrow down"></span></button> <button type="button" aria-label="Languages" class="mobile-dropdown-title"><span class="title">选择语言</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/component/" aria-current="page" class="nav-link router-link-exact-active router-link-active">
+  English
+</a></li><li class="dropdown-item"><!----> <a href="/zh/component/" class="nav-link">
+  简体中文
+</a></li></ul></div></div> <!----></nav></div></header> <div class="sidebar-mask"></div> <aside class="sidebar"><nav class="nav-links"><div class="nav-item"><a href="/guide/" class="nav-link">
+  Guide
+</a></div><div class="nav-item"><a href="/API/" class="nav-link">
+  API
+</a></div><div class="nav-item"><a href="/component/" aria-current="page" class="nav-link router-link-exact-active router-link-active">
+  Examples
+</a></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Resources" class="dropdown-title"><span class="title">Resources</span> <span class="arrow down"></span></button> <button type="button" aria-label="Resources" class="mobile-dropdown-title"><span class="title">Resources</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="https://github.com/ZJUVAG/NetV.js" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  GitHub
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li><li class="dropdown-item"><!----> <a href="https://zjuvag.org/" target="_blank" rel="noopener noreferrer" class="nav-link external">
+  ZJU-VAG-Lab
+  <span><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewBox="0 0 100 100" width="15" height="15" class="icon outbound"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path> <polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg> <span class="sr-only">(opens new window)</span></span></a></li></ul></div></div><div class="nav-item"><div class="dropdown-wrapper"><button type="button" aria-label="Languages" class="dropdown-title"><span class="title">选择语言</span> <span class="arrow down"></span></button> <button type="button" aria-label="Languages" class="mobile-dropdown-title"><span class="title">选择语言</span> <span class="arrow right"></span></button> <ul class="nav-dropdown" style="display:none;"><li class="dropdown-item"><!----> <a href="/component/" aria-current="page" class="nav-link router-link-exact-active router-link-active">
+  English
+</a></li><li class="dropdown-item"><!----> <a href="/zh/component/" class="nav-link">
+  简体中文
+</a></li></ul></div></div> <!----></nav>  <ul class="sidebar-links"><li><a href="/component/" aria-current="page" class="active sidebar-link">/component/</a></li></ul> </aside> <main class="page"> <div class="theme-default-content content__default"></div> <footer class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated:</span> <span class="time">12/27/2020, 12:26:56 AM</span></div></footer> <!----> </main></div><div class="global-ui"></div></div>
+    <script src="/assets/js/app.27b99fa7.js" defer></script><script src="/assets/js/3.b25797c6.js" defer></script><script src="/assets/js/22.d2fc3550.js" defer></script>
+  </body>
+</html>
