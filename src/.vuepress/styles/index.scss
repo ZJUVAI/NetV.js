@@ -6,31 +6,17 @@ html {
     $offset_color: #444;
     background-color: $background_color !important;
     body {
-        background-color: $background_color !important;
         #app {
             height: 100%;
             .theme-container.homeOverwrite {
+                user-select: none;
+                background-color: $background_color;
                 .sidebar {
                     background-color: $background_color;
                 }
-            }
-            .theme-container {
-                user-select: none;
-                background-color: $background_color;
-                height: 100%;
-                .navbar .homeOverwrite {
-                    background-color: transparent;
-                }
                 .navbar {
-                    background-color: $background_color;
+                    background-color: transparent;
                     border-bottom: 0;
-                    .sidebar-button {
-                        svg {
-                            path {
-                                fill: $front_color;
-                            }
-                        }
-                    }
                     .home-link {
                         .site-name {
                             color: $front_color;
@@ -41,19 +27,10 @@ html {
                         color: $front_color;
                         .nav-links {
                             .nav-item {
-                                .nav-link:hover {
-                                    color: $theme_color;
-                                }
-                                a.nav-link.router-link-active {
-                                    color: $theme_color;
-                                }
                                 .dropdown-wrapper {
                                     .dropdown-title {
                                         .title {
                                             color: $front_color;
-                                        }
-                                        .title:hover {
-                                            color: $theme_color;
                                         }
                                     }
                                     .nav-dropdown {
@@ -65,14 +42,46 @@ html {
                         }
                     }
                 }
+            }
+            .theme-container {
+                height: 100%;
+                .navbar {
+                    background-color: white;
+                    .sidebar-button {
+                        svg {
+                            path {
+                                fill: $front_color;
+                            }
+                        }
+                    }
+                    .links {
+                        .nav-links {
+                            .nav-item {
+                                .nav-link:hover {
+                                    color: $theme_color;
+                                }
+                                a.nav-link.router-link-active {
+                                    color: $theme_color;
+                                }
+                                .dropdown-wrapper {
+                                    .dropdown-title {
+                                        .title:hover {
+                                            color: $theme_color;
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
                 aside.sidebar {
-                    background-color: $middle_color - #111;
+                    // background-color: $front_color - $background_color;
                     -ms-overflow-style: none;
                     overflow: -moz-scrollbars-none;
-                    border: 0;
-                    color: white;
+                    // border: 0;
+                    // color: white;
                     .nav-links {
-                        color: $front_color;
+                        // color: $front_color;
                         border: 0;
                         .nav-item {
                             .nav-link:hover {
@@ -81,7 +90,8 @@ html {
                             .dropdown-wrapper {
                                 .mobile-dropdown-title {
                                     .title {
-                                        color: $front_color;
+                                        // color: $front_color;
+                                        color: $middle_color;
                                     }
                                     .title:hover {
                                         color: $theme_color;
@@ -97,15 +107,8 @@ html {
                     .sidebar-links {
                         li {
                             .sidebar-group {
-                                .sidebar-heading {
-                                    color: $front_color;
-                                }
                                 .sidebar-group-items {
-                                    color: $front_color;
                                     li {
-                                        a.sidebar-link {
-                                            color: $front_color;
-                                        }
                                         a.sidebar-link.active {
                                             color: $theme_color;
                                         }
@@ -113,15 +116,9 @@ html {
                                 }
                             }
                             .sidebar-sub-header {
-                                a.sidebar-link {
-                                    color: $front_color;
-                                }
                                 a.sidebar-link.active {
                                     color: $theme_color;
                                 }
-                            }
-                            a.sidebar-link {
-                                color: $front_color;
                             }
                         }
                     }
@@ -159,6 +156,8 @@ html {
                     .features {
                         border: 0;
                         margin-top: 50px;
+                        position: relative;
+                        z-index: 2;
                         .feature {
                             h2,
                             p {
@@ -177,15 +176,17 @@ html {
                     }
                 }
                 main.page {
-                    background-color: $middle_color;
-                    color: $front_color - $offset_color;
+                    background-color: white;
+                    // background-color: $middle_color;
+                    // color: $front_color - $offset_color;
                     h1,
                     h2,
                     h3,
                     h4,
                     h5,
                     h6 {
-                        color: $front_color;
+                        // color: $front_color;
+                        // color: $middle_color-$offset_color;
                         code {
                             color: $theme_color;
                         }

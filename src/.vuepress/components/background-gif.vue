@@ -4,14 +4,13 @@
     </div>
 </template>
 
-<script>
-</script>
+<script></script>
 
-<style scoped lang='scss'>
+<style scoped lang="scss">
 #background-container {
     $height: 800px;
     $width: 2200px;
-    $ratio: 0.75;
+    $ratio: 1;
     position: absolute;
     overflow: hidden;
     top: 0;
