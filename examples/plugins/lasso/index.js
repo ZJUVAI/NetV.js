@@ -14,11 +14,6 @@ const netv = new NetV({
             strokeWidth: 1
         }
     },
-    node: {
-        style: {
-            r: 5
-        }
-    }
 })
 const data = NetV.Utils.transformGraphPosition(netv.loadDataset('miserables'), 500, 400, 300)
 const colorMap = [
@@ -50,7 +45,7 @@ netv.on('zoom', () => {})
 const lasso = new Lasso(netv, { enable: true })
 lasso.onSelected((selectedItems) => {
     netv.nodes().forEach((node) => {
-        node.r(5)
+        node.r(8)
     })
     selectedItems.forEach((node) => {
         node.r(10)
