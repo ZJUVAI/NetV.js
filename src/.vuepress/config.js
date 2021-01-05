@@ -1,4 +1,6 @@
 // import sidebar from sidebar
+const englishSite = 'http://netv.zjuvag.org/'
+const chineseSite = 'https://netv.projects.zjvis.org'
 module.exports = {
     title: 'NetV.js',
     description:
@@ -8,7 +10,8 @@ module.exports = {
         // ['script', { src: 'https://unpkg.com/netv/build/NetV.js' }],
         ['script', { src: '/NetV.js' }],
         ['script', { src: '/d3.v5.min.js' }],
-        ['script', { src: '/ogdf.js' }],
+        // ['script', { src: '/ogdf.js' }],
+        ['script', { src: '/utils.js' }],
         ['link', { rel: 'icon', href: '/logo.svg' }] // 增加一个自定义的 favicon(网页标签的图标)
     ],
     // cache: false,
@@ -72,19 +75,7 @@ module.exports = {
                             }
                         ]
                     },
-                    {
-                        text: 'Access',
-                        items: [
-                            {
-                                text: 'International Access',
-                                link: 'http://netv.zjuvag.org/'
-                            },
-                            {
-                                text: 'China Access',
-                                link: 'https://netv.projects.zjvis.org/'
-                            }
-                        ]
-                    }
+                    { text: '国内镜像', link: chineseSite, rel: 'chinese-mirror' } // 外部链接
                 ],
                 sidebar: {
                     '/guide/': ['', 'getting-start'],
@@ -110,9 +101,9 @@ module.exports = {
                 // 当前 locale 的 algolia docsearch 选项
                 algolia: {},
                 nav: [
-                    { text: '指南', link: '/zh/guide/' }, // 外部链接
-                    { text: 'API', link: '/zh/API/' }, // 外部链接
-                    { text: '样例', link: '/zh/component/' }, // 外部链接
+                    { text: '指南', link: '/guide/' }, // 外部链接
+                    { text: 'API', link: '/API/' }, // 外部链接
+                    { text: '样例', link: '/component/' }, // 外部链接
                     // 下拉列表
                     {
                         text: '资源链接',
@@ -127,30 +118,18 @@ module.exports = {
                             }
                         ]
                     },
-                    {
-                        text: '镜像访问',
-                        items: [
-                            {
-                                text: '国际镜像',
-                                link: 'http://netv.zjuvag.org/'
-                            },
-                            {
-                                text: '国内镜像',
-                                link: 'https://netv.projects.zjvis.org/'
-                            }
-                        ]
-                    }
+                    { text: '国内镜像', link: chineseSite + '/zh', rel: 'chinese-mirror' } // 外部链接
                 ],
                 sidebar: {
-                    '/zh/guide/': [
+                    '/guide/': [
                         '',
                         'getting-start',
                         'others'
                         // 'development-guide',
                         // 'development-guide-chinese',
                     ],
-                    '/zh/API/': ['', 'node', 'link', 'interfaces', 'utils'],
-                    '/zh/component/': ['', 'shape', 'layout', 'others', 'plugins']
+                    '/API/': ['', 'node', 'link', 'interfaces', 'utils'],
+                    '/component/': ['', 'shape', 'layout', 'others', 'plugins']
                 },
                 lastUpdated: 'Last Updated' // 文档更新时间：每个文件git最后提交的时间
             }

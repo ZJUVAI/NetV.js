@@ -16,5 +16,6 @@ features:
 footer: MIT License | Copyright © 2019-present VAG in Zhejiang University
 ---
 
-<demo-background/>
+<background-gif/>
+<!-- <demo-background/> -->
 <!-- <demo-table/> -->

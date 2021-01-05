@@ -1,5 +1,5 @@
 html {
-    $background_color: #111;
+    $background_color: rgb(16, 16, 16);
     $middle_color: #333;
     $front_color: white;
     $theme_color: #c2185b;
@@ -15,6 +15,7 @@ html {
                 }
             }
             .theme-container {
+                user-select: none;
                 background-color: $background_color;
                 height: 100%;
                 .navbar .homeOverwrite {
@@ -130,9 +131,29 @@ html {
                 }
                 main.home {
                     header.hero {
-                        // background: url('../public/background.gif');
+                        z-index: 2;
+                        position: relative;
+                        pointer-events: none;
+                        img {
+                            width: 40rem;
+                        }
                         p.action {
                             margin-top: 70px;
+                            pointer-events: all;
+                            a.action-button {
+                                background-color: #c2185b;
+                                border-bottom: 1px solid #c2185b;
+                            }
+                            a.action-button:hover {
+                                background-color: #e61c58;
+                            }
+                        }
+                        #main-title {
+                            color: white;
+                            font-size: 2.5rem;
+                        }
+                        .description {
+                            color: white;
                         }
                     }
                     .features {
@@ -198,73 +219,6 @@ html {
 }
 .demo div.theme-default-content {
     max-width: 40%;
-}
-// .theme-default-content #demo-background {
-//     width: 100%;
-//     position: absolute;
-//     left: 0;
-//     top: 0;
-//     overflow: hidden;
-// }
-
-.homeOverwrite {
-    user-select: none;
-}
-.homeOverwrite .hero {
-    z-index: 2;
-    // height: 690px;
-    position: relative;
-    pointer-events: none;
-}
-.homeOverwrite .hero .action {
-    pointer-events: all;
-}
-.homeOverwrite .hero #main-title {
-    color: white;
-    font-size: 2.5rem;
-}
-.homeOverwrite .home .hero .description {
-    color: white;
-}
-.homeOverwrite .home .hero .action-button {
-    background-color: #c2185b;
-    border-bottom: 1px solid #c2185b;
-}
-.homeOverwrite .home .hero img {
-    width: 40rem;
-}
-.homeOverwrite .home .hero .action-button:hover {
-    background-color: #e61c58;
-}
-
-.homeOverwriteZh {
-    user-select: none;
-}
-.homeOverwriteZh .hero {
-    z-index: 2;
-    height: 690px;
-    position: relative;
-    pointer-events: none;
-}
-.homeOverwriteZh .hero .action {
-    pointer-events: all;
-}
-.homeOverwriteZh .hero #main-title {
-    color: white;
-    font-size: 2.5rem;
-}
-.homeOverwriteZh .home .hero .description {
-    color: white;
-}
-.homeOverwriteZh .home .hero .action-button {
-    background-color: #c2185b;
-    border-bottom: 1px solid #c2185b;
-}
-.homeOverwriteZh .home .hero .action-button:hover {
-    background-color: #e61c58;
-}
-.homeOverwriteZh .home .hero img {
-    width: 40rem;
 }
 
 .sidebar,
