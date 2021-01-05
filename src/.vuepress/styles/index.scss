@@ -130,6 +130,7 @@ html {
                 }
                 main.home {
                     header.hero {
+                        // background: url('../public/background.gif');
                         p.action {
                             margin-top: 70px;
                         }
@@ -198,13 +199,13 @@ html {
 .demo div.theme-default-content {
     max-width: 40%;
 }
-.theme-default-content #demo-background {
-    width: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    overflow: hidden;
-}
+// .theme-default-content #demo-background {
+//     width: 100%;
+//     position: absolute;
+//     left: 0;
+//     top: 0;
+//     overflow: hidden;
+// }
 
 .homeOverwrite {
     user-select: none;
