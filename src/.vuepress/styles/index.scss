@@ -10,6 +10,7 @@ html {
             height: 100%;
             .theme-container {
                 height: 100%;
+                background-color: white;
                 .navbar {
                     background-color: white;
                     // transition: background-color 500ms linear;
@@ -177,7 +178,8 @@ html {
             .theme-container.homeOverwrite,
             .theme-container.homeOverwriteZh {
                 user-select: none;
-                background-color: $background_color;
+                // background-color: $background_color;
+                background-color: white;
                 // .sidebar {
                 // background-color: $background_color;
                 // }
@@ -203,7 +205,6 @@ html {
                                         }
                                     }
                                     .nav-dropdown {
-                                        
                                         background-color: $middle_color;
                                         border: -1;
                                     }
@@ -217,7 +218,7 @@ html {
             .theme-container.homeOverwrite,
             .theme-container.homeOverwriteZh {
                 // user-select: none;
-                // background-color: $background_color;
+                background-color: $background_color;
                 .sidebar {
                     background-color: $background_color;
                     .nav-links {
