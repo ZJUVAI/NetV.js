@@ -16,7 +16,7 @@ class Dep {
                 try {
                     e.update.apply(e) //触发订阅者更新函数
                 } catch (err) {
-                    console.warr(err)
+                    console.warn(err)
                 }
             }
         })
@@ -61,15 +61,36 @@ var addHistoryMethod = (function() {
     }
 })()
 
-window.onload = function() {
-    if (window.location.href.indexOf('zjvis') >= 0) {
+const removeMirrorLink = function() {
+    if (window.location.href.indexOf('localhost') >= 0) {
         document
             .querySelector('a[rel="chinese-mirror"]')
             .parentElement.setAttribute('style', 'display: none;')
     }
 }
+
+window.onload = function() {
+    const mutationObserver = new MutationObserver(function(mutations) {
+        mutations.forEach(function(mutation) {
+            removeMirrorLink()
+        })
+    })
+    /**Element**/
+    mutationObserver.observe(document.querySelector('.theme-container .home-link'), {
+        attributes: true,
+        attributeFilter: ['href'],
+        characterData: false,
+        childList: false,
+        subtree: false,
+        attributeOldValue: false,
+        characterDataOldValue: false
+    })
+    removeMirrorLink()
+}
 window.addHistoryListener = addHistoryMethod('historychange')
 history.pushState = addHistoryMethod('pushState')
 history.replaceState = addHistoryMethod('replaceState')
 
-window.addHistoryListener('history', window.onload)
+window.addHistoryListener('history', () => {
+    removeMirrorLink()
+})
