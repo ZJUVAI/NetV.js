@@ -62,7 +62,7 @@ var addHistoryMethod = (function() {
 })()
 
 const removeMirrorLink = function() {
-    if (window.location.href.indexOf('localhost') >= 0) {
+    if (window.location.href.indexOf('zjvis') >= 0) {
         document
             .querySelector('a[rel="chinese-mirror"]')
             .parentElement.setAttribute('style', 'display: none;')
