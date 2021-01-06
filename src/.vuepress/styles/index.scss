@@ -8,7 +8,8 @@ html {
     body {
         #app {
             height: 100%;
-            .theme-container.homeOverwrite {
+            .theme-container.homeOverwrite,
+            .theme-container.homeOverwriteZh {
                 user-select: none;
                 background-color: $background_color;
                 .sidebar {

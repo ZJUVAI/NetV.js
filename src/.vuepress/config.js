@@ -101,9 +101,9 @@ module.exports = {
                 // 当前 locale 的 algolia docsearch 选项
                 algolia: {},
                 nav: [
-                    { text: '指南', link: '/guide/' }, // 外部链接
-                    { text: 'API', link: '/API/' }, // 外部链接
-                    { text: '样例', link: '/component/' }, // 外部链接
+                    { text: '指南', link: '/zh/guide/' }, // 外部链接
+                    { text: 'API', link: '/zh/API/' }, // 外部链接
+                    { text: '样例', link: '/zh/component/' }, // 外部链接
                     // 下拉列表
                     {
                         text: '资源链接',
@@ -121,15 +121,15 @@ module.exports = {
                     { text: '国内镜像', link: chineseSite + '/zh', rel: 'chinese-mirror' } // 外部链接
                 ],
                 sidebar: {
-                    '/guide/': [
+                    '/zh/guide/': [
                         '',
                         'getting-start',
                         'others'
                         // 'development-guide',
                         // 'development-guide-chinese',
                     ],
-                    '/API/': ['', 'node', 'link', 'interfaces', 'utils'],
-                    '/component/': ['', 'shape', 'layout', 'others', 'plugins']
+                    '/zh/API/': ['', 'node', 'link', 'interfaces', 'utils'],
+                    '/zh/component/': ['', 'shape', 'layout', 'others', 'plugins']
                 },
                 lastUpdated: 'Last Updated' // 文档更新时间：每个文件git最后提交的时间
             }
