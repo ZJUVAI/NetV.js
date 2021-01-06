@@ -11,7 +11,7 @@ sidebarDepth: 3
 ## Sigma.js
 
 [Sigma.js](http://sigmajs.org/)是一个用于图绘制的 JavaScript 库，它支持通过简单的配置生成图，并可以方便进行拓展。
-Sigma.js近乎[停止维护](https://github.com/jacomyal/sigma.js/releases/)，同时在大国莫图数据下表现不佳。
+Sigma.js近乎[停止维护](https://github.com/jacomyal/sigma.js/releases/)，同时在大规图数据下表现不佳。
 
 ## Stardust.js
 

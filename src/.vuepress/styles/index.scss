@@ -8,46 +8,11 @@ html {
     body {
         #app {
             height: 100%;
-            .theme-container.homeOverwrite,
-            .theme-container.homeOverwriteZh {
-                user-select: none;
-                background-color: $background_color;
-                .sidebar {
-                    background-color: $background_color;
-                }
-                .navbar {
-                    background-color: transparent;
-                    border-bottom: 0;
-                    .home-link {
-                        .site-name {
-                            color: $front_color;
-                        }
-                    }
-                    .links {
-                        background-color: $background_color;
-                        color: $front_color;
-                        .nav-links {
-                            .nav-item {
-                                .dropdown-wrapper {
-                                    .dropdown-title {
-                                        .title {
-                                            color: $front_color;
-                                        }
-                                    }
-                                    .nav-dropdown {
-                                        background-color: $middle_color;
-                                        border: 0;
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
             .theme-container {
                 height: 100%;
                 .navbar {
                     background-color: white;
+                    // transition: background-color 500ms linear;
                     .sidebar-button {
                         svg {
                             path {
@@ -56,6 +21,7 @@ html {
                         }
                     }
                     .links {
+                        // transition: background-color 500ms linear;
                         .nav-links {
                             .nav-item {
                                 .nav-link:hover {
@@ -99,7 +65,8 @@ html {
                                     }
                                 }
                                 .nav-dropdown {
-                                    background-color: $background_color;
+                                    color: $middle_color;
+                                    // background-color: $background_color;
                                     border: 0;
                                 }
                             }
@@ -203,6 +170,74 @@ html {
                     }
                     h2 {
                         border-bottom: 1px solid $middle_color + $offset_color;
+                    }
+                }
+            }
+            .theme-container,
+            .theme-container.homeOverwrite,
+            .theme-container.homeOverwriteZh {
+                user-select: none;
+                background-color: $background_color;
+                // .sidebar {
+                // background-color: $background_color;
+                // }
+                .navbar {
+                    // transition: background-color 500ms linear;
+                    background-color: $background_color;
+                    border-bottom: 0;
+                    .home-link {
+                        .site-name {
+                            color: $front_color;
+                        }
+                    }
+                    .links {
+                        // transition: background-color 500ms linear;
+                        background-color: $background_color;
+                        color: $front_color;
+                        .nav-links {
+                            .nav-item {
+                                .dropdown-wrapper {
+                                    .dropdown-title {
+                                        .title {
+                                            color: $front_color;
+                                        }
+                                    }
+                                    .nav-dropdown {
+                                        
+                                        background-color: $middle_color;
+                                        border: -1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+            .theme-container.homeOverwrite,
+            .theme-container.homeOverwriteZh {
+                // user-select: none;
+                // background-color: $background_color;
+                .sidebar {
+                    background-color: $background_color;
+                    .nav-links {
+                        color: $front_color;
+                        .nav-item {
+                            .dropdown-wrapper {
+                                .dropdown-title,
+                                .mobile-dropdown-title {
+                                    .title {
+                                        color: $front_color;
+                                    }
+                                }
+                                .nav-dropdown {
+                                    color: $front_color;
+                                    // background-color: $background_color;
+                                    border: 0;
+                                    // background-color: $middle_color;
+                                }
+                            }
+                        }
                     }
                 }
             }
