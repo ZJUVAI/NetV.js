@@ -1,10 +1,11 @@
 ---
 sidebarDepth: 2
+sidebar: open
 ---
 
 # NetV
 
-## Initialization
+## 初始化
 
 `NetV` 是一个类, `NetV` 的实例化可以通过以下几种方式创建:
 
@@ -22,17 +23,30 @@ const netV = new NetV({
 })
 ```
 
+
 整个初始化配置接口可以在这里获得:[InitializationConfigurations](interfaces.html#InitializationConfigurations)
 
 ## 操作
 
+### `netv.backgroundColor()`
+
+设置/获取 NetV 的画布背景颜色。
+
+-   `netv.backgroundColor()`: 返回 NetV 的背景颜色，类型为：[Color](interfaces.html#color).
+
+-   `netv.backgroundColor(`[`Color`](interfaces.html#color)`)`: 设置 NetV 的画布背景颜色。
+
+### `netv.dispose()`
+
+销毁 NetV 对象，清除其中的数据，释放分配的内存并删除创建的DOM元素。
+
 ### `NetV.data()`
 
-加入数据到 `NetV`的实例,或者返回已经加入的数据.
+设置/获取 NetV 绑定的图数据。
 
--   `NetV.data()`: 返回数据 (a [`NodeLinkData`](interfaces.html#nodelinkdata) object).
+-   `NetV.data()`: 返回图数据，类型为：[`NodeLinkData`](interfaces.html#nodelinkdata)。
 
--   `NetV.data(`[`NodeLinkData`](interfaces.html#nodelinkdata)`)`: 加入数据到 `NetV` 实例,没有返回值.
+-   `NetV.data(`[`NodeLinkData`](interfaces.html#nodelinkdata)`)`: 设定 NetV 的图数据。
 
     ```typescript
     netV.data({
@@ -65,8 +79,10 @@ const newNode = netV.addNode({
     id: '3',
     x: 100,
     y: 100,
-    fill: { r: 1, g: 0, b: 1, a: 0 },
-    r: 10
+    style: {
+        fill: { r: 1, g: 0, b: 1, a: 0 },
+        r: 10
+    }
 })
 ```
 
@@ -78,7 +94,9 @@ const newNode = netV.addNode({
 const newLink = netV.addLink({
     source: '0',
     target: '3',
-    strokeColor: { r: 1, g: 0, b: 1, a: 0 }
+    style: {
+        strokeColor: { r: 1, g: 0, b: 1, a: 0 }
+    }
 })
 ```
 
@@ -124,7 +142,7 @@ const linkOneTwo = netV.getLinkByEnds(['1', '2'])
 
 ### `NetV.getElementByPosition()`
 
-`NetV.getElementByPosition( {x: number, y: number} )`: 通过的 2 维坐标获得当前位置的元素(节点或者边).其中两个数值型参数表示 2 维坐标的 x,y.返回一个对象其中包括了元素的 ID 和对象: `{type: string, element: Node/Link}`
+`NetV.getElementByPosition(`[`Position`](interfaces.html#position)`)`: 通过的 2 维坐标获得当前位置的元素(节点或者边)。返回一个对象其中包括了元素的类型和对象: `{type: 'node' | link, element: Node | Link}`
 
 ```typescript
 const obj = netV.getElementByPosition({ x: 100, y: 200 })
@@ -148,16 +166,74 @@ if (!obj) {
 
 ### `NetV.loadDataset()`
 
-`NetV.loadDataset( string )`: 获取整合在 _NetV.js_ 中的数据集,返回一个 [`NodeLinkData`](interfaces.html#nodelinkdata) 对象.数据集如下:
+`NetV.loadDataset( string )`: 获取整合在 NetV 中的数据集,返回一个 [`NodeLinkData`](interfaces.html#nodelinkdata) 对象.数据集如下:
 
--   `'miserables'`: 它包含维克多·雨果的小说《悲惨世界》中的关系人物.其中有 77 个节点和 254 条边.
+-   `'miserables'`: 它包含维克多·雨果的小说《悲惨世界》中的关系人物。其中有 77 个节点和 254 条边。
+- `'patent'`: 包含近年专利申请公司，发明人与专利的相互关系，包含 352 个节点和 412 条边。
 
 ```typescript
 const miserables = netV.loadDataset('miserables')
 netV.data(miserables)
 ```
 
-## Render
+## 交互
+
+### `netv.on()`
+
+为 NetV 添加监听事件。注意此处添加的监听事件是绑定在整个画布上的。
+
+`netv.on(eventName: string, callback: (e: Event) => void)`
+
+-   `eventName`: 事件类型，包括：`zoom`, `pan`, `mousedown`, `mouseup`, `click`
+-   `callback`: 事件触发时将执行的回调函数
+
+### `netv.off()`
+
+删除添加在 NetV 上的监听事件。
+
+`netv.on(eventName: string, callback: (e: Event) => void)`
+
+-   `eventName`: 事件类型，包括：`zoom`, `pan`, `mousedown`, `mouseup`, `click`
+-   `callback`: 事件触发时将执行的回调函数
+
+### `netv.panBy()`
+
+平移 NetV 画布。
+
+`netv.panBy(x: number, y: number)`: 在水平和竖直方向上各平移`x`与`y`长度。
+
+### `netv.zoomBy()`
+
+缩放 NetV 画布。
+
+`netv.zoomBy(k: number, center?: Position)`: 以`center`为中心，将画布缩放`k`倍，如果未指定`center`，将以画面中央为中心缩放。
+
+### `netv.centerOn()`
+
+平移画布使特定节点居中。
+
+`netv.centerOn(node: Node)`: 通过平移画布，将`node`元素置于画布中央。
+
+### `netv.transform()`
+
+获取 NetV 的当前transform，以及不通过鼠标交互或调用`panBy`和`zoomBy`函数直接改动画面的 transform。
+
+-   `netv.transform()`: 返回 transform，类型为 [Transform](interfaces.html#transform).
+-   `netv.transform(value: Transform)`: 设定 transform， 类型为 [Transform](interfaces.html#transform).
+
+### `netv.transition()`
+
+给定若干不同的 transform，NetV 可逐一过渡到对应transform。
+
+`netv.transition(transforms: Transform[], durationMS: number[], callback?:({transform: Transform}) => void)`
+
+-   `transforms`: 待过渡的 transform，类型为：[Transform](interfaces.html#transform).
+-   `durationMS`: 每个过渡的持续时间。
+-   `callback`: _可选_, 过渡时执行的回调函数，该回调函数接收一个内含当前transform的对象：`{ transform: Transform}`
+
+
+
+## 绘制
 
 ### `NetV.draw()`
 
