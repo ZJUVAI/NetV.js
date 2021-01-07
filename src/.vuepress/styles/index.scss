@@ -148,6 +148,11 @@ html {
                     background-color: white;
                     // background-color: $middle_color;
                     // color: $front_color - $offset_color;
+                    .theme-default-content,
+                    .page-edit,
+                    .page-nav {
+                        max-width: 1000px;
+                    }
                     h1,
                     h2,
                     h3,
