@@ -23,7 +23,6 @@ const netV = new NetV({
 })
 ```
 
-
 整个初始化配置接口可以在这里获得:[InitializationConfigurations](interfaces.html#InitializationConfigurations)
 
 ## 操作
@@ -38,7 +37,7 @@ const netV = new NetV({
 
 ### `netv.dispose()`
 
-销毁 NetV 对象，清除其中的数据，释放分配的内存并删除创建的DOM元素。
+销毁 NetV 对象，清除其中的数据，释放分配的内存并删除创建的 DOM 元素。
 
 ### `NetV.data()`
 
@@ -169,7 +168,7 @@ if (!obj) {
 `NetV.loadDataset( string )`: 获取整合在 NetV 中的数据集,返回一个 [`NodeLinkData`](interfaces.html#nodelinkdata) 对象.数据集如下:
 
 -   `'miserables'`: 它包含维克多·雨果的小说《悲惨世界》中的关系人物。其中有 77 个节点和 254 条边。
-- `'patent'`: 包含近年专利申请公司，发明人与专利的相互关系，包含 352 个节点和 412 条边。
+-   `'patent'`: 包含近年专利申请公司，发明人与专利的相互关系，包含 352 个节点和 412 条边。
 
 ```typescript
 const miserables = netV.loadDataset('miserables')
@@ -216,22 +215,20 @@ netV.data(miserables)
 
 ### `netv.transform()`
 
-获取 NetV 的当前transform，以及不通过鼠标交互或调用`panBy`和`zoomBy`函数直接改动画面的 transform。
+获取 NetV 的当前 transform，以及不通过鼠标交互或调用`panBy`和`zoomBy`函数直接改动画面的 transform。
 
 -   `netv.transform()`: 返回 transform，类型为 [Transform](interfaces.html#transform).
 -   `netv.transform(value: Transform)`: 设定 transform， 类型为 [Transform](interfaces.html#transform).
 
 ### `netv.transition()`
 
-给定若干不同的 transform，NetV 可逐一过渡到对应transform。
+给定若干不同的 transform，NetV 可逐一过渡到对应 transform。
 
 `netv.transition(transforms: Transform[], durationMS: number[], callback?:({transform: Transform}) => void)`
 
 -   `transforms`: 待过渡的 transform，类型为：[Transform](interfaces.html#transform).
 -   `durationMS`: 每个过渡的持续时间。
--   `callback`: _可选_, 过渡时执行的回调函数，该回调函数接收一个内含当前transform的对象：`{ transform: Transform}`
-
-
+-   `callback`: _可选_, 过渡时执行的回调函数，该回调函数接收一个内含当前 transform 的对象：`{ transform: Transform}`
 
 ## 绘制
 
