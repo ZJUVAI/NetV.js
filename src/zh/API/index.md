@@ -23,6 +23,34 @@ const netV = new NetV({
 })
 ```
 
+一个简单的 demo：
+
+<initialization-demo/>
+
+```javascript
+const div = document.getElementById(id)
+const width = div.clientWidth
+const height = 300
+const testData = {
+    nodes: [
+        { id: '0', x: width / 4, y: height / 3 },
+        { id: '1', x: (width / 4) * 3, y: height / 3 },
+        { id: '2', x: width / 2, y: (height * 2) / 3 }
+    ],
+    links: [
+        { source: '0', target: '2' },
+        { source: '1', target: '2' }
+    ]
+}
+const netv = new NetV({
+    container: div,
+    width,
+    height
+})
+netv.data(testData)
+netv.draw()
+```
+
 整个初始化配置接口可以在这里获得:[InitializationConfigurations](interfaces.html#InitializationConfigurations)
 
 ## 操作
@@ -34,6 +62,14 @@ const netV = new NetV({
 -   `netv.backgroundColor()`: 返回 NetV 的背景颜色，类型为：[Color](interfaces.html#color).
 
 -   `netv.backgroundColor(`[`Color`](interfaces.html#color)`)`: 设置 NetV 的画布背景颜色。
+
+<backgroundColor-demo/>
+
+```javascript
+// 延续上面初始化的demo
+netv.backgroundColor({ r: 174 / 255, g: 129 / 255, b: 255 / 255, a: 1 })
+netv.draw()
+```
 
 ### `netv.dispose()`
 
