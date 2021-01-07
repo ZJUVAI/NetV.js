@@ -37,7 +37,7 @@ sidebarDepth: 2
     }) // 改变 linkOneTwo's 目标节点到 nodeThree
     ```
 
-## Style
+## 样式
 
 <img :src="$withBase('/link-style.svg')" alt="link-style">
 
@@ -61,3 +61,13 @@ netV.draw()
 
 -   `Link.strokeWidth()`: 获取边的宽度 (一个数字).
 -   `Link.strokeWidth( number )`: 设置边的宽度.
+
+## 交互
+
+### `Link.on()`
+
+`Link.on(eventName: string, callback?: (e:Event) => {})`: 为边添加交互事件，支持的事件类型包括: `'mousedown'`, `'mouseup'`, `'click'`, `'mouseover'`, and `'mouseout'`.
+
+### `Link.off()`
+
+`Link.off(eventName, callback?: (e:Event) => {})`: 删除绑定在边上的交互回调函数，如果未指定`callback`，将删除所有对应事件的回调。
