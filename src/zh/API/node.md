@@ -39,7 +39,7 @@ sidebarDepth: 3
     //  注意只有经过 netV.draw() 后, 可视化才回被刷新
     ```
 
-## Style
+## 样式
 
 ```typescript
 const node = netV.getNodeById('1')

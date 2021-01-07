@@ -6,7 +6,7 @@ sidebarDepth: 2
 
 [`Link`](link.html)是 _NetV.js_ 的一个基本对象. 它默认被可视化成一条直线 (没有箭头).
 
-## Manipulation
+## 操作
 
 ### `Link.source()`
 
