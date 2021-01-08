@@ -1,31 +1,22 @@
 #version 300 es
 precision highp float;
 in vec3 inVertexPos;
-in float in_shape;
+in vec4 in_shape_strokeWidth_rotate_r; // merge shape strokeWidth rotate and r into one attribute
 in vec2 in_position;
-in vec2 in_offset;
-in float in_width; // rect
-in float in_height; // rect
-in float in_rotate; // rect
-in float in_r; // circle
+in vec2 in_size; // rect: width + height
 in vec2 in_vertex_alpha; // triangle
 in vec2 in_vertex_beta; // triangle
 in vec2 in_vertex_gamma; // triangle
 in vec4 in_fill;
-in float in_strokeWidth;
 in vec4 in_strokeColor;
 
 out vec2 position;
-out float shape;
-out float width; // rect
-out float height; // rect
-out float rotate; // rect
-out float r; // circle
+out vec4 shape_strokeWidth_rotate_r;
+out vec2 size; // rect: width + height
 out vec2 vertex_alpha; // triangle
 out vec2 vertex_beta; // triangle
 out vec2 vertex_gamma; // triangle
 out vec4 fill;
-out float strokeWidth;
 out vec4 strokeColor;
 
 uniform mat3 projection;
@@ -56,16 +47,16 @@ float calculate_stroke_scale (vec2 p1, vec2 p2, vec2 p3, float strokeWidth, floa
 }
 
 void main(void) {
-    r = in_r;
-    width = in_width;
-    height = in_height;
-    shape = in_shape;
+    size = in_size;
+    shape_strokeWidth_rotate_r = in_shape_strokeWidth_rotate_r;
+    float shape = shape_strokeWidth_rotate_r.r;
+    float strokeWidth = shape_strokeWidth_rotate_r.g;
+    float rotate = shape_strokeWidth_rotate_r.b;
+    float r = shape_strokeWidth_rotate_r.a;
     fill = in_fill;
     strokeColor = in_strokeColor;
-    strokeWidth = in_strokeWidth;
-    rotate = in_rotate;
     
-    position = scale * (in_position + in_offset) + translate;
+    position = scale * in_position + translate;
     vertex_alpha = in_vertex_alpha * pixelRatio;
     vertex_beta = in_vertex_beta * pixelRatio;
     vertex_gamma = in_vertex_gamma * pixelRatio;
@@ -95,8 +86,8 @@ void main(void) {
         );
     } else if (shape == 1.0) { // rect shape
         scale_mat = mat3(
-            width + strokeWidth, 0, 0,
-            0, height + strokeWidth, 0,
+            size.x + strokeWidth, 0, 0,
+            0, size.y + strokeWidth, 0,
             0, 0, 1
         );
         rotate_mat = mat3(
@@ -114,8 +105,9 @@ void main(void) {
         vec2 outer_vertex_gamma = (vertex_gamma - inner) * stroke_scale + inner ; // consider stroke in
 
         // to ensure the fragment cutting is within the rectangle
-        width = 1.5 * (max(max(outer_vertex_alpha.x, outer_vertex_beta.x), outer_vertex_gamma.x) - min(min(outer_vertex_alpha.x, outer_vertex_beta.x), outer_vertex_gamma.x));
-        height = 1.5 * (max(max(outer_vertex_alpha.y, outer_vertex_beta.y), outer_vertex_gamma.y)- min(min(outer_vertex_alpha.y, outer_vertex_beta.y), outer_vertex_gamma.y));
+        float width = 1.5 * (max(max(outer_vertex_alpha.x, outer_vertex_beta.x), outer_vertex_gamma.x) - min(min(outer_vertex_alpha.x, outer_vertex_beta.x), outer_vertex_gamma.x));
+        float height = 1.5 * (max(max(outer_vertex_alpha.y, outer_vertex_beta.y), outer_vertex_gamma.y)- min(min(outer_vertex_alpha.y, outer_vertex_beta.y), outer_vertex_gamma.y));
+        size = vec2(width, height);
 
         scale_mat = mat3(
             width, 0, 0,

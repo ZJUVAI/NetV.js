@@ -41,9 +41,9 @@ npm run build # or: npm run watch
 1. 首先，你需要修改`src/config.ts`，增加了第30-32行，增加对三角形三个顶点的位置的默认值。
 2. 打开`src/interface.ts`，在22行最后增加了`triangle`字符串，使节点的形状能够支持三角形
 3. 打开`src/elements/node.ts`，增加了第26-29行，使得调用`NetV.js`的开发者能够指定/获取任意三角形节点的三个顶点
-4. 打开`src/renderer/elements/node/render-node.ts`，先增加了第89-90行，使得shape信息能够传递给`WebGL`，然后增加了第95-110行，定义了从节点的属性到`WebGL`属性的转换方式；
-5. 然后打开`src/renderer/elements/node/vertex.hlsl`，增加了11-14行，能够读取外部传给shader的三角形三个顶点的属性值。第38-44行，根据三角形的三个顶点，计算了其内心；第46-56行，计算了三角形因为`strokeWidth`引起的内三角形和外三角形相对于没有`strokeWidth`的三角形所需要进行的缩放比例。第108-124，计算了这个三角形的外接长方形。
-6. 在`src/renderer/elements/node/fragment.hlsl`，增加了45-64行，计算需要被绘制的片元，是否处于内三角形内部，以及66-88行，计算了片元是否位于外三角形内部，最后第152-156行，对位于内三角形内部的区域绘制`fill`颜色，处于内三角形和外三角形之间的区域绘制`strokeColor`颜色。其他部分则不绘制。
+4. 打开`src/renderer/elements/node/render-node.ts`，先增加了第60-62行，使得shape信息能够传递给`WebGL`，然后增加了第79-94行，定义了从节点的属性到`WebGL`属性的转换方式；
+5. 然后打开`src/renderer/elements/node/vertex.hlsl`，增加了7-9行，能够读取外部传给shader的三角形三个顶点的属性值。第29-35行，根据三角形的三个顶点，计算了其内心；第37-47行，计算了三角形因为`strokeWidth`引起的内三角形和外三角形相对于没有`strokeWidth`的三角形所需要进行的缩放比例。第99-116，计算了这个三角形的外接长方形。
+6. 在`src/renderer/elements/node/fragment.hlsl`，增加了43-62行，计算需要被绘制的片元，是否处于内三角形内部，以及64-86行，计算了片元是否位于外三角形内部，最后第160-164行，对位于内三角形内部的区域绘制`fill`颜色，处于内三角形和外三角形之间的区域绘制`strokeColor`颜色。其他部分则不绘制。
 7. 类似的，修改`src/renderer/elements/node/id-vertex.hlsl`和`src/renderer/elements/node/id-fragment.hlsl`，他们的作用是能够将节点的`id`映射到一层虚拟画布的颜色上，当鼠标点击屏幕时能够获取节点的id。
 
 

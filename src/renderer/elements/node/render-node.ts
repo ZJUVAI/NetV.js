@@ -51,46 +51,30 @@ export class RenderNodeManager extends RenderElementManager {
                     const position = node.position()
                     return [position.x, position.y]
                 }
-            } else if (attr.name === 'in_r') {
+            } else if (attr.name === 'in_shape_strokeWidth_rotate_r') {
                 attr.extractAttributeValueFrom = (node: Node) => {
-                    return [node.r() * this.pixelRatio]
+                    const shape = node.shape()
+                    let shapeCode = 0
+                    if (shape === 'rect') {
+                        shapeCode = 1
+                    } else if (shape === 'triangle') {
+                        shapeCode = 2
+                    }
+                    return [shapeCode,node.strokeWidth() * this.pixelRatio, node.rotate(), node.r() * this.pixelRatio]
                 }
-            } else if (attr.name === 'in_width') {
+            } else if (attr.name === 'in_size') {
                 attr.extractAttributeValueFrom = (node: Node) => {
-                    return [node.width() * this.pixelRatio]
+                    return [node.width() * this.pixelRatio,node.height() * this.pixelRatio]
                 }
-            } else if (attr.name === 'in_height') {
-                attr.extractAttributeValueFrom = (node: Node) => {
-                    return [node.height() * this.pixelRatio]
-                }
-            } else if (attr.name === 'in_rotate') {
-                attr.extractAttributeValueFrom = (node: Node) => {
-                    return [node.rotate()]
-                }
-            } else if (attr.name === 'in_fill') {
+            }else if (attr.name === 'in_fill') {
                 attr.extractAttributeValueFrom = (node: Node) => {
                     const fill = node.fill()
                     return [fill.r, fill.g, fill.b, fill.a]
-                }
-            } else if (attr.name === 'in_strokeWidth') {
-                attr.extractAttributeValueFrom = (node: Node) => {
-                    return [node.strokeWidth() * this.pixelRatio]
                 }
             } else if (attr.name === 'in_strokeColor') {
                 attr.extractAttributeValueFrom = (node: Node) => {
                     const strokeColor = node.strokeColor()
                     return [strokeColor.r, strokeColor.g, strokeColor.b, strokeColor.a]
-                }
-            } else if (attr.name === 'in_shape') {
-                attr.extractAttributeValueFrom = (node: Node) => {
-                    const shape = node.shape()
-                    if (shape === 'rect') {
-                        return [1]
-                    } else if (shape === 'triangle') {
-                        return [2]
-                    } else {
-                        return [0]
-                    }
                 }
             } else if (attr.name === 'in_vertex_alpha') {
                 attr.extractAttributeValueFrom = (node: Node) => {

@@ -1,22 +1,19 @@
 #version 300 es
 precision highp float;
 in vec2 position;
-in float shape;
-in float width; // rect
-in float height; // rect
-in float rotate; // rect
-in float r; // circle
+in vec4 shape_strokeWidth_rotate_r;
+in vec2 size; // rect: width + height
 in vec2 vertex_alpha; // triangle
 in vec2 vertex_beta; // triangle
 in vec2 vertex_gamma; // triangle
 in vec4 fill;
-in float strokeWidth;
 in vec4 strokeColor;
 
 out vec4 fragmentColor;
 
 uniform vec2 viewport;
 uniform float pixelRatio;
+
 
 vec2 calculate_inner_point (vec2 p1, vec2 p2, vec2 p3) {
     float inner_p1 = sqrt(dot(p1, p1));
@@ -27,6 +24,7 @@ vec2 calculate_inner_point (vec2 p1, vec2 p2, vec2 p3) {
 }
 
 float calculate_stroke_scale (vec2 p1, vec2 p2, vec2 p3) {
+    float strokeWidth = shape_strokeWidth_rotate_r.g;
     vec2 inner = calculate_inner_point(p1, p2, p3);
     float a = distance(p1, inner);
     float b = distance(p2, inner);
@@ -88,6 +86,8 @@ float inTriangleBorder() {
 }
 
 float inRect() {
+    float strokeWidth = shape_strokeWidth_rotate_r.g;
+    float rotate = shape_strokeWidth_rotate_r.b;
     vec2 flip_pos = position;
     flip_pos.y = viewport.y - position.y;
     mat2 rotate_mat = mat2(
@@ -95,12 +95,14 @@ float inRect() {
         -sin(rotate), cos(rotate)
     );
     vec2 rotate_related_FragCoord = rotate_mat * (gl_FragCoord.xy / pixelRatio - flip_pos);
-    float x_in = step(rotate_related_FragCoord.x, width / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - width / 2.0 + strokeWidth / 2.0));
-    float y_in = step(rotate_related_FragCoord.y, height / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - height / 2.0 + strokeWidth / 2.0));
+    float x_in = step(rotate_related_FragCoord.x, size.x / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - size.x / 2.0 + strokeWidth / 2.0));
+    float y_in = step(rotate_related_FragCoord.y, size.y / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - size.y / 2.0 + strokeWidth / 2.0));
     return x_in * y_in;
 }
 
 float inRectBorder() {
+    float strokeWidth = shape_strokeWidth_rotate_r.g;
+    float rotate = shape_strokeWidth_rotate_r.b;
     vec2 flip_pos = position;
     flip_pos.y = viewport.y - position.y;
     mat2 rotate_mat = mat2(
@@ -108,15 +110,17 @@ float inRectBorder() {
         -sin(rotate), cos(rotate)
     );
     vec2 rotate_related_FragCoord = rotate_mat * (gl_FragCoord.xy / pixelRatio - flip_pos);
-    float x_in_outer = step(rotate_related_FragCoord.x, width / 2.0 + strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - width / 2.0 - strokeWidth / 2.0));
-    float y_in_outer = step(rotate_related_FragCoord.y, height / 2.0 + strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - height / 2.0 - strokeWidth / 2.0));
-    float x_in_inner = step(rotate_related_FragCoord.x, width / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - width / 2.0 + strokeWidth / 2.0));
-    float y_in_inner = step(rotate_related_FragCoord.y, height / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - height / 2.0 + strokeWidth / 2.0));
+    float x_in_outer = step(rotate_related_FragCoord.x, size.x / 2.0 + strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - size.x / 2.0 - strokeWidth / 2.0));
+    float y_in_outer = step(rotate_related_FragCoord.y, size.y / 2.0 + strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - size.y / 2.0 - strokeWidth / 2.0));
+    float x_in_inner = step(rotate_related_FragCoord.x, size.x / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - size.x / 2.0 + strokeWidth / 2.0));
+    float y_in_inner = step(rotate_related_FragCoord.y, size.y / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - size.y / 2.0 + strokeWidth / 2.0));
 
     return x_in_outer * y_in_outer * (1.0 - x_in_inner * y_in_inner);
 }
 
 float inCircle() {
+    float r = shape_strokeWidth_rotate_r.a;
+    float strokeWidth = shape_strokeWidth_rotate_r.g;
     vec2 flip_pos = position;
     flip_pos.y = viewport.y - position.y;
     float dist = distance(gl_FragCoord.xy / pixelRatio, flip_pos);
@@ -125,6 +129,8 @@ float inCircle() {
 }
 
 float inCircleBorder() {
+    float r = shape_strokeWidth_rotate_r.a;
+    float strokeWidth = shape_strokeWidth_rotate_r.g;
     if (strokeWidth == 0.) {
       return 0.;
     }
@@ -138,6 +144,8 @@ float inCircleBorder() {
 }
 
 void main(void) {
+    float strokeWidth = shape_strokeWidth_rotate_r.g;
+    float shape = shape_strokeWidth_rotate_r.r;
     if (shape == 0.0) {
         // circle shape
         // border check, using 0.5(center of smoothstep)
