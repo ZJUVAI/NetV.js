@@ -106,6 +106,13 @@ fragment.methods = [
         `float distToQuadraticBezierCurve(vec2 p, vec2 b0, vec2 b1, vec2 b2) {`,
         `  return length(get_distance_vector(b0 - p, b1 - p, b2 - p));`,
         `}`
+    ],
+    [
+        `float isInDash(vec2 p, vec2 p0, vec2 p1, int dashInterval) {`,
+        `  float d = length((p - p0) * normalize(p1 - p0));`, // projected p to p0-p1 line and calculate distance to p0
+        `  int idx = int(d) / dashInterval;`,
+        `  return float(idx % 2);`,
+        `}`
     ]
 ]
 
@@ -113,7 +120,10 @@ fragment.main = [
     `void main(void) {`,
     `  if (shape == 0.) {`,
     `    // line`,
-    `    fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
+    `    vec2 pos = gl_FragCoord.xy / pixelRatio;`,
+    `    vec2 cpAFlipped = vec2(cpA.x, viewport.y - cpA.y);`,
+    `    vec2 cpCFlipped = vec2(cpC.x, viewport.y - cpC.y);`,
+    `    fragmentColor = isInDash(pos, cpAFlipped, cpCFlipped, 5) * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
     `  } else if (shape == 1.) {`,
     `    // curve`,
     `    vec2 pos = gl_FragCoord.xy / pixelRatio;`,
