@@ -344,7 +344,7 @@ export class RenderElementManager {
                 },
                 shape: {
                     name: 'in_shape',
-                    value: [style.shape === 'curve' ? 1 : 0]
+                    value: [style.shape === 'dash-line' ? 2 : style.shape === 'curve' ? 1 : 0]
                 },
                 strokeWidth: {
                     name: 'in_strokeWidth',

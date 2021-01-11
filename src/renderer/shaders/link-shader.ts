@@ -123,10 +123,7 @@ fragment.main = [
     `void main(void) {`,
     `  if (shape == 0.) {`,
     `    // line`,
-    `    vec2 pos = gl_FragCoord.xy / pixelRatio;`,
-    `    vec2 cpAFlipped = vec2(cpA.x, viewport.y - cpA.y);`,
-    `    vec2 cpCFlipped = vec2(cpC.x, viewport.y - cpC.y);`,
-    `    fragmentColor = isInDash(pos, cpAFlipped, cpCFlipped, int(dashInterval)) * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
+    `    fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
     `  } else if (shape == 1.) {`,
     `    // curve`,
     `    vec2 pos = gl_FragCoord.xy / pixelRatio;`,
@@ -141,6 +138,16 @@ fragment.main = [
     `    } else {`,
     `      discard;`,
     `    }`,
+    `  } else if (shape == 2.) {`,
+    `    // dash-line`,
+    `    vec2 pos = gl_FragCoord.xy / pixelRatio;`,
+    `    vec2 cpAFlipped = vec2(cpA.x, viewport.y - cpA.y);`,
+    `    vec2 cpCFlipped = vec2(cpC.x, viewport.y - cpC.y);`,
+    `    if(isInDash(pos, cpAFlipped, cpCFlipped, int(dashInterval)) > 0.5) {`,
+    `      fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
+    `    } else {`,
+    `      discard;`,
+    `    }`,
     `  }`,
     `}`
 ]
@@ -150,7 +157,8 @@ idFragment.inputs['id'] = 'vec4'
 
 const sentencesTobeReplaced = [
     `    fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
-    `      fragmentColor = inCurve * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`
+    `      fragmentColor = inCurve * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
+    `      fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`
 ]
 sentencesTobeReplaced.forEach((sentence) => {
     idFragment.main[idFragment.main.indexOf(sentence)] = `fragmentColor = id;`

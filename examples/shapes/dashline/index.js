@@ -32,8 +32,9 @@ const netv = new NetV({
     container: document.getElementById('main'),
     link: {
         style: {
-            // shape: 'curve',
-            shape: 'line',
+            // shape: 'line',
+            shape: 'dash-line',
+            dashInterval: 8
         }
     }
 })
