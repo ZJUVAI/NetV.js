@@ -59,6 +59,8 @@ export interface LinkStyle {
     strokeColor?: Color
     /* curve shape */
     curveness?: number
+    
+    dashInterval?: number
 }
 
 export interface LinkData {

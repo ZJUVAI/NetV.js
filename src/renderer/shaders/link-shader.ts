@@ -7,6 +7,7 @@ vertex.inputs = {
     in_source: 'vec2',
     in_target: 'vec2',
     in_curveness: 'float',
+    in_dashInterval: 'float',
     in_strokeWidth: 'float',
     in_strokeColor: 'vec4'
 }
@@ -17,7 +18,8 @@ vertex.outputs = {
     cpA: 'vec2',
     cpB: 'vec2',
     cpC: 'vec2',
-    curveness: 'float'
+    curveness: 'float',
+    dashInterval: 'float'
 }
 vertex.uniforms = {
     projection: 'mat3',
@@ -29,6 +31,7 @@ vertex.main = [
     `    strokeColor = in_strokeColor;`,
     `    strokeWidth = in_strokeWidth;`,
     `    shape = in_shape;`,
+    `    dashInterval = in_dashInterval;`,
     `    vec2 source = in_source * scale + translate;`,
     `    vec2 target = in_target * scale + translate;`,
     `    vec2 delta = target - source;`,
@@ -123,7 +126,7 @@ fragment.main = [
     `    vec2 pos = gl_FragCoord.xy / pixelRatio;`,
     `    vec2 cpAFlipped = vec2(cpA.x, viewport.y - cpA.y);`,
     `    vec2 cpCFlipped = vec2(cpC.x, viewport.y - cpC.y);`,
-    `    fragmentColor = isInDash(pos, cpAFlipped, cpCFlipped, 5) * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
+    `    fragmentColor = isInDash(pos, cpAFlipped, cpCFlipped, int(dashInterval)) * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
     `  } else if (shape == 1.) {`,
     `    // curve`,
     `    vec2 pos = gl_FragCoord.xy / pixelRatio;`,

@@ -362,6 +362,10 @@ export class RenderElementManager {
                 curveness: {
                     name: 'in_curveness',
                     value: [style.curveness]
+                },
+                dashInterval: {
+                    name: 'in_dashInterval',
+                    value: [style.dashInterval]
                 }
             }
         } else {
