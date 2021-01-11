@@ -109,7 +109,7 @@ fragment.methods = [
     ],
     [
         `float isInDash(vec2 p, vec2 p0, vec2 p1, int dashInterval) {`,
-        `  float d = length((p - p0) * normalize(p1 - p0));`, // projected p to p0-p1 line and calculate distance to p0
+        `  float d = dot((p - p0), (p1 - p0)) / length(p1 - p0);`, // projected p to p0-p1 line and calculate distance to p0
         `  int idx = int(d) / dashInterval;`,
         `  return float(idx % 2);`,
         `}`
