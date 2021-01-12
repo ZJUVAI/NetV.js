@@ -334,6 +334,10 @@ export class RenderElementManager {
             const style = link.$_style as interfaces.LinkStyle
 
             map = {
+                valid: {
+                    name: 'in_valid',
+                    value: [link.$_valid]
+                },
                 source: {
                     name: 'in_source',
                     value: [link.$_source.$_position.x, link.$_source.$_position.y]
@@ -373,6 +377,10 @@ export class RenderElementManager {
             const style = node.$_style as interfaces.NodeStyle
 
             map = {
+                valid: {
+                    name: 'in_valid',
+                    value: [node.$_valid]
+                },
                 position: {
                     name: 'in_position',
                     value: [node.$_position.x, node.$_position.y]

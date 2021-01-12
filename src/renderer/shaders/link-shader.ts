@@ -3,6 +3,7 @@ import { Shader } from '../utils'
 const vertex = new Shader()
 vertex.inputs = {
     inVertexPos: 'vec3',
+    in_valid: 'float',
     in_shape: 'float',
     in_source: 'vec2',
     in_target: 'vec2',
@@ -12,6 +13,7 @@ vertex.inputs = {
     in_strokeColor: 'vec4'
 }
 vertex.outputs = {
+    valid: 'float',
     shape: 'float',
     strokeColor: 'vec4',
     strokeWidth: 'float',
@@ -28,6 +30,7 @@ vertex.uniforms = {
 }
 vertex.main = [
     `void main(void) {`,
+    `    valid = in_valid;`,
     `    strokeColor = in_strokeColor;`,
     `    strokeWidth = in_strokeWidth;`,
     `    shape = in_shape;`,
@@ -127,6 +130,9 @@ fragment.methods = [
 
 fragment.main = [
     `void main(void) {`,
+    `  if (valid == 0.0) {`,
+    `    discard;`,
+    `  }`,
     `  if (shape == 0.) {`,
     `    // line`,
     `    fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
