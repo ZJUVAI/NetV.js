@@ -37,6 +37,7 @@ export const link = {
         strokeColor: { r: 0.4, g: 0.6, b: 0.8, a: 0.5 },
         strokeWidth: 2,
         /* curve shape style */
-        curveness: 0.2
+        curveness: 0.2,
+        dashInterval: 5
     }
 }

@@ -14,6 +14,7 @@ class Link extends Element {
     public strokeWidth: (value?: number) => number
     public strokeColor: (value?: interfaces.Color) => interfaces.Color
     public curveness: (value?: number) => number
+    public dashInterval: (value?: number) => number
 
     public $_source: Node
     public $_target: Node

@@ -51,7 +51,7 @@ export interface NodeData {
     hoverCallback?: (node: Node) => void
 }
 
-export type LinkShape = 'line' | 'curve'
+export type LinkShape = 'line' | 'curve' | 'dash-line'
 
 export interface LinkStyle {
     shape?: LinkShape
@@ -59,6 +59,8 @@ export interface LinkStyle {
     strokeColor?: Color
     /* curve shape */
     curveness?: number
+    
+    dashInterval?: number
 }
 
 export interface LinkData {

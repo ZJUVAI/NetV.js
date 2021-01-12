@@ -344,7 +344,7 @@ export class RenderElementManager {
                 },
                 shape: {
                     name: 'in_shape',
-                    value: [style.shape === 'curve' ? 1 : 0]
+                    value: [style.shape === 'dash-line' ? 2 : style.shape === 'curve' ? 1 : 0]
                 },
                 strokeWidth: {
                     name: 'in_strokeWidth',
@@ -362,6 +362,10 @@ export class RenderElementManager {
                 curveness: {
                     name: 'in_curveness',
                     value: [style.curveness]
+                },
+                dashInterval: {
+                    name: 'in_dashInterval',
+                    value: [style.dashInterval]
                 }
             }
         } else {

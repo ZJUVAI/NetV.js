@@ -7,6 +7,7 @@ vertex.inputs = {
     in_source: 'vec2',
     in_target: 'vec2',
     in_curveness: 'float',
+    in_dashInterval: 'float',
     in_strokeWidth: 'float',
     in_strokeColor: 'vec4'
 }
@@ -17,7 +18,8 @@ vertex.outputs = {
     cpA: 'vec2',
     cpB: 'vec2',
     cpC: 'vec2',
-    curveness: 'float'
+    curveness: 'float',
+    dashInterval: 'float'
 }
 vertex.uniforms = {
     projection: 'mat3',
@@ -29,6 +31,7 @@ vertex.main = [
     `    strokeColor = in_strokeColor;`,
     `    strokeWidth = in_strokeWidth;`,
     `    shape = in_shape;`,
+    `    dashInterval = in_dashInterval;`,
     `    vec2 source = in_source * scale + translate;`,
     `    vec2 target = in_target * scale + translate;`,
     `    vec2 delta = target - source;`,
@@ -106,6 +109,19 @@ fragment.methods = [
         `float distToQuadraticBezierCurve(vec2 p, vec2 b0, vec2 b1, vec2 b2) {`,
         `  return length(get_distance_vector(b0 - p, b1 - p, b2 - p));`,
         `}`
+    ],
+    [
+        `float isInDash(vec2 p, vec2 p0, vec2 p1, int dashInterval) {`,
+        `  if (dashInterval <= 0) {`,
+        `    return 0.;`,
+        `  }`,
+        `  if (dashInterval >= int(length(p1 - p0))) {`,
+        `    return 1.;`,
+        `  }`,
+        `  float d = dot((p - p0), (p1 - p0)) / length(p1 - p0);`, // projected p to p0-p1 line and calculate distance to p0
+        `  int idx = int(d) / dashInterval;`,
+        `  return 1. - float(idx % 2);`,
+        `}`
     ]
 ]
 
@@ -128,6 +144,16 @@ fragment.main = [
     `    } else {`,
     `      discard;`,
     `    }`,
+    `  } else if (shape == 2.) {`,
+    `    // dash-line`,
+    `    vec2 pos = gl_FragCoord.xy / pixelRatio;`,
+    `    vec2 cpAFlipped = vec2(cpA.x, viewport.y - cpA.y);`,
+    `    vec2 cpCFlipped = vec2(cpC.x, viewport.y - cpC.y);`,
+    `    if(isInDash(pos, cpAFlipped, cpCFlipped, int(dashInterval)) > 0.5) {`,
+    `      fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
+    `    } else {`,
+    `      discard;`,
+    `    }`,
     `  }`,
     `}`
 ]
@@ -137,7 +163,8 @@ idFragment.inputs['id'] = 'vec4'
 
 const sentencesTobeReplaced = [
     `    fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
-    `      fragmentColor = inCurve * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`
+    `      fragmentColor = inCurve * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
+    `      fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`
 ]
 sentencesTobeReplaced.forEach((sentence) => {
     idFragment.main[idFragment.main.indexOf(sentence)] = `fragmentColor = id;`
