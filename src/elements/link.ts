@@ -19,6 +19,8 @@ class Link extends Element {
     public $_source: Node
     public $_target: Node
 
+    public $_valid = 1
+
     private $_elementReservedKeys = new Set(['source', 'target', 'style'])
 
     public constructor(core, linkData: interfaces.LinkData) {
@@ -126,6 +128,15 @@ class Link extends Element {
             source: this.$_source,
             target: this.$_target
         }
+    }
+
+    /**
+     * set valid flag for link
+     * @param value
+     */
+    public $_setValid(value: boolean) {
+        this.$_valid = value ? 1 : 0
+        this.$_core.$_renderer.linkManager.changeAttribute(this, 'valid')
     }
 }
 

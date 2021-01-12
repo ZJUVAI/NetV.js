@@ -3,6 +3,7 @@ import { Shader } from '../utils'
 const vertex = new Shader()
 vertex.inputs = {
     inVertexPos: 'vec3',
+    in_valid: 'float',
     in_shape: 'float',
     in_position: 'vec2',
     in_offset: 'vec2',
@@ -18,6 +19,7 @@ vertex.inputs = {
     in_strokeColor: 'vec4'
 }
 vertex.outputs = {
+    valid: 'float',
     position: 'vec2',
     shape: 'float',
     size: 'vec2', // width & height
@@ -66,6 +68,7 @@ vertex.methods = [
 ]
 vertex.main = [
     `void main(void) {`,
+    `   valid = in_valid;`,
     `   r = in_r;`,
     `   size = in_size;`,
     `   float width = size.x;`,
@@ -331,6 +334,9 @@ fragment.methods = [
 ]
 fragment.main = [
     `void main(void) {`,
+    `    if (valid == 0.0) {`,
+    `       discard;`,
+    `    }`,
     `    if (shape == 0.0) {`,
     `        // circle shape`,
     `        // border check, using 0.5(center of smoothstep)`,

@@ -36,6 +36,8 @@ class Node extends Element {
         y: 0
     }
 
+    public $_valid = 1
+
     public $_dragstartCallbackSet: Set<(e: any) => void> = new Set()
     public $_draggingCallbackSet: Set<(e: any) => void> = new Set()
     public $_dragendCallbackSet: Set<(e: any) => void> = new Set()
@@ -180,6 +182,15 @@ class Node extends Element {
         }
 
         return this.$_position
+    }
+
+    /**
+     * set valid flag for node
+     * @param value
+     */
+    public $_setValid(value: boolean) {
+        this.$_valid = value ? 1 : 0
+        this.$_core.$_renderer.nodeManager.changeAttribute(this, 'valid')
     }
 
     /**

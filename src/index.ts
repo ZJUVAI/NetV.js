@@ -122,6 +122,42 @@ export default class NetV {
     }
 
     /**
+     * remove given node
+     * fake remove, mark as invalid
+     * @param node
+     */
+    public removeNode(node: Node) {
+        node.$_setValid(false)
+        const links = node.neighborLinks()
+        links.forEach((l) => l.$_setValid(false))
+    }
+
+    /**
+     * remove given link
+     * @param link
+     */
+    public removeLink(link: Link) {
+        link.$_setValid(false)
+    }
+
+    /**
+     * remove given nodes
+     * fake remove, mark as invalid
+     * @param nodes
+     */
+    public removeNodes(nodes: Node[]) {
+        nodes.forEach((n) => this.removeNode(n))
+    }
+
+    /**
+     * remove given links
+     * @param links
+     */
+    public removeLinks(links: Link[]) {
+        links.forEach((l) => l.$_setValid(false))
+    }
+
+    /**
      * @description initialize and add an array of nodes.
      * @param {interfaces.NodeData[]} nodesData: a data array of nodes tobe added
      * @memberof NetV
