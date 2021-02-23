@@ -139,7 +139,7 @@ html {
                             p {
                                 color: $front_color;
                                 cursor: text;
-                                user-select: text;
+                                // user-select: text;
                             }
                             p {
                                 color: $front_color - $offset_color;
@@ -189,7 +189,7 @@ html {
             .theme-container,
             .theme-container.homeOverwrite,
             .theme-container.homeOverwriteZh {
-                user-select: none;
+                // user-select: none;
                 // background-color: $background_color;
                 background-color: white;
                 // .sidebar {
