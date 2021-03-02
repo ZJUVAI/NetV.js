@@ -170,6 +170,10 @@ module.exports = {
                             {
                                 text: '浙江大学可视分析小组',
                                 link: 'https://zjuvag.org/'
+                            },
+                            {
+                                text: '联系我们(zjuvis@cad.zju.edu.cn)',
+                                link: 'mailto:zjuvis@cad.zju.edu.cn'
                             }
                         ]
                     },
