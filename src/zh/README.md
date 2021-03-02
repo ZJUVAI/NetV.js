@@ -5,7 +5,7 @@ heroImage: /title.svg
 heroText: A Large-scale Network Visualization Library
 tagline: 基于WebGL的大规模图可视化引擎
 actionText: 快速上手 →
-actionLink: /zh/guide/
+actionLink: /guide/ # 临时屏蔽英文，根目录为中文，跳转到根目录的guide
 features:
     - title: 海量数据
       details: 基于WebGL；支持百万级别点边元素绘制
