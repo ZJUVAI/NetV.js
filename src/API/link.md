@@ -4,28 +4,28 @@ sidebarDepth: 2
 
 # Link
 
-[`Link`](link.html) is a basic element in [_NetV.js_](/). It is visualized as a straight line (without an arrow) in default.
+[`Link`](link.html)是 _NetV.js_ 的一个基本对象. 它默认被可视化成一条直线 (没有箭头).
 
-## Manipulation
+## 操作
 
 ### `Link.source()`
 
-Get or set the source node of the link.
+获取或者设置边的源头节点.
 
--   `Link.source()`: return the source node (a [`Node`](node.html) object).
--   `Link.source(`[`Node`](node.html)`)`: set the source node of the link.
+-   `Link.source()`: 获取边的源头节点 (一个 [`Node`](node.html) 对象).
+-   `Link.source(`[`Node`](node.html)`)`: 设置边的源头节点.
 
 ### `Link.target()`
 
-Same to `Link.source()`
+同 `Link.source()` 一样.
 
 ### `Link.sourceTarget()`
 
-Get or set both the source and the target nodes of the link.
+获取或者设置边的源头节点和目标节点.
 
--   `Link.sourceTarget()`: return an object with the source and the target nodes (`{source: Node, target: Node}`).
+-   `Link.sourceTarget()`: 返回一个对象,包含了边的源头节点和目标节点 (`{source: Node, target: Node}`).
 
--   `Link.sourceTarget( {source: Node, target: Node} )`: set the source and the target nodes of the link.
+-   `Link.sourceTarget( {source: Node, target: Node} )`: 设置边的源头节点和目标节点.
 
     ```typescript
     const linkOneTwo = netV.getLinkByEnds(['1', '2'])
@@ -34,32 +34,40 @@ Get or set both the source and the target nodes of the link.
     linkOneTwo.sourceTarget({
         source: nodeOne,
         target: nodeThree
-    }) // change linkOneTwo's target into nodeThree
+    }) // 改变 linkOneTwo's 目标节点到 nodeThree
     ```
 
-## Style
+## 样式
+
+<img :src="$withBase('/link-style.svg')" alt="link-style">
+
+```typescript
+const linkOneTwo = netV.getLinkByEnds(['1', '2'])
+link.strokeWidth(4)
+link.strokeColor({ r: 0, g: 0.44, b: 0.74, a: 1 })
+netV.draw()
+```
 
 ### `Link.strokeColor()`
 
-Get or set the color of the link.
+获取或者设置边的颜色.
 
--   `Link.strokeColor()`: return the color of the link (a [`Color`](interfaces.html#color) object ).
--   `Link.strokeColor(`[`Color`](interfaces.html#color)`)`: set the color of the link.
+-   `Link.strokeColor()`: 获取边的颜色 (一个 [`Color`](interfaces.html#color) 对象 ).
+-   `Link.strokeColor(`[`Color`](interfaces.html#color)`)`: 设置边的颜色.
 
 ### `Link.strokeWidth()`
 
-Get or set the width of the link
+获取或者设置边的宽度.
 
--   `Link.strokeWidth()`: return the width of the link (a number).
--   `Link.strokeWidth( number )`: set the width of the link.
+-   `Link.strokeWidth()`: 获取边的宽度 (一个数字).
+-   `Link.strokeWidth( number )`: 设置边的宽度.
 
-## Interactions
+## 交互
 
 ### `Link.on()`
 
-`Link.on(eventName: string, callback?: (e:Event) => {})`: add event listeners on a link.
-Supported eventName: `'mousedown'`, `'mouseup'`, `'click'`, `'mouseover'`, and `'mouseout'`.
+`Link.on(eventName: string, callback?: (e:Event) => {})`: 为边添加交互事件，支持的事件类型包括: `'mousedown'`, `'mouseup'`, `'click'`, `'mouseover'`, and `'mouseout'`.
 
 ### `Link.off()`
 
-`Link.off(eventName, callback?: (e:Event) => {})`: remove event listeners on a link according to the callback. Only the input callback will be removed. For example, `somelink.off('click', clickCallback)` only removes the `clickCallback` function from all `'click'` callbacks on `somelink`.
+`Link.off(eventName, callback?: (e:Event) => {})`: 删除绑定在边上的交互回调函数，如果未指定`callback`，将删除所有对应事件的回调。

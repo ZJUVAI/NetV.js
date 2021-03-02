@@ -4,42 +4,42 @@ sidebarDepth: 3
 
 # Node
 
-[`Node`](node.html) is a basic element in _NetV.js_. It is visualized as a circle in default.
+[`Node`](node.html)是 _NetV.js_ 的一个基本对象. 它默认被可视化成圆形.
 
-## Manipulation
+## 操作
 
 ### `Node.id()`
 
-`Node.id()`: return the ID of the node (a string).
+`Node.id()`: 返回节点的 ID(一个字符串).
 
 ### `Node.x()`
 
-Get the x position of the node or set it.
+获取或者设置节点的 x 坐标.
 
--   `Node.x()`: return the x position (a number) of the node;
--   `Node.x( number )`: set the x position of the node;
+-   `Node.x()`: 获取节点的 x 坐标 (一个数字);
+-   `Node.x( number )`: 设置节点的 x 坐标;
 
 ### `Node.y()`
 
-Same to `Node.x()`
+同 `Node.x()` 一样.
 
 ### `Node.position()`
 
-Get the position (x and y) of the node or set it.
+获取或者设置节点的坐标(x 和 y).
 
--   `Node.position()`: return an object (`{x: number, y: number}`)
+-   `Node.position()`: 获取节点的坐标 (`{x: number, y: number}`)
 
--   `Node.position( {x: number, y: number} )`: set the position of the node. Two numerical parameters are the 2D position (x and y). Return the position (`{x: number, y: number}`).
+-   `Node.position( {x: number, y: number} )`: 设置节点的坐标(x 和 y). 同时返回当前设置的坐标 (`{x: number, y: number}`).
 
     ```typescript
     const nodeOne = netV.getNodeById('1')
-    nodeOne.position() // example return: {x: 100, y: 200}
+    nodeOne.position() // 返回: {x: 100, y: 200}
     nodeOne.position({ x: 100, y: 100 })
     netV.draw()
-    // note that only after netV.draw(), the visualization will be refreshed
+    //  注意只有经过 netV.draw() 后, 可视化才回被刷新
     ```
 
-## Style
+## 样式
 
 ```typescript
 const node = netV.getNodeById('1')
@@ -52,23 +52,17 @@ netV.draw()
 
 ### `Node.shape()`
 
-Get or set the shape of the node.
+获取或设置节点样式
 
--   `Node.shape()`: return the shape ofthe node (a string).
--   `Node.shape( string )`: set the shape of the node.
-
-    `'circle'`, `'rect'`, `'triangle'`, and `'cross'` are supported now. Their corresponding style configurations are :
+-   `Node.shape()`: 返回节点形状，类型为`string`
+-   `Node.shape( string )`: 设置节点形状，支持`'circle'`, `'rect'`, `'triangle'`和 `'cross'`，各形状对应的样式包括：
 
     -   `'circle'`: `r`, `fill`, `strokeColor`, `strokeWidth`
     -   `'rect'`: `width`, `height`, `fill`, `strokeColor`, `strokeWidth`
     -   `'triangle'`: `vertexAlpha`, `vertexBeta`, `vertexGamma`, `fill`, `strokeColor`, `strokeWidth`
     -   `'cross'`: `width`, `height`, `innerWidth`, `innerHeight`, `fill`, `strokeColor`, `strokeWidth`
 
-### General Styles
-
-Following [the idea of SVG](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Fills_and_Strokes), we draw the stroke centered around the shape:
-
-<node-shapes/>
+对不同形状的一个默认样式参考示例如下：
 
 ```javascript
 const netv = new NetV({
@@ -98,34 +92,45 @@ const netv = new NetV({
 })
 ```
 
-#### `Node.fill()`
+### 一般样式
 
--   `Node.fill()`: return the fill color of the node (a [`Color`](interfaces.html#color) object)
--   `Node.fill(`[`Color`](interfaces.html#color)`)`: set the the fill color of the node.
+### `Node.fill()`
 
-#### `Node.strokeColor()`
+获取或者设置节点的颜色.
 
--   `Node.strokeColor()`: return the border color of the node (a [`Color`](interfaces.html#color) object)
--   `Node.strokeColor(`[`Color`](interfaces.html#color)`)`: set the the border color of the node.
+-   `Node.fill()`: 获得节点的颜色 (一个 [`Color`](interfaces.html#color) 对象).
+-   `Node.fill(`[`Color`](interfaces.html#color)`)`: 设置节点的颜色.
 
-#### `Node.strokeWidth()`
+根据 [SVG的相关定义](https://developer.mozilla.org/en-US/docs/Web/SVG/Tutorial/Fills_and_Strokes)，我们支持为图形添加边框属性：
 
--   `Node.strokeWidth()`: return the border width of the node (a number).
--   `Node.strokeWidth( number )`: set the border width of the node.
+<node-shapes/>
+
+
+### `Node.strokeColor()`
+
+获取或者设置节点的边框颜色.
+
+-   `Node.strokeColor()`: 获取节点的边框颜色 (一个 [`Color`](interfaces.html#color) 对象).
+-   `Node.strokeColor(`[`Color`](interfaces.html#color)`)`: 设置节点的边框颜色.
+
+### `Node.strokeWidth()`
+
+获取或者设置节点的边框宽度.
+
+-   `Node.strokeWidth()`: 获取节点的边框宽度(一个数字).
+-   `Node.strokeWidth( number )`: 设置节点的边框宽度.
 
 #### `Node.rotate()`
 
--   `Node.rotate()`: return the rotate angle (clockwise) of the node (a number).
--   `Node.rotate( number )`: set the border width of the node.
+-   `Node.rotate()`: 获取节点的旋转角度，范围为`[-PI, PI]`，值为正表示顺时针旋转
+-   `Node.rotate( number )`: 设置节点的旋转角度
 
-Note: the node will be rotated around the center of the node. For the triangle shape, it will be rotated around its relative origin.
-
-### 🟢 Shape: `'circle'`
+### 🟢 `'circle'`形状
 
 #### `Node.r()`
 
--   `Node.r()`: return the radius of the circle (a number).
--   `Node.r( number )`: set the radius of the circle.
+-   `Node.r()`: 获取圆形半径，类型为`number`
+-   `Node.r( number )`: 设置圆形半径
 
 <node-circle/>
 
@@ -143,17 +148,17 @@ netv.getNodeById('3').r(40)
 netv.getNodeById('3').strokeWidth(40)
 ```
 
-### 🟦 Shape: `'rect'`
+### 🟦 `'rect'`形状
 
 #### `Node.width()`
 
--   `Node.width()`: return the width of the rectangle (a number).
--   `Node.width( number )`: set the width of the rectangle.
+-   `Node.width()`: 获取矩形宽度，类型为`number`
+-   `Node.width( number )`: 设置矩形宽度
 
 #### `Node.height()`
 
--   `Node.height()`: return the height of the rectangle (a number).
--   `Node.height( number )`: set the height of the rectangle.
+-   `Node.height()`: 获取矩形宽度，类型为`number
+-   `Node.height( number )`: 设置矩形宽度
 
 <node-rect/>
 
@@ -169,27 +174,28 @@ netv.getNodeById('1').height(40)
 netv.getNodeById('1').strokeWidth(20)
 ```
 
-### 🔺 Shape: `'triangle'`
+### 🔺 `'triangle'`形状
 
 #### `Node.vertexAlpha()`
 
--   `Node.vertexAlpha()`: return the alpha vertex of the triangle (a [`Position`](interfaces.html#position)).
--   `Node.vertexAlpha(`[`Position`](interfaces.html#position)`)`: set the alpha vertex of the triangle with a [`Position`](interfaces.html#position).
+-   `Node.vertexAlpha()`: 返回三角形第一个顶点`vertexAlpha`的位置，类型为[`Position`](interfaces.html#position).
+-   `Node.vertexAlpha(`[`Position`](interfaces.html#position)`)`: 设置三角形第一个顶点`vertexAlpha`的位置，类型为[`Position`](interfaces.html#position).
 
 #### `Node.vertexBeta()`
 
--   `Node.vertexBeta()`: return the beta vertex of the triangle (a [`Position`](interfaces.html#position)).
--   `Node.vertexBeta(`[`Position`](interfaces.html#position)`)`: set the beta vertex of the triangle with a [`Position`](interfaces.html#position).
+-   `Node.vertexBeta()`: 返回三角形第二个顶点`vertexBeta`的位置，类型为[`Position`](interfaces.html#position).
+-   `Node.vertexBeta(`[`Position`](interfaces.html#position)`)`: 设置三角形第二个顶点`vertexBeta`的位置，类型为[`Position`](interfaces.html#position).
 
 #### `Node.vertexGamma()`
 
--   `Node.vertexGamma()`: return the gamma vertex of the triangle (a [`Position`](interfaces.html#position)).
--   `Node.vertexGamma(`[`Position`](interfaces.html#position)`)`: set the gamma vertex of the triangle with a [`Position`](interfaces.html#position).
+-   `Node.vertexGamma()`: 返回三角形第二个顶点`vertexGamma`的位置，类型为[`Position`](interfaces.html#position).
+-   `Node.vertexGamma(`[`Position`](interfaces.html#position)`)`: 设置三角形第三个顶点`vertexGamma`的位置，类型为[`Position`](interfaces.html#position).
 
 <node-triangle/>
 
-Note: The positions of the triangle's verteces is relative to its origin. The origin of the triangle is where its corresponding links departure or arrive.
-// 三角形的三个顶点的坐标都是相对于其原点而言的。三角形的原点指的是，它对应的边出发或到达的位置。
+:::warning
+三角形的三个顶点的坐标都是相对于其原点而言的。三角形的原点指的是，它对应的边出发或到达的位置。
+:::
 
 ```javascript
 netv.getNodeById('0').vertexAlpha({ x: 0, y: -40 })
@@ -204,27 +210,27 @@ netv.getNodeById('1').vertexGamma({ x: -20 * Math.sqrt(3), y: 20 })
 netv.getNodeById('1').strokeWidth(20)
 ```
 
-### ➕ Shape: `'cross'`
+### ➕ `'cross'`形状
 
 #### `Node.width()`
 
--   `Node.width()`: return the horizonal width of the rectangle (a number).
--   `Node.width( number )`: set the horizonal width of the rectangle.
+-   `Node.width()`: 获取十字架的水平宽度，类型为`number`
+-   `Node.width( number )`: 设置十字架的水平宽度
 
 #### `Node.height()`
 
--   `Node.height()`: return the vertical height of the rectangle (a number).
--   `Node.height( number )`: set the vertical height of the rectangle.
+-   `Node.height()`: 获取十字架的垂直高度，类型为`number`
+-   `Node.height( number )`: 设置十字架的垂直高度
 
 #### `Node.innerWidth()`
 
--   `Node.innerWidth()`: return the horizonal thickness of the rectangle (a number).
--   `Node.innerWidth( number )`: set the horizonal thickness of the rectangle.
+-   `Node.innerWidth()`: 获取十字架的竖线宽度，类型为`number`
+-   `Node.innerWidth( number )`: 设置十字架的竖线宽度
 
 #### `Node.innerHeight()`
 
--   `Node.innerHeight()`: return the vertical thickness of the rectangle (a number).
--   `Node.innerHeight( number )`: set the vertical thickness of the rectangle.
+-   `Node.innerHeight()`: 获取十字架的横线高度，类型为`number`
+-   `Node.innerHeight( number )`: 设置十字架的横线高度
 
 <node-cross/>
 
@@ -245,13 +251,12 @@ node1.innerHeight(30)
 node1.strokeWidth(10)
 ```
 
-## Interactions
+## 交互
 
 ### `Node.on()`
 
-`Node.on(eventName: string, callback?: (e:Event) => {})`: add event listeners on a node.
-Supported eventName: `'mousedown'`, `'mouseup'`, `'click'`, `'dragstart'`, `'dragging'`, `'dragend'`, `'mouseover'`, and `'mouseout'`.
+`Node.on(eventName: string, callback?: (e:Event) => {})`: 为节点添加交互事件，支持的事件类型包括：`'mousedown'`, `'mouseup'`, `'click'`, `'dragstart'`, `'dragging'`, `'dragend'`, `'mouseover'`, 和 `'mouseout'`.
 
 ### `Node.off()`
 
-`Node.off(eventName, callback?: (e:Event) => {})`: remove event listeners on a node according to the callback. Only the input callback will be removed. For example, `somenode.off('click', clickCallback)` only removes the `clickCallback` function from all `'click'` callbacks on `somenode`.
+`Node.off(eventName, callback?: (e:Event) => {})`: 删除绑定在节点上的交互回调函数，如果未指定`callback`，将删除所有对应事件的回调。

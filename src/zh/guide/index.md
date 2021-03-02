@@ -61,6 +61,29 @@ NetV的核心渲染引擎相对精简，尽可能保证其高性能渲染特性�
 * [GitHub/文档](https://github.com/ZJUVAG/NetV-label)
 * NPM: `npm i netv-label`
 
+
+### 引用NetV.js
+
+如果您在科研项目、产品、学术论文、技术报告、新闻报告、教育、专利以及其他相关活动中使用了 NetV.js，欢迎引用本论文：
+
+* **NetV.js: A web-based library for high-efficiency visualization of large-scale graphs and networks**  
+    Dongming Han, Jiacheng Pan, Xiaodong Zhao and Wei Chen  
+    **Visual Informatics, 2021**  
+    [[Link](https://www.sciencedirect.com/science/article/pii/S2468502X21000048), [PDF](https://www.sciencedirect.com/science/article/pii/S2468502X21000048/pdfft?md5=e26957f0ca1bde3d2ecb06f2fe857519&pid=1-s2.0-S2468502X21000048-main.pdf)]
+
+```
+@article{HAN2021,
+    title = {NetV.js: A web-based library for high-efficiency visualization of large-scale graphs and networks},
+    journal = {Visual Informatics},
+    year = {2021},
+    issn = {2468-502X},
+    doi = {https://doi.org/10.1016/j.visinf.2021.01.002},
+    url = {https://www.sciencedirect.com/science/article/pii/S2468502X21000048},
+    author = {Dongming Han and Jiacheng Pan and Xiaodong Zhao and Wei Chen},
+}
+```
+
+
 <!-- ### 布局
 
 -   多种图布局支持

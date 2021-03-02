@@ -34,6 +34,7 @@ module.exports = {
         }
     ],
     dest: 'docs',
+    /*
     locales: {
         '/': {
             lang: 'en-US'
@@ -42,9 +43,11 @@ module.exports = {
             lang: 'zh-CN'
         }
     },
+    */
     themeConfig: {
         smoothScroll: true,
         locales: {
+            /*
             '/': {
                 selectText: '选择语言',
                 label: 'English',
@@ -84,11 +87,13 @@ module.exports = {
                 },
                 lastUpdated: 'Last Updated' // 文档更新时间：每个文件git最后提交的时间
             },
+            */
+            /*
             '/zh/': {
                 // 多语言下拉菜单的标题
-                selectText: 'Languages',
+                // selectText: 'Languages',
                 // 该语言在下拉菜单中的标签
-                label: '简体中文',
+                // label: '简体中文',
                 // 编辑链接文字
                 editLinkText: '在 GitHub 上编辑此页',
                 // Service Worker 的配置
@@ -130,6 +135,56 @@ module.exports = {
                     ],
                     '/zh/API/': ['', 'node', 'link', 'interfaces', 'utils'],
                     '/zh/component/': ['', 'shape', 'layout', 'others', 'plugins']
+                },
+                lastUpdated: 'Last Updated' // 文档更新时间：每个文件git最后提交的时间
+            }
+            */
+            '/': {
+                // 多语言下拉菜单的标题
+                // selectText: 'Languages',
+                // 该语言在下拉菜单中的标签
+                // label: '简体中文',
+                // 编辑链接文字
+                editLinkText: '在 GitHub 上编辑此页',
+                // Service Worker 的配置
+                serviceWorker: {
+                    updatePopup: {
+                        message: '发现新内容可用.',
+                        buttonText: '刷新'
+                    }
+                },
+                // 当前 locale 的 algolia docsearch 选项
+                algolia: {},
+                nav: [
+                    { text: '指南', link: '/guide/' }, // 外部链接
+                    { text: 'API', link: '/API/' }, // 外部链接
+                    { text: '样例', link: '/component/' }, // 外部链接
+                    // 下拉列表
+                    {
+                        text: '资源链接',
+                        items: [
+                            {
+                                text: 'GitHub',
+                                link: 'https://github.com/ZJUVAG/NetV.js'
+                            },
+                            {
+                                text: '浙江大学可视分析小组',
+                                link: 'https://zjuvag.org/'
+                            }
+                        ]
+                    },
+                    { text: '国内镜像', link: chineseSite + '/zh', rel: 'chinese-mirror' } // 外部链接
+                ],
+                sidebar: {
+                    '/guide/': [
+                        '',
+                        'getting-start',
+                        'others'
+                        // 'development-guide',
+                        // 'development-guide-chinese',
+                    ],
+                    '/API/': ['', 'node', 'link', 'interfaces', 'utils'],
+                    '/component/': ['', 'shape', 'layout', 'others', 'plugins']
                 },
                 lastUpdated: 'Last Updated' // 文档更新时间：每个文件git最后提交的时间
             }

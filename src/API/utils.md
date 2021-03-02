@@ -1,10 +1,14 @@
-# Utils
+---
+sidebarDepth: 2
+---
 
-Some utilities are provided in _NetV.js_.
+# 工具
+
+_NetV.js_ 中提供的工具.
 
 ## `Utils.transformGraphPosition()`
 
-`Utils.transformGraphPosition(`[`NodeLinkData`](interfaces.html#nodelinkdata)`, number, number, number)`: transform the nodes' positions into a given square area. The first parameter is the data that will be imported into a `NetV` instance. The second parameter defines the length of the square's side. The third and fourth parameters define the center position of the square.
+`Utils.transformGraphPosition(`[`NodeLinkData`](interfaces.html#nodelinkdata)`, number, number, number)`: 将节点的位置转换为给定的正方形区域. 第一个参数是将被导入到 `NetV` 实例中的数据. 第二个参数定义正方形边的长度. 第三和第四参数定义正方形的中心位置.
 
 ```typescript
 const data = {

@@ -1,18 +1,18 @@
 ---
-pageClass: homeOverwrite
+pageClass: homeOverwriteZh
 home: true
 heroImage: /title.svg
 heroText: A Large-scale Network Visualization Library
-tagline: WebGL-based large-scale network visualization engine
-actionText: Get Start →
+tagline: 基于WebGL的大规模图可视化引擎
+actionText: 快速上手 →
 actionLink: /guide/
 features:
-    - title: Large-scale
-      details: WebGL-based; 10 million level node & edge drawing
-    - title: Rich interactions
-      details: Rich built-in interactions
-    - title: Visualization & Visual analysis
-      details: Multiple graph visualization components and graph visual analysis techniques
+    - title: 海量数据
+      details: 基于WebGL；支持百万级别点边元素绘制
+    - title: 丰富交互
+      details: 内置多种交互手段
+    - title: 可视化 & 可视分析
+      details: 提供多种图可视化组件、图可视分析技术
 footer: MIT License | Copyright © 2019-present VAG in Zhejiang University
 ---
 
