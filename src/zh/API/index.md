@@ -168,11 +168,11 @@ const nodeOne = netV.getNodeById('1')
 
 ### `NetV.getLinkByEnds()`
 
-`NetV.getLinkByEnds( string[] )`: 通过一条边的两个节点的 ID 来获取这条边的对象,输入参数是一个包含这两个 ID 的数组,顺序无关.返回 [`Link`](link.html) 对象.
+`NetV.getLinkByEnds( id1, id2 )`: 通过一条边的两个节点的 ID 来获取这条边的对象,输入参数是两个端点，顺序无关.返回 [`Link`](link.html) 对象.
 
 ```typescript
-// 同 getLinkByEnds(['2', '1']) 一样
-const linkOneTwo = netV.getLinkByEnds(['1', '2'])
+// 同 getLinkByEnds('2', '1') 一样
+const linkOneTwo = netV.getLinkByEnds('1', '2')
 ```
 
 ### `NetV.getElementByPosition()`
