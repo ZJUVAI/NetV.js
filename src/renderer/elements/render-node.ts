@@ -47,27 +47,13 @@ export class RenderNodeManager extends RenderElementManager {
      */
     public refreshPosition(nodes: Node[]) {
         // set array
+        const attr = this.attributes.get('in_position')
         nodes.forEach((node, i) => {
-            // TODO: consider node and render node attribute mapping
-            const name = 'in_position'
-            const attribute = this.attributes.get(name)
-            const value = this.getAttributeByElement(node, name)
-            const array = value.value as number[]
-            attribute.array[2 * i] = array[0]
-            attribute.array[2 * i + 1] = array[1]
+            attr.array[2 * i] = node.$_position.x
+            attr.array[2 * i + 1] = node.$_position.y
         })
 
-        this.attributes.forEach((attr) => {
-            if (!attr.isBuildIn) {
-                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
-                this.gl.bufferSubData(
-                    this.gl.ARRAY_BUFFER,
-                    0,
-                    attr.array,
-                    0,
-                    attr.size * nodes.length
-                )
-            }
-        })
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+        this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, attr.array, 0, attr.size * nodes.length)
     }
 }

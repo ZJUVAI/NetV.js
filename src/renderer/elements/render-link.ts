@@ -42,58 +42,21 @@ export class RenderLinkManager extends RenderElementManager {
      * @param links all link data
      */
     public refreshPosition(links: Link[]) {
-        let count = 0 // TODO: useless count
+        const sourceAttribute = this.attributes.get('in_source')
+        const targetAttribute = this.attributes.get('in_target')
+
         links.forEach((link, i) => {
-            // TODO: consider link and render link attribute mapping
-            const sourceName = 'in_source'
-            const sourceAttribute = this.attributes.get(sourceName)
-            const sourceValue = this.getAttributeByElement(link, sourceName)
-            const sourceArray = sourceValue.value as number[]
-            sourceAttribute.array[2 * i] = sourceArray[0]
-            sourceAttribute.array[2 * i + 1] = sourceArray[1]
+            sourceAttribute.array[2 * i] = link.$_source.$_position.x
+            sourceAttribute.array[2 * i + 1] = link.$_source.$_position.y
 
-            const targetName = 'in_target'
-            const targetAttribute = this.attributes.get(targetName)
-            const targetValue = this.getAttributeByElement(link, targetName)
-            const targetArray = targetValue.value as number[]
-            targetAttribute.array[2 * i] = targetArray[0]
-            targetAttribute.array[2 * i + 1] = targetArray[1]
-
-            // currently no need for color&renderId change
-            /*
-            this.attributes[LinkAttrKey.WIDTH].array[this.count + i] =
-                link.strokeWidth() * this.pixelRatio
-
-            const color = link.strokeColor()
-            this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i)] = color.r
-            this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 1] = color.g
-            this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 2] = color.b
-            this.attributes[LinkAttrKey.COLOR].array[4 * (this.count + i) + 3] = color.a
-
-            const renderIdColor = encodeRenderId(2 * (this.count + i) + 1) // NOTE: link render id, use odd integer
-            this.idAttributes.get('in_id').array[4 * (this.count + i)] = renderIdColor.r
-            this.idAttributes.get('in_id').array[4 * (this.count + i) + 1] = renderIdColor.g
-            this.idAttributes.get('in_id').array[4 * (this.count + i) + 2] = renderIdColor.b
-            this.idAttributes.get('in_id').array[4 * (this.count + i) + 3] = renderIdColor.a
-            */
+            targetAttribute.array[2 * i] = link.$_target.$_position.x
+            targetAttribute.array[2 * i + 1] = link.$_target.$_position.y
         })
 
-        const sourceAttr = this.attributes.get('in_source')
-        const targetAttr = this.attributes.get('in_target')
-
-        const arr = [sourceAttr, targetAttr]
-
+        const arr = [sourceAttribute, targetAttribute]
         arr.forEach((attr) => {
-            if (!attr.isBuildIn) {
-                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
-                this.gl.bufferSubData(
-                    this.gl.ARRAY_BUFFER,
-                    attr.size * count * attr.array.BYTES_PER_ELEMENT,
-                    attr.array,
-                    attr.size * count,
-                    attr.size * links.length
-                )
-            }
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer)
+            this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, attr.array, 0, attr.size * links.length)
         })
     }
 }
