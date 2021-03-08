@@ -28,7 +28,7 @@ Get or set both the source and the target nodes of the link.
 -   `Link.sourceTarget( {source: Node, target: Node} )`: set the source and the target nodes of the link.
 
     ```typescript
-    const linkOneTwo = netV.getLinkByEnds(['1', '2'])
+    const linkOneTwo = netV.getLinkByEnds('1', '2')
     const nodeOne = netV.getNodeById('1')
     const nodeThree = netV.getNodeById('3')
     linkOneTwo.sourceTarget({

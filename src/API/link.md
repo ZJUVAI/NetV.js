@@ -28,7 +28,7 @@ sidebarDepth: 2
 -   `Link.sourceTarget( {source: Node, target: Node} )`: 设置边的源头节点和目标节点.
 
     ```typescript
-    const linkOneTwo = netV.getLinkByEnds(['1', '2'])
+    const linkOneTwo = netV.getLinkByEnds('1', '2')
     const nodeOne = netV.getNodeById('1')
     const nodeThree = netV.getNodeById('3')
     linkOneTwo.sourceTarget({
@@ -42,7 +42,7 @@ sidebarDepth: 2
 <img :src="$withBase('/link-style.svg')" alt="link-style">
 
 ```typescript
-const linkOneTwo = netV.getLinkByEnds(['1', '2'])
+const linkOneTwo = netV.getLinkByEnds('1', '2')
 link.strokeWidth(4)
 link.strokeColor({ r: 0, g: 0.44, b: 0.74, a: 1 })
 netV.draw()
