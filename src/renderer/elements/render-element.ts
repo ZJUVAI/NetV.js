@@ -243,24 +243,16 @@ export class RenderElementManager {
             // link attribute => webgl attribute
             this.attributes.forEach((attr) => {
                 if (!attr.isBuildIn) {
-                    // const value = attr.extractAttributeValueFrom(element)
-                    const value = this.getAttributeByElement(element, attr.name)
-                    const array = value.value as number[]
-
-                    array.forEach((v, j) => {
-                        // inject into the Buffer Array
-                        attr.array[attr.size * index + j] = v
-                    })
+                    const array = getShaderAttributeValue(element, attr.name)
+                    attr.array.set(array, attr.size * index)
                 }
             })
 
             const offset = element.type === 'Node' ? 0 : 1 // NOTE: node render id, use even integer
             const renderId = 2 * index + offset
             const renderIdColor = encodeRenderId(renderId)
-            this.idAttributes.get('in_id').array[4 * index] = renderIdColor.r
-            this.idAttributes.get('in_id').array[4 * index + 1] = renderIdColor.g
-            this.idAttributes.get('in_id').array[4 * index + 2] = renderIdColor.b
-            this.idAttributes.get('in_id').array[4 * index + 3] = renderIdColor.a
+            const idAttr = this.idAttributes.get('in_id')
+            idAttr.array.set([renderIdColor.r, renderIdColor.g, renderIdColor.b, renderIdColor.a], 4 * index)
 
             this.setRenderIdOf(element, renderId)
         })
@@ -383,10 +375,10 @@ export class RenderElementManager {
                         style.shape === 'rect'
                             ? 1
                             : style.shape === 'triangle'
-                            ? 2
-                            : style.shape === 'cross'
-                            ? 3
-                            : 0
+                                ? 2
+                                : style.shape === 'cross'
+                                    ? 3
+                                    : 0
                     ]
                 },
                 offset: {
@@ -457,6 +449,7 @@ export class RenderElementManager {
             return map[attributeName]
         }
 
+        // TODO: consider unused reversed_map?
         const reversed_map = {}
         Object.entries(map).forEach(([k, v]) => {
             const value = v as any
@@ -468,5 +461,61 @@ export class RenderElementManager {
         })
 
         return reversed_map[attributeName]
+    }
+}
+
+const linkShaderAttrMap = {
+    'in_source': (link) => [link.$_source.$_position.x, link.$_source.$_position.y],
+    'in_target': (link) => [link.$_target.$_position.x, link.$_target.$_position.y],
+    'in_shape': (link) => [link.$_style.shape === 'dash-line' ? 2 : link.$_style.shape === 'curve' ? 1 : 0],
+    'in_strokeWidth': (link) => [link.$_style.strokeWidth],
+    'in_strokeColor': (link) => [
+        link.$_style.strokeColor.r,
+        link.$_style.strokeColor.g,
+        link.$_style.strokeColor.b,
+        link.$_style.strokeColor.a
+    ],
+    'in_curveness': (link) => [link.$_style.curveness],
+    'in_dashInterval': (link) => [link.$_style.dashInterval]
+}
+
+const nodeShaderAttrMap = {
+    'in_position': (node) => [node.$_position.x, node.$_position.y],
+    'in_shape': (node) => [
+        node.$_style.shape === 'rect'
+            ? 1
+            : node.$_style.shape === 'triangle'
+                ? 2
+                : node.$_style.shape === 'cross'
+                    ? 3
+                    : 0
+    ],
+    'in_offset': (node) => [node.$_style.offset.x, node.$_style.offset.y],
+    'in_fill': (node) => [node.$_style.fill.r, node.$_style.fill.g, node.$_style.fill.b, node.$_style.fill.a],
+    'in_strokeWidth': (node) => [node.$_style.strokeWidth],
+    'in_strokeColor': (node) => [
+        node.$_style.strokeColor.r,
+        node.$_style.strokeColor.g,
+        node.$_style.strokeColor.b,
+        node.$_style.strokeColor.a
+    ],
+    'in_rotate': (node) => [node.$_style.rotate],
+    /* circle */
+    'in_r': (node) => [node.$_style.r],
+    /* rect */
+    'in_size': (node) => [node.$_style.width, node.$_style.height],
+    /* triangle */
+    'in_vertexAlpha': (node) => [node.$_style.vertexAlpha.x, node.$_style.vertexAlpha.y],
+    'in_vertexBeta': (node) => [node.$_style.vertexBeta.x, node.$_style.vertexBeta.y],
+    'in_vertexGamma': (node) => [node.$_style.vertexGamma.x, node.$_style.vertexGamma.y],
+    /* cross */
+    'in_innerSize': (node) => [node.$_style.innerWidth, node.$_style.innerHeight],
+}
+
+function getShaderAttributeValue(element: Link | Node, attributeName: string) {
+    if (element.type === 'Link') {
+        return linkShaderAttrMap[attributeName](element)
+    } else {
+        return nodeShaderAttrMap[attributeName](element)
     }
 }
