@@ -16,7 +16,7 @@
 
 下载 NetV.js 的地址: https://github.com/ZJUVAG/NetV.js/releases
 
-或者从 CDN 引入: https://unpkg.com/netv/build/NetV.js
+或者从 CDN 引入: https://unpkg.com/netv/build/NetV.min.js
 
 NPM 安装：
 

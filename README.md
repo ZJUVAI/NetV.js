@@ -16,7 +16,7 @@ Homepage: http://netv.zjuvag.org/
 
 Download NetV.js from releases: https://github.com/ZJUVAG/NetV.js/releases
 
-Or import from CDN: https://unpkg.com/netv/build/NetV.js
+Or import from CDN: https://unpkg.com/netv/build/NetV.min.js
 
 If you use npm, you can also install netv:
 
