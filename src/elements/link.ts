@@ -86,8 +86,8 @@ class Link extends Element {
             const oldTarget: Node = this.$_target
             const newSource = sourceTargetObj.source
             const newTarget = sourceTargetObj.target
-            const newSourceId = newSource.id()
-            const newTargetId = newTarget.id()
+            const newSourceId = newSource.$_id
+            const newTargetId = newTarget.$_id
 
             if (newSource === newTarget) {
                 // error: self loop
@@ -101,10 +101,10 @@ class Link extends Element {
 
             if (oldSource && oldTarget) {
                 // delete old Map
-                this.$_core.$_ends2link.delete([oldSource.id(), oldTarget.id()])
+                this.$_core.$_ends2link.delete([oldSource.$_id, oldTarget.$_id])
 
-                this.$_core.$_sourceId2links.get(oldSource.id())?.delete(this)
-                this.$_core.$_targetId2links.get(oldTarget.id())?.delete(this)
+                this.$_core.$_sourceId2links.get(oldSource.$_id)?.delete(this)
+                this.$_core.$_targetId2links.get(oldTarget.$_id)?.delete(this)
             }
 
             this.$_source = newSource
