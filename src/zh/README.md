@@ -13,9 +13,10 @@ features:
       details: 内置多种交互手段
     - title: 可视化 & 可视分析
       details: 提供多种图可视化组件、图可视分析技术
-footer: MIT License | Copyright © 2019-present VAG in Zhejiang University
+# footer: MIT License | Copyright © 2019-present VAG in Zhejiang University
 ---
 
+<page-footer/>
 <background-gif/>
 <!-- <demo-background/> -->
 <!-- <demo-table/> -->
