@@ -2,7 +2,7 @@ const netv = new NetV({
     container: document.getElementById('main'),
     node: {
         style: {
-            r: 8,
+            r: 8
         }
     },
     link: {
@@ -55,4 +55,10 @@ simulation.on('tick', () => {
     })
 
     netv.draw()
+})
+
+netv.nodes().forEach((node) => {
+    node.on('click', function(e) {
+        console.log(e)
+    })
 })
