@@ -250,21 +250,6 @@ export class Renderer {
         gl.bindTexture(gl.TEXTURE_2D, null)
         gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, idTexture, 0)
 
-        // TODO: need simplify
-        gl.drawBuffers([0].map((v) => v + gl.COLOR_ATTACHMENT0))
-
-        const rbo = gl.createRenderbuffer()
-        gl.bindRenderbuffer(gl.RENDERBUFFER, rbo)
-        gl.clearColor(1, 1, 1, 1)
-        gl.renderbufferStorage(gl.RENDERBUFFER, gl.DEPTH24_STENCIL8, screenWidth, screenHeight)
-        gl.bindRenderbuffer(gl.RENDERBUFFER, null)
-        gl.framebufferRenderbuffer(
-            gl.FRAMEBUFFER,
-            gl.DEPTH_STENCIL_ATTACHMENT,
-            gl.RENDERBUFFER,
-            rbo
-        )
-
         if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) {
             throw new Error('Framebuffer generate failed')
         }
