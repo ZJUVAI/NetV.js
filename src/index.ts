@@ -15,6 +15,7 @@ import { InteractionManager } from './interaction/interaction'
 import * as Utils from './utils/utils'
 import { Position } from './interfaces'
 import { EMPTY_FUNCTION } from './utils/const'
+import { Layout } from './layout'
 
 export default class NetV {
     public static Utils = Utils
@@ -26,6 +27,7 @@ export default class NetV {
     public $_container: HTMLDivElement
     public $_canvas: HTMLCanvasElement
     public $_renderer: Renderer
+    public $_layout: Layout
     public $_configs = JSON.parse(JSON.stringify(defaultConfigs)) // NOTE: deep copy configs
 
     public $_transform: interfaces.Transform = { x: 0, y: 0, k: 1 }
@@ -67,6 +69,8 @@ export default class NetV {
             getAllNodes: this.nodes.bind(this),
             getAllLinks: this.links.bind(this)
         })
+
+        this.$_layout = new Layout(this.$_configs.layout || {type:'none'})
 
         this.$_interactionManager = new InteractionManager(this)
     }
@@ -245,6 +249,14 @@ export default class NetV {
                 }
             }
         }
+    }
+
+    /**
+     * @description refresh the layout if nodes or links has been changed
+     */
+    public refresh(){
+        this.$_layout.layout(this.nodes(),this.links());
+        this.draw();
     }
 
     /**
