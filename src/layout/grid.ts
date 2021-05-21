@@ -206,13 +206,13 @@ export default class GridLayout extends BaseLayout {
                 }
                 var nodew;
                 var nodeh;
-                if (isArray(node.size)) {
-                    nodew = node.size[0];
-                    nodeh = node.size[1];
+                if (node.shape() === 'rect' || node.shape() === 'cross') {
+                    nodew = node.width();
+                    nodeh = node.height();
                 }
-                else if (isNumber(node.size)) {
-                    nodew = node.size;
-                    nodeh = node.size;
+                else if (node.shape() === 'circle') {
+                    nodew = node.r();
+                    nodeh = node.r();
                 }
                 if (nodew === undefined || nodeh === undefined) {
                     if (isArray(self.nodeSize)) {

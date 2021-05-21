@@ -7,6 +7,9 @@ import GridLayout from "./grid";
 import CircularLayout from "./circular";
 import ConcentricLayout from "./concentric";
 import FruchtermanLayout from "./fruchterman";
+import GForceLayout from "./gForce";
+import NetV from "src";
+import ForceAtlas2Layout from "./forceAtlas2";
 
 export default class Layout {
     readonly layoutInstance: BaseLayout;
@@ -18,14 +21,14 @@ export default class Layout {
         var layoutClass = Layouts[options.type];
         this.layoutInstance = new layoutClass(options);
     }
-    public layout(nodes:Node[],links:Link[]){
-        return this.layoutInstance.layout(nodes,links);
+    public layout(netv:NetV){
+        return this.layoutInstance.layout(netv);
     };
     updateCfg(cfg: ILayout.LayoutOptions){
         this.layoutInstance.updateCfg(cfg);
     };
-    init(nodes:Node[],links:Link[]){
-        this.layoutInstance.init(nodes,links);
+    init(netv:NetV){
+        this.layoutInstance.init(netv);
     };
     execute(){
         this.layoutInstance.execute();
@@ -38,7 +41,6 @@ export default class Layout {
     };
 }
 export const Layouts = new Proxy(BaseLayout, {
-    // tslint:disable-line
     get: function (target, propKey) {
         switch(propKey){
             case "grid":return GridLayout;
@@ -46,6 +48,8 @@ export const Layouts = new Proxy(BaseLayout, {
             case "circular":return CircularLayout;
             case "concentric":return ConcentricLayout;
             case "fruchterman":return FruchtermanLayout;
+            case "gforce":return GForceLayout;
+            case "forceAtlas2":return ForceAtlas2Layout;
             default:return BaseLayout;
         }
     },

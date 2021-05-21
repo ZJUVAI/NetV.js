@@ -183,7 +183,7 @@ export default class CircularLayout extends BaseLayout {
         // layout
         var nodeMap = {};
         nodes.forEach(function (node, i) {
-            nodeMap[node.id()] = i;
+            nodeMap[node.$_id] = i;
         });
         self.nodeMap = nodeMap;
         var degrees = getDegree(nodes.length, nodeMap, links);

@@ -255,7 +255,7 @@ export default class NetV {
      * @description refresh the layout if nodes or links has been changed
      */
     public refresh(){
-        this.$_layout.layout(this.nodes(),this.links());
+        this.$_layout.layout(this);
         this.draw();
     }
 

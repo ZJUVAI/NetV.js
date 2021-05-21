@@ -118,11 +118,11 @@ export default class ConcentricLayout extends BaseLayout {
         nodes.forEach(function (node) {
             layoutNodes.push(node);
             var nodeSize = maxNodeSize;
-            if (isArray(node.size)) {
-                nodeSize = Math.max(node.size[0], node.size[1]);
+            if (node.shape() === 'rect' || node.shape() === 'cross') {
+                nodeSize = Math.max(node.width(), node.height());
             }
-            else if (isNumber(node.size)) {
-                nodeSize = node.size;
+            else if (node.shape() === 'circle') {
+                nodeSize = node.r();
             }
             maxNodeSize = Math.max(maxNodeSize, nodeSize);
         });

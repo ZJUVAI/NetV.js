@@ -27,6 +27,9 @@ function isString(param){
 function isNaN(param){
     return Number.isNaN(Number(param))
 }
+function isFunction(param){
+    return typeof param === 'function';
+}
 function clone(target) {
     if (target === null) {
         return target;
@@ -50,4 +53,4 @@ function clone(target) {
     }
     return target;
 };
-export{getDegree,isArray,isNumber,isNaN,isString,clone}
+export{getDegree,isArray,isNumber,isNaN,isString,isFunction,clone}
