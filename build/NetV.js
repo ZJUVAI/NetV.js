@@ -91,11 +91,140 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 5);
+/******/ 	return __webpack_require__(__webpack_require__.s = 7);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class BaseLayout {
+    constructor() {
+        this.nodes = [];
+        this.links = [];
+        this.positions = [];
+        this.destroyed = false;
+        this.onLayoutEnd = function () { };
+    }
+    layout(netv) {
+        this.init(netv);
+        return this.execute(true);
+    }
+    ;
+    init(netv) {
+        this.netv = netv;
+        this.nodes = netv.nodes() || [];
+        this.links = netv.links() || [];
+    }
+    ;
+    execute(reloadData) { }
+    ;
+    executeWithWorker() { }
+    ;
+    getDefaultCfg() {
+        return {};
+    }
+    ;
+    updateCfg(cfg) {
+        if (cfg) {
+            Object.assign(this, cfg);
+        }
+    }
+    ;
+    getType() {
+        return 'base';
+    }
+    ;
+    destroy() {
+        this.nodes = null;
+        this.links = null;
+        this.positions = null;
+        this.destroyed = true;
+    }
+    ;
+}
+exports.default = BaseLayout;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.clone = exports.isFunction = exports.isString = exports.isNaN = exports.isNumber = exports.isArray = exports.getDegree = void 0;
+function getDegree(n, nodeIdxMap, links) {
+    var degrees = [];
+    for (var i = 0; i < n; i++) {
+        degrees[i] = 0;
+    }
+    if (!links)
+        return degrees;
+    links.forEach(function (e) {
+        if (e.source()) {
+            degrees[nodeIdxMap[e.source().id()]] += 1;
+        }
+        if (e.target()) {
+            degrees[nodeIdxMap[e.target().id()]] += 1;
+        }
+    });
+    return degrees;
+}
+exports.getDegree = getDegree;
+;
+function isArray(param) {
+    return Array.isArray(param);
+}
+exports.isArray = isArray;
+function isNumber(param) {
+    return typeof param === 'number';
+}
+exports.isNumber = isNumber;
+function isString(param) {
+    return typeof param === 'string';
+}
+exports.isString = isString;
+function isNaN(param) {
+    return Number.isNaN(Number(param));
+}
+exports.isNaN = isNaN;
+function isFunction(param) {
+    return typeof param === 'function';
+}
+exports.isFunction = isFunction;
+function clone(target) {
+    if (target === null) {
+        return target;
+    }
+    if (target instanceof Date) {
+        return new Date(target.getTime());
+    }
+    if (target instanceof Array) {
+        var cp_1 = [];
+        target.forEach(function (v) {
+            cp_1.push(v);
+        });
+        return cp_1.map(function (n) { return exports.clone(n); });
+    }
+    if (typeof target === 'object' && target !== {}) {
+        var cp_2 = Object.assign({}, target);
+        Object.keys(cp_2).forEach(function (k) {
+            cp_2[k] = exports.clone(cp_2[k]);
+        });
+        return cp_2;
+    }
+    return target;
+}
+exports.clone = clone;
+;
+
+
+/***/ }),
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -277,14 +406,14 @@ exports.Shader = Shader;
 
 
 /***/ }),
-/* 1 */
+/* 3 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
-const utils_1 = __webpack_require__(2);
-const const_1 = __webpack_require__(3);
+const utils_1 = __webpack_require__(4);
+const const_1 = __webpack_require__(5);
 class Element {
     constructor(core, data, type) {
         this.$_style = {};
@@ -394,7 +523,7 @@ exports.default = Element;
 
 
 /***/ }),
-/* 2 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -461,7 +590,7 @@ exports.override = override;
 
 
 /***/ }),
-/* 3 */
+/* 5 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -471,14 +600,14 @@ const EMPTY_FUNCTION = () => {}
 
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RenderElementManager = void 0;
-const utils_1 = __webpack_require__(0);
+const utils_1 = __webpack_require__(2);
 class RenderElementManager {
     constructor(gl, params, shaders, idTexture) {
         this.count = 0;
@@ -884,7 +1013,7 @@ function getShaderAttributeValue(element, attributeName) {
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -895,15 +1024,16 @@ function getShaderAttributeValue(element, attributeName) {
  * @dependences interfaces.ts, utils/map2.js, node.ts, link.ts
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const map2_1 = __webpack_require__(6);
-const node_1 = __webpack_require__(7);
-const link_1 = __webpack_require__(9);
-const defaultConfigs = __webpack_require__(10);
-const dataset = __webpack_require__(11);
-const renderer_1 = __webpack_require__(14);
-const interaction_1 = __webpack_require__(19);
-const Utils = __webpack_require__(2);
-const const_1 = __webpack_require__(3);
+const map2_1 = __webpack_require__(8);
+const node_1 = __webpack_require__(9);
+const link_1 = __webpack_require__(11);
+const defaultConfigs = __webpack_require__(12);
+const dataset = __webpack_require__(13);
+const renderer_1 = __webpack_require__(16);
+const interaction_1 = __webpack_require__(21);
+const Utils = __webpack_require__(4);
+const const_1 = __webpack_require__(5);
+const layout_1 = __webpack_require__(22);
 class NetV {
     /**
      * @description create NetV object.
@@ -942,6 +1072,7 @@ class NetV {
             getAllNodes: this.nodes.bind(this),
             getAllLinks: this.links.bind(this)
         });
+        this.$_layout = new layout_1.Layout(this.$_configs.layout || { type: 'none' });
         this.$_interactionManager = new interaction_1.InteractionManager(this);
     }
     /**
@@ -1102,6 +1233,13 @@ class NetV {
         }
     }
     /**
+     * @description refresh the layout if nodes or links has been changed
+     */
+    refresh() {
+        this.$_layout.layout(this);
+        this.draw();
+    }
+    /**
      * @description draw elements
      */
     draw() {
@@ -1239,7 +1377,7 @@ window.NetV = NetV;
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1338,7 +1476,7 @@ exports.default = Map2;
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1349,8 +1487,8 @@ exports.default = Map2;
  * @dependences interfaces.ts, utils/is.ts
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const is_1 = __webpack_require__(8);
-const element_1 = __webpack_require__(1);
+const is_1 = __webpack_require__(10);
+const element_1 = __webpack_require__(3);
 class Node extends element_1.default {
     constructor(core, nodeData) {
         super(core, nodeData, /* type: */ 'Node');
@@ -1511,7 +1649,7 @@ exports.default = Node;
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1530,7 +1668,7 @@ exports.isValidId = isValidId;
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1541,7 +1679,7 @@ exports.isValidId = isValidId;
  * @dependences interfaces.ts, utils/is.ts
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const element_1 = __webpack_require__(1);
+const element_1 = __webpack_require__(3);
 class Link extends element_1.default {
     constructor(core, linkData) {
         super(core, linkData, /* type: */ 'Link');
@@ -1647,7 +1785,7 @@ exports.default = Link;
 
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1698,7 +1836,7 @@ exports.link = {
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1709,14 +1847,14 @@ exports.link = {
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.patents = exports.miserables = void 0;
-const miserables_1 = __webpack_require__(12);
+const miserables_1 = __webpack_require__(14);
 Object.defineProperty(exports, "miserables", { enumerable: true, get: function () { return miserables_1.miserables; } });
-const patents_1 = __webpack_require__(13);
+const patents_1 = __webpack_require__(15);
 Object.defineProperty(exports, "patents", { enumerable: true, get: function () { return patents_1.patents; } });
 
 
 /***/ }),
-/* 12 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2070,7 +2208,7 @@ exports.miserables = {
 
 
 /***/ }),
-/* 13 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5318,7 +5456,7 @@ exports.patents = {
 
 
 /***/ }),
-/* 14 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5329,11 +5467,11 @@ exports.patents = {
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.Renderer = void 0;
-const nodeShaders = __webpack_require__(15);
-const linkShaders = __webpack_require__(16);
-const render_node_1 = __webpack_require__(17);
-const render_link_1 = __webpack_require__(18);
-const utils_1 = __webpack_require__(0);
+const nodeShaders = __webpack_require__(17);
+const linkShaders = __webpack_require__(18);
+const render_node_1 = __webpack_require__(19);
+const render_link_1 = __webpack_require__(20);
+const utils_1 = __webpack_require__(2);
 const MODIFIED_ELEMENTS_COUNT_UPPER_THRESHOLD = 100; // when modifiedElementCount is larger than it, $_shouldLazyUpdate will be true
 class Renderer {
     /**
@@ -5511,14 +5649,14 @@ exports.Renderer = Renderer;
 
 
 /***/ }),
-/* 15 */
+/* 17 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.idFragment = exports.fragment = exports.idVertex = exports.vertex = void 0;
-const utils_1 = __webpack_require__(0);
+const utils_1 = __webpack_require__(2);
 const vertex = new utils_1.Shader();
 exports.vertex = vertex;
 vertex.inputs = {
@@ -5888,14 +6026,14 @@ sentencesTobeReplaced.forEach((sentence) => {
 
 
 /***/ }),
-/* 16 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.idFragment = exports.fragment = exports.idVertex = exports.vertex = void 0;
-const utils_1 = __webpack_require__(0);
+const utils_1 = __webpack_require__(2);
 const vertex = new utils_1.Shader();
 exports.vertex = vertex;
 vertex.inputs = {
@@ -6064,7 +6202,7 @@ sentencesTobeReplaced.forEach((sentence) => {
 
 
 /***/ }),
-/* 17 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6075,7 +6213,7 @@ sentencesTobeReplaced.forEach((sentence) => {
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RenderNodeManager = void 0;
-const render_element_1 = __webpack_require__(4);
+const render_element_1 = __webpack_require__(6);
 class RenderNodeManager extends render_element_1.RenderElementManager {
     // private idToIndex: { [key: string]: number }
     /**
@@ -6116,7 +6254,7 @@ exports.RenderNodeManager = RenderNodeManager;
 
 
 /***/ }),
-/* 18 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6127,7 +6265,7 @@ exports.RenderNodeManager = RenderNodeManager;
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RenderLinkManager = void 0;
-const render_element_1 = __webpack_require__(4);
+const render_element_1 = __webpack_require__(6);
 class RenderLinkManager extends render_element_1.RenderElementManager {
     /**
      * create render link manager
@@ -6170,7 +6308,7 @@ exports.RenderLinkManager = RenderLinkManager;
 
 
 /***/ }),
-/* 19 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6539,6 +6677,2401 @@ class InteractionManager {
     }
 }
 exports.InteractionManager = InteractionManager;
+
+
+/***/ }),
+/* 22 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Layouts = exports.Layout = void 0;
+const layout_1 = __webpack_require__(23);
+exports.Layout = layout_1.default;
+Object.defineProperty(exports, "Layouts", { enumerable: true, get: function () { return layout_1.Layouts; } });
+
+
+/***/ }),
+/* 23 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Layouts = void 0;
+const base_1 = __webpack_require__(0);
+const random_1 = __webpack_require__(24);
+const grid_1 = __webpack_require__(25);
+const circular_1 = __webpack_require__(26);
+const concentric_1 = __webpack_require__(27);
+const fruchterman_1 = __webpack_require__(28);
+const gForce_1 = __webpack_require__(29);
+const forceAtlas2_1 = __webpack_require__(30);
+class Layout {
+    constructor(options) {
+        if (options.type === "none")
+            console.warn("You are not using any layout, please make sure that the node location has been accurately defined.");
+        this.type = options.type;
+        var layoutClass = exports.Layouts[options.type];
+        this.layoutInstance = new layoutClass(options);
+    }
+    layout(netv) {
+        return this.layoutInstance.layout(netv);
+    }
+    ;
+    updateCfg(cfg) {
+        this.layoutInstance.updateCfg(cfg);
+    }
+    ;
+    init(netv) {
+        this.layoutInstance.init(netv);
+    }
+    ;
+    execute() {
+        this.layoutInstance.execute();
+    }
+    ;
+    getDefaultCfg() {
+        return this.layoutInstance.getDefaultCfg();
+    }
+    ;
+    destroy() {
+        return this.layoutInstance.destroy();
+    }
+    ;
+}
+exports.default = Layout;
+exports.Layouts = new Proxy(base_1.default, {
+    get: function (target, propKey) {
+        switch (propKey) {
+            case "grid": return grid_1.default;
+            case "random": return random_1.default;
+            case "circular": return circular_1.default;
+            case "concentric": return concentric_1.default;
+            case "fruchterman": return fruchterman_1.default;
+            case "gforce": return gForce_1.default;
+            case "forceAtlas2": return forceAtlas2_1.default;
+            default: return base_1.default;
+        }
+    },
+});
+
+
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const base_1 = __webpack_require__(0);
+class RandomLayout extends base_1.default {
+    constructor(options) {
+        super();
+        this.center = { x: 0, y: 0 };
+        /** 宽度 */
+        this.width = 500;
+        /** 高度 */
+        this.height = 500;
+        this.nodes = [];
+        this.links = [];
+        /** 迭代结束的回调函数 */
+        this.onLayoutEnd = function () { };
+        this.updateCfg(options);
+        return this;
+    }
+    getDefaultCfg() {
+        return {
+            center: { x: 0, y: 0 },
+            width: 500,
+            height: 500
+        };
+    }
+    ;
+    /**
+     * 执行布局
+     */
+    execute() {
+        var self = this;
+        var nodes = self.nodes;
+        var layoutScale = 0.9;
+        var center = self.center;
+        if (!self.width && typeof window !== "undefined") {
+            self.width = window.innerWidth;
+        }
+        if (!self.height && typeof window !== "undefined") {
+            self.height = window.innerHeight;
+        }
+        if (nodes) {
+            nodes.forEach(function (node) {
+                node.x((Math.random() - 0.5) * layoutScale * self.width + center.x);
+                node.y((Math.random() - 0.5) * layoutScale * self.height + center.y);
+            });
+        }
+        if (self.onLayoutEnd)
+            self.onLayoutEnd();
+        return {
+            nodes: nodes,
+            links: this.links
+        };
+    }
+    ;
+    getType() {
+        return "random";
+    }
+    ;
+}
+exports.default = RandomLayout;
+
+
+/***/ }),
+/* 25 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const base_1 = __webpack_require__(0);
+const util_1 = __webpack_require__(1);
+/**
+ * 网格布局
+ */
+class GridLayout extends base_1.default {
+    constructor(options) {
+        super();
+        /** 布局起始点 */
+        this.begin = { x: 0, y: 0 };
+        /** prevents node overlap, may overflow boundingBox if not enough space */
+        this.preventOverlap = true;
+        /** extra spacing around nodes when preventOverlap: true */
+        this.preventOverlapPadding = 10;
+        /** uses all available space on false, uses minimal space on true */
+        this.condense = false;
+        /** a sorting function to order the nodes; e.g. function(a, b){ return a.datapublic ('weight') - b.data('weight') } */
+        this.sortBy = "degree";
+        this.nodeSize = 30;
+        this.nodes = [];
+        this.links = [];
+        this.width = 300;
+        this.height = 300;
+        this.row = 0;
+        this.col = 0;
+        this.cellWidth = 0;
+        this.cellHeight = 0;
+        this.cellUsed = {};
+        this.id2manPos = {};
+        /** 迭代结束的回调函数 */
+        this.onLayoutEnd = function () { };
+        this.updateCfg(options);
+        return this;
+    }
+    getDefaultCfg() {
+        return {
+            begin: { x: 0, y: 0 },
+            preventOverlap: true,
+            preventOverlapPadding: 10,
+            condense: false,
+            rows: undefined,
+            cols: undefined,
+            position: undefined,
+            sortBy: "degree",
+            nodeSize: 30
+        };
+    }
+    ;
+    /**
+     * 执行布局
+     */
+    execute() {
+        var self = this;
+        var nodes = self.nodes;
+        var n = nodes.length;
+        var begin = self.begin;
+        if (n === 0) {
+            if (self.onLayoutEnd)
+                self.onLayoutEnd();
+            return;
+        }
+        if (n === 1) {
+            nodes[0].x(begin.x);
+            nodes[0].y(begin.y);
+            if (self.onLayoutEnd)
+                self.onLayoutEnd();
+            return;
+        }
+        var links = self.links;
+        var layoutNodes = [];
+        nodes.forEach(function (node) {
+            layoutNodes.push(node);
+        });
+        var nodeIdxMap = {};
+        layoutNodes.forEach(function (node, i) {
+            nodeIdxMap[node.id()] = i;
+        });
+        if (self.sortBy === "degree" ||
+            typeof self.sortBy !== 'string' ||
+            layoutNodes[0][self.sortBy] === undefined) {
+            self.sortBy = "degree";
+            if (util_1.isNaN(nodes[0].degree)) {
+                var values_1 = util_1.getDegree(layoutNodes.length, nodeIdxMap, links);
+                layoutNodes.forEach(function (node, i) {
+                    node.degree = values_1[i];
+                });
+            }
+        }
+        // sort nodes by value
+        layoutNodes.sort(function (n1, n2) { return n2[self.sortBy] - n1[self.sortBy]; });
+        if (!self.width && typeof window !== "undefined") {
+            self.width = window.innerWidth;
+        }
+        if (!self.height && typeof window !== "undefined") {
+            self.height = window.innerHeight;
+        }
+        var oRows = self.rows;
+        var oCols = self.cols != null ? self.cols : self.columns;
+        self.cells = n;
+        // if rows or columns were set in self, use those values
+        if (oRows != null && oCols != null) {
+            self.rows = oRows;
+            self.cols = oCols;
+        }
+        else if (oRows != null && oCols == null) {
+            self.rows = oRows;
+            self.cols = Math.ceil(self.cells / self.rows);
+        }
+        else if (oRows == null && oCols != null) {
+            self.cols = oCols;
+            self.rows = Math.ceil(self.cells / self.cols);
+        }
+        else {
+            // otherwise use the automatic values and adjust accordingly	      // otherwise use the automatic values and adjust accordingly
+            // width/height * splits^2 = cells where splits is number of times to split width
+            self.splits = Math.sqrt((self.cells * self.height) / self.width);
+            self.rows = Math.round(self.splits);
+            self.cols = Math.round((self.width / self.height) * self.splits);
+        }
+        if (self.cols * self.rows > self.cells) {
+            // otherwise use the automatic values and adjust accordingly
+            // if rounding was up, see if we can reduce rows or columns
+            var sm = self.small();
+            var lg = self.large();
+            // reducing the small side takes away the most cells, so try it first
+            if ((sm - 1) * lg >= self.cells) {
+                self.small(sm - 1);
+            }
+            else if ((lg - 1) * sm >= self.cells) {
+                self.large(lg - 1);
+            }
+        }
+        else {
+            // if rounding was too low, add rows or columns
+            while (self.cols * self.rows < self.cells) {
+                var sm = self.small();
+                var lg = self.large();
+                // try to add to larger side first (adds less in multiplication)
+                if ((lg + 1) * sm >= self.cells) {
+                    self.large(lg + 1);
+                }
+                else {
+                    self.small(sm + 1);
+                }
+            }
+        }
+        self.cellWidth = self.width / self.cols;
+        self.cellHeight = self.height / self.rows;
+        if (self.condense) {
+            self.cellWidth = 0;
+            self.cellHeight = 0;
+        }
+        if (self.preventOverlap) {
+            layoutNodes.forEach(function (node) {
+                if (!node.x() || !node.y()) {
+                    // for bb
+                    node.x(0);
+                    node.y(0);
+                }
+                var nodew;
+                var nodeh;
+                if (util_1.isArray(node.size)) {
+                    nodew = node.size[0];
+                    nodeh = node.size[1];
+                }
+                else if (util_1.isNumber(node.size)) {
+                    nodew = node.size;
+                    nodeh = node.size;
+                }
+                if (nodew === undefined || nodeh === undefined) {
+                    if (util_1.isArray(self.nodeSize)) {
+                        nodew = self.nodeSize[0];
+                        nodeh = self.nodeSize[1];
+                    }
+                    else if (util_1.isNumber(self.nodeSize)) {
+                        nodew = self.nodeSize;
+                        nodeh = self.nodeSize;
+                    }
+                    else {
+                        nodew = 30;
+                        nodeh = 30;
+                    }
+                }
+                var p = self.preventOverlapPadding;
+                var w = nodew + p;
+                var h = nodeh + p;
+                self.cellWidth = Math.max(self.cellWidth, w);
+                self.cellHeight = Math.max(self.cellHeight, h);
+            });
+        }
+        self.cellUsed = {}; // e.g. 'c-0-2' => true
+        // to keep track of current cell position
+        self.row = 0;
+        self.col = 0;
+        // get a cache of all the manual positions
+        self.id2manPos = {};
+        for (var i = 0; i < layoutNodes.length; i++) {
+            var node = layoutNodes[i];
+            var rcPos = void 0;
+            if (self.position) {
+                rcPos = self.position(node);
+            }
+            if (rcPos && (rcPos.row !== undefined || rcPos.col !== undefined)) {
+                // must have at least row or col def'd
+                var pos = {
+                    row: rcPos.row,
+                    col: rcPos.col
+                };
+                if (pos.col === undefined) {
+                    // find unused col
+                    pos.col = 0;
+                    while (self.used(pos.row, pos.col)) {
+                        pos.col++;
+                    }
+                }
+                else if (pos.row === undefined) {
+                    // find unused row
+                    pos.row = 0;
+                    while (self.used(pos.row, pos.col)) {
+                        pos.row++;
+                    }
+                }
+                self.id2manPos[node.id()] = pos;
+                self.use(pos.row, pos.col);
+            }
+            self.getPos(node);
+        }
+        if (self.onLayoutEnd)
+            self.onLayoutEnd();
+        return {
+            links: links,
+            nodes: layoutNodes
+        };
+    }
+    small(val) {
+        var self = this;
+        var res;
+        var rows = self.rows || 5;
+        var cols = self.cols || 5;
+        if (val == null) {
+            res = Math.min(rows, cols);
+        }
+        else {
+            var min = Math.min(rows, cols);
+            if (min === self.rows) {
+                self.rows = val;
+            }
+            else {
+                self.cols = val;
+            }
+        }
+        return res;
+    }
+    ;
+    large(val) {
+        var self = this;
+        var res;
+        var rows = self.rows || 5;
+        var cols = self.cols || 5;
+        if (val == null) {
+            res = Math.max(rows, cols);
+        }
+        else {
+            var max = Math.max(rows, cols);
+            if (max === self.rows) {
+                self.rows = val;
+            }
+            else {
+                self.cols = val;
+            }
+        }
+        return res;
+    }
+    ;
+    used(row, col) {
+        var self = this;
+        return self.cellUsed["c-" + row + "-" + col] || false;
+    }
+    ;
+    use(row, col) {
+        var self = this;
+        self.cellUsed["c-" + row + "-" + col] = true;
+    }
+    ;
+    moveToNextCell() {
+        var self = this;
+        var cols = self.cols || 5;
+        self.col++;
+        if (self.col >= cols) {
+            self.col = 0;
+            self.row++;
+        }
+    }
+    ;
+    getPos(node) {
+        var self = this;
+        var begin = self.begin;
+        var cellWidth = self.cellWidth;
+        var cellHeight = self.cellHeight;
+        var x;
+        var y;
+        // see if we have a manual position set
+        var rcPos = self.id2manPos[node.id()];
+        if (rcPos) {
+            x = rcPos.col * cellWidth + cellWidth / 2 + begin.x;
+            y = rcPos.row * cellHeight + cellHeight / 2 + begin.y;
+        }
+        else {
+            // otherwise set automatically
+            while (self.used(self.row, self.col)) {
+                self.moveToNextCell();
+            }
+            x = self.col * cellWidth + cellWidth / 2 + begin.x;
+            y = self.row * cellHeight + cellHeight / 2 + begin.y;
+            self.use(self.row, self.col);
+            self.moveToNextCell();
+        }
+        node.x(x);
+        node.y(y);
+    }
+    ;
+    getType() {
+        return "grid";
+    }
+    ;
+}
+exports.default = GridLayout;
+
+
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const base_1 = __webpack_require__(0);
+const util_1 = __webpack_require__(1);
+function initHierarchy(nodes, edges, nodeMap, directed) {
+    nodes.forEach(function (_, i) {
+        nodes[i].children = [];
+        nodes[i].parent = [];
+    });
+    if (directed) {
+        edges.forEach(function (e) {
+            var sourceIdx = 0;
+            if (e.source) {
+                sourceIdx = nodeMap[e.source];
+            }
+            var targetIdx = 0;
+            if (e.target) {
+                targetIdx = nodeMap[e.target];
+            }
+            var child = nodes[sourceIdx].children;
+            var parent = nodes[targetIdx].parent;
+            child.push(nodes[targetIdx].id());
+            parent.push(nodes[sourceIdx].id());
+        });
+    }
+    else {
+        edges.forEach(function (e) {
+            var sourceIdx = 0;
+            if (e.source) {
+                sourceIdx = nodeMap[e.source];
+            }
+            var targetIdx = 0;
+            if (e.target) {
+                targetIdx = nodeMap[e.target];
+            }
+            var sourceChildren = nodes[sourceIdx].children;
+            var targetChildren = nodes[targetIdx].children;
+            sourceChildren.push(nodes[targetIdx].id());
+            targetChildren.push(nodes[sourceIdx].id());
+        });
+    }
+}
+function connect(a, b, edges) {
+    var m = edges.length;
+    for (var i = 0; i < m; i++) {
+        if ((a.id() === edges[i].source && b.id() === edges[i].target) ||
+            (b.id() === edges[i].source && a.id() === edges[i].target)) {
+            return true;
+        }
+    }
+    return false;
+}
+function compareDegree(a, b) {
+    var aDegree = a.degree;
+    var bDegree = b.degree;
+    if (aDegree < bDegree) {
+        return -1;
+    }
+    if (aDegree > bDegree) {
+        return 1;
+    }
+    return 0;
+}
+/**
+ * 圆形布局
+ */
+class CircularLayout extends base_1.default {
+    constructor(options) {
+        super();
+        /** 固定半径，若设置了 radius，则 startRadius 与 endRadius 不起效 */
+        this.radius = null;
+        /** 起始半径 */
+        this.startRadius = null;
+        /** 终止半径 */
+        this.endRadius = null;
+        /** 起始角度 */
+        this.startAngle = 0;
+        /** 终止角度 */
+        this.endAngle = 2 * Math.PI;
+        /** 是否顺时针 */
+        this.clockwise = true;
+        /** 节点在环上分成段数（几个段将均匀分布），在 endRadius - startRadius != 0 时生效 */
+        this.divisions = 1;
+        /** 节点在环上排序的依据，可选: 'topology', 'degree', 'null' */
+        this.ordering = null;
+        /** how many 2*pi from first to last nodes */
+        this.angleRatio = 1;
+        this.nodes = [];
+        this.links = [];
+        this.nodeMap = {};
+        this.degrees = [];
+        this.width = 300;
+        this.height = 300;
+        this.updateCfg(options);
+        return this;
+    }
+    getDefaultCfg() {
+        return {
+            radius: null,
+            startRadius: null,
+            endRadius: null,
+            startAngle: 0,
+            endAngle: 2 * Math.PI,
+            clockwise: true,
+            divisions: 1,
+            ordering: null,
+            angleRatio: 1
+        };
+    }
+    ;
+    /**
+     * 执行布局
+     */
+    execute() {
+        var self = this;
+        var nodes = self.nodes;
+        var links = self.links;
+        var n = nodes.length;
+        if (n === 0) {
+            if (self.onLayoutEnd)
+                self.onLayoutEnd();
+            return;
+        }
+        if (!self.width && typeof window !== "undefined") {
+            self.width = window.innerWidth;
+        }
+        if (!self.height && typeof window !== "undefined") {
+            self.height = window.innerHeight;
+        }
+        if (!self.center) {
+            self.center = { x: self.width / 2, y: self.height / 2 };
+        }
+        var center = self.center;
+        if (n === 1) {
+            nodes[0].x(center.x);
+            nodes[0].y(center.y);
+            if (self.onLayoutEnd)
+                self.onLayoutEnd();
+            return;
+        }
+        var radius = self.radius;
+        var startRadius = self.startRadius;
+        var endRadius = self.endRadius;
+        var divisions = self.divisions;
+        var startAngle = self.startAngle;
+        var endAngle = self.endAngle;
+        var angleStep = (endAngle - startAngle) / n;
+        // layout
+        var nodeMap = {};
+        nodes.forEach(function (node, i) {
+            nodeMap[node.id()] = i;
+        });
+        self.nodeMap = nodeMap;
+        var degrees = util_1.getDegree(nodes.length, nodeMap, links);
+        self.degrees = degrees;
+        if (!radius && !startRadius && !endRadius) {
+            radius = self.height > self.width ? self.width / 2 : self.height / 2;
+        }
+        else if (!startRadius && endRadius) {
+            startRadius = endRadius;
+        }
+        else if (startRadius && !endRadius) {
+            endRadius = startRadius;
+        }
+        var angleRatio = self.angleRatio;
+        var astep = angleStep * angleRatio;
+        var ordering = self.ordering;
+        var layoutNodes = [];
+        if (ordering === "topology") {
+            // layout according to the topology
+            layoutNodes = self.topologyOrdering();
+        }
+        else if (ordering === "topology-directed") {
+            // layout according to the topology
+            layoutNodes = self.topologyOrdering(true);
+        }
+        else if (ordering === "degree") {
+            // layout according to the descent order of degrees
+            layoutNodes = self.degreeOrdering();
+        }
+        else {
+            // layout according to the original order in the data.nodes
+            layoutNodes = nodes;
+        }
+        var clockwise = self.clockwise;
+        var divN = Math.ceil(n / divisions); // node number in each division
+        for (var i = 0; i < n; ++i) {
+            var r = radius;
+            if (!r && startRadius !== null && endRadius !== null) {
+                r = startRadius + (i * (endRadius - startRadius)) / (n - 1);
+            }
+            if (!r) {
+                r = 10 + (i * 100) / (n - 1);
+            }
+            var angle = startAngle +
+                (i % divN) * astep +
+                ((2 * Math.PI) / divisions) * Math.floor(i / divN);
+            if (!clockwise) {
+                angle =
+                    endAngle -
+                        (i % divN) * astep -
+                        ((2 * Math.PI) / divisions) * Math.floor(i / divN);
+            }
+            layoutNodes[i].x(center.x + Math.cos(angle) * r);
+            layoutNodes[i].y(center.y + Math.sin(angle) * r);
+            layoutNodes[i].weight = degrees[i];
+        }
+        if (self.onLayoutEnd)
+            self.onLayoutEnd();
+        return {
+            nodes: layoutNodes,
+            links: this.links
+        };
+    }
+    /**
+     * 根据节点的拓扑结构排序
+     * @return {array} orderedNodes 排序后的结果
+     */
+    topologyOrdering(directed) {
+        if (directed === void 0) {
+            directed = false;
+        }
+        var self = this;
+        var degrees = self.degrees;
+        var links = self.links;
+        var nodes = self.nodes;
+        var cnodes = util_1.clone(nodes);
+        var nodeMap = self.nodeMap;
+        var orderedCNodes = [cnodes[0]];
+        var resNodes = [nodes[0]];
+        var pickFlags = [];
+        var n = nodes.length;
+        pickFlags[0] = true;
+        initHierarchy(cnodes, links, nodeMap, directed);
+        var k = 0;
+        cnodes.forEach(function (cnode, i) {
+            if (i !== 0) {
+                if ((i === n - 1 ||
+                    degrees[i] !== degrees[i + 1] ||
+                    connect(orderedCNodes[k], cnode, links)) &&
+                    !pickFlags[i]) {
+                    orderedCNodes.push(cnode);
+                    resNodes.push(nodes[nodeMap[cnode.id()]]);
+                    pickFlags[i] = true;
+                    k++;
+                }
+                else {
+                    var children = orderedCNodes[k].children;
+                    var foundChild = false;
+                    for (var j = 0; j < children.length; j++) {
+                        var childIdx = nodeMap[children[j]];
+                        if (degrees[childIdx] === degrees[i] && !pickFlags[childIdx]) {
+                            orderedCNodes.push(cnodes[childIdx]);
+                            resNodes.push(nodes[nodeMap[cnodes[childIdx].id()]]);
+                            pickFlags[childIdx] = true;
+                            foundChild = true;
+                            break;
+                        }
+                    }
+                    var ii = 0;
+                    while (!foundChild) {
+                        if (!pickFlags[ii]) {
+                            orderedCNodes.push(cnodes[ii]);
+                            resNodes.push(nodes[nodeMap[cnodes[ii].id()]]);
+                            pickFlags[ii] = true;
+                            foundChild = true;
+                        }
+                        ii++;
+                        if (ii === n) {
+                            break;
+                        }
+                    }
+                }
+            }
+        });
+        return resNodes;
+    }
+    ;
+    /**
+     * 根据节点度数大小排序
+     * @return {array} orderedNodes 排序后的结果
+     */
+    degreeOrdering() {
+        var self = this;
+        var nodes = self.nodes;
+        var orderedNodes = [];
+        var degrees = self.degrees;
+        nodes.forEach(function (node, i) {
+            node.degree = degrees[i];
+            orderedNodes.push(node);
+        });
+        orderedNodes.sort(compareDegree);
+        return orderedNodes;
+    }
+    ;
+    getType() {
+        return "circular";
+    }
+    ;
+}
+exports.default = CircularLayout;
+
+
+/***/ }),
+/* 27 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const base_1 = __webpack_require__(0);
+const util_1 = __webpack_require__(1);
+/**
+ * 同心圆布局
+ */
+class ConcentricLayout extends base_1.default {
+    constructor(options) {
+        super();
+        this.nodeSize = 30;
+        /** min spacing between outside of nodes (used for radius adjustment) */
+        this.minNodeSpacing = 10;
+        /** prevents node overlap, may overflow boundingBox if not enough space */
+        this.preventOverlap = false;
+        /** whether levels have an equal radial distance betwen them, may cause bounding box overflow */
+        this.equidistant = false;
+        /** where nodes start in radians */
+        this.startAngle = (3 / 2) * Math.PI;
+        /** whether the layout should go clockwise (true) or counterclockwise/anticlockwise (false) */
+        this.clockwise = true;
+        /** 根据 sortBy 指定的属性进行排布，数值高的放在中心，如果是 sortBy 则会计算节点度数，度数最高的放在中心 */
+        this.sortBy = "degree";
+        this.nodes = [];
+        this.links = [];
+        this.width = 300;
+        this.height = 300;
+        /** 迭代结束的回调函数 */
+        this.onLayoutEnd = function () { };
+        this.updateCfg(options);
+        return this;
+    }
+    getDefaultCfg() {
+        return {
+            nodeSize: 30,
+            minNodeSpacing: 10,
+            preventOverlap: false,
+            sweep: undefined,
+            equidistant: false,
+            startAngle: (3 / 2) * Math.PI,
+            clockwise: true,
+            maxLevelDiff: undefined,
+            sortBy: "degree"
+        };
+    }
+    ;
+    /**
+     * 执行布局
+     */
+    execute() {
+        var self = this;
+        var nodes = self.nodes;
+        var links = self.links;
+        var n = nodes.length;
+        if (n === 0) {
+            if (self.onLayoutEnd)
+                self.onLayoutEnd();
+            return;
+        }
+        if (!self.width && typeof window !== "undefined") {
+            self.width = window.innerWidth;
+        }
+        if (!self.height && typeof window !== "undefined") {
+            self.height = window.innerHeight;
+        }
+        if (!self.center) {
+            self.center = { x: self.width / 2, y: self.height / 2 };
+        }
+        var center = self.center;
+        if (n === 1) {
+            nodes[0].x(center.x);
+            nodes[0].y(center.y);
+            if (self.onLayoutEnd)
+                self.onLayoutEnd();
+            return;
+        }
+        var layoutNodes = [];
+        var maxNodeSize;
+        if (util_1.isArray(self.nodeSize)) {
+            maxNodeSize = Math.max(self.nodeSize[0], self.nodeSize[1]);
+        }
+        else {
+            maxNodeSize = self.nodeSize;
+        }
+        nodes.forEach(function (node) {
+            layoutNodes.push(node);
+            var nodeSize = maxNodeSize;
+            if (util_1.isArray(node.size)) {
+                nodeSize = Math.max(node.size[0], node.size[1]);
+            }
+            else if (util_1.isNumber(node.size)) {
+                nodeSize = node.size;
+            }
+            maxNodeSize = Math.max(maxNodeSize, nodeSize);
+        });
+        self.clockwise =
+            self.counterclockwise !== undefined
+                ? !self.counterclockwise
+                : self.clockwise;
+        // layout
+        var nodeMap = {};
+        var indexMap = {};
+        layoutNodes.forEach(function (node, i) {
+            nodeMap[node.id()] = node;
+            indexMap[node.id()] = i;
+        });
+        // get the node degrees
+        if (self.sortBy === "degree" ||
+            !util_1.isString(self.sortBy) ||
+            layoutNodes[0][self.sortBy] === undefined) {
+            self.sortBy = "degree";
+            if (!util_1.isNumber(nodes[0].degree)) {
+                var values_1 = util_1.getDegree(nodes.length, indexMap, links);
+                layoutNodes.forEach(function (node, i) {
+                    node.degree = values_1[i];
+                });
+            }
+        }
+        // sort nodes by value
+        layoutNodes.sort(function (n1, n2) {
+            return n2[self.sortBy] - n1[self.sortBy];
+        });
+        self.maxValueNode = layoutNodes[0];
+        self.maxLevelDiff =
+            self.maxLevelDiff || self.maxValueNode[self.sortBy] / 4;
+        // put the values into levels
+        var levels = [[]];
+        var currentLevel = levels[0];
+        layoutNodes.forEach(function (node) {
+            if (currentLevel.length > 0) {
+                var diff = Math.abs(currentLevel[0][self.sortBy] - node[self.sortBy]);
+                if (self.maxLevelDiff && diff >= self.maxLevelDiff) {
+                    currentLevel = [];
+                    levels.push(currentLevel);
+                }
+            }
+            currentLevel.push(node);
+        });
+        // create positions for levels
+        var minDist = maxNodeSize + self.minNodeSpacing; // min dist between nodes
+        if (!self.preventOverlap) {
+            // then strictly constrain to bb
+            var firstLvlHasMulti = levels.length > 0 && levels[0].length > 1;
+            var maxR = Math.min(self.width, self.height) / 2 - minDist;
+            var rStep = maxR / (levels.length + (firstLvlHasMulti ? 1 : 0));
+            minDist = Math.min(minDist, rStep);
+        }
+        // find the metrics for each level
+        var r = 0;
+        levels.forEach(function (level) {
+            var sweep = self.sweep;
+            if (sweep === undefined) {
+                sweep = 2 * Math.PI - (2 * Math.PI) / level.length;
+            }
+            level["dTheta"] = sweep / Math.max(1, level.length - 1);
+            var dTheta = level["dTheta"];
+            // calculate the radius
+            if (level.length > 1 && self.preventOverlap) {
+                // but only if more than one node (can't overlap)
+                var dcos = Math.cos(dTheta) - Math.cos(0);
+                var dsin = Math.sin(dTheta) - Math.sin(0);
+                var rMin = Math.sqrt((minDist * minDist) / (dcos * dcos + dsin * dsin)); // s.t. no nodes overlapping
+                r = Math.max(rMin, r);
+            }
+            level["r"] = r;
+            r += minDist;
+        });
+        if (self.equidistant) {
+            var rDeltaMax_1 = 0;
+            var rr_1 = 0;
+            for (var i = 0; i < levels.length; i++) {
+                var level = levels[i];
+                var rDelta = level["r"] - rr_1;
+                rDeltaMax_1 = Math.max(rDeltaMax_1, rDelta);
+            }
+            rr_1 = 0;
+            levels.forEach(function (level, i) {
+                if (i === 0) {
+                    rr_1 = level["r"];
+                }
+                level["r"] = rr_1;
+                rr_1 += rDeltaMax_1;
+            });
+        }
+        // calculate the node positions
+        levels.forEach(function (level) {
+            var dTheta = level["dTheta"];
+            var rr = level["r"];
+            level.forEach(function (node, j) {
+                var theta = self.startAngle + (self.clockwise ? 1 : -1) * dTheta * j;
+                node.x(center.x + rr * Math.cos(theta));
+                node.y(center.y + rr * Math.sin(theta));
+            });
+        });
+        if (self.onLayoutEnd)
+            self.onLayoutEnd();
+        return {
+            nodes: nodes,
+            links: links
+        };
+    }
+    ;
+    getType() {
+        return "concentric";
+    }
+    ;
+}
+exports.default = ConcentricLayout;
+
+
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const base_1 = __webpack_require__(0);
+const util_1 = __webpack_require__(1);
+const SPEED_DIVISOR = 800;
+/**
+ * fruchterman 布局
+ */
+class FruchtermanLayout extends base_1.default {
+    constructor(options) {
+        super();
+        /** 停止迭代的最大迭代数 */
+        this.maxIteration = 1000;
+        /** 重力大小，影响图的紧凑程度 */
+        this.gravity = 10;
+        /** 速度 */
+        this.speed = 1;
+        /** 是否产生聚类力 */
+        this.clustering = false;
+        /** 聚类力大小 */
+        this.clusterGravity = 10;
+        this.nodes = [];
+        this.links = [];
+        this.width = 300;
+        this.height = 300;
+        this.nodeMap = {};
+        this.nodeIdxMap = {};
+        /** 迭代结束的回调函数 */
+        this.onLayoutEnd = function () { };
+        this.updateCfg(options);
+        return this;
+    }
+    getDefaultCfg() {
+        return {
+            maxIteration: 1000,
+            gravity: 10,
+            speed: 1,
+            clustering: false,
+            clusterGravity: 10
+        };
+    }
+    ;
+    /**
+     * 执行布局
+     */
+    execute() {
+        var _this = this;
+        var self = this;
+        var nodes = self.nodes;
+        if (!nodes || nodes.length === 0) {
+            if (self.onLayoutEnd)
+                self.onLayoutEnd();
+            return;
+        }
+        if (!self.width && typeof window !== "undefined") {
+            self.width = window.innerWidth;
+        }
+        if (!self.height && typeof window !== "undefined") {
+            self.height = window.innerHeight;
+        }
+        if (!self.center) {
+            self.center = { x: self.width / 2, y: self.height / 2 };
+        }
+        var center = self.center;
+        if (nodes.length === 1) {
+            nodes[0].x(center.x);
+            nodes[0].y(center.y);
+            if (self.onLayoutEnd)
+                self.onLayoutEnd();
+            return;
+        }
+        var nodeMap = {};
+        var nodeIdxMap = {};
+        nodes.forEach(function (node, i) {
+            if (!util_1.isNumber(node.x()))
+                node.x(Math.random() * _this.width);
+            if (!util_1.isNumber(node.y()))
+                node.y(Math.random() * _this.height);
+            nodeMap[node.id()] = node;
+            nodeIdxMap[node.id()] = i;
+        });
+        self.nodeMap = nodeMap;
+        self.nodeIdxMap = nodeIdxMap;
+        // layout
+        return self.run();
+    }
+    ;
+    run() {
+        var self = this;
+        var nodes = self.nodes;
+        var links = self.links;
+        var maxIteration = self.maxIteration;
+        var center = self.center;
+        var area = self.height * self.width;
+        var maxDisplace = Math.sqrt(area) / 10;
+        var k2 = area / (nodes.length + 1);
+        var k = Math.sqrt(k2);
+        var gravity = self.gravity;
+        var speed = self.speed;
+        var clustering = self.clustering;
+        var clusterMap = {};
+        if (clustering) {
+            nodes.forEach(function (n) {
+                if (clusterMap[n.cluster] === undefined) {
+                    var cluster = {
+                        name: n.cluster,
+                        cx: 0,
+                        cy: 0,
+                        count: 0
+                    };
+                    clusterMap[n.cluster] = cluster;
+                }
+                var c = clusterMap[n.cluster];
+                if (util_1.isNumber(n.x())) {
+                    c.cx += n.x();
+                }
+                if (util_1.isNumber(n.y)) {
+                    c.cy += n.y();
+                }
+                c.count++;
+            });
+            for (var key in clusterMap) {
+                clusterMap[key].cx /= clusterMap[key].count;
+                clusterMap[key].cy /= clusterMap[key].count;
+            }
+        }
+        var _loop_1 = function (i) {
+            var displacements = [];
+            nodes.forEach(function (_, j) {
+                displacements[j] = { x: 0, y: 0 };
+            });
+            self.applyCalculate(nodes, links, displacements, k, k2);
+            // gravity for clusters
+            if (clustering) {
+                var clusterGravity_1 = self.clusterGravity || gravity;
+                nodes.forEach(function (n, j) {
+                    if (!util_1.isNumber(n.x()) || !util_1.isNumber(n.y()))
+                        return;
+                    var c = clusterMap[n.cluster];
+                    var distLength = Math.sqrt((n.x() - c.cx) * (n.x() - c.cx) + (n.y() - c.cy) * (n.y() - c.cy));
+                    var gravityForce = k * clusterGravity_1;
+                    displacements[j].x -= (gravityForce * (n.x() - c.cx)) / distLength;
+                    displacements[j].y -= (gravityForce * (n.y() - c.cy)) / distLength;
+                });
+                for (var key in clusterMap) {
+                    clusterMap[key].cx = 0;
+                    clusterMap[key].cy = 0;
+                    clusterMap[key].count = 0;
+                }
+                nodes.forEach(function (n) {
+                    var c = clusterMap[n.cluster];
+                    if (util_1.isNumber(n.x())) {
+                        c.cx += n.x();
+                    }
+                    if (util_1.isNumber(n.y())) {
+                        c.cy += n.y();
+                    }
+                    c.count++;
+                });
+                for (var key in clusterMap) {
+                    clusterMap[key].cx /= clusterMap[key].count;
+                    clusterMap[key].cy /= clusterMap[key].count;
+                }
+            }
+            // gravity
+            nodes.forEach(function (n, j) {
+                if (!util_1.isNumber(n.x()) || !util_1.isNumber(n.y()))
+                    return;
+                var gravityForce = 0.01 * k * gravity;
+                displacements[j].x -= gravityForce * (n.x() - center.x);
+                displacements[j].y -= gravityForce * (n.y() - center.y);
+            });
+            // move
+            nodes.forEach(function (n, j) {
+                if (!util_1.isNumber(n.x()) || !util_1.isNumber(n.y()))
+                    return;
+                var distLength = Math.sqrt(displacements[j].x * displacements[j].x +
+                    displacements[j].y * displacements[j].y);
+                if (distLength > 0) {
+                    // && !n.isFixed()
+                    var limitedDist = Math.min(maxDisplace * (speed / SPEED_DIVISOR), distLength);
+                    n.x(n.x() + (displacements[j].x / distLength) * limitedDist);
+                    n.y(n.y() + (displacements[j].y / distLength) * limitedDist);
+                }
+            });
+        };
+        for (var i = 0; i < maxIteration; i++) {
+            _loop_1(i);
+        }
+        if (self.onLayoutEnd)
+            self.onLayoutEnd();
+        return {
+            nodes: nodes,
+            links: links
+        };
+    }
+    applyCalculate(nodes, links, displacements, k, k2) {
+        var self = this;
+        self.calRepulsive(nodes, displacements, k2);
+        self.calAttractive(links, displacements, k);
+    }
+    ;
+    calRepulsive(nodes, displacements, k2) {
+        nodes.forEach(function (v, i) {
+            displacements[i] = { x: 0, y: 0 };
+            nodes.forEach(function (u, j) {
+                if (i === j) {
+                    return;
+                }
+                if (!util_1.isNumber(v.x()) ||
+                    !util_1.isNumber(u.x()) ||
+                    !util_1.isNumber(v.y()) ||
+                    !util_1.isNumber(u.y()))
+                    return;
+                var vecX = v.x() - u.x();
+                var vecY = v.y() - u.y();
+                var vecLengthSqr = vecX * vecX + vecY * vecY;
+                if (vecLengthSqr === 0) {
+                    vecLengthSqr = 1;
+                    var sign = i > j ? 1 : -1;
+                    vecX = 0.01 * sign;
+                    vecY = 0.01 * sign;
+                }
+                var common = k2 / vecLengthSqr;
+                displacements[i].x += vecX * common;
+                displacements[i].y += vecY * common;
+            });
+        });
+    }
+    ;
+    calAttractive(links, displacements, k) {
+        var _this = this;
+        links.forEach(function (e) {
+            if (!e.source() || !e.target())
+                return;
+            var uIndex = _this.nodeIdxMap[e.source().id()];
+            var vIndex = _this.nodeIdxMap[e.target().id()];
+            if (uIndex === vIndex) {
+                return;
+            }
+            var u = _this.nodeMap[e.source().id()];
+            var v = _this.nodeMap[e.target().id()];
+            if (!util_1.isNumber(v.x()) || !util_1.isNumber(u.x()) || !util_1.isNumber(v.y()) || !util_1.isNumber(u.y()))
+                return;
+            var vecX = v.x() - u.x();
+            var vecY = v.y() - u.y();
+            var vecLength = Math.sqrt(vecX * vecX + vecY * vecY);
+            var common = (vecLength * vecLength) / k;
+            displacements[vIndex].x -= (vecX / vecLength) * common;
+            displacements[vIndex].y -= (vecY / vecLength) * common;
+            displacements[uIndex].x += (vecX / vecLength) * common;
+            displacements[uIndex].y += (vecY / vecLength) * common;
+        });
+    }
+    ;
+    getType() {
+        return "fruchterman";
+    }
+    ;
+}
+exports.default = FruchtermanLayout;
+
+
+/***/ }),
+/* 29 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const base_1 = __webpack_require__(0);
+const util_1 = __webpack_require__(1);
+const proccessToFunc = function (value, defaultV) {
+    var func;
+    if (!value) {
+        func = function (d) {
+            return defaultV || 1;
+        };
+    }
+    else if (util_1.isNumber(value)) {
+        func = function (d) {
+            return value;
+        };
+    }
+    else {
+        func = value;
+    }
+    return func;
+};
+/**
+ * graphin 中的 force 布局
+ */
+class GForceLayout extends base_1.default {
+    constructor(options) {
+        super();
+        /** 停止迭代的最大迭代数 */
+        this.maxIteration = 1000;
+        /** 弹簧引力系数 */
+        this.linkStrength = 200;
+        /** 斥力系数 */
+        this.nodeStrength = 1000;
+        /** 库伦系数 */
+        this.coulombDisScale = 0.005;
+        /** 阻尼系数 */
+        this.damping = 0.9;
+        /** 最大速度 */
+        this.maxSpeed = 1000;
+        /** 一次迭代的平均移动距离小于该值时停止迭代 */
+        this.minMovement = 0.5;
+        /** 迭代中衰减 */
+        this.interval = 0.02;
+        /** 斥力的一个系数 */
+        this.factor = 1;
+        /** 理想边长 */
+        this.linkDistance = 1;
+        /** 重力大小 */
+        this.gravity = 10;
+        /** 是否防止重叠 */
+        this.preventOverlap = true;
+        /** 每次迭代结束的回调函数 */
+        this.tick = function () { };
+        this.nodes = [];
+        this.links = [];
+        this.width = 300;
+        this.height = 300;
+        this.nodeMap = {};
+        this.nodeIdxMap = {};
+        this.updateCfg(options);
+        return this;
+    }
+    getDefaultCfg() {
+        return {
+            maxIteration: 500,
+            gravity: 10,
+            enableTick: true
+        };
+    }
+    ;
+    /**
+     * 执行布局
+     */
+    execute() {
+        var self = this;
+        var nodes = self.nodes;
+        if (self.timeInterval !== undefined && typeof window !== "undefined") {
+            window.clearInterval(self.timeInterval);
+        }
+        if (!nodes || nodes.length === 0) {
+            if (self.onLayoutEnd)
+                self.onLayoutEnd();
+            return;
+        }
+        if (!self.width && typeof window !== "undefined") {
+            self.width = window.innerWidth;
+        }
+        if (!self.height && typeof window !== "undefined") {
+            self.height = window.innerHeight;
+        }
+        if (!self.center) {
+            self.center = { x: self.width / 2, y: self.height / 2 };
+        }
+        var center = self.center;
+        if (nodes.length === 1) {
+            nodes[0].x(center.x);
+            nodes[0].y(center.y);
+            if (self.onLayoutEnd)
+                self.onLayoutEnd();
+            return;
+        }
+        var nodeMap = {};
+        var nodeIdxMap = {};
+        nodes.forEach(function (node, i) {
+            if (!util_1.isNumber(node.x()))
+                node.x(Math.random() * self.width);
+            if (!util_1.isNumber(node.y()))
+                node.y(Math.random() * self.height);
+            nodeMap[node.id()] = node;
+            nodeIdxMap[node.id()] = i;
+        });
+        self.nodeMap = nodeMap;
+        self.nodeIdxMap = nodeIdxMap;
+        self.linkDistance = proccessToFunc(self.linkDistance, 1);
+        self.nodeStrength = proccessToFunc(self.nodeStrength, 1);
+        self.linkStrength = proccessToFunc(self.linkStrength, 1);
+        // node size function
+        var nodeSize = self.nodeSize;
+        var nodeSizeFunc;
+        if (self.preventOverlap) {
+            var nodeSpacing_1 = self.nodeSpacing;
+            var nodeSpacingFunc_1;
+            if (util_1.isNumber(nodeSpacing_1)) {
+                nodeSpacingFunc_1 = function () { return nodeSpacing_1; };
+            }
+            else if (util_1.isFunction(nodeSpacing_1)) {
+                nodeSpacingFunc_1 = nodeSpacing_1;
+            }
+            else {
+                nodeSpacingFunc_1 = function () { return 0; };
+            }
+            if (!nodeSize) {
+                nodeSizeFunc = function (d) {
+                    if (d.size) {
+                        if (util_1.isArray(d.size)) {
+                            var res = d.size[0] > d.size[1] ? d.size[0] : d.size[1];
+                            return res + nodeSpacingFunc_1(d);
+                        }
+                        return d.size + nodeSpacingFunc_1(d);
+                    }
+                    return 10 + nodeSpacingFunc_1(d);
+                };
+            }
+            else if (util_1.isArray(nodeSize)) {
+                nodeSizeFunc = function (d) {
+                    var res = nodeSize[0] > nodeSize[1] ? nodeSize[0] : nodeSize[1];
+                    return res + nodeSpacingFunc_1(d);
+                };
+            }
+            else {
+                nodeSizeFunc = function (d) { return nodeSize + nodeSpacingFunc_1(d); };
+            }
+        }
+        self.nodeSize = nodeSizeFunc;
+        var links = self.links;
+        self.degrees = util_1.getDegree(nodes.length, self.nodeIdxMap, links);
+        if (!self.getMass) {
+            self.getMass = function (d) {
+                return self.degrees[self.nodeIdxMap[d.id]] || 1;
+            };
+        }
+        // layout
+        self.run();
+    }
+    ;
+    run() {
+        var self = this;
+        var nodes = self.nodes;
+        var links = self.links;
+        var maxIteration = self.maxIteration;
+        if (typeof window === "undefined")
+            return;
+        var iter = 0;
+        // interval for render the result after each iteration
+        this.timeInterval = window.setInterval(function () {
+            var accArray = [];
+            var velArray = [];
+            if (!nodes)
+                return;
+            nodes.forEach(function (_, i) {
+                accArray[2 * i] = 0;
+                accArray[2 * i + 1] = 0;
+                velArray[2 * i] = 0;
+                velArray[2 * i + 1] = 0;
+            });
+            self.calRepulsive(accArray, nodes);
+            if (links)
+                self.calAttractive(accArray, links);
+            self.calGravity(accArray, nodes);
+            var stepInterval = Math.max(0.02, self.interval - iter * 0.002);
+            self.updateVelocity(accArray, velArray, stepInterval, nodes);
+            var previousPos = [];
+            nodes.forEach(function (node) {
+                previousPos.push({
+                    x: node.x(),
+                    y: node.y()
+                });
+            });
+            self.updatePosition(velArray, stepInterval, nodes);
+            if (self.tick)
+                self.tick();
+            // whether to stop the iteration
+            var movement = 0;
+            nodes.forEach(function (node, j) {
+                var vx = node.x() - previousPos[j].x;
+                var vy = node.y() - previousPos[j].y;
+                movement += Math.sqrt(vx * vx + vy * vy);
+            });
+            movement /= nodes.length;
+            if (movement < self.minMovement) {
+                window.clearInterval(self.timeInterval);
+                if (self.onLayoutEnd)
+                    self.onLayoutEnd();
+            }
+            iter++;
+            if (iter > maxIteration) {
+                window.clearInterval(self.timeInterval);
+                if (self.onLayoutEnd)
+                    self.onLayoutEnd();
+            }
+            self.netv.draw();
+        }, 0);
+    }
+    ;
+    calRepulsive(accArray, nodes) {
+        var self = this;
+        // const nodes = self.nodes;
+        var getMass = self.getMass;
+        var nodeStrength = self.nodeStrength;
+        var factor = self.factor;
+        var coulombDisScale = self.coulombDisScale;
+        var preventOverlap = self.preventOverlap;
+        var nodeSize = self.nodeSize;
+        nodes.forEach(function (ni, i) {
+            var massi = getMass ? getMass(ni) : 1;
+            nodes.forEach(function (nj, j) {
+                if (i >= j)
+                    return;
+                // if (!accArray[j]) accArray[j] = 0;
+                var vecX = ni.x() - nj.x();
+                var vecY = ni.y() - nj.y();
+                var vecLength = Math.sqrt(vecX * vecX + vecY * vecY) + 0.01;
+                var nVecLength = (vecLength + 0.1) * coulombDisScale;
+                var direX = vecX / vecLength;
+                var direY = vecY / vecLength;
+                var param = (((typeof nodeStrength === 'function' ? nodeStrength(ni) + nodeStrength(nj) : 2 * nodeStrength) / 2) * factor) /
+                    (nVecLength * nVecLength);
+                var massj = getMass ? getMass(nj) : 1;
+                accArray[2 * i] += (direX * param) / massi;
+                accArray[2 * i + 1] += (direY * param) / massi;
+                accArray[2 * j] -= (direX * param) / massj;
+                accArray[2 * j + 1] -= (direY * param) / massj;
+                if (preventOverlap && vecLength < (typeof nodeSize === 'function' ? nodeSize(ni) + nodeSize(nj) :
+                    typeof nodeSize === 'number' ? 2 * nodeSize : nodeSize.length) / 2) {
+                    var paramOverlap = (typeof nodeStrength === 'function' ? nodeStrength(ni) + nodeStrength(nj) : 2 * nodeStrength) / 2 / (vecLength * vecLength);
+                    accArray[2 * i] += (direX * paramOverlap) / massi;
+                    accArray[2 * i + 1] += (direY * paramOverlap) / massi;
+                    accArray[2 * j] -= (direX * paramOverlap) / massj;
+                    accArray[2 * j + 1] -= (direY * paramOverlap) / massj;
+                }
+            });
+        });
+    }
+    ;
+    calAttractive(accArray, edges) {
+        var self = this;
+        // const edges = self.edges;
+        var nodeMap = self.nodeMap;
+        var nodeIdxMap = self.nodeIdxMap;
+        var linkDistance = self.linkDistance;
+        var linkStrength = self.linkStrength;
+        var getMass = self.getMass;
+        edges.forEach(function (edge, i) {
+            var sourceNode = nodeMap[edge.source().id()];
+            var targetNode = nodeMap[edge.target().id()];
+            var vecX = targetNode.x() - sourceNode.x();
+            var vecY = targetNode.y() - sourceNode.y();
+            var vecLength = Math.sqrt(vecX * vecX + vecY * vecY) + 0.01;
+            var direX = vecX / vecLength;
+            var direY = vecY / vecLength;
+            var length = typeof linkDistance === 'function' ? linkDistance(edge) : linkDistance || 1;
+            var diff = length - vecLength;
+            var param = diff * (typeof linkStrength === 'function' ? linkStrength(edge) : linkStrength || 1);
+            var sourceIdx = nodeIdxMap[edge.source().id()];
+            var targetIdx = nodeIdxMap[edge.target().id()];
+            var massSource = getMass ? getMass(sourceNode) : 1;
+            var massTarget = getMass ? getMass(targetNode) : 1;
+            accArray[2 * sourceIdx] -= (direX * param) / massSource;
+            accArray[2 * sourceIdx + 1] -= (direY * param) / massSource;
+            accArray[2 * targetIdx] += (direX * param) / massTarget;
+            accArray[2 * targetIdx + 1] += (direY * param) / massTarget;
+        });
+    }
+    ;
+    calGravity(accArray, nodes) {
+        var self = this;
+        // const nodes = self.nodes;
+        var center = self.center;
+        var defaultGravity = self.gravity;
+        var degrees = self.degrees;
+        var nodeLength = nodes.length;
+        for (var i = 0; i < nodeLength; i++) {
+            var node = nodes[i];
+            var vecX = node.x() - center.x;
+            var vecY = node.y() - center.y;
+            var gravity = defaultGravity;
+            if (self.getCenter) {
+                var customCenterOpt = self.getCenter(node, degrees[i]);
+                if (customCenterOpt &&
+                    util_1.isNumber(customCenterOpt[0]) &&
+                    util_1.isNumber(customCenterOpt[1]) &&
+                    util_1.isNumber(customCenterOpt[2])) {
+                    vecX = node.x() - customCenterOpt[0];
+                    vecY = node.y() - customCenterOpt[1];
+                    gravity = customCenterOpt[2];
+                }
+            }
+            if (!gravity)
+                continue;
+            accArray[2 * i] -= gravity * vecX;
+            accArray[2 * i + 1] -= gravity * vecY;
+        }
+    }
+    ;
+    updateVelocity(accArray, velArray, stepInterval, nodes) {
+        var self = this;
+        var param = stepInterval * self.damping;
+        // const nodes = self.nodes;
+        nodes.forEach(function (node, i) {
+            var vx = accArray[2 * i] * param || 0.01;
+            var vy = accArray[2 * i + 1] * param || 0.01;
+            var vLength = Math.sqrt(vx * vx + vy * vy);
+            if (vLength > self.maxSpeed) {
+                var param2 = self.maxSpeed / vLength;
+                vx = param2 * vx;
+                vy = param2 * vy;
+            }
+            velArray[2 * i] = vx;
+            velArray[2 * i + 1] = vy;
+        });
+    }
+    ;
+    updatePosition(velArray, stepInterval, nodes) {
+        nodes.forEach(function (node, i) {
+            var distX = velArray[2 * i] * stepInterval;
+            var distY = velArray[2 * i + 1] * stepInterval;
+            node.x(node.x() + distX);
+            node.y(node.y() + distY);
+        });
+    }
+    ;
+    stop() {
+        if (this.timeInterval && typeof window !== "undefined") {
+            window.clearInterval(this.timeInterval);
+        }
+    }
+    ;
+    destroy() {
+        var self = this;
+        self.stop();
+        self.tick = null;
+        self.nodes = null;
+        self.links = null;
+        self.destroyed = true;
+    }
+    ;
+    getType() {
+        return "gForce";
+    }
+    ;
+}
+exports.default = GForceLayout;
+
+
+/***/ }),
+/* 30 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const base_1 = __webpack_require__(0);
+const body_1 = __webpack_require__(31);
+const quad_1 = __webpack_require__(32);
+const quadTree_1 = __webpack_require__(33);
+class ForceAtlas2Layout extends base_1.default {
+    constructor(options) {
+        super();
+        /** 布局中心 */
+        this.center = { x: 0, y: 0 };
+        /** 宽度 */
+        this.width = 300;
+        /** 高度 */
+        this.height = 300;
+        this.nodes = [];
+        this.links = [];
+        this.kr = 5;
+        this.kg = 1;
+        this.mode = 'normal';
+        this.preventOverlap = false;
+        this.dissuadeHubs = false;
+        this.barnesHut = false;
+        this.maxIteration = 0;
+        this.ks = 0.1;
+        this.ksmax = 10;
+        this.tao = 0.1;
+        this.onLayoutEnd = function () { };
+        this.prune = false;
+        this.updateCfg(options);
+        return this;
+    }
+    getDefaultCfg() {
+        return {};
+    }
+    ;
+    execute() {
+        var self = this;
+        var nodes = self.nodes, maxIteration = self.maxIteration, onLayoutEnd = self.onLayoutEnd, prune = self.prune;
+        if (!self.width && typeof window !== "undefined") {
+            self.width = window.innerWidth;
+        }
+        if (!self.height && typeof window !== "undefined") {
+            self.height = window.innerHeight;
+        }
+        // the whidth of each nodes
+        var sizes = [];
+        var nodeNum = nodes.length;
+        for (var i = 0; i < nodeNum; i += 1) {
+            var node = nodes[i];
+            var nodeWidth = 10;
+            var nodeHeight = 10;
+            if (node.shape() === 'circle') {
+                nodeWidth = node.r();
+                nodeHeight = node.r();
+            }
+            if (node.shape() === 'rect' || node.shape() === 'cross') {
+                if (!isNaN(node.width()))
+                    nodeWidth = node.width();
+                if (!isNaN(node.height()))
+                    nodeHeight = node.height();
+            }
+            if (self.getWidth && !isNaN(self.getWidth(node)))
+                nodeHeight = self.getWidth(node);
+            if (self.getHeight && !isNaN(self.getHeight(node)))
+                nodeWidth = self.getHeight(node);
+            var maxSize = Math.max(nodeWidth, nodeHeight);
+            sizes.push(maxSize);
+        }
+        if (!self.barnesHut && nodeNum > 250)
+            self.barnesHut = true;
+        if (!self.prune && nodeNum > 100)
+            self.prune = true;
+        if (this.maxIteration === 0 && !self.prune) {
+            maxIteration = 250;
+            if (nodeNum <= 200 && nodeNum > 100)
+                maxIteration = 1000;
+            else if (nodeNum > 200)
+                maxIteration = 1200;
+            this.maxIteration = maxIteration;
+        }
+        else if (this.maxIteration === 0 && prune) {
+            maxIteration = 100;
+            if (nodeNum <= 200 && nodeNum > 100)
+                maxIteration = 500;
+            else if (nodeNum > 200)
+                maxIteration = 950;
+            this.maxIteration = maxIteration;
+        }
+        if (!self.kr) {
+            self.kr = 50;
+            if (nodeNum > 100 && nodeNum <= 500)
+                self.kr = 20;
+            else if (nodeNum > 500)
+                self.kr = 1;
+        }
+        if (!self.kg) {
+            self.kg = 20;
+            if (nodeNum > 100 && nodeNum <= 500)
+                self.kg = 10;
+            else if (nodeNum > 500)
+                self.kg = 1;
+        }
+        this.nodes = self.updateNodesByForces(sizes);
+        onLayoutEnd();
+    }
+    ;
+    updateNodesByForces(sizes) {
+        var self = this;
+        var nodes = self.nodes, links = self.links, maxIteration = self.maxIteration;
+        var nonLoopEdges = links.filter(function (edge) {
+            return edge.source().id() !== edge.target().id();
+        });
+        var size = nodes.length;
+        var esize = nonLoopEdges.length;
+        var degrees = [];
+        var idMap = {};
+        var edgeEndsIdMap = {};
+        var Es = [];
+        for (var i = 0; i < size; i += 1) {
+            idMap[nodes[i].id()] = i;
+            degrees[i] = 0;
+            if (nodes[i].x === undefined || isNaN(nodes[i].x())) {
+                nodes[i].x(Math.random() * 1000);
+            }
+            if (nodes[i].y === undefined || isNaN(nodes[i].y())) {
+                nodes[i].y(Math.random() * 1000);
+            }
+            Es.push({ x: nodes[i].x(), y: nodes[i].y() });
+        }
+        for (var i = 0; i < esize; i += 1) {
+            var node1 = void 0;
+            var node2 = void 0;
+            var sIdx = 0, tIdx = 0;
+            for (var j = 0; j < size; j += 1) {
+                if (nodes[j].id() === nonLoopEdges[i].source().id()) {
+                    node1 = nodes[j];
+                    sIdx = j;
+                }
+                else if (nodes[j].id() === nonLoopEdges[i].target().id()) {
+                    node2 = nodes[j];
+                    tIdx = j;
+                }
+                edgeEndsIdMap[i] = { sourceIdx: sIdx, targetIdx: tIdx };
+            }
+            if (node1)
+                degrees[idMap[node1.id()]] += 1;
+            if (node2)
+                degrees[idMap[node2.id()]] += 1;
+        }
+        var iteration = maxIteration;
+        nodes = this.iterate(iteration, idMap, edgeEndsIdMap, esize, degrees, sizes);
+        // if prune, place the leaves around their parents, and then re-layout for several iterations.
+        if (self.prune) {
+            for (var j = 0; j < esize; j += 1) {
+                if (degrees[edgeEndsIdMap[j].sourceIdx] <= 1) {
+                    nodes[edgeEndsIdMap[j].sourceIdx].x(nodes[edgeEndsIdMap[j].targetIdx].x());
+                    nodes[edgeEndsIdMap[j].sourceIdx].y(nodes[edgeEndsIdMap[j].targetIdx].y());
+                }
+                else if (degrees[edgeEndsIdMap[j].targetIdx] <= 1) {
+                    nodes[edgeEndsIdMap[j].targetIdx].x(nodes[edgeEndsIdMap[j].sourceIdx].x());
+                    nodes[edgeEndsIdMap[j].targetIdx].y(nodes[edgeEndsIdMap[j].sourceIdx].y());
+                }
+            }
+            self.prune = false;
+            self.barnesHut = false;
+            iteration = 100;
+            nodes = this.iterate(iteration, idMap, edgeEndsIdMap, esize, degrees, sizes);
+        }
+        return nodes;
+    }
+    ;
+    iterate(iteration, idMap, edgeEndsIdMap, esize, degrees, sizes) {
+        var self = this;
+        var nodes = self.nodes, kr = self.kr, preventOverlap = self.preventOverlap, barnesHut = self.barnesHut;
+        var nodeNum = nodes.length;
+        var sg = 0;
+        var krPrime = 100;
+        var iter = iteration;
+        var prevoIter = 50;
+        var forces = [];
+        var preForces = [];
+        var bodies = [];
+        for (var i = 0; i < nodeNum; i += 1) {
+            forces[2 * i] = 0;
+            forces[2 * i + 1] = 0;
+            if (barnesHut) {
+                var params = {
+                    id: i,
+                    rx: nodes[i].x(),
+                    ry: nodes[i].y(),
+                    mass: 1,
+                    g: kr,
+                    degree: degrees[i]
+                };
+                bodies[i] = new body_1.default(params);
+            }
+        }
+        while (iter > 0) {
+            for (var i = 0; i < nodeNum; i += 1) {
+                preForces[2 * i] = forces[2 * i];
+                preForces[2 * i + 1] = forces[2 * i + 1];
+                forces[2 * i] = 0;
+                forces[2 * i + 1] = 0;
+            }
+            // attractive forces, existing on every actual edge
+            forces = this.getAttrForces(iter, prevoIter, esize, idMap, edgeEndsIdMap, degrees, sizes, forces);
+            // repulsive forces and Gravity, existing on every node pair
+            // if preventOverlap, using the no-optimized method in the last prevoIter instead.
+            if (barnesHut && ((preventOverlap && iter > prevoIter) || !preventOverlap)) {
+                forces = this.getOptRepGraForces(forces, bodies, degrees);
+            }
+            else {
+                forces = this.getRepGraForces(iter, prevoIter, forces, krPrime, sizes, degrees);
+            }
+            // update the positions
+            var res = this.updatePos(forces, preForces, sg, degrees);
+            nodes = res.nodes;
+            sg = res.sg;
+            iter--;
+            if (self.tick)
+                self.tick();
+        }
+        ;
+        return nodes;
+    }
+    ;
+    getAttrForces(iter, prevoIter, esize, idMap, edgeEndsIdMap, degrees, sizes, forces) {
+        var self = this;
+        var nodes = self.nodes, preventOverlap = self.preventOverlap, dissuadeHubs = self.dissuadeHubs, mode = self.mode, prune = self.prune;
+        for (var i = 0; i < esize; i += 1) {
+            var sourceNode = nodes[edgeEndsIdMap[i].sourceIdx];
+            var sourceIdx = edgeEndsIdMap[i].sourceIdx;
+            var targetNode = nodes[edgeEndsIdMap[i].targetIdx];
+            var targetIdx = edgeEndsIdMap[i].targetIdx;
+            if (prune && (degrees[sourceIdx] <= 1 || degrees[targetIdx] <= 1))
+                continue;
+            var dir = [targetNode.x() - sourceNode.x(), targetNode.y() - sourceNode.y()];
+            var eucliDis = Math.hypot(dir[0], dir[1]);
+            eucliDis = eucliDis < 0.0001 ? 0.0001 : eucliDis;
+            dir[0] = dir[0] / eucliDis;
+            dir[1] = dir[1] / eucliDis;
+            if (preventOverlap && iter < prevoIter)
+                eucliDis = eucliDis - sizes[sourceIdx] - sizes[targetIdx];
+            var Fa1 = eucliDis;
+            var Fa2 = Fa1;
+            if (mode === 'linlog') {
+                Fa1 = Math.log(1 + eucliDis);
+                Fa2 = Fa1;
+            }
+            if (dissuadeHubs) {
+                Fa1 = eucliDis / degrees[sourceIdx];
+                Fa2 = eucliDis / degrees[targetIdx];
+            }
+            if (preventOverlap && iter < prevoIter && eucliDis <= 0) {
+                Fa1 = 0;
+                Fa2 = 0;
+            }
+            else if (preventOverlap && iter < prevoIter && eucliDis > 0) {
+                Fa1 = eucliDis;
+                Fa2 = eucliDis;
+            }
+            forces[2 * idMap[sourceNode.id()]] += Fa1 * dir[0];
+            forces[2 * idMap[targetNode.id()]] -= Fa2 * dir[0];
+            forces[2 * idMap[sourceNode.id()] + 1] += Fa1 * dir[1];
+            forces[2 * idMap[targetNode.id()] + 1] -= Fa2 * dir[1];
+        }
+        return forces;
+    }
+    ;
+    getRepGraForces(iter, prevoIter, forces, krPrime, sizes, degrees) {
+        var self = this;
+        var nodes = self.nodes, preventOverlap = self.preventOverlap, kr = self.kr, kg = self.kg, center = self.center, prune = self.prune;
+        var nodeNum = nodes.length;
+        for (var i = 0; i < nodeNum; i += 1) {
+            for (var j = i + 1; j < nodeNum; j += 1) {
+                if (prune && (degrees[i] <= 1 || degrees[j] <= 1))
+                    continue;
+                var dir_1 = [nodes[j].x() - nodes[i].x(), nodes[j].y() - nodes[i].y()];
+                var eucliDis_1 = Math.hypot(dir_1[0], dir_1[1]);
+                eucliDis_1 = eucliDis_1 < 0.0001 ? 0.0001 : eucliDis_1;
+                dir_1[0] = dir_1[0] / eucliDis_1;
+                dir_1[1] = dir_1[1] / eucliDis_1;
+                if (preventOverlap && iter < prevoIter)
+                    eucliDis_1 = eucliDis_1 - sizes[i] - sizes[j];
+                var Fr = kr * (degrees[i] + 1) * (degrees[j] + 1) / eucliDis_1;
+                if (preventOverlap && iter < prevoIter && eucliDis_1 < 0) {
+                    Fr = krPrime * (degrees[i] + 1) * (degrees[j] + 1);
+                }
+                else if (preventOverlap && iter < prevoIter && eucliDis_1 === 0) {
+                    Fr = 0;
+                }
+                else if (preventOverlap && iter < prevoIter && eucliDis_1 > 0) {
+                    Fr = kr * (degrees[i] + 1) * (degrees[j] + 1) / eucliDis_1;
+                }
+                forces[2 * i] -= Fr * dir_1[0];
+                forces[2 * j] += Fr * dir_1[0];
+                forces[2 * i + 1] -= Fr * dir_1[1];
+                forces[2 * j + 1] += Fr * dir_1[1];
+            }
+            // gravity
+            var dir = [nodes[i].x() - center.x, nodes[i].y() - center.y];
+            var eucliDis = Math.hypot(dir[0], dir[1]);
+            dir[0] = dir[0] / eucliDis;
+            dir[1] = dir[1] / eucliDis;
+            var Fg = kg * (degrees[i] + 1);
+            forces[2 * i] -= Fg * dir[0];
+            forces[2 * i + 1] -= Fg * dir[1];
+        }
+        return forces;
+    }
+    ;
+    getOptRepGraForces(forces, bodies, degrees) {
+        var self = this;
+        var nodes = self.nodes, kg = self.kg, center = self.center, prune = self.prune;
+        var nodeNum = nodes.length;
+        var minx = 9e10, maxx = -9e10, miny = 9e10, maxy = -9e10;
+        for (var i = 0; i < nodeNum; i += 1) {
+            if (prune && (degrees[i] <= 1))
+                continue;
+            bodies[i].setPos(nodes[i].x(), nodes[i].y());
+            if (nodes[i].x() >= maxx)
+                maxx = nodes[i].x();
+            if (nodes[i].x() <= minx)
+                minx = nodes[i].x();
+            if (nodes[i].y() >= maxy)
+                maxy = nodes[i].y();
+            if (nodes[i].y() <= miny)
+                miny = nodes[i].y();
+        }
+        var width = Math.max(maxx - minx, maxy - miny);
+        var quadParams = {
+            xmid: (maxx + minx) / 2,
+            ymid: (maxy + miny) / 2,
+            length: width,
+            massCenter: center,
+            mass: nodeNum
+        };
+        var quad = new quad_1.default(quadParams);
+        var quadTree = new quadTree_1.default(quad);
+        // build the tree, insert the nodes(quads) into the tree
+        for (var i = 0; i < nodeNum; i += 1) {
+            if (prune && (degrees[i] <= 1))
+                continue;
+            if (bodies[i].in(quad))
+                quadTree.insert(bodies[i]);
+        }
+        // update the repulsive forces and the gravity.
+        for (var i = 0; i < nodeNum; i += 1) {
+            if (prune && (degrees[i] <= 1))
+                continue;
+            bodies[i].resetForce();
+            quadTree.updateForce(bodies[i]);
+            forces[2 * i] -= bodies[i].fx;
+            forces[2 * i + 1] -= bodies[i].fy;
+            // gravity
+            var dir = [nodes[i].x() - center.x, nodes[i].y() - center.y];
+            var eucliDis = Math.hypot(dir[0], dir[1]);
+            eucliDis = eucliDis < 0.0001 ? 0.0001 : eucliDis;
+            dir[0] = dir[0] / eucliDis;
+            dir[1] = dir[1] / eucliDis;
+            var Fg = kg * (degrees[i] + 1);
+            forces[2 * i] -= Fg * dir[0];
+            forces[2 * i + 1] -= Fg * dir[1];
+        }
+        return forces;
+    }
+    ;
+    updatePos(forces, preForces, sg, degrees) {
+        var self = this;
+        var nodes = self.nodes, ks = self.ks, tao = self.tao, prune = self.prune, ksmax = self.ksmax;
+        var nodeNum = nodes.length;
+        var swgns = [];
+        var trans = [];
+        // swg(G) and tra(G)
+        var swgG = 0;
+        var traG = 0;
+        for (var i = 0; i < nodeNum; i += 1) {
+            if (prune && (degrees[i] <= 1))
+                continue;
+            var minus = [forces[2 * i] - preForces[2 * i],
+                forces[2 * i + 1] - preForces[2 * i + 1]
+            ];
+            var minusNorm = Math.hypot(minus[0], minus[1]);
+            var add = [forces[2 * i] + preForces[2 * i],
+                forces[2 * i + 1] + preForces[2 * i + 1]
+            ];
+            var addNorm = Math.hypot(add[0], add[1]);
+            swgns[i] = minusNorm;
+            trans[i] = addNorm / 2;
+            swgG += (degrees[i] + 1) * swgns[i];
+            traG += (degrees[i] + 1) * trans[i];
+        }
+        var preSG = sg;
+        sg = tao * traG / swgG;
+        if (preSG !== 0) {
+            sg = sg > (1.5 * preSG) ? (1.5 * preSG) : sg;
+        }
+        // update the node positions
+        for (var i = 0; i < nodeNum; i += 1) {
+            if (prune && (degrees[i] <= 1))
+                continue;
+            var sn = ks * sg / (1 + sg * Math.sqrt(swgns[i]));
+            var absForce = Math.hypot(forces[2 * i], forces[2 * i + 1]);
+            absForce = absForce < 0.0001 ? 0.0001 : absForce;
+            var max = ksmax / absForce;
+            sn = sn > max ? max : sn;
+            var dnx = sn * forces[2 * i];
+            var dny = sn * forces[2 * i + 1];
+            nodes[i].x(dnx + nodes[i].x());
+            nodes[i].y(dny + nodes[i].y());
+        }
+        return { nodes: nodes, sg: sg };
+    }
+    ;
+}
+exports.default = ForceAtlas2Layout;
+
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class Body {
+    constructor(params) {
+        /**
+         * the id of this body, the same with the node id
+         * @type  {number}
+         */
+        this.id = params.id || 0;
+        /**
+         * the position of this body
+         * @type  {number}
+         */
+        this.rx = params.rx;
+        /**
+         * the position of this body
+         * @type  {number}
+         */
+        this.ry = params.ry;
+        /**
+         * the force acting on this body
+         * @type  {number}
+         */
+        this.fx = 0;
+        /**
+         * the force acting on this body
+         * @type  {number}
+         */
+        this.fy = 0;
+        /**
+         * the mass of this body, =1 for a node
+         * @type  {number}
+         */
+        this.mass = params.mass;
+        /**
+         * the degree of the node represented by this body
+         * @type  {number}
+         */
+        this.degree = params.degree;
+        /**
+         * the parameter for repulsive force, = kr
+         * @type  {number}
+         */
+        this.g = params.g || 0;
+    }
+    // returns the euclidean distance
+    distanceTo(bo) {
+        var dx = this.rx - bo.rx;
+        var dy = this.ry - bo.ry;
+        return Math.hypot(dx, dy);
+    }
+    ;
+    setPos(x, y) {
+        this.rx = x;
+        this.ry = y;
+    }
+    ;
+    resetForce() {
+        this.fx = 0;
+        this.fy = 0;
+    }
+    ;
+    addForce(b) {
+        var dx = b.rx - this.rx;
+        var dy = b.ry - this.ry;
+        var dist = Math.hypot(dx, dy);
+        dist = dist < 0.0001 ? 0.0001 : dist;
+        // the repulsive defined by force atlas 2
+        var F = (this.g * (this.degree + 1) * (b.degree + 1)) / dist;
+        this.fx += F * dx / dist;
+        this.fy += F * dy / dist;
+    }
+    ;
+    in(quad) {
+        return quad.contains(this.rx, this.ry);
+    }
+    ;
+    add(bo) {
+        var nenwMass = this.mass + bo.mass;
+        var x = (this.rx * this.mass + bo.rx * bo.mass) / nenwMass;
+        var y = (this.ry * this.mass + bo.ry * bo.mass) / nenwMass;
+        var dg = this.degree + bo.degree;
+        var params = {
+            rx: x,
+            ry: y,
+            mass: nenwMass,
+            degree: dg
+        };
+        return new Body(params);
+    }
+}
+exports.default = Body;
+
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+class Quad {
+    constructor(params) {
+        /**
+         * the center position of this quad
+         * @type  {number}
+         */
+        this.xmid = params.xmid;
+        /**
+         * the center position of this quad
+         * @type  {number}
+         */
+        this.ymid = params.ymid;
+        /**
+         * the length of this quad
+         * @type  {number}
+         */
+        this.length = params.length;
+        /**
+         * the mass center of this quad
+         * @type  {number}
+         */
+        this.massCenter = params.massCenter || { x: 0, y: 0 };
+        /**
+         * the mass of this quad
+         * @type  {number}
+         */
+        this.mass = params.mass || 1;
+    }
+    getLength() {
+        return this.length;
+    }
+    ;
+    contains(x, y) {
+        var halfLen = this.length / 2;
+        return (x <= this.xmid + halfLen &&
+            x >= this.xmid - halfLen &&
+            y <= this.ymid + halfLen &&
+            y >= this.ymid - halfLen);
+    }
+    ;
+    // northwest quadrant
+    NW() {
+        var x = this.xmid - this.length / 4;
+        var y = this.ymid + this.length / 4;
+        var len = this.length / 2;
+        var params = {
+            xmid: x,
+            ymid: y,
+            length: len
+        };
+        var NW = new Quad(params);
+        return NW;
+    }
+    ;
+    // northeast
+    NE() {
+        var x = this.xmid + this.length / 4;
+        var y = this.ymid + this.length / 4;
+        var len = this.length / 2;
+        var params = {
+            xmid: x,
+            ymid: y,
+            length: len
+        };
+        var NE = new Quad(params);
+        return NE;
+    }
+    ;
+    // southwest
+    SW() {
+        var x = this.xmid - this.length / 4;
+        var y = this.ymid - this.length / 4;
+        var len = this.length / 2;
+        var params = {
+            xmid: x,
+            ymid: y,
+            length: len
+        };
+        var SW = new Quad(params);
+        return SW;
+    }
+    ;
+    // southeast
+    SE() {
+        var x = this.xmid + this.length / 4;
+        var y = this.ymid - this.length / 4;
+        var len = this.length / 2;
+        var params = {
+            xmid: x,
+            ymid: y,
+            length: len
+        };
+        var SE = new Quad(params);
+        return SE;
+    }
+    ;
+}
+exports.default = Quad;
+
+
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+/**
+ * @fileOverview quadTree
+ * @author shiwu.wyy@antfin.com
+ */
+class QuadTree {
+    // each quadtree represents a quadrant and an aggregate body
+    // that represents all bodies inside the quadrant
+    constructor(param) {
+        /**
+         * (aggregated) body in this quad
+         * @type  {object}
+         */
+        this.body = null;
+        /**
+         * tree representing the northwest quadrant
+         * @type  {object}
+         */
+        this.quad = null;
+        this.NW = null;
+        this.NE = null;
+        this.SW = null;
+        this.SE = null;
+        /**
+         * threshold
+         * @type  {number}
+         */
+        this.theta = 0.5;
+        if (param != null)
+            this.quad = param;
+    }
+    // insert a body(node) into the tree
+    insert(bo) {
+        // if this node does not contain a body, put the new body bo here
+        if (this.body == null) {
+            this.body = bo;
+            return;
+        }
+        // internal node
+        if (!this._isExternal()) {
+            // update mass info
+            this.body = this.body.add(bo);
+            // insert body into quadrant
+            this._putBody(bo);
+        }
+        else { // external node
+            // divide this region into four children
+            if (this.quad) {
+                this.NW = new QuadTree(this.quad.NW());
+                this.NE = new QuadTree(this.quad.NE());
+                this.SW = new QuadTree(this.quad.SW());
+                this.SE = new QuadTree(this.quad.SE());
+            }
+            // insert this body and bo
+            this._putBody(this.body);
+            this._putBody(bo);
+            // update the mass info
+            this.body = this.body.add(bo);
+        }
+    }
+    ;
+    // inserts bo into a quad
+    _putBody(bo) {
+        if (!this.quad)
+            return;
+        if (bo.in(this.quad.NW()) && this.NW)
+            this.NW.insert(bo);
+        else if (bo.in(this.quad.NE()) && this.NE)
+            this.NE.insert(bo);
+        else if (bo.in(this.quad.SW()) && this.SW)
+            this.SW.insert(bo);
+        else if (bo.in(this.quad.SE()) && this.SE)
+            this.SE.insert(bo);
+    }
+    ;
+    _isExternal() {
+        // four children are null
+        return (this.NW == null && this.NE == null && this.SW == null && this.SE == null);
+    }
+    ;
+    updateForce(bo) {
+        if (this.body == null || bo === this.body) {
+            return;
+        }
+        // if the current node is external
+        if (this._isExternal())
+            bo.addForce(this.body);
+        // internal nodes
+        else {
+            var s = this.quad ? this.quad.getLength() : 0;
+            var d = this.body.distanceTo(bo);
+            // b is far enough
+            if ((s / d) < this.theta)
+                bo.addForce(this.body);
+            else {
+                this.NW && this.NW.updateForce(bo);
+                this.NE && this.NE.updateForce(bo);
+                this.SW && this.SW.updateForce(bo);
+                this.SE && this.SE.updateForce(bo);
+            }
+        }
+    }
+    ;
+}
+exports.default = QuadTree;
 
 
 /***/ })
