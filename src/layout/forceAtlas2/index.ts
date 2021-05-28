@@ -1,9 +1,7 @@
-import Link from "src/elements/link";
-import Node from "src/elements/node";
 import { Position } from "src/interfaces";
 import BaseLayout from "../base";
 import { ForceAtlas2LayoutOptions } from "../options";
-import { isArray, isNumber } from "../util";
+import { Node,Link} from "../util";
 import Body from "./body";
 import Quad from "./quad";
 import QuadTree from "./quadTree";
@@ -130,7 +128,7 @@ export default class ForceAtlas2Layout extends BaseLayout {
     getDefaultCfg(){
         return {};
     };
-    execute(){
+    protected process(){
         var self = this;
         var nodes = self.nodes, maxIteration = self.maxIteration, onLayoutEnd = self.onLayoutEnd, prune = self.prune;
         if (!self.width && typeof window !== "undefined") {
@@ -146,15 +144,15 @@ export default class ForceAtlas2Layout extends BaseLayout {
             var node = nodes[i];
             var nodeWidth = 10;
             var nodeHeight = 10;
-            if (node.shape() === 'circle') {
-                nodeWidth = node.r();
-                nodeHeight = node.r();
+            if (node.shape === 'circle') {
+                nodeWidth = node.size[0];
+                nodeHeight = node.size[0];
             }
-            if (node.shape() === 'rect' || node.shape() === 'cross') {
-                if (!isNaN(node.width()))
-                    nodeWidth = node.width();
-                if (!isNaN(node.height()))
-                    nodeHeight = node.height();
+            if (node.shape === 'rect' || node.shape === 'cross') {
+                if (!isNaN(node.size[0]))
+                    nodeWidth = node.size[0];
+                if (!isNaN(node.size[1]))
+                    nodeHeight = node.size[1];
             }
             if (self.getWidth && !isNaN(self.getWidth(node)))
                 nodeHeight = self.getWidth(node);
@@ -199,12 +197,16 @@ export default class ForceAtlas2Layout extends BaseLayout {
         }
         this.nodes = self.updateNodesByForces(sizes);
         onLayoutEnd();
+        return {
+            nodes:this.nodes,
+            links:this.links
+        }
     };
     updateNodesByForces(sizes: number[]){
         var self = this;
         var nodes = self.nodes, links = self.links, maxIteration = self.maxIteration;
         var nonLoopEdges = links.filter(function (edge) {
-            return edge.source().id() !== edge.target().id();
+            return edge.source !== edge.target;
         });
         var size = nodes.length;
         var esize = nonLoopEdges.length;
@@ -213,35 +215,35 @@ export default class ForceAtlas2Layout extends BaseLayout {
         var edgeEndsIdMap = {};
         var Es = [];
         for (var i = 0; i < size; i += 1) {
-            idMap[nodes[i].id()] = i;
+            idMap[nodes[i].id] = i;
             degrees[i] = 0;
-            if (nodes[i].x === undefined || isNaN(nodes[i].x())) {
-                nodes[i].x(Math.random() * 1000);
+            if (nodes[i].x === undefined || isNaN(nodes[i].x)) {
+                nodes[i].x = Math.random() * 1000;
             }
-            if (nodes[i].y === undefined || isNaN(nodes[i].y())) {
-                nodes[i].y(Math.random() * 1000);
+            if (nodes[i].y === undefined || isNaN(nodes[i].y)) {
+                nodes[i].y = Math.random() * 1000;
             }
-            Es.push({ x: nodes[i].x(), y: nodes[i].y() });
+            Es.push({ x: nodes[i].x, y: nodes[i].y });
         }
         for (var i = 0; i < esize; i += 1) {
             var node1 = void 0;
             var node2 = void 0;
             var sIdx = 0, tIdx = 0;
             for (var j = 0; j < size; j += 1) {
-                if (nodes[j].id() === nonLoopEdges[i].source().id()) {
+                if (nodes[j].id === nonLoopEdges[i].source) {
                     node1 = nodes[j];
                     sIdx = j;
                 }
-                else if (nodes[j].id() === nonLoopEdges[i].target().id()) {
+                else if (nodes[j].id === nonLoopEdges[i].target) {
                     node2 = nodes[j];
                     tIdx = j;
                 }
                 edgeEndsIdMap[i] = { sourceIdx: sIdx, targetIdx: tIdx };
             }
             if (node1)
-                degrees[idMap[node1.id()]] += 1;
+                degrees[idMap[node1.id]] += 1;
             if (node2)
-                degrees[idMap[node2.id()]] += 1;
+                degrees[idMap[node2.id]] += 1;
         }
         var iteration = maxIteration;
         nodes = this.iterate(iteration, idMap, edgeEndsIdMap, esize, degrees, sizes);
@@ -249,12 +251,12 @@ export default class ForceAtlas2Layout extends BaseLayout {
         if (self.prune) {
             for (var j = 0; j < esize; j += 1) {
                 if (degrees[edgeEndsIdMap[j].sourceIdx] <= 1) {
-                    nodes[edgeEndsIdMap[j].sourceIdx].x(nodes[edgeEndsIdMap[j].targetIdx].x());
-                    nodes[edgeEndsIdMap[j].sourceIdx].y(nodes[edgeEndsIdMap[j].targetIdx].y());
+                    nodes[edgeEndsIdMap[j].sourceIdx].x = nodes[edgeEndsIdMap[j].targetIdx].x;
+                    nodes[edgeEndsIdMap[j].sourceIdx].y = nodes[edgeEndsIdMap[j].targetIdx].y;
                 }
                 else if (degrees[edgeEndsIdMap[j].targetIdx] <= 1) {
-                    nodes[edgeEndsIdMap[j].targetIdx].x(nodes[edgeEndsIdMap[j].sourceIdx].x());
-                    nodes[edgeEndsIdMap[j].targetIdx].y(nodes[edgeEndsIdMap[j].sourceIdx].y());
+                    nodes[edgeEndsIdMap[j].targetIdx].x = nodes[edgeEndsIdMap[j].sourceIdx].x;
+                    nodes[edgeEndsIdMap[j].targetIdx].y = nodes[edgeEndsIdMap[j].sourceIdx].y;
                 }
             }
             self.prune = false;
@@ -288,8 +290,8 @@ export default class ForceAtlas2Layout extends BaseLayout {
             if (barnesHut) {
                 var params = {
                     id: i,
-                    rx: nodes[i].x(),
-                    ry: nodes[i].y(),
+                    rx: nodes[i].x,
+                    ry: nodes[i].y,
                     mass: 1,
                     g: kr,
                     degree: degrees[i]
@@ -342,7 +344,7 @@ export default class ForceAtlas2Layout extends BaseLayout {
             var targetIdx = edgeEndsIdMap[i].targetIdx;
             if (prune && (degrees[sourceIdx] <= 1 || degrees[targetIdx] <= 1))
                 continue;
-            var dir = [targetNode.x() - sourceNode.x(), targetNode.y() - sourceNode.y()];
+            var dir = [targetNode.x - sourceNode.x, targetNode.y - sourceNode.y];
             var eucliDis = Math.hypot(dir[0], dir[1]);
             eucliDis = eucliDis < 0.0001 ? 0.0001 : eucliDis;
             dir[0] = dir[0] / eucliDis;
@@ -367,10 +369,10 @@ export default class ForceAtlas2Layout extends BaseLayout {
                 Fa1 = eucliDis;
                 Fa2 = eucliDis;
             }
-            forces[2 * idMap[sourceNode.id()]] += Fa1 * dir[0];
-            forces[2 * idMap[targetNode.id()]] -= Fa2 * dir[0];
-            forces[2 * idMap[sourceNode.id()] + 1] += Fa1 * dir[1];
-            forces[2 * idMap[targetNode.id()] + 1] -= Fa2 * dir[1];
+            forces[2 * idMap[sourceNode.id]] += Fa1 * dir[0];
+            forces[2 * idMap[targetNode.id]] -= Fa2 * dir[0];
+            forces[2 * idMap[sourceNode.id] + 1] += Fa1 * dir[1];
+            forces[2 * idMap[targetNode.id] + 1] -= Fa2 * dir[1];
         }
         return forces;
     };
@@ -382,7 +384,7 @@ export default class ForceAtlas2Layout extends BaseLayout {
             for (var j = i + 1; j < nodeNum; j += 1) {
                 if (prune && (degrees[i] <= 1 || degrees[j] <= 1))
                     continue;
-                var dir_1 = [nodes[j].x() - nodes[i].x(), nodes[j].y() - nodes[i].y()];
+                var dir_1 = [nodes[j].x - nodes[i].x, nodes[j].y - nodes[i].y];
                 var eucliDis_1 = Math.hypot(dir_1[0], dir_1[1]);
                 eucliDis_1 = eucliDis_1 < 0.0001 ? 0.0001 : eucliDis_1;
                 dir_1[0] = dir_1[0] / eucliDis_1;
@@ -405,7 +407,7 @@ export default class ForceAtlas2Layout extends BaseLayout {
                 forces[2 * j + 1] += Fr * dir_1[1];
             }
             // gravity
-            var dir = [nodes[i].x() - center.x, nodes[i].y() - center.y];
+            var dir = [nodes[i].x - center.x, nodes[i].y - center.y];
             var eucliDis = Math.hypot(dir[0], dir[1]);
             dir[0] = dir[0] / eucliDis;
             dir[1] = dir[1] / eucliDis;
@@ -423,15 +425,15 @@ export default class ForceAtlas2Layout extends BaseLayout {
         for (var i = 0; i < nodeNum; i += 1) {
             if (prune && (degrees[i] <= 1))
                 continue;
-            bodies[i].setPos(nodes[i].x(), nodes[i].y());
-            if (nodes[i].x() >= maxx)
-                maxx = nodes[i].x();
-            if (nodes[i].x() <= minx)
-                minx = nodes[i].x();
-            if (nodes[i].y() >= maxy)
-                maxy = nodes[i].y();
-            if (nodes[i].y() <= miny)
-                miny = nodes[i].y();
+            bodies[i].setPos(nodes[i].x, nodes[i].y);
+            if (nodes[i].x >= maxx)
+                maxx = nodes[i].x;
+            if (nodes[i].x <= minx)
+                minx = nodes[i].x;
+            if (nodes[i].y >= maxy)
+                maxy = nodes[i].y;
+            if (nodes[i].y <= miny)
+                miny = nodes[i].y;
         }
         var width = Math.max(maxx - minx, maxy - miny);
         var quadParams = {
@@ -459,7 +461,7 @@ export default class ForceAtlas2Layout extends BaseLayout {
             forces[2 * i] -= bodies[i].fx;
             forces[2 * i + 1] -= bodies[i].fy;
             // gravity
-            var dir = [nodes[i].x() - center.x, nodes[i].y() - center.y];
+            var dir = [nodes[i].x - center.x, nodes[i].y - center.y];
             var eucliDis = Math.hypot(dir[0], dir[1]);
             eucliDis = eucliDis < 0.0001 ? 0.0001 : eucliDis;
             dir[0] = dir[0] / eucliDis;
@@ -511,8 +513,8 @@ export default class ForceAtlas2Layout extends BaseLayout {
             sn = sn > max ? max : sn;
             var dnx = sn * forces[2 * i];
             var dny = sn * forces[2 * i + 1];
-            nodes[i].x(dnx + nodes[i].x());
-            nodes[i].y(dny + nodes[i].y());
+            nodes[i].x = dnx + nodes[i].x;
+            nodes[i].y = dny + nodes[i].y;
         }
         return { nodes: nodes, sg: sg };
     };

@@ -1,9 +1,8 @@
-import Link from "src/elements/link";
-import Node from "src/elements/node";
+import { Link, Node } from './util';
 import { Position } from "src/interfaces";
 import BaseLayout from "./base";
 import { ConcentricLayoutOptions } from "./options";
-import { isArray, isNumber,isString,getDegree } from "./util";
+import { isArray, isNumber,isString,getDegree, isRect, isCircle } from "./util";
 
 declare type INode = Node & {
     degree: number;
@@ -80,7 +79,7 @@ export default class ConcentricLayout extends BaseLayout {
     /**
      * 执行布局
      */
-    execute(){
+    protected process(){
         var self = this;
         var nodes = self.nodes;
         var links = self.links;
@@ -101,8 +100,8 @@ export default class ConcentricLayout extends BaseLayout {
         }
         var center = self.center;
         if (n === 1) {
-            nodes[0].x(center.x);
-            nodes[0].y(center.y);
+            nodes[0].x = center.x;
+            nodes[0].y = center.y;
             if (self.onLayoutEnd)
                 self.onLayoutEnd();
             return;
@@ -118,11 +117,11 @@ export default class ConcentricLayout extends BaseLayout {
         nodes.forEach(function (node) {
             layoutNodes.push(node);
             var nodeSize = maxNodeSize;
-            if (node.shape() === 'rect' || node.shape() === 'cross') {
-                nodeSize = Math.max(node.width(), node.height());
+            if (isRect(node)) {
+                nodeSize = Math.max(node.size[0], node.size[1]);
             }
-            else if (node.shape() === 'circle') {
-                nodeSize = node.r();
+            else if (isCircle(node)) {
+                nodeSize = node.size[0];
             }
             maxNodeSize = Math.max(maxNodeSize, nodeSize);
         });
@@ -134,8 +133,8 @@ export default class ConcentricLayout extends BaseLayout {
         var nodeMap = {};
         var indexMap = {};
         layoutNodes.forEach(function (node, i) {
-            nodeMap[node.id()] = node;
-            indexMap[node.id()] = i;
+            nodeMap[node.id] = node;
+            indexMap[node.id] = i;
         });
         // get the node degrees
         if (self.sortBy === "degree" ||
@@ -221,8 +220,8 @@ export default class ConcentricLayout extends BaseLayout {
             var rr = level["r"];
             level.forEach(function (node, j) {
                 var theta = self.startAngle + (self.clockwise ? 1 : -1) * dTheta * j;
-                node.x(center.x + rr * Math.cos(theta));
-                node.y(center.y + rr * Math.sin(theta));
+                node.x = center.x + rr * Math.cos(theta);
+                node.y = center.y + rr * Math.sin(theta);
             });
         });
         if (self.onLayoutEnd)

@@ -1,5 +1,4 @@
-import Link from "src/elements/link";
-import Node from "src/elements/node";
+import { Link, Node } from './util';
 import { Position } from "src/interfaces";
 import BaseLayout from "./base";
 import { FruchtermanLayoutOptions } from "./options";
@@ -74,7 +73,7 @@ export default class FruchtermanLayout extends BaseLayout {
     /**
      * 执行布局
      */
-    execute(){
+    protected process(){
         var _this = this;
         var self = this;
         var nodes = self.nodes;
@@ -94,8 +93,8 @@ export default class FruchtermanLayout extends BaseLayout {
         }
         var center = self.center;
         if (nodes.length === 1) {
-            nodes[0].x(center.x);
-            nodes[0].y(center.y);
+            nodes[0].x = center.x;
+            nodes[0].y = center.y;
             if (self.onLayoutEnd)
                 self.onLayoutEnd();
             return;
@@ -103,12 +102,12 @@ export default class FruchtermanLayout extends BaseLayout {
         var nodeMap = {};
         var nodeIdxMap = {};
         nodes.forEach(function (node, i) {
-            if (!isNumber(node.x()))
-                node.x(Math.random() * _this.width);
-            if (!isNumber(node.y()))
-                node.y(Math.random() * _this.height);
-            nodeMap[node.id()] = node;
-            nodeIdxMap[node.id()] = i;
+            if (!isNumber(node.x))
+                node.x = Math.random() * _this.width;
+            if (!isNumber(node.y))
+                node.y = Math.random() * _this.height;
+            nodeMap[node.id] = node;
+            nodeIdxMap[node.id] = i;
         });
         self.nodeMap = nodeMap;
         self.nodeIdxMap = nodeIdxMap;
@@ -141,11 +140,11 @@ export default class FruchtermanLayout extends BaseLayout {
                     clusterMap[n.cluster] = cluster;
                 }
                 var c = clusterMap[n.cluster];
-                if (isNumber(n.x())) {
-                    c.cx += n.x();
+                if (isNumber(n.x)) {
+                    c.cx += n.x;
                 }
                 if (isNumber(n.y)) {
-                    c.cy += n.y();
+                    c.cy += n.y;
                 }
                 c.count++;
             });
@@ -164,13 +163,13 @@ export default class FruchtermanLayout extends BaseLayout {
             if (clustering) {
                 var clusterGravity_1 = self.clusterGravity || gravity;
                 nodes.forEach(function (n, j) {
-                    if (!isNumber(n.x()) || !isNumber(n.y()))
+                    if (!isNumber(n.x) || !isNumber(n.y))
                         return;
                     var c = clusterMap[n.cluster];
-                    var distLength = Math.sqrt((n.x() - c.cx) * (n.x() - c.cx) + (n.y() - c.cy) * (n.y() - c.cy));
+                    var distLength = Math.sqrt((n.x - c.cx) * (n.x - c.cx) + (n.y - c.cy) * (n.y - c.cy));
                     var gravityForce = k * clusterGravity_1;
-                    displacements[j].x -= (gravityForce * (n.x() - c.cx)) / distLength;
-                    displacements[j].y -= (gravityForce * (n.y() - c.cy)) / distLength;
+                    displacements[j].x -= (gravityForce * (n.x - c.cx)) / distLength;
+                    displacements[j].y -= (gravityForce * (n.y - c.cy)) / distLength;
                 });
                 for (var key in clusterMap) {
                     clusterMap[key].cx = 0;
@@ -179,11 +178,11 @@ export default class FruchtermanLayout extends BaseLayout {
                 }
                 nodes.forEach(function (n) {
                     var c = clusterMap[n.cluster];
-                    if (isNumber(n.x())) {
-                        c.cx += n.x();
+                    if (isNumber(n.x)) {
+                        c.cx += n.x;
                     }
-                    if (isNumber(n.y())) {
-                        c.cy += n.y();
+                    if (isNumber(n.y)) {
+                        c.cy += n.y;
                     }
                     c.count++;
                 });
@@ -194,23 +193,23 @@ export default class FruchtermanLayout extends BaseLayout {
             }
             // gravity
             nodes.forEach(function (n, j) {
-                if (!isNumber(n.x()) || !isNumber(n.y()))
+                if (!isNumber(n.x) || !isNumber(n.y))
                     return;
                 var gravityForce = 0.01 * k * gravity;
-                displacements[j].x -= gravityForce * (n.x() - center.x);
-                displacements[j].y -= gravityForce * (n.y() - center.y);
+                displacements[j].x -= gravityForce * (n.x - center.x);
+                displacements[j].y -= gravityForce * (n.y - center.y);
             });
             // move
             nodes.forEach(function (n, j) {
-                if (!isNumber(n.x()) || !isNumber(n.y()))
+                if (!isNumber(n.x) || !isNumber(n.y))
                     return;
                 var distLength = Math.sqrt(displacements[j].x * displacements[j].x +
                     displacements[j].y * displacements[j].y);
                 if (distLength > 0) {
                     // && !n.isFixed()
                     var limitedDist = Math.min(maxDisplace * (speed / SPEED_DIVISOR), distLength);
-                    n.x(n.x()+(displacements[j].x / distLength) * limitedDist) ;
-                    n.y(n.y()+(displacements[j].y / distLength) * limitedDist);
+                    n.x = n.x+(displacements[j].x / distLength) * limitedDist ;
+                    n.y = n.y+(displacements[j].y / distLength) * limitedDist;
                 }
             });
         };
@@ -236,13 +235,13 @@ export default class FruchtermanLayout extends BaseLayout {
                 if (i === j) {
                     return;
                 }
-                if (!isNumber(v.x()) ||
-                    !isNumber(u.x()) ||
-                    !isNumber(v.y()) ||
-                    !isNumber(u.y()))
+                if (!isNumber(v.x) ||
+                    !isNumber(u.x) ||
+                    !isNumber(v.y) ||
+                    !isNumber(u.y))
                     return;
-                var vecX = v.x() - u.x();
-                var vecY = v.y() - u.y();
+                var vecX = v.x - u.x;
+                var vecY = v.y - u.y;
                 var vecLengthSqr = vecX * vecX + vecY * vecY;
                 if (vecLengthSqr === 0) {
                     vecLengthSqr = 1;
@@ -259,19 +258,19 @@ export default class FruchtermanLayout extends BaseLayout {
     private calAttractive(links, displacements, k) {
         var _this = this;
         links.forEach(function (e) {
-            if (!e.source() || !e.target())
+            if (!e.source || !e.target)
                 return;
-            var uIndex = _this.nodeIdxMap[e.source().id()];
-            var vIndex = _this.nodeIdxMap[e.target().id()];
+            var uIndex = _this.nodeIdxMap[e.source];
+            var vIndex = _this.nodeIdxMap[e.target];
             if (uIndex === vIndex) {
                 return;
             }
-            var u = _this.nodeMap[e.source().id()];
-            var v = _this.nodeMap[e.target().id()];
-            if (!isNumber(v.x()) || !isNumber(u.x()) || !isNumber(v.y()) || !isNumber(u.y()))
+            var u = _this.nodeMap[e.source];
+            var v = _this.nodeMap[e.target];
+            if (!isNumber(v.x) || !isNumber(u.x) || !isNumber(v.y) || !isNumber(u.y))
                 return;
-            var vecX = v.x() - u.x();
-            var vecY = v.y() - u.y();
+            var vecX = v.x - u.x;
+            var vecY = v.y - u.y;
             var vecLength = Math.sqrt(vecX * vecX + vecY * vecY);
             var common = (vecLength * vecLength) / k;
             displacements[vIndex].x -= (vecX / vecLength) * common;

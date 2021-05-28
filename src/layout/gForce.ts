@@ -3,13 +3,10 @@ import Node from "src/elements/node";
 import { Position } from "src/interfaces";
 import BaseLayout from "./base";
 import { GForceLayoutOptions } from "./options";
-import { getDegree, isArray, isFunction, isNumber } from "./util";
+import { getDegree, isArray, isFunction, isNumber, isRect } from "./util";
 
-declare type INode = Node & {
-    size: number | Position;
-};
 declare type NodeMap = {
-    [key: string]: INode;
+    [key: string]: Node;
 };
 declare type IndexMap = {
     [key: string]: number;
@@ -74,8 +71,8 @@ export default class GForceLayout extends BaseLayout {
     tick: (() => void) | null;
     /** 是否允许每次迭代结束调用回调函数 */
     enableTick: boolean;
-    nodes: INode[] | null;
-    links: Link[] | null;
+    gNodes: Node[];
+    gLinks: Link[];
     width: number;
     height: number;
     nodeMap: NodeMap;
@@ -114,8 +111,8 @@ export default class GForceLayout extends BaseLayout {
         this.preventOverlap = true;
         /** 每次迭代结束的回调函数 */
         this.tick = function () { };
-        this.nodes = [];
-        this.links = [];
+        this.gNodes = [];
+        this.gLinks = [];
         this.width = 300;
         this.height = 300;
         this.nodeMap = {};
@@ -133,9 +130,10 @@ export default class GForceLayout extends BaseLayout {
     /**
      * 执行布局
      */
-    execute(){
+    protected execute(){
         var self = this;
-        var nodes = self.nodes;
+        self.gNodes = self.core.nodes();
+        var nodes = self.core.nodes();
         if (self.timeInterval !== undefined && typeof window !== "undefined") {
             window.clearInterval(self.timeInterval);
         }
@@ -226,8 +224,8 @@ export default class GForceLayout extends BaseLayout {
     };
     run(){
         var self = this;
-        var nodes = self.nodes;
-        var links = self.links;
+        var nodes = self.core.nodes();
+        var links = self.core.links();
         var maxIteration = self.maxIteration;
         if (typeof window === "undefined")
             return;
@@ -279,10 +277,10 @@ export default class GForceLayout extends BaseLayout {
                 if (self.onLayoutEnd)
                     self.onLayoutEnd();
             }
-            self.netv.draw()
+            self.core.draw()
         }, 0);
     };
-    calRepulsive(accArray: number[], nodes: INode[]){
+    calRepulsive(accArray: number[], nodes){
         var self = this;
         // const nodes = self.nodes;
         var getMass = self.getMass;
@@ -350,7 +348,7 @@ export default class GForceLayout extends BaseLayout {
             accArray[2 * targetIdx + 1] += (direY * param) / massTarget;
         });
     };
-    calGravity(accArray: number[], nodes: INode[]){
+    calGravity(accArray: number[], nodes: Node[]){
         var self = this;
         // const nodes = self.nodes;
         var center = self.center;
@@ -379,7 +377,7 @@ export default class GForceLayout extends BaseLayout {
             accArray[2 * i + 1] -= gravity * vecY;
         }
     };
-    updateVelocity(accArray: number[], velArray: number[], stepInterval: number, nodes: INode[]){
+    updateVelocity(accArray: number[], velArray: number[], stepInterval: number, nodes: Node[]){
         var self = this;
         var param = stepInterval * self.damping;
         // const nodes = self.nodes;
@@ -396,7 +394,7 @@ export default class GForceLayout extends BaseLayout {
             velArray[2 * i + 1] = vy;
         });
     };
-    updatePosition(velArray: number[], stepInterval: number, nodes: INode[]){
+    updatePosition(velArray: number[], stepInterval: number, nodes: Node[]){
         nodes.forEach(function (node, i) {
             var distX = velArray[2 * i] * stepInterval;
             var distY = velArray[2 * i + 1] * stepInterval;

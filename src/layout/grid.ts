@@ -3,12 +3,11 @@
  * @author shiwu.wyy@antfin.com
  * this algorithm refers to <cytoscape.js> - https://github.com/cytoscape/cytoscape.js/
  */
-import Link from "src/elements/link";
-import Node from "src/elements/node";
+import { Link, Node } from './util';
 import { Position } from "src/interfaces";
 import BaseLayout from "./base";
 import { GridLayoutOptions } from "./options";
-import { getDegree,isArray,isNumber,isNaN } from "./util";
+import { getDegree,isArray,isNumber,isNaN, isCircle, isRect } from "./util";
 declare type INode = Node & {
     degree: number;
     size: number | Position;
@@ -96,7 +95,7 @@ export default class GridLayout extends BaseLayout {
     /**
      * 执行布局
      */
-    public execute(){
+    protected process(){
         var self = this;
         var nodes = self.nodes;
         var n = nodes.length;
@@ -107,8 +106,8 @@ export default class GridLayout extends BaseLayout {
             return;
         }
         if (n === 1) {
-            nodes[0].x(begin.x);
-            nodes[0].y(begin.y);
+            nodes[0].x = begin.x;
+            nodes[0].y = begin.y;
             if (self.onLayoutEnd)
                 self.onLayoutEnd();
             return;
@@ -120,7 +119,7 @@ export default class GridLayout extends BaseLayout {
         });
         var nodeIdxMap = {};
         layoutNodes.forEach(function (node, i) {
-            nodeIdxMap[node.id()] = i;
+            nodeIdxMap[node.id] = i;
         });
         if (self.sortBy === "degree" ||
             typeof self.sortBy !== 'string' ||
@@ -199,21 +198,12 @@ export default class GridLayout extends BaseLayout {
         }
         if (self.preventOverlap) {
             layoutNodes.forEach(function (node) {
-                if (!node.x() || !node.y()) {
+                if (!node.x || !node.y) {
                     // for bb
-                    node.x(0);
-                    node.y(0);
+                    node.x = 0;
+                    node.y = 0;
                 }
-                var nodew;
-                var nodeh;
-                if (node.shape() === 'rect' || node.shape() === 'cross') {
-                    nodew = node.width();
-                    nodeh = node.height();
-                }
-                else if (node.shape() === 'circle') {
-                    nodew = node.r();
-                    nodeh = node.r();
-                }
+                var [nodew,nodeh] = node.size;
                 if (nodew === undefined || nodeh === undefined) {
                     if (isArray(self.nodeSize)) {
                         nodew = self.nodeSize[0];
@@ -267,7 +257,7 @@ export default class GridLayout extends BaseLayout {
                         pos.row++;
                     }
                 }
-                self.id2manPos[node.id()] = pos;
+                self.id2manPos[node.id] = pos;
                 self.use(pos.row, pos.col);
             }
             self.getPos(node);
@@ -342,7 +332,7 @@ export default class GridLayout extends BaseLayout {
         var x;
         var y;
         // see if we have a manual position set
-        var rcPos = self.id2manPos[node.id()];
+        var rcPos = self.id2manPos[node.id];
         if (rcPos) {
             x = rcPos.col * cellWidth + cellWidth / 2 + begin.x;
             y = rcPos.row * cellHeight + cellHeight / 2 + begin.y;
@@ -357,8 +347,8 @@ export default class GridLayout extends BaseLayout {
             self.use(self.row, self.col);
             self.moveToNextCell();
         }
-        node.x(x);
-        node.y(y);
+        node.x = x;
+        node.y = y;
     };
     getType() {
         return "grid";

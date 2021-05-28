@@ -1,7 +1,6 @@
 import BaseLayout from "./base";
-import Node from "src/elements/node";
+import { Link, Node } from './util';
 import { Position } from "src/interfaces";
-import Link from "src/elements/link";
 import { CircularLayoutOptions } from "./options";
 import {clone, getDegree} from "./util"
 declare type INode = Node & {
@@ -28,8 +27,8 @@ function initHierarchy(nodes, edges, nodeMap, directed) {
             }
             var child = nodes[sourceIdx].children;
             var parent = nodes[targetIdx].parent;
-            child.push(nodes[targetIdx].id());
-            parent.push(nodes[sourceIdx].id());
+            child.push(nodes[targetIdx].id);
+            parent.push(nodes[sourceIdx].id);
         });
     }
     else {
@@ -44,16 +43,16 @@ function initHierarchy(nodes, edges, nodeMap, directed) {
             }
             var sourceChildren = nodes[sourceIdx].children;
             var targetChildren = nodes[targetIdx].children;
-            sourceChildren.push(nodes[targetIdx].id());
-            targetChildren.push(nodes[sourceIdx].id());
+            sourceChildren.push(nodes[targetIdx].id);
+            targetChildren.push(nodes[sourceIdx].id);
         });
     }
 }
 function connect(a, b, edges) {
     var m = edges.length;
     for (var i = 0; i < m; i++) {
-        if ((a.id() === edges[i].source && b.id() === edges[i].target) ||
-            (b.id() === edges[i].source && a.id() === edges[i].target)) {
+        if ((a.id === edges[i].source && b.id === edges[i].target) ||
+            (b.id === edges[i].source && a.id === edges[i].target)) {
             return true;
         }
     }
@@ -146,7 +145,7 @@ export default class CircularLayout extends BaseLayout {
     /**
      * 执行布局
      */
-    execute() {
+    protected process() {
         var self = this;
         var nodes = self.nodes;
         var links = self.links;
@@ -167,8 +166,8 @@ export default class CircularLayout extends BaseLayout {
         }
         var center = self.center;
         if (n === 1) {
-            nodes[0].x(center.x);
-            nodes[0].y(center.y);
+            nodes[0].x = center.x;
+            nodes[0].y = center.y;
             if (self.onLayoutEnd)
                 self.onLayoutEnd();
             return;
@@ -183,7 +182,7 @@ export default class CircularLayout extends BaseLayout {
         // layout
         var nodeMap = {};
         nodes.forEach(function (node, i) {
-            nodeMap[node.$_id] = i;
+            nodeMap[node.id] = i;
         });
         self.nodeMap = nodeMap;
         var degrees = getDegree(nodes.length, nodeMap, links);
@@ -236,8 +235,8 @@ export default class CircularLayout extends BaseLayout {
                         (i % divN) * astep -
                         ((2 * Math.PI) / divisions) * Math.floor(i / divN);
             }
-            layoutNodes[i].x(center.x + Math.cos(angle) * r);
-            layoutNodes[i].y(center.y + Math.sin(angle) * r);
+            layoutNodes[i].x = center.x + Math.cos(angle) * r;
+            layoutNodes[i].y = center.y + Math.sin(angle) * r;
             layoutNodes[i].weight = degrees[i];
         }
         if (self.onLayoutEnd)
@@ -273,7 +272,7 @@ export default class CircularLayout extends BaseLayout {
                     connect(orderedCNodes[k], cnode, links)) &&
                     !pickFlags[i]) {
                     orderedCNodes.push(cnode);
-                    resNodes.push(nodes[nodeMap[cnode.id()]]);
+                    resNodes.push(nodes[nodeMap[cnode.id]]);
                     pickFlags[i] = true;
                     k++;
                 }
@@ -284,7 +283,7 @@ export default class CircularLayout extends BaseLayout {
                         var childIdx = nodeMap[children[j]];
                         if (degrees[childIdx] === degrees[i] && !pickFlags[childIdx]) {
                             orderedCNodes.push(cnodes[childIdx]);
-                            resNodes.push(nodes[nodeMap[cnodes[childIdx].id()]]);
+                            resNodes.push(nodes[nodeMap[cnodes[childIdx].id]]);
                             pickFlags[childIdx] = true;
                             foundChild = true;
                             break;
@@ -294,7 +293,7 @@ export default class CircularLayout extends BaseLayout {
                     while (!foundChild) {
                         if (!pickFlags[ii]) {
                             orderedCNodes.push(cnodes[ii]);
-                            resNodes.push(nodes[nodeMap[cnodes[ii].id()]]);
+                            resNodes.push(nodes[nodeMap[cnodes[ii].id]]);
                             pickFlags[ii] = true;
                             foundChild = true;
                         }

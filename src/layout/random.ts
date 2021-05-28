@@ -1,8 +1,7 @@
 import { Position } from 'src/interfaces';
 import {RandomLayoutOptions} from './options'
 import BaseLayout from './base'
-import Node from 'src/elements/node';
-import Link from 'src/elements/link';
+import { Link, Node } from './util';
 export default class RandomLayout extends BaseLayout {
     /** 布局中心 */
     center: Position;
@@ -38,7 +37,7 @@ export default class RandomLayout extends BaseLayout {
     /**
      * 执行布局
      */
-    execute(){
+    protected process(){
         var self = this;
         var nodes = self.nodes;
         var layoutScale = 0.9;
@@ -51,8 +50,8 @@ export default class RandomLayout extends BaseLayout {
         }
         if (nodes) {
             nodes.forEach(function (node) {
-                node.x((Math.random() - 0.5) * layoutScale * self.width + center.x);
-                node.y((Math.random() - 0.5) * layoutScale * self.height + center.y);
+                node.x = (Math.random() - 0.5) * layoutScale * self.width + center.x;
+                node.y = (Math.random() - 0.5) * layoutScale * self.height + center.y;
             });
         }
         if (self.onLayoutEnd)

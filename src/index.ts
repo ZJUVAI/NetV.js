@@ -16,6 +16,7 @@ import * as Utils from './utils/utils'
 import { Position } from './interfaces'
 import { EMPTY_FUNCTION } from './utils/const'
 import { Layout } from './layout'
+import { ILayout } from './layout/options'
 
 export default class NetV {
     public static Utils = Utils
@@ -70,7 +71,7 @@ export default class NetV {
             getAllLinks: this.links.bind(this)
         })
 
-        this.$_layout = new Layout(this.$_configs.layout || {type:'none'})
+        this.$_layout = new Layout(this.$_configs.layout)
 
         this.$_interactionManager = new InteractionManager(this)
     }
@@ -178,6 +179,19 @@ export default class NetV {
     }
 
     /**
+     * @description get or set the layout options and refresh the layout settings
+     * @param {ILayout.LayoutOptions}options options of layout
+     * @returns Layout object
+     */
+    public layout(options?:ILayout.LayoutOptions){
+        if(options!==undefined){
+            this.$_layout = new Layout(options)
+        }
+        this.$_layout.layout(this);
+        return this.$_layout;
+    }
+
+    /**
      * @description get all nodes
      */
     public nodes(): Node[] {
@@ -249,14 +263,6 @@ export default class NetV {
                 }
             }
         }
-    }
-
-    /**
-     * @description refresh the layout if nodes or links has been changed
-     */
-    public refresh(){
-        this.$_layout.layout(this);
-        this.draw();
     }
 
     /**

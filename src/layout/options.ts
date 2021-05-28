@@ -1,5 +1,6 @@
 import Node from "src/elements/node";
 import { Position } from "src/interfaces";
+import BaseLayout from "./base";
 
 export interface CircularLayoutOptions {
     type: "circular";
@@ -33,6 +34,19 @@ export interface ConcentricLayoutOptions {
     workerEnabled?: boolean;
     width?: number;
     height?: number;
+    onLayoutEnd?: () => void;
+}
+export interface DagreLayoutOptions {
+    type: "dagre";
+    rankdir?: "TB" | "BT" | "LR" | "RL";
+    align?: "UL" | "UR" | "DL" | "DR";
+    nodeSize?: number | number[] | undefined;
+    nodesep?: number;
+    ranksep?: number;
+    nodesepFunc?: ((d?: any) => number) | undefined;
+    ranksepFunc?: ((d?: any) => number) | undefined;
+    controlPoints?: boolean;
+    workerEnabled?: boolean;
     onLayoutEnd?: () => void;
 }
 export interface FruchtermanLayoutOptions {
@@ -120,10 +134,60 @@ export interface ForceAtlas2LayoutOptions {
     barnesHut?: boolean;
     prune?: boolean;
 }
-export interface NoneLayout {
-    type: "none"
+export interface ForceLayoutOptions {
+    type: "force";
+    center?: Position;
+    linkDistance?: number | ((d?: any) => number) | undefined;
+    edgeStrength?: number | ((d?: any) => number) | undefined;
+    nodeStrength?: number | ((d?: any) => number) | undefined;
+    preventOverlap?: boolean;
+    collideStrength?: number;
+    nodeSize?: number | number[] | ((d?: any) => number) | undefined;
+    nodeSpacing?: number | number[] | ((d?: any) => number) | undefined;
+    alpha?: number;
+    alphaDecay?: number;
+    alphaMin?: number;
+    clustering?: boolean;
+    clusterNodeStrength?: number;
+    clusterEdgeStrength?: number;
+    clusterEdgeDistance?: number;
+    clusterNodeSize?: number;
+    clusterFociStrength?: number;
+    forceSimulation?: any;
+    tick?: () => void;
+    onLayoutEnd?: () => void;
+    workerEnabled?: boolean;
+}
+export interface MDSLayoutOptions {
+    type: "mds";
+    center?: Position;
+    linkDistance?: number;
+    workerEnabled?: boolean;
+    onLayoutEnd?: () => void;
+}
+export interface BaseLayoutOptions {
+    type: "base"
+}
+export interface RadialLayoutOptions{
+    type: "radial";
+    center?: Position;
+    width?: number;
+    height?: number;
+    linkDistance?: number;
+    maxIteration?: number;
+    focusNode?: string | Node | null;
+    unitRadius?: number | null;
+    preventOverlap?: boolean;
+    nodeSize?: number | number[] | undefined;
+    nodeSpacing?: number | Function | undefined;
+    maxPreventOverlapIteration?: number;
+    strictRadial?: boolean;
+    sortBy?: string | undefined;
+    sortStrength?: number;
+    workerEnabled?: boolean;
+    onLayoutEnd?: () => void;
 }
 export declare namespace ILayout {
-    type LayoutTypes = "circular" | "concentric" | "random" | "grid" | "fruchterman" | "gforce" | "forceAtlas2" | "none";
-    type LayoutOptions = CircularLayoutOptions | ConcentricLayoutOptions | RandomLayoutOptions | GridLayoutOptions | FruchtermanLayoutOptions | GForceLayoutOptions | ForceAtlas2LayoutOptions | NoneLayout;
+    type LayoutTypes = "circular" | "concentric" | "dagre" | "random" | "grid" | "fruchterman" | "force" | "gforce" | "forceAtlas2" | "mds" | "base" | "radial";
+    type LayoutOptions = CircularLayoutOptions | ConcentricLayoutOptions | DagreLayoutOptions | RandomLayoutOptions | GridLayoutOptions | FruchtermanLayoutOptions | ForceLayoutOptions | GForceLayoutOptions | ForceAtlas2LayoutOptions | MDSLayoutOptions | BaseLayoutOptions | RadialLayoutOptions;
 }

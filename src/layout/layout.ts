@@ -1,37 +1,27 @@
-import Link from "src/elements/link";
-import Node from "src/elements/node";
 import { ILayout } from "./options";
 import BaseLayout from "./base";
-import RandomLayout  from "./random";
-import GridLayout from "./grid";
-import CircularLayout from "./circular";
-import ConcentricLayout from "./concentric";
-import FruchtermanLayout from "./fruchterman";
-import GForceLayout from "./gForce";
 import NetV from "src";
-import ForceAtlas2Layout from "./forceAtlas2";
+import { getLayoutByName, registerLayout } from "./registy";
 
 export default class Layout {
     readonly layoutInstance: BaseLayout;
-    public type: String;
+    public type: string;
     public constructor(options: ILayout.LayoutOptions) {
-        if(options.type === "none")
-            console.warn("You are not using any layout, please make sure that the node location has been accurately defined.");
-        this.type = options.type;
-        var layoutClass = Layouts[options.type];
+        if(!options || !options.type){
+            this.type = "base"
+        }
+        else this.type = options.type;
+        var layoutClass = Layouts[this.type.toString()];
         this.layoutInstance = new layoutClass(options);
     }
-    public layout(netv:NetV){
-        return this.layoutInstance.layout(netv);
+    public layout(core:NetV){
+        return this.layoutInstance.layout(core);
     };
     updateCfg(cfg: ILayout.LayoutOptions){
         this.layoutInstance.updateCfg(cfg);
     };
-    init(netv:NetV){
-        this.layoutInstance.init(netv);
-    };
-    execute(){
-        this.layoutInstance.execute();
+    init(core:NetV){
+        this.layoutInstance.init(core);
     };
     getDefaultCfg(){
         return this.layoutInstance.getDefaultCfg();
@@ -40,17 +30,12 @@ export default class Layout {
         return this.layoutInstance.destroy();
     };
 }
-export const Layouts = new Proxy(BaseLayout, {
+export const Layouts : {[key: string]: any;} = new Proxy(BaseLayout, {
     get: function (target, propKey) {
-        switch(propKey){
-            case "grid":return GridLayout;
-            case "random":return RandomLayout;
-            case "circular":return CircularLayout;
-            case "concentric":return ConcentricLayout;
-            case "fruchterman":return FruchtermanLayout;
-            case "gforce":return GForceLayout;
-            case "forceAtlas2":return ForceAtlas2Layout;
-            default:return BaseLayout;
-        }
+        return getLayoutByName(propKey.toString());
     },
+    set: function (target, propKey, value) {
+        registerLayout(propKey.toString(), value);
+        return true;
+    }
 });

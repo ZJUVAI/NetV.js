@@ -1,12 +1,11 @@
 import NetV from 'src';
-import Link from 'src/elements/link';
-import Node from 'src/elements/node';
+import { isCircle, isRect, Link, Node } from './util';
 import { Position} from '../interfaces'
 export default class BaseLayout {
     nodes: Node[] | null;
     links: Link[] | null;
-    netv: NetV | null;
-    positions: Position[] | null;
+    core: NetV | null;
+    positions: Position[] | number[][] | null;
     destroyed: boolean;
     onLayoutEnd: () => void;
     public constructor() {
@@ -16,17 +15,66 @@ export default class BaseLayout {
         this.destroyed = false;
         this.onLayoutEnd = function () { };
     }
-    public layout(netv:NetV) {
-        this.init(netv);
-        return this.execute(true);
+    public layout(core:NetV) {
+        this.init(core);
+        return this.execute();
     };
-    public init(netv:NetV) {
-        this.netv = netv;
-        this.nodes = netv.nodes() || [];
-        this.links = netv.links() || [];
+    public init(core:NetV) {
+        this.core = core;
+        this.nodes = core.nodes().map((node,index)=>{
+            let res:Node = {
+                x: node.x(),
+                y:node.y(),
+                id:node.id(),
+                index:index,
+                shape:node.shape(),
+                size:isRect(node)?[node.width(),node.height()]:
+                     isCircle(node)?[node.r(),node.r()]:[5,5]
+            };
+            return res;
+        }) || [];
+        this.links = core.links().map((link,index)=>{
+            let res:Link = {
+                source:link.source().id(),
+                target:link.target().id(),
+                width:link.strokeWidth()
+            }
+            return res;
+        }) || [];
     };
-    public execute(reloadData?:boolean) { };
-    public executeWithWorker() { };
+    /**
+     * @override if you need to interact with core directly (such as some animation interactions), please override this function
+     */
+    protected execute() { 
+        let data = this.process();
+            data.nodes.forEach(node=>{
+                let element = this.core.getNodeById(node.id);
+                element.x(node.x);
+                element.y(node.y);
+                element.shape(node.shape);
+                if(isRect(node.shape)){
+                    element.width(node.size[0]);
+                    element.height(node.size[1]);
+                }
+                else if(isCircle(node.shape)){
+                    element.r(node.size[0]);
+                }
+            });
+            data.links.forEach(link=>{
+                let element = this.core.getLinkByEnds(link.source,link.target);
+                element.strokeWidth(link.width);
+            })
+    };
+    /**
+     * @override if you need to process the data only once, please override this function
+     * @returns node-link data
+     */
+    protected process() : {nodes:Node[],links:Link[]}{
+        return {
+            nodes:this.nodes,
+            links:this.links
+        }
+    }
     public getDefaultCfg() {
         return {};
     };
