@@ -23,6 +23,7 @@ export class Renderer {
     public modifiedElementsCount = 0 // record modified link num to control lazy update
     public shouldLazyUpdate = false // flag to control lazy update
 
+    public pixelRatio: number
     private gl: WebGL2RenderingContext
     private backgroundColor: Color
     private width: number
@@ -58,35 +59,23 @@ export class Renderer {
         this.width = width
         this.height = height
 
+        this.pixelRatio = window.devicePixelRatio || 1
+
         this.getAllNodes = getAllNodes
         this.getAllLinks = getAllLinks
 
         this.initIdTexture()
 
-        const nodeShaderSeriels = {
-            vertex: nodeShaders.vertex.connect(),
-            fragment: nodeShaders.fragment.connect(),
-            idVertex: nodeShaders.idVertex.connect(),
-            idFragment: nodeShaders.idFragment.connect()
-        }
-
-        const linkShaderSeriels = {
-            vertex: linkShaders.vertex.connect(),
-            fragment: linkShaders.fragment.connect(),
-            idVertex: linkShaders.idVertex.connect(),
-            idFragment: linkShaders.idFragment.connect()
-        }
-
         this.nodeManager = new RenderNodeManager(
             this.gl,
             { width, height, limit: nodeLimit },
-            nodeShaderSeriels,
+            nodeShaders,
             this.idTexture
         )
         this.linkManager = new RenderLinkManager(
             this.gl,
             { width, height, limit: linkLimit },
-            linkShaderSeriels,
+            linkShaders,
             this.idTexture
         )
     }
@@ -202,7 +191,7 @@ export class Renderer {
      * @param y y pos
      */
     public readIdTexture(position: Position): number {
-        const ratio = window.devicePixelRatio || 1
+        const ratio = this.pixelRatio
         this.gl.bindFramebuffer(this.gl.READ_FRAMEBUFFER, this.idTexture)
         const readPixelBuffer = new Uint8Array([255, 255, 255, 255]) // -1
         this.gl.readPixels(
@@ -236,7 +225,7 @@ export class Renderer {
      */
     private initIdTexture() {
         const gl = this.gl
-        const pixelRatio = window.devicePixelRatio || 1
+        const pixelRatio = this.pixelRatio
         const screenWidth = this.width * pixelRatio
         const screenHeight = this.height * pixelRatio
 

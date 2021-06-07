@@ -27,6 +27,7 @@ export interface NodeStyle {
     fill?: Color
     strokeWidth?: number
     strokeColor?: Color
+    rotate?: number
     /* circle shape styles */
     r?: number
     /* rect shape styles */
@@ -36,6 +37,9 @@ export interface NodeStyle {
     vertexAlpha?: Position
     vertexBeta?: Position
     vertexGamma?: Position
+    /* cross shape styles */
+    innerWidth?: number
+    innerHeight?: number
 }
 
 export interface NodeData {
@@ -47,12 +51,16 @@ export interface NodeData {
     hoverCallback?: (node: Node) => void
 }
 
-export type LinkShape = 'line' | 'curve'
+export type LinkShape = 'line' | 'curve' | 'dash-line'
 
 export interface LinkStyle {
     shape?: LinkShape
     strokeWidth?: number
     strokeColor?: Color
+    /* curve shape */
+    curveness?: number
+    
+    dashInterval?: number
 }
 
 export interface LinkData {

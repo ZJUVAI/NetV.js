@@ -13,11 +13,11 @@ export const node = {
     style: {
         shape: 'circle', // default shape
         offset: { x: 0, y: 0 },
-        fill: { r: 0.2, g: 0.6, b: 0.2, a: 0.8 },
+        fill: { r: 0.2, g: 0.6, b: 0.2, a: 1 },
         strokeColor: { r: 0.9, g: 0.9, b: 0.9, a: 0.6 },
         strokeWidth: 2,
         /* circle shape styles */
-        r: 5,
+        r: 10,
         /* rect shape styles */
         width: 5,
         height: 5,
@@ -35,7 +35,9 @@ export const link = {
     style: {
         shape: 'line',
         strokeColor: { r: 0.4, g: 0.6, b: 0.8, a: 0.5 },
-        curveness: 0.2, // curve parameter
-        strokeWidth: 2
+        strokeWidth: 2,
+        /* curve shape style */
+        curveness: 0.2,
+        dashInterval: 5
     }
 }

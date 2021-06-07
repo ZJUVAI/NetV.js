@@ -16,7 +16,7 @@ Homepage: http://netv.zjuvag.org/
 
 Download NetV.js from releases: https://github.com/ZJUVAG/NetV.js/releases
 
-Or import from CDN: https://unpkg.com/netv/build/NetV.js
+Or import from CDN: https://unpkg.com/netv/build/NetV.min.js
 
 If you use npm, you can also install netv:
 
@@ -52,4 +52,4 @@ Feel freely submitting issues and pull requests. You may check our [contribution
 
 ## Team
 
-NetV.js is owned by <img src='./docs/zju.svg' height=18 style="display: inline; vertical-align: sub;"> [Zhejiang University](http://www.zju.edu.cn/) and <img src='./docs/zjlab.svg' height=18 style="display: inline; vertical-align: sub;"> [Zhejiang Lab](https://www.zhejianglab.com/). The development of Vega-Lite is led by the <img src='./docs/zjuvag.png'  height=18 style="display: inline; vertical-align: sub;"> [Visual Analytics Group of Zhejiang University](https://zjuvag.org/) and <img src='./docs/jianwei.svg' height=18 style="display: inline; vertical-align: sub;"> [Zhejiang Lab Jianwei Team](https://jianwei.projects.zjvis.org/#/).
+NetV.js is owned by <img src='./docs/zju.svg' height=18 style="display: inline; vertical-align: sub;"> [Zhejiang University](http://www.zju.edu.cn/) and <img src='./docs/zjlab.svg' height=18 style="display: inline; vertical-align: sub;"> [Zhejiang Lab](https://www.zhejianglab.com/). The development of NetV.js is led by the <img src='./docs/zjuvag.png'  height=18 style="display: inline; vertical-align: sub;"> [Visual Analytics Group of Zhejiang University](https://zjuvag.org/) and <img src='./docs/jianwei.svg' height=18 style="display: inline; vertical-align: sub;"> [Zhejiang Lab Jianwei Team](https://jianwei.projects.zjvis.org/#/).
