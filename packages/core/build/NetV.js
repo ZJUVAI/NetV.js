@@ -246,9 +246,9 @@ class Shader {
     }
     copy() {
         const copyShader = new Shader();
-        copyShader.inputs = Object.assign({}, this.inputs);
-        copyShader.outputs = Object.assign({}, this.outputs);
-        copyShader.uniforms = Object.assign({}, this.uniforms);
+        copyShader.inputs = { ...this.inputs };
+        copyShader.outputs = { ...this.outputs };
+        copyShader.uniforms = { ...this.uniforms };
         copyShader.main = this.main.map((str) => str);
         copyShader.methods = this.methods.map((method) => method.map((str) => str));
         return copyShader;
@@ -312,7 +312,10 @@ class Element {
                 else {
                     // ! if the depth of style is more than one, it can cause bugs
                     // ! e.g. style = { xx: {...}, yy: ... }
-                    this.$_style[name] = Object.assign(Object.assign({}, this.$_style[name]), style);
+                    this.$_style[name] = {
+                        ...this.$_style[name],
+                        ...style
+                    };
                 }
             });
         }
@@ -965,7 +968,7 @@ class NetV {
         }
         else {
             // delete old data
-            this.$_data = Object.assign(Object.assign({}, this.$_data), nodeLinkData);
+            this.$_data = { ...this.$_data, ...nodeLinkData };
             this.$_id2node = new Map();
             this.$_ends2link = new map2_1.default();
             this.$_sourceId2links = new Map();
@@ -1121,7 +1124,9 @@ class NetV {
                 return;
             }
             const TOTAL_STEPS = Math.max(STEPS_PER_MS * durationsMS[index], 1);
-            const newTransform = Object.assign({}, transforms[index]);
+            const newTransform = {
+                ...transforms[index]
+            };
             const difference = {
                 x: transforms[index + 1].x - transforms[index].x,
                 y: transforms[index + 1].y - transforms[index].y,
@@ -1368,10 +1373,13 @@ class Node extends element_1.default {
                 this.$_attributes[key] = nodeData[key];
             }
         }
-        const data = Object.assign({
-            x: this.$_position.x,
-            y: this.$_position.y
-        }, nodeData);
+        const data = {
+            ...{
+                x: this.$_position.x,
+                y: this.$_position.y
+            },
+            ...nodeData
+        };
         this.$_setId(data.id);
         this.$_position = {
             x: data.x,
@@ -5649,7 +5657,7 @@ idVertex.outputs['id'] = 'vec4';
 idVertex.main.splice(1, 0, `id = in_id;`);
 const fragment = new utils_1.Shader();
 exports.fragment = fragment;
-fragment.inputs = Object.assign({}, vertex.outputs);
+fragment.inputs = { ...vertex.outputs };
 fragment.outputs = {
     fragmentColor: 'vec4'
 };
@@ -5964,7 +5972,7 @@ idVertex.outputs['id'] = 'vec4';
 idVertex.main.splice(1, 0, `id = in_id;`);
 const fragment = new utils_1.Shader();
 exports.fragment = fragment;
-fragment.inputs = Object.assign({}, vertex.outputs);
+fragment.inputs = { ...vertex.outputs };
 fragment.outputs = {
     fragmentColor: 'vec4'
 };
@@ -6080,12 +6088,17 @@ class RenderNodeManager extends render_element_1.RenderElementManager {
     // shaders: ShaderSeries,
     idTexture) {
         super(
-        /* webgl context */ gl, Object.assign(Object.assign({}, params), { instanceVerteces: [
+        /* webgl context */ gl, 
+        // prettier-ignore
+        /* parameters */ { ...params, instanceVerteces: [
                 -0.5, 0.5, 1.0,
                 -0.5, -0.5, 1.0,
                 0.5, 0.5, 1.0,
                 0.5, -0.5, 1.0,
-            ] }), Object.assign({}, shaders), 
+            ] }, 
+        /* shader series */ {
+            ...shaders
+        }, 
         /* idTexture */ idTexture);
         this.renderIdToElement = {};
     }
@@ -6129,12 +6142,17 @@ class RenderLinkManager extends render_element_1.RenderElementManager {
      */
     constructor(gl, params, shaders, idTexture) {
         super(
-        /* webgl context */ gl, Object.assign(Object.assign({}, params), { instanceVerteces: [
+        /* webgl context */ gl, 
+        // prettier-ignore
+        /* parameters */ { ...params, instanceVerteces: [
                 -0.5, 0.5, 1.0,
                 -0.5, -0.5, 1.0,
                 0.5, 0.5, 1.0,
                 0.5, -0.5, 1.0,
-            ] }), Object.assign({}, shaders), 
+            ] }, 
+        /* shader series */ {
+            ...shaders
+        }, 
         /* idTexture */ idTexture);
         this.renderIdToElement = {};
     }
@@ -6194,7 +6212,7 @@ class InteractionManager {
      * @param y
      */
     panBy(x, y) {
-        const newTransform = Object.assign({}, this.netv.$_transform);
+        const newTransform = { ...this.netv.$_transform };
         newTransform.x += x;
         newTransform.y += y;
         return this.netv.transform(newTransform);
@@ -6205,7 +6223,7 @@ class InteractionManager {
      * @param center optional, zoom center position
      */
     zoomBy(factor, center) {
-        const newTransform = Object.assign({}, this.netv.$_transform);
+        const newTransform = { ...this.netv.$_transform };
         let centerPos = center;
         if (!centerPos) {
             centerPos = { x: this.netv.$_configs.width / 2, y: this.netv.$_configs.height / 2 };
@@ -6221,7 +6239,7 @@ class InteractionManager {
      * @param pos
      */
     centerPosition(pos) {
-        const newTransform = Object.assign({}, this.netv.$_transform);
+        const newTransform = { ...this.netv.$_transform };
         const x = pos.x * newTransform.k + newTransform.x;
         const y = pos.y * newTransform.k + newTransform.y;
         const center = {
@@ -6304,7 +6322,7 @@ class InteractionManager {
      * @memberof InteractionManager
      */
     handleZoom(evt) {
-        const newTransform = Object.assign({}, this.netv.$_transform);
+        const newTransform = { ...this.netv.$_transform };
         const x = evt.offsetX || evt.pageX - this.canvas.offsetLeft;
         const y = evt.offsetY || evt.pageY - this.canvas.offsetTop;
         const delta = evt.deltaY ? evt.deltaY / 40 : evt.detail ? -evt.detail : 0;
@@ -6333,7 +6351,7 @@ class InteractionManager {
         const x = evt.offsetX || evt.pageX - this.canvas.offsetLeft;
         const y = evt.offsetY || evt.pageY - this.canvas.offsetTop;
         const yInv = this.netv.$_configs.height - y;
-        const newTransform = Object.assign({}, this.netv.$_transform);
+        const newTransform = { ...this.netv.$_transform };
         this.isMouseDown = true;
         this.mouseDownPos = { x, y };
         this.dragStartTransform = JSON.parse(JSON.stringify(newTransform));
@@ -6346,7 +6364,7 @@ class InteractionManager {
             if ((element === null || element === void 0 ? void 0 : element.type) === 'Node') {
                 // only node can be dragged
                 // record orgin position for drag
-                this.mouseDownElementOriginPos = Object.assign({}, element.position());
+                this.mouseDownElementOriginPos = { ...element.position() };
             }
             element.$_mousedownCallbackSet.forEach((callback) => {
                 callback({
@@ -6372,7 +6390,7 @@ class InteractionManager {
      */
     handleMouseMove(evt) {
         var _a, _b;
-        let newTransform = Object.assign({}, this.netv.$_transform);
+        let newTransform = { ...this.netv.$_transform };
         const x = evt.offsetX || evt.pageX - this.canvas.offsetLeft;
         const y = evt.offsetY || evt.pageY - this.canvas.offsetTop;
         const lastIsMouseMove = this.isMouseMove;
