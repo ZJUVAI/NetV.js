@@ -10,3 +10,12 @@ import Random from './layouts/random'
 import RadialTree from './layouts/radial-tree'
 
 export { Random, RadialTree }
+
+// declare global {
+//     // to ensure window.NetV will not report ts error
+//     interface Window {
+//         Layout: any
+//     }
+// }
+
+// window.Layout = Layout
