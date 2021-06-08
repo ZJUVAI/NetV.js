@@ -11,15 +11,9 @@ const netv = new NetV({
 const data = netv.loadDataset('miserables')
 
 // eslint-disable-next-line no-undef
-const radialTreeLayout = new RadialTree()
-radialTreeLayout.data(data)
-radialTreeLayout.parameters({
-    rootID: data.nodes[Math.floor(Math.random() * data.nodes.length)].id,
-    directed: false,
-    width,
-    height
-})
-radialTreeLayout.onStop((data) => {
+const randomLayout = new Random()
+randomLayout.data(data)
+randomLayout.onStop((data) => {
     netv.data(
         // eslint-disable-next-line no-undef
         NetV.Utils.transformGraphPosition(
@@ -31,4 +25,4 @@ radialTreeLayout.onStop((data) => {
     )
     netv.draw()
 })
-radialTreeLayout.start()
+randomLayout.start()

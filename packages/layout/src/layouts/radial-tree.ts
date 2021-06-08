@@ -31,7 +31,7 @@ export default class RadialTree implements Layout {
             if (this._param.rootID === undefined) {
                 this._param.rootID = this._data.nodes[0].id
             }
-            this._data.nodes = radialLayoutMultiple(this._data, this._param)
+            this._data.nodes = radialLayoutMultiple(this._data, this._param).nodes
 
             this._onStopCallback?.(this._data)
         } else {

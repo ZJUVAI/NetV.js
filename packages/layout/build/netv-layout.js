@@ -193,7 +193,7 @@ class RadialTree {
             if (this._param.rootID === undefined) {
                 this._param.rootID = this._data.nodes[0].id;
             }
-            this._data.nodes = radialLayoutMultiple(this._data, this._param);
+            this._data.nodes = radialLayoutMultiple(this._data, this._param).nodes;
             (_b = this._onStopCallback) === null || _b === void 0 ? void 0 : _b.call(this, this._data);
         }
         else {
