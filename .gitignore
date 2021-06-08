@@ -1,9 +1,14 @@
 .DS_Store
 npm-debug.log
 examples/data
+
 packages/core/build/stats.json
 packages/core/node_modules
 packages/core/benchmarks/stats.json
 packages/core/benchmarks/bundle.js
+
+packages/layout/build/stats.json
+packages/layout/node_modules
+
 packages/netv/build/stats.json
 packages/netv/node_modules
