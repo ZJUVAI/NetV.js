@@ -7,5 +7,6 @@
  */
 
 import Random from './layouts/random'
+import RadialTree from './layouts/radial-tree'
 
-export { Random }
+export { Random, RadialTree }

@@ -7,27 +7,51 @@
  */
 
 import * as d3 from 'd3'
+import Layout from './abstract-layout'
+import { Data, Callback, ID } from '../interfaces'
 
-export function radialLayout(graph, rootId, configs) {
-    // eslint-disable-next-line no-param-reassign
-    graph = {
-        nodes: graph.nodes.map((node) => ({
-            id: node.id
-        })),
-        links: graph.links.map((link) => ({
-            source: link.source,
-            target: link.target
-        }))
-    }
-    const { directed = false, centerX, centerY, radius } = configs
-    const trees = graphBFS(graph, rootId, directed)
-    const tree = trees[0]
-    graph.links = []
-    applyRadialTreeGraph(graph, tree, centerX, centerY, radius)
-    return graph
+interface RadialTreeParams {
+    rootID: ID
+    directed: boolean
+    width: number
+    height: number
 }
 
-export function radialLayoutMultiple(graph, rootId, configs) {
+export default class RadialTree implements Layout {
+    private _data: Data
+    private _param: RadialTreeParams = {
+        rootID: undefined,
+        directed: false,
+        width: 1,
+        height: 1
+    }
+    private _onStopCallback: Callback
+    public start() {
+        if (this._data.nodes?.length) {
+            if (this._param.rootID === undefined) {
+                this._param.rootID = this._data.nodes[0].id
+            }
+            this._data.nodes = radialLayoutMultiple(this._data, this._param)
+
+            this._onStopCallback?.(this._data)
+        } else {
+            throw new Error('Data is not specified.')
+        }
+    }
+    public data(data?: Data) {
+        if (data) this._data = data
+        else return this._data
+    }
+    public parameters(param?: RadialTreeParams) {
+        if (param) this._param = param
+        else return this._param
+    }
+    public onStop(callback: Callback) {
+        this._onStopCallback = callback
+    }
+}
+
+function radialLayoutMultiple(graph, configs) {
     // eslint-disable-next-line no-param-reassign
     graph = {
         nodes: graph.nodes.map((node) => ({
@@ -38,9 +62,9 @@ export function radialLayoutMultiple(graph, rootId, configs) {
             target: link.target
         }))
     }
-    const { directed = false, width, height } = configs
+    const { directed = false, width, height, rootID } = configs
 
-    const trees = graphBFS(graph, rootId, directed)
+    const trees = graphBFS(graph, rootID, directed)
     const treesDegree = trees.map((tree) => tree.degree)
     const bubblePositions = computeBubbleLayoutPosition(treesDegree, width, height)
 
@@ -127,11 +151,11 @@ function getTreeLinks(tree) {
     return links
 }
 
-function rootBaseBFS(adjNodes, rootId, visitedSet) {
-    visitedSet.add(rootId)
+function rootBaseBFS(adjNodes, rootID, visitedSet) {
+    visitedSet.add(rootID)
 
     const queue = []
-    const tree = { id: rootId, depth: 0, parent: null, children: [], degree: undefined }
+    const tree = { id: rootID, depth: 0, parent: null, children: [], degree: undefined }
     queue.push(tree)
 
     let degree = 0
@@ -153,7 +177,7 @@ function rootBaseBFS(adjNodes, rootId, visitedSet) {
     return tree
 }
 
-function graphBFS(graph, rootId, directed = false) {
+function graphBFS(graph, rootID, directed = false) {
     // construct adjacient relation
     const adjNodes = {}
     for (const { source, target } of graph.links) {
@@ -173,7 +197,7 @@ function graphBFS(graph, rootId, directed = false) {
 
     const trees = []
     const visitedSet = new Set()
-    trees.push(rootBaseBFS(adjNodes, rootId, visitedSet))
+    trees.push(rootBaseBFS(adjNodes, rootID, visitedSet))
 
     for (const node of graph.nodes) {
         if (!visitedSet.has(node.id)) {
