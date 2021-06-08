@@ -22,8 +22,6 @@ interface Data {
     [propName: string]: any
 }
 
-interface Callback {
-    (data: Data): any
-}
+type Callback = (data: Data) => any
 
 export { Node, Link, Data, Callback }

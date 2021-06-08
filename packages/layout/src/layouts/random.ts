@@ -26,7 +26,7 @@ class Random implements Layout {
             node.y = Math.random() * this._param.height
         })
 
-        this._onStopCallback && this._onStopCallback(this._data)
+        this._onStopCallback?.(this._data)
     }
     public data(data?: Data) {
         if (data) this._data = data

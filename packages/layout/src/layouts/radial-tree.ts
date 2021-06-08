@@ -9,6 +9,7 @@
 import * as d3 from 'd3'
 
 export function radialLayout(graph, rootId, configs) {
+    // eslint-disable-next-line no-param-reassign
     graph = {
         nodes: graph.nodes.map((node) => ({
             id: node.id
@@ -27,6 +28,7 @@ export function radialLayout(graph, rootId, configs) {
 }
 
 export function radialLayoutMultiple(graph, rootId, configs) {
+    // eslint-disable-next-line no-param-reassign
     graph = {
         nodes: graph.nodes.map((node) => ({
             id: node.id
@@ -56,6 +58,7 @@ export function radialLayoutMultiple(graph, rootId, configs) {
     return graph
 }
 
+// eslint-disable-next-line max-params
 function applyRadialTreeGraph(graph, tree, centerX, centerY, radius) {
     const links = getTreeLinks(tree)
     graph.links.push(...links)
@@ -96,6 +99,7 @@ function applyRadialTreeGraph(graph, tree, centerX, centerY, radius) {
     return graph
 }
 
+// eslint-disable-next-line max-params
 function pack(data, width, height, padding, valueFunc) {
     return d3
         .pack()

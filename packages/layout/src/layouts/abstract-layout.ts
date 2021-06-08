@@ -8,15 +8,15 @@
 import { Data, Callback } from '../interfaces'
 
 interface Layout {
-    data(data?: Data): void | Data
-    start(): void
-    parameters(param?: {}): void | {}
-    onStop(callback: Callback): void
+    data: (data?: Data) => Data
+    start: () => void
+    parameters: (param?: {}) => {}
+    onStop: (callback: Callback) => void
 
-    stop?(): void
-    resume?(): void
-    pause?(): void
-    onEach?(callback: Callback): void
+    stop?: () => void
+    resume?: () => void
+    pause?: () => void
+    onEach?: (callback: Callback) => void
 }
 
 export default Layout
