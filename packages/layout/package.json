@@ -9,5 +9,8 @@
         "eslint": "eslint src/index.ts"
     },
     "author": "",
-    "license": "ISC"
+    "license": "MIT",
+    "dependencies": {
+        "d3": "^6.7.0"
+    }
 }
