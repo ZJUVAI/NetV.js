@@ -7,5 +7,6 @@
  */
 
 import Random from './layouts/random'
+import Chaos from './layouts/chaos'
 
-export { Random }
+export { Random, Chaos }
