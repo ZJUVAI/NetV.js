@@ -2,15 +2,9 @@
 npm-debug.log
 examples/data
 
-node_modules
+node_modules/
 
-packages/core/build/stats.json
-packages/core/node_modules
+build/stats.json
+
 packages/core/benchmarks/stats.json
 packages/core/benchmarks/bundle.js
-
-packages/layout/build/stats.json
-packages/layout/node_modules
-
-packages/netv/build/stats.json
-packages/netv/node_modules
