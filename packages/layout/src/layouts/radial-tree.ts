@@ -1,3 +1,11 @@
+/**
+ * @author Jiacheng Pan
+ * @email panjiacheng@zju.edu.cn
+ * @create date 2021-06-08 15:40:04
+ * @modify date 2021-06-08 15:40:04
+ * @desc [copy from Xiaodong Zhao's implementation]
+ */
+
 import * as d3 from 'd3'
 
 export function radialLayout(graph, rootId, configs) {

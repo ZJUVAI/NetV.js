@@ -1,8 +1,10 @@
 /**
- * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
- * @description collect all layout releated objects and export
- */
+ * @author Jiacheng Pan
+ * @email panjiacheng@zju.edu.cn
+ * @create date 2021-06-08 15:41:06
+ * @modify date 2021-06-08 15:41:06
+ * @desc [description]
 
-import { RadialTree } from './layouts/radial-tree'
+import Random from './layouts/random'
 
-export { RadialTree }
+export { Random }

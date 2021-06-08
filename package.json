@@ -1,12 +1,13 @@
 {
-  "name": "netv",
-  "private": true,
-  "devDependencies": {
-    "lerna": "^4.0.0"
-  },
-  "scripts": {
-    "build:core": "cd ./packages/core && npm run build",
-    "build:netv": "cd ./packages/netv && npm run build",
-    "build:all": "npm run build:core && npm run build:netv"
-  }
+    "name": "netv",
+    "private": true,
+    "devDependencies": {
+        "lerna": "^4.0.0"
+    },
+    "scripts": {
+        "build:core": "cd ./packages/core && npm run build",
+        "build:netv": "cd ./packages/netv && npm run build",
+        "build:all": "npm run build:core && npm run build:netv",
+        "bootstrap": "lerna bootstrap"
+    }
 }
