@@ -4,7 +4,7 @@ examples/data
 
 node_modules/
 
-build/stats.json
+packages/*/build/stats.json
 
 packages/core/benchmarks/stats.json
 packages/core/benchmarks/bundle.js
