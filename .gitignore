@@ -2,6 +2,8 @@
 npm-debug.log
 examples/data
 
+node_modules
+
 packages/core/build/stats.json
 packages/core/node_modules
 packages/core/benchmarks/stats.json

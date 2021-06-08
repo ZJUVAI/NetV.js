@@ -127,7 +127,7 @@ function rootBaseBFS(adjNodes, rootId, visitedSet) {
     visitedSet.add(rootId)
 
     const queue = []
-    const tree = { id: rootId, depth: 0, parent: null, children: [] }
+    const tree = { id: rootId, depth: 0, parent: null, children: [], degree: undefined }
     queue.push(tree)
 
     let degree = 0

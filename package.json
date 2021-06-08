@@ -2,12 +2,26 @@
     "name": "netv",
     "private": true,
     "devDependencies": {
-        "lerna": "^4.0.0"
+        "lerna": "^4.0.0",
+        "@babel/core": "^7.9.6",
+        "@babel/preset-env": "^7.9.6",
+        "@typescript-eslint/eslint-plugin": "^4.8.1",
+        "@typescript-eslint/parser": "^4.8.1",
+        "babel-eslint": "^10.1.0",
+        "eslint": "^7.14.0",
+        "eslint-config-alloy": "^3.7.2",
+        "ts-loader": "^7.0.4",
+        "typescript": "^3.9.3",
+        "webpack": "^4.43.0",
+        "webpack-bundle-analyzer": "^3.8.0",
+        "webpack-cli": "^3.3.12",
+        "webpack-merge": "^5.7.3"
     },
     "scripts": {
         "build:core": "cd ./packages/core && npm run build",
         "build:netv": "cd ./packages/netv && npm run build",
-        "build:all": "npm run build:core && npm run build:netv",
-        "bootstrap": "lerna bootstrap"
+        "build:layout": "cd ./packages/layout && npm run build",
+        "build:all": "npm run build:core && npm run build:layout && npm run build:netv",
+        "bootstrap": "lerna bootstrap && cd ./packages/netv && npm install"
     }
 }
