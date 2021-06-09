@@ -2,15 +2,15 @@
  * Tobe implemented by Xiaoyu Yang
  */
 
-import { Callback, Data } from "src/interfaces"
-import Layout from "./abstract-layout"
+import { Callback, Data } from 'src/interfaces'
+import Layout from './abstract-layout'
 
 interface ChaosParam {
     width: number
     height: number
-    timeout?: number
+    timeout?: number //refresh layout interval, default as 0
 }
-export default class Chaos implements Layout{
+export default class Chaos implements Layout {
     private _data: Data
     private _param: ChaosParam = {
         width: 1,
@@ -29,24 +29,27 @@ export default class Chaos implements Layout{
         this._onEachCallback?.(this._data)
     }
     public start() {
-        if(this._stopped){
-            return;
+        if (this._stopped) {
+            return
         }
-        this._timeInterval = setInterval(this._timerHandler,this._param.timeout)
+        this._timeInterval = setInterval(this._timerHandler, this._param.timeout)
     }
     public stop() {
-        this.pause()
-        this._timeInterval = null
-        this._stopped = true
-        this._onStopCallback?.(this._data)
+        if (!this._stopped) {
+            this.pause()
+            this._timeInterval = null
+            this._stopped = true
+            this._onStopCallback?.(this._data)
+        }
     }
     public resume() {
-        this.start();
+        if (!this._timeInterval) this.start()
     }
     public pause() {
-        if (this._timeInterval && typeof window !== "undefined") {
+        if (this._timeInterval && typeof window !== 'undefined') {
             clearInterval(this._timeInterval)
         }
+        this._timeInterval = null
     }
     public onEach(callback: Callback) {
         this._onEachCallback = callback
@@ -56,7 +59,7 @@ export default class Chaos implements Layout{
         else return this._data
     }
     public parameters(param?: ChaosParam) {
-        if (param) this._param = param
+        if (param) this._param = Object.assign({}, this._param, param)
         else return this._param
     }
     public onStop(callback: Callback) {
