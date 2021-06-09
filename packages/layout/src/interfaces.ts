@@ -5,14 +5,17 @@
  * @modify date 2021-06-08 15:41:13
  * @desc [description]
  */
+
+type ID = string | number
+
 interface Node {
-    id: string | number
+    id: ID
     [propName: string]: any
 }
 
 interface Link {
-    source: string | number
-    target: string | number
+    source: ID
+    target: ID
     [propName: string]: any
 }
 
@@ -24,4 +27,4 @@ interface Data {
 
 type Callback = (data: Data) => any
 
-export { Node, Link, Data, Callback }
+export { ID, Node, Link, Data, Callback }
