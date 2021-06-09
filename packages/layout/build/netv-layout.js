@@ -108,11 +108,13 @@ return /******/ (function(modules) { // webpackBootstrap
  * @desc [description]
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.RadialTree = exports.Random = void 0;
+exports.RadialTree = exports.Chaos = exports.Random = void 0;
 const random_1 = __webpack_require__(1);
 exports.Random = random_1.default;
 const radial_tree_1 = __webpack_require__(2);
 exports.RadialTree = radial_tree_1.default;
+const chaos_1 = __webpack_require__(3);
+exports.Chaos = chaos_1.default;
 // declare global {
 //     // to ensure window.NetV will not report ts error
 //     interface Window {
@@ -177,7 +179,7 @@ exports.default = Random;
  * @desc [copy from Xiaodong Zhao's implementation]
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const d3 = __webpack_require__(3);
+const d3 = __webpack_require__(4);
 class RadialTree {
     constructor() {
         this._param = {
@@ -367,6 +369,80 @@ function computeTreeDepth(tree) {
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * Tobe implemented by Xiaoyu Yang
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+class Chaos {
+    constructor() {
+        this._param = {
+            width: 1,
+            height: 1,
+            timeout: 0
+        };
+        this._stopped = false;
+        this._timerHandler = () => {
+            var _a, _b;
+            (_a = this._data.nodes) === null || _a === void 0 ? void 0 : _a.forEach((node) => {
+                node.x = Math.random() * this._param.width;
+                node.y = Math.random() * this._param.height;
+            });
+            (_b = this._onEachCallback) === null || _b === void 0 ? void 0 : _b.call(this, this._data);
+        };
+    }
+    start() {
+        if (this._stopped) {
+            return;
+        }
+        this._timeInterval = setInterval(this._timerHandler, this._param.timeout);
+    }
+    stop() {
+        var _a;
+        if (!this._stopped) {
+            this.pause();
+            this._timeInterval = null;
+            this._stopped = true;
+            (_a = this._onStopCallback) === null || _a === void 0 ? void 0 : _a.call(this, this._data);
+        }
+    }
+    resume() {
+        if (!this._timeInterval)
+            this.start();
+    }
+    pause() {
+        if (this._timeInterval && typeof window !== 'undefined') {
+            clearInterval(this._timeInterval);
+        }
+        this._timeInterval = null;
+    }
+    onEach(callback) {
+        this._onEachCallback = callback;
+    }
+    data(data) {
+        if (data)
+            this._data = data;
+        else
+            return this._data;
+    }
+    parameters(param) {
+        if (param)
+            this._param = Object.assign({}, this._param, param);
+        else
+            return this._param;
+    }
+    onStop(callback) {
+        this._onStopCallback = callback;
+    }
+}
+exports.default = Chaos;
+
+
+/***/ }),
+/* 4 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
