@@ -7,6 +7,16 @@
  */
 
 import Random from './layouts/random'
+import RadialTree from './layouts/radial-tree'
 import Chaos from './layouts/chaos'
 
-export { Random, Chaos }
+export { Random, Chaos, RadialTree }
+
+// declare global {
+//     // to ensure window.NetV will not report ts error
+//     interface Window {
+//         Layout: any
+//     }
+// }
+
+// window.Layout = Layout
