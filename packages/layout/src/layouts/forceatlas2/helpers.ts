@@ -133,7 +133,6 @@ export function graphToByteArrays(data: Data) {
 
 export function assignLayoutChanges(data: Data, NodeMatrix: Float32Array) {
     var i = 0
-
     data.nodes.forEach(function (node) {
         node.x = NodeMatrix[i]
         node.y = NodeMatrix[i + 1]

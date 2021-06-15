@@ -27,10 +27,7 @@ export default function worker() {
         self.postMessage(
             {
                 nodes: NODES.buffer
-            },
-            [NODES.buffer]
+            }
         )
-
-        console.log(SETTINGS.byteLength)
     })
 }
