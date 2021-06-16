@@ -2,7 +2,7 @@
 /* eslint-disable one-var */
 /* eslint-disable no-var */
 /**
- * Graphology ForceAtlas2 Layout Webworker
+ * NetV ForceAtlas2 Layout Webworker
  * ========================================
  *
  * Web worker able to run the layout in a separate thread.

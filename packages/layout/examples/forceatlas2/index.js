@@ -38,6 +38,18 @@ const param = {
 }
 FA2Layout.parameters(param)
 FA2Layout.data(data)
+// avoid shaking by maxShakeDistance
+function avoidShaking(data, maxShakeDistance = Infinity) {
+    data.nodes.forEach(nodeData => {
+        let node = netv.getNodeById(nodeData.id)
+        let dx = nodeData.x - node.x()
+        let dy = nodeData.y - node.y()
+        let distance = Math.hypot(dx, dy)
+        let scale = distance > maxShakeDistance ? maxShakeDistance / distance : 1
+        node.x(node.x() + dx * scale)
+        node.y(node.y() + dy * scale)
+    });
+}
 FA2Layout.onEach((data) => {
     // eslint-disable-next-line no-param-reassign
     data =
@@ -48,11 +60,7 @@ FA2Layout.onEach((data) => {
             width / 2,
             height / 2
         )
-    data.nodes.forEach(nodeData => {
-        let node = netv.getNodeById(nodeData.id)
-        node.x(nodeData.x)
-        node.y(nodeData.y)
-    });
+    avoidShaking(data)
     netv.draw()
 })
 FA2Layout.onStop((data) => {

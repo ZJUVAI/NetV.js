@@ -6,7 +6,7 @@ import worker from './worker'
 
 interface ForceAtlas2Param {
     iterations?: number // defines iteration times, default as 1000, useless if worker is used
-    useWorker?: boolean // defines use worker or not, default as false
+    useWorker?: boolean // defines use worker or not, default as false, this parameter cannot be changed when using
     linLogMode?: boolean
     outboundAttractionDistribution?: boolean
     adjustSizes?: boolean
@@ -42,8 +42,11 @@ export default class ForceAtlas2Layout implements Layout {
         nodes: Float32Array
         links: Float32Array
     }
-    private _iterations: number // iteration times has been run
+    // iteration times has been run
+    private _iterations: number
+    // the worker or the interval is running or not
     private _running: boolean = false
+    // the layout is stopped or not
     private _stopped: boolean = false
     /**
      * NetV ForceAtlas2 Layout Runner
@@ -79,7 +82,6 @@ export default class ForceAtlas2Layout implements Layout {
         this._worker.addEventListener('message', this._handleMessage)
         if (this._running) {
             this._running = false
-            this.start()
         }
     }
     /**
@@ -178,9 +180,10 @@ export default class ForceAtlas2Layout implements Layout {
     public parameters(param?: ForceAtlas2Param) {
         if (param) {
             this._param = Object.assign({}, this._param, param)
+            this._iterations = 0 // initialize
             if (this._running) {
-                this._iterations = 0 // initialize
                 if (this._param.useWorker) this._worker?.postMessage({ settings: this._param })
+                //redefine the settings
                 else this.synchronousLayout()
             }
         } else return this._param
