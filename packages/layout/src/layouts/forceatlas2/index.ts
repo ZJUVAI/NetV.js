@@ -19,7 +19,8 @@ interface ForceAtlas2Param {
     barnesHutTheta?: number
 }
 export default class ForceAtlas2 implements Layout {
-    private _data: Data
+    private _data: Data // current data
+    private _initData: Data // initialized data
     private _param: ForceAtlas2Param = {
         iterations: 1000,
         useWorker: false,
@@ -42,8 +43,8 @@ export default class ForceAtlas2 implements Layout {
         nodes: Float32Array
         links: Float32Array
     }
-    // the layout has been initialized or not
-    private _initialized: boolean
+    // the layout parameters has been initialized or not
+    private _initialized = false
     // iteration times has been run
     private _iterations: number
     // the worker or the interval is running or not
@@ -64,8 +65,15 @@ export default class ForceAtlas2 implements Layout {
         }
         return this
     }
+    public restart() {
+        if (!this._stopped) this.stop() // if this layout is not stopped, stop it
+        this._stopped = false
+        this._data = JSON.parse(JSON.stringify(this._initData))
+        this._iterations = 0
+        this.start()
+    }
     public stop() {
-        if (this._stopped) return this
+        if (this._stopped) return this // the layout has already been stopped
         this._running = false
         this._stopped = true
         this._matrices = null
@@ -79,6 +87,7 @@ export default class ForceAtlas2 implements Layout {
         this._onStopCallback?.(this._data)
     }
     public resume() {
+        if (this._running) return this // the layout is running
         this.start()
     }
     public pause() {
@@ -91,20 +100,8 @@ export default class ForceAtlas2 implements Layout {
     }
     public data(data?: Data) {
         if (data) {
-            let mapper = {}
-            data.links.forEach((link) => {
-                if (!mapper[link.source]) {
-                    mapper[link.source] = 1
-                } else mapper[link.source] += 1
-                if (!mapper[link.target]) {
-                    mapper[link.target] = 1
-                } else mapper[link.target] += 1
-            })
-            data.nodes.forEach((node) => {
-                node.degree = mapper[node.id]
-                return node
-            })
-            this._data = data
+            this._initData = this.setDegreeForNodes(data)
+            this._data = JSON.parse(JSON.stringify(this._initData))
             if (this._param.useWorker) {
                 this._matrices = helpers.graphToByteArrays(this._data)
                 this.spawnWorker()
@@ -113,17 +110,9 @@ export default class ForceAtlas2 implements Layout {
     }
     public parameters(param?: ForceAtlas2Param) {
         if (param) {
-            if (this._initialized) {
-                if (param.useWorker !== this._param.useWorker) {
-                    console.warn(
-                        'netv-layout-forceatlas2/layout has been initialized, you cannot change useWorker mode'
-                    )
-                    // forced change useworker parameter
-                    param.useWorker = this._param.useWorker
-                }
-            } else {
-                this._initialized = true
-            }
+            // useWorker should be locked when using
+            if (this._initialized && !this._stopped) param.useWorker = this._param.useWorker
+            else if (!this._initialized) this._initialized = true
             this._param = { ...this._param, ...param }
             this._iterations = 0 // initialize
             if (this._running) {
@@ -135,6 +124,22 @@ export default class ForceAtlas2 implements Layout {
     }
     public onStop(callback: Callback) {
         this._onStopCallback = callback
+    }
+    private setDegreeForNodes(data: Data) {
+        let mapper = {}
+        data.links.forEach((link) => {
+            if (!mapper[link.source]) {
+                mapper[link.source] = 1
+            } else mapper[link.source] += 1
+            if (!mapper[link.target]) {
+                mapper[link.target] = 1
+            } else mapper[link.target] += 1
+        })
+        data.nodes.forEach((node) => {
+            node.degree = mapper[node.id]
+            return node
+        })
+        return data
     }
     /**
      * NetV ForceAtlas2 Layout Runner
