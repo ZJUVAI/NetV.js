@@ -11,7 +11,8 @@ interface ChaosParam {
     timeout?: number // refresh layout interval, default as 0
 }
 export default class Chaos implements Layout {
-    private _data: Data
+    private _data: Data // current data
+    private _initData: Data // initialized data
     private _param: ChaosParam = {
         width: 1,
         height: 1,
@@ -22,21 +23,25 @@ export default class Chaos implements Layout {
     private _timeInterval
     private _stopped = false
     public start() {
-        if (this._stopped) {
-            return
-        }
+        if (this._stopped) return // should not start when the layout was stopped
         this._timeInterval = setInterval(this._timerHandler, this._param.timeout)
     }
+    public restart() {
+        if (!this._stopped) this.stop() // if this layout is not stopped, stop it
+        this._stopped = false
+        this._data = JSON.parse(JSON.stringify(this._initData))
+        this.start()
+    }
     public stop() {
-        if (!this._stopped) {
-            this.pause()
-            this._timeInterval = null
-            this._stopped = true
-            this._onStopCallback?.(this._data)
-        }
+        if (this._stopped) return // the layout has already been stopped
+        this.pause()
+        this._timeInterval = null
+        this._stopped = true
+        this._onStopCallback?.(this._data)
     }
     public resume() {
-        if (!this._timeInterval) this.start()
+        if (this._timeInterval) return // should not resume when the layout was not paused
+        this.start()
     }
     public pause() {
         if (this._timeInterval && typeof window !== 'undefined') {
@@ -48,8 +53,10 @@ export default class Chaos implements Layout {
         this._onEachCallback = callback
     }
     public data(data?: Data) {
-        if (data) this._data = data
-        else return this._data
+        if (data) {
+            this._initData = data
+            this._data = JSON.parse(JSON.stringify(this._initData))
+        } else return this._data
     }
     public parameters(param?: ChaosParam) {
         if (param) this._param = { ...this._param, ...param }
