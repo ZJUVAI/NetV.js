@@ -10,6 +10,7 @@ import { Data, Callback } from '../interfaces'
 interface Layout {
     data: (data?: Data) => Data
     start: () => void
+    restart: () => void
     parameters: (param?: {}) => {}
     onStop: (callback: Callback) => void
 

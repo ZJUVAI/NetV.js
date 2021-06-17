@@ -28,6 +28,9 @@ class Random implements Layout {
 
         this._onStopCallback?.(this._data)
     }
+    public restart() {
+        this.start()
+    }
     public data(data?: Data) {
         if (data) this._data = data
         else return this._data
