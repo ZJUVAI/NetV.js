@@ -4,6 +4,7 @@
  * ========================================
  *
  * Web worker able to run the layout in a separate thread.
+ * https://github.com/graphology/graphology-layout-forceatlas2
  */
 
 export default function worker() {
@@ -24,10 +25,8 @@ export default function worker() {
         iterate(SETTINGS, NODES, LINKS)
 
         // Sending result to supervisor
-        self.postMessage(
-            {
-                nodes: NODES.buffer
-            }
-        )
+        self.postMessage({
+            nodes: NODES.buffer
+        })
     })
 }

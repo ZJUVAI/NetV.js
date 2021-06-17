@@ -5,6 +5,7 @@
  * =================================
  *
  * Function used to perform a single iteration of the algorithm.
+ * https://github.com/graphology/graphology-layout-forceatlas2
  */
 
 /**

@@ -3,6 +3,7 @@
  * ===============================
  *
  * Miscellaneous helper functions.
+ * https://github.com/graphology/graphology-layout-forceatlas2
  */
 
 import { Data } from 'src/interfaces'
