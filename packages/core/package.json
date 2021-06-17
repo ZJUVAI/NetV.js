@@ -11,7 +11,7 @@
     "scripts": {
         "build": "webpack --config webpack.prod.js",
         "watch": "webpack --config webpack.dev.js",
-        "eslint": "eslint src/index.ts",
+        "lint": "eslint --ext .ts \"./src\"",
         "build:benchmarks": "webpack --env.watch=false --config benchmarks/webpack.config.js",
         "watch:benchmarks": "webpack --env.watch=true --config benchmarks/webpack.config.js"
     },

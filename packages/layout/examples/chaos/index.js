@@ -10,22 +10,29 @@ const netv = new NetV({
 
 const data = netv.loadDataset('miserables')
 
+netv.data(
+    // eslint-disable-next-line no-undef
+    NetV.Utils.transformGraphPosition(
+        data,
+        Math.min(width, height) * 0.9,
+        width / 2,
+        height / 2
+    )
+)
 // eslint-disable-next-line no-undef
 const chaosLayout = new Chaos()
 chaosLayout.parameters({
-    timeout: 1000
+    width,
+    height,
+    timeout: 0
 })
 chaosLayout.data(data)
 chaosLayout.onEach((data) => {
-    netv.data(
-        // eslint-disable-next-line no-undef
-        NetV.Utils.transformGraphPosition(
-            data,
-            Math.min(width, height) * 0.9,
-            width / 2,
-            height / 2
-        )
-    )
+    data.nodes.forEach(nodeData => {
+        let node = netv.getNodeById(nodeData.id)
+        node.x(nodeData.x)
+        node.y(nodeData.y)
+    });
     netv.draw()
 })
 chaosLayout.onStop((data) => {
