@@ -42,6 +42,8 @@ export default class ForceAtlas2Layout implements Layout {
         nodes: Float32Array
         links: Float32Array
     }
+    // the layout has been initialized or not
+    private _initialized: boolean
     // iteration times has been run
     private _iterations: number
     // the worker or the interval is running or not
@@ -179,6 +181,17 @@ export default class ForceAtlas2Layout implements Layout {
     }
     public parameters(param?: ForceAtlas2Param) {
         if (param) {
+            if (this._initialized) {
+                if (param.useWorker !== this._param.useWorker) {
+                    console.warn(
+                        'netv-layout-forceatlas2/layout has been initialized, you cannot change useWorker mode'
+                    )
+                    // forced change useworker parameter
+                    param.useWorker = this._param.useWorker
+                }
+            } else {
+                this._initialized = true
+            }
             this._param = Object.assign({}, this._param, param)
             this._iterations = 0 // initialize
             if (this._running) {

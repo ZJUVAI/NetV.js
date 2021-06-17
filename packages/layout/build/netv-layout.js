@@ -619,6 +619,16 @@ class ForceAtlas2Layout {
     parameters(param) {
         var _a;
         if (param) {
+            if (this._initialized) {
+                if (param.useWorker !== this._param.useWorker) {
+                    console.warn('netv-layout-forceatlas2/layout has been initialized, you cannot change useWorker mode');
+                    // forced change useworker parameter
+                    param.useWorker = this._param.useWorker;
+                }
+            }
+            else {
+                this._initialized = true;
+            }
             this._param = Object.assign({}, this._param, param);
             this._iterations = 0; // initialize
             if (this._running) {
