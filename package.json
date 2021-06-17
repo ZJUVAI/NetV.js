@@ -22,6 +22,10 @@
         "build:netv": "cd ./packages/netv && npm run build",
         "build:layout": "cd ./packages/layout && npm run build",
         "build:all": "npm run build:core && npm run build:layout && npm run build:netv",
-        "bootstrap": "lerna bootstrap && cd ./packages/netv && npm install"
+        "bootstrap": "lerna bootstrap && cd ./packages/netv && npm install",
+        "lint:core": "cd ./packages/core && npm run lint",
+        "lint:layout": "cd ./packages/layout && npm run lint",
+        "lint:netv": "cd ./packages/netv && npm run lint",
+        "lint:all": "npm run lint:core && npm run lint:layout && npm run lint:netv"
     }
 }
