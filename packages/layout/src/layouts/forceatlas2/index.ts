@@ -47,77 +47,9 @@ export default class ForceAtlas2Layout implements Layout {
     // iteration times has been run
     private _iterations: number
     // the worker or the interval is running or not
-    private _running: boolean = false
+    private _running = false
     // the layout is stopped or not
-    private _stopped: boolean = false
-    /**
-     * NetV ForceAtlas2 Layout Runner
-     * Using Web Worker
-     * ===============================================
-     */
-    private askForIteractions = () => {
-        let matrices = this._matrices
-        let payload = {
-            settings: this._param,
-            nodes: matrices.nodes.buffer,
-            links: matrices.links.buffer
-        }
-        this._worker.postMessage(payload)
-        return this
-    }
-    private _handleMessage = (event: MessageEvent) => {
-        if (!this._running) return
-        let matrix = new Float32Array(event.data.nodes)
-        helpers.assignLayoutChanges(this._data, matrix)
-        this._onEachCallback?.(this._data)
-        this._matrices.nodes = matrix
-        this._iterations++
-        if (this._iterations >= this._param.iterations) {
-            this.stop()
-        } else this._worker.postMessage({})
-    }
-    private spawnWorker = () => {
-        if (this._worker) {
-            this._worker.terminate()
-        }
-        this._worker = helpers.createWorker(worker, [iterate])
-        this._worker.addEventListener('message', this._handleMessage)
-        if (this._running) {
-            this._running = false
-        }
-    }
-    /**
-     * NetV ForceAtlas2 Layout Runner
-     * Without Using Web Worker
-     * ===============================================
-     */
-    private synchronousLayout() {
-        var iterations = this._param.iterations
-
-        if (iterations <= 0)
-            throw new Error(
-                'netv-layout-forceatlas2: you should provide a positive number of iterations.'
-            )
-
-        // Validating settings
-        var settings = helpers.assign({}, this._param),
-            validationError = helpers.validateSettings(settings)
-
-        if (validationError) throw new Error('netv-layout-forceatlas2: ' + validationError.message)
-        // Building matrices
-        var matrices = helpers.graphToByteArrays(this._data)
-        // Iterating
-        if (this._interval) clearInterval(this._interval)
-        this._interval = setInterval(() => {
-            iterate(settings, matrices.nodes, matrices.links)
-            helpers.assignLayoutChanges(this._data, matrices.nodes)
-            this._onEachCallback?.(this._data)
-            this._iterations++
-            if (this._iterations >= this._param.iterations) {
-                this.stop()
-            }
-        }, 0)
-    }
+    private _stopped = false
     public start() {
         if (this._stopped) {
             throw new Error('netv-layout-forceatlas2/worker.start: layout was stopped.')
@@ -192,16 +124,84 @@ export default class ForceAtlas2Layout implements Layout {
             } else {
                 this._initialized = true
             }
-            this._param = Object.assign({}, this._param, param)
+            this._param = { ...this._param, ...param }
             this._iterations = 0 // initialize
             if (this._running) {
                 if (this._param.useWorker) this._worker?.postMessage({ settings: this._param })
-                //redefine the settings
+                // redefine the settings
                 else this.synchronousLayout()
             }
         } else return this._param
     }
     public onStop(callback: Callback) {
         this._onStopCallback = callback
+    }
+    /**
+     * NetV ForceAtlas2 Layout Runner
+     * Using Web Worker
+     * ===============================================
+     */
+    private askForIteractions = () => {
+        let matrices = this._matrices
+        let payload = {
+            settings: this._param,
+            nodes: matrices.nodes.buffer,
+            links: matrices.links.buffer
+        }
+        this._worker.postMessage(payload)
+        return this
+    }
+    private _handleMessage = (event: MessageEvent) => {
+        if (!this._running) return
+        let matrix = new Float32Array(event.data.nodes)
+        helpers.assignLayoutChanges(this._data, matrix)
+        this._onEachCallback?.(this._data)
+        this._matrices.nodes = matrix
+        this._iterations++
+        if (this._iterations >= this._param.iterations) {
+            this.stop()
+        } else this._worker.postMessage({})
+    }
+    private spawnWorker = () => {
+        if (this._worker) {
+            this._worker.terminate()
+        }
+        this._worker = helpers.createWorker(worker, [iterate])
+        this._worker.addEventListener('message', this._handleMessage)
+        if (this._running) {
+            this._running = false
+        }
+    }
+    /**
+     * NetV ForceAtlas2 Layout Runner
+     * Without Using Web Worker
+     * ===============================================
+     */
+    private synchronousLayout() {
+        let iterations = this._param.iterations
+
+        if (iterations <= 0)
+            throw new Error(
+                'netv-layout-forceatlas2: you should provide a positive number of iterations.'
+            )
+
+        // Validating settings
+        let settings = helpers.assign({}, this._param)
+        let validationError = helpers.validateSettings(settings)
+
+        if (validationError) throw new Error('netv-layout-forceatlas2: ' + validationError.message)
+        // Building matrices
+        let matrices = helpers.graphToByteArrays(this._data)
+        // Iterating
+        if (this._interval) clearInterval(this._interval)
+        this._interval = setInterval(() => {
+            iterate(settings, matrices.nodes, matrices.links)
+            helpers.assignLayoutChanges(this._data, matrices.nodes)
+            this._onEachCallback?.(this._data)
+            this._iterations++
+            if (this._iterations >= this._param.iterations) {
+                this.stop()
+            }
+        }, 0)
     }
 }

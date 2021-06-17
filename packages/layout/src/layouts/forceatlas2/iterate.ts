@@ -1,3 +1,5 @@
+/* eslint-disable max-depth */
+/* eslint-disable complexity */
 /**
  * NetV ForceAtlas2 Iteration
  * =================================
@@ -8,62 +10,78 @@
 /**
  * Function used to perform a single interation of the algorithm.
  */
+
 export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: Float32Array) {
     /**
      * Matrices properties accessors.
      */
-    const NODE_X = 0,
-        NODE_Y = 1,
-        NODE_DX = 2,
-        NODE_DY = 3,
-        NODE_OLD_DX = 4,
-        NODE_OLD_DY = 5,
-        NODE_MASS = 6,
-        NODE_CONVERGENCE = 7,
-        NODE_SIZE = 8,
-        NODE_FIXED = 9
+    const NODE_X = 0
+    const NODE_Y = 1
+    const NODE_DX = 2
+    const NODE_DY = 3
+    const NODE_OLD_DX = 4
+    const NODE_OLD_DY = 5
+    const NODE_MASS = 6
+    const NODE_CONVERGENCE = 7
+    const NODE_SIZE = 8
+    const NODE_FIXED = 9
 
-    const EDGE_SOURCE = 0,
-        EDGE_TARGET = 1,
-        EDGE_WEIGHT = 2
+    const EDGE_SOURCE = 0
+    const EDGE_TARGET = 1
+    const EDGE_WEIGHT = 2
 
-    const REGION_NODE = 0,
-        REGION_CENTER_X = 1,
-        REGION_CENTER_Y = 2,
-        REGION_SIZE = 3,
-        REGION_NEXT_SIBLING = 4,
-        REGION_FIRST_CHILD = 5,
-        REGION_MASS = 6,
-        REGION_MASS_CENTER_X = 7,
-        REGION_MASS_CENTER_Y = 8
+    const REGION_NODE = 0
+    const REGION_CENTER_X = 1
+    const REGION_CENTER_Y = 2
+    const REGION_SIZE = 3
+    const REGION_NEXT_SIBLING = 4
+    const REGION_FIRST_CHILD = 5
+    const REGION_MASS = 6
+    const REGION_MASS_CENTER_X = 7
+    const REGION_MASS_CENTER_Y = 8
 
     const SUBDIVISION_ATTEMPTS = 3
 
     /**
      * Constants.
      */
-    const PPN = 10,
-        PPE = 3,
-        PPR = 9
+    const PPN = 10
+    const PPE = 3
+    const PPR = 9
 
     const MAX_FORCE = 10
 
     // Initializing variables
-    var l, r, n, n1, n2, rn, e, w, g, s
+    let l
+    let r
+    let n
+    let n1
+    let n2
+    let rn
+    let e
+    let w
+    let g
+    let s
 
-    var order = NodeMatrix.length,
-        size = LinkMatrix?.length
+    let order = NodeMatrix.length
+    let size = LinkMatrix?.length
 
-    var adjustSizes = options.adjustSizes
+    let adjustSizes = options.adjustSizes
 
-    var thetaSquared = options.barnesHutTheta * options.barnesHutTheta
+    let thetaSquared = options.barnesHutTheta * options.barnesHutTheta
 
-    var outboundAttCompensation, coefficient, xDist, yDist, ewc, distance, factor
+    let outboundAttCompensation
+    let coefficient
+    let xDist
+    let yDist
+    let ewc
+    let distance
+    let factor
 
-    var RegionMatrix = []
+    let RegionMatrix = []
 
     // 1) Initializing layout data
-    //-----------------------------
+    // -----------------------------
 
     // Resetting positions & computing max values
     for (n = 0; n < order; n += PPN) {
@@ -84,17 +102,17 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
     }
 
     // 1.bis) Barnes-Hut computation
-    //------------------------------
+    // ------------------------------
 
     if (options.barnesHutOptimize) {
         // Setting up
-        var minX = Infinity,
-            maxX = -Infinity,
-            minY = Infinity,
-            maxY = -Infinity,
-            q,
-            q2,
-            subdivisionAttempts
+        let minX = Infinity
+        let maxX = -Infinity
+        let minY = Infinity
+        let maxY = -Infinity
+        let q
+        let q2
+        let subdivisionAttempts
 
         // Computing min and max values
         for (n = 0; n < order; n += PPN) {
@@ -105,8 +123,8 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
         }
 
         // squarify bounds, it's a quadtree
-        var dx = maxX - minX,
-            dy = maxY - minY
+        let dx = maxX - minX
+        let dy = maxY - minY
         if (dx > dy) {
             minY -= (dx - dy) / 2
             maxY = minY + dx
@@ -342,7 +360,7 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
     }
 
     // 2) Repulsion
-    //--------------
+    // --------------
     // NOTES: adjustSizes = antiCollision & scalingRatio = coefficient
 
     if (options.barnesHutOptimize) {
@@ -374,7 +392,7 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
                         yDist = NodeMatrix[n + NODE_Y] - RegionMatrix[r + REGION_MASS_CENTER_Y]
 
                         if (adjustSizes === true) {
-                            //-- Linear Anti-collision Repulsion
+                            // -- Linear Anti-collision Repulsion
                             if (distance > 0) {
                                 factor =
                                     (coefficient *
@@ -395,7 +413,7 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
                                 NodeMatrix[n + NODE_DY] += yDist * factor
                             }
                         } else {
-                            //-- Linear Repulsion
+                            // -- Linear Repulsion
                             if (distance > 0) {
                                 factor =
                                     (coefficient *
@@ -430,7 +448,7 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
                         distance = xDist * xDist + yDist * yDist
 
                         if (adjustSizes === true) {
-                            //-- Linear Anti-collision Repulsion
+                            // -- Linear Anti-collision Repulsion
                             if (distance > 0) {
                                 factor =
                                     (coefficient *
@@ -451,7 +469,7 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
                                 NodeMatrix[n + NODE_DY] += yDist * factor
                             }
                         } else {
-                            //-- Linear Repulsion
+                            // -- Linear Repulsion
                             if (distance > 0) {
                                 factor =
                                     (coefficient *
@@ -485,7 +503,7 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
                 yDist = NodeMatrix[n1 + NODE_Y] - NodeMatrix[n2 + NODE_Y]
 
                 if (adjustSizes === true) {
-                    //-- Anticollision Linear Repulsion
+                    // -- Anticollision Linear Repulsion
                     distance =
                         Math.sqrt(xDist * xDist + yDist * yDist) -
                         NodeMatrix[n1 + NODE_SIZE] -
@@ -520,7 +538,7 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
                         NodeMatrix[n2 + NODE_DY] -= yDist * factor
                     }
                 } else {
-                    //-- Linear Repulsion
+                    // -- Linear Repulsion
                     distance = Math.sqrt(xDist * xDist + yDist * yDist)
 
                     if (distance > 0) {
@@ -544,7 +562,7 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
     }
 
     // 3) Gravity
-    //------------
+    // ------------
     g = options.gravity / options.scalingRatio
     coefficient = options.scalingRatio
     for (n = 0; n < order; n += PPN) {
@@ -556,10 +574,10 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
         distance = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2))
 
         if (options.strongGravityMode) {
-            //-- Strong gravity
+            // -- Strong gravity
             if (distance > 0) factor = coefficient * NodeMatrix[n + NODE_MASS] * g
         } else {
-            //-- Linear Anti-collision Repulsion n
+            // -- Linear Anti-collision Repulsion n
             if (distance > 0) factor = (coefficient * NodeMatrix[n + NODE_MASS] * g) / distance
         }
 
@@ -569,8 +587,8 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
     }
 
     // 4) Attraction
-    //---------------
-    coefficient = 1 * (options.outboundAttractionDistribution ? outboundAttCompensation : 1)
+    // ---------------
+    coefficient = Number(options.outboundAttractionDistribution ? outboundAttCompensation : 1)
 
     // TODO: simplify distance
     // TODO: coefficient is always used as -c --> optimize?
@@ -597,7 +615,7 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
 
             if (options.linLogMode) {
                 if (options.outboundAttractionDistribution) {
-                    //-- LinLog Degree Distributed Anti-collision Attraction
+                    // -- LinLog Degree Distributed Anti-collision Attraction
                     if (distance > 0) {
                         factor =
                             (-coefficient * ewc * Math.log(1 + distance)) /
@@ -605,19 +623,19 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
                             NodeMatrix[n1 + NODE_MASS]
                     }
                 } else {
-                    //-- LinLog Anti-collision Attraction
+                    // -- LinLog Anti-collision Attraction
                     if (distance > 0) {
                         factor = (-coefficient * ewc * Math.log(1 + distance)) / distance
                     }
                 }
             } else {
                 if (options.outboundAttractionDistribution) {
-                    //-- Linear Degree Distributed Anti-collision Attraction
+                    // -- Linear Degree Distributed Anti-collision Attraction
                     if (distance > 0) {
                         factor = (-coefficient * ewc) / NodeMatrix[n1 + NODE_MASS]
                     }
                 } else {
-                    //-- Linear Anti-collision Attraction
+                    // -- Linear Anti-collision Attraction
                     if (distance > 0) {
                         factor = -coefficient * ewc
                     }
@@ -628,7 +646,7 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
 
             if (options.linLogMode) {
                 if (options.outboundAttractionDistribution) {
-                    //-- LinLog Degree Distributed Attraction
+                    // -- LinLog Degree Distributed Attraction
                     if (distance > 0) {
                         factor =
                             (-coefficient * ewc * Math.log(1 + distance)) /
@@ -636,18 +654,18 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
                             NodeMatrix[n1 + NODE_MASS]
                     }
                 } else {
-                    //-- LinLog Attraction
+                    // -- LinLog Attraction
                     if (distance > 0)
                         factor = (-coefficient * ewc * Math.log(1 + distance)) / distance
                 }
             } else {
                 if (options.outboundAttractionDistribution) {
-                    //-- Linear Attraction Mass Distributed
+                    // -- Linear Attraction Mass Distributed
                     // NOTE: Distance is set to 1 to override next condition
                     distance = 1
                     factor = (-coefficient * ewc) / NodeMatrix[n1 + NODE_MASS]
                 } else {
-                    //-- Linear Attraction
+                    // -- Linear Attraction
                     // NOTE: Distance is set to 1 to override next condition
                     distance = 1
                     factor = -coefficient * ewc
@@ -668,8 +686,13 @@ export default function iterate(options, NodeMatrix: Float32Array, LinkMatrix: F
     }
 
     // 5) Apply Forces
-    //-----------------
-    var force, swinging, traction, nodespeed, newX, newY
+    // -----------------
+    let force
+    let swinging
+    let traction
+    let nodespeed
+    let newX
+    let newY
 
     // MATH: sqrt and square distances
     if (adjustSizes === true) {

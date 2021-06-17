@@ -8,7 +8,7 @@ import Layout from './abstract-layout'
 interface ChaosParam {
     width: number
     height: number
-    timeout?: number //refresh layout interval, default as 0
+    timeout?: number // refresh layout interval, default as 0
 }
 export default class Chaos implements Layout {
     private _data: Data
@@ -20,14 +20,7 @@ export default class Chaos implements Layout {
     private _onStopCallback: Callback
     private _onEachCallback: Callback
     private _timeInterval
-    private _stopped: boolean = false
-    private _timerHandler = () => {
-        this._data.nodes?.forEach((node) => {
-            node.x = Math.random() * this._param.width
-            node.y = Math.random() * this._param.height
-        })
-        this._onEachCallback?.(this._data)
-    }
+    private _stopped = false
     public start() {
         if (this._stopped) {
             return
@@ -59,10 +52,17 @@ export default class Chaos implements Layout {
         else return this._data
     }
     public parameters(param?: ChaosParam) {
-        if (param) this._param = Object.assign({}, this._param, param)
+        if (param) this._param = { ...this._param, ...param }
         else return this._param
     }
     public onStop(callback: Callback) {
         this._onStopCallback = callback
+    }
+    private _timerHandler = () => {
+        this._data.nodes?.forEach((node) => {
+            node.x = Math.random() * this._param.width
+            node.y = Math.random() * this._param.height
+        })
+        this._onEachCallback?.(this._data)
     }
 }

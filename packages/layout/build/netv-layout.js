@@ -432,7 +432,7 @@ class Chaos {
     }
     parameters(param) {
         if (param)
-            this._param = Object.assign({}, this._param, param);
+            this._param = { ...this._param, ...param };
         else
             return this._param;
     }
@@ -513,35 +513,6 @@ class ForceAtlas2Layout {
                 this._running = false;
             }
         };
-    }
-    /**
-     * NetV ForceAtlas2 Layout Runner
-     * Without Using Web Worker
-     * ===============================================
-     */
-    synchronousLayout() {
-        var iterations = this._param.iterations;
-        if (iterations <= 0)
-            throw new Error('netv-layout-forceatlas2: you should provide a positive number of iterations.');
-        // Validating settings
-        var settings = helpers.assign({}, this._param), validationError = helpers.validateSettings(settings);
-        if (validationError)
-            throw new Error('netv-layout-forceatlas2: ' + validationError.message);
-        // Building matrices
-        var matrices = helpers.graphToByteArrays(this._data);
-        // Iterating
-        if (this._interval)
-            clearInterval(this._interval);
-        this._interval = setInterval(() => {
-            var _a;
-            iterate_1.default(settings, matrices.nodes, matrices.links);
-            helpers.assignLayoutChanges(this._data, matrices.nodes);
-            (_a = this._onEachCallback) === null || _a === void 0 ? void 0 : _a.call(this, this._data);
-            this._iterations++;
-            if (this._iterations >= this._param.iterations) {
-                this.stop();
-            }
-        }, 0);
     }
     start() {
         if (this._stopped) {
@@ -629,12 +600,12 @@ class ForceAtlas2Layout {
             else {
                 this._initialized = true;
             }
-            this._param = Object.assign({}, this._param, param);
+            this._param = { ...this._param, ...param };
             this._iterations = 0; // initialize
             if (this._running) {
                 if (this._param.useWorker)
                     (_a = this._worker) === null || _a === void 0 ? void 0 : _a.postMessage({ settings: this._param });
-                //redefine the settings
+                // redefine the settings
                 else
                     this.synchronousLayout();
             }
@@ -644,6 +615,36 @@ class ForceAtlas2Layout {
     }
     onStop(callback) {
         this._onStopCallback = callback;
+    }
+    /**
+     * NetV ForceAtlas2 Layout Runner
+     * Without Using Web Worker
+     * ===============================================
+     */
+    synchronousLayout() {
+        let iterations = this._param.iterations;
+        if (iterations <= 0)
+            throw new Error('netv-layout-forceatlas2: you should provide a positive number of iterations.');
+        // Validating settings
+        let settings = helpers.assign({}, this._param);
+        let validationError = helpers.validateSettings(settings);
+        if (validationError)
+            throw new Error('netv-layout-forceatlas2: ' + validationError.message);
+        // Building matrices
+        let matrices = helpers.graphToByteArrays(this._data);
+        // Iterating
+        if (this._interval)
+            clearInterval(this._interval);
+        this._interval = setInterval(() => {
+            var _a;
+            iterate_1.default(settings, matrices.nodes, matrices.links);
+            helpers.assignLayoutChanges(this._data, matrices.nodes);
+            (_a = this._onEachCallback) === null || _a === void 0 ? void 0 : _a.call(this, this._data);
+            this._iterations++;
+            if (this._iterations >= this._param.iterations) {
+                this.stop();
+            }
+        }, 0);
     }
 }
 exports.default = ForceAtlas2Layout;
@@ -666,7 +667,8 @@ exports.createWorker = exports.assignLayoutChanges = exports.graphToByteArrays =
 /**
  * Constants.
  */
-var PPN = 10, PPE = 3;
+const PPN = 10;
+const PPE = 3;
 /**
  * Very simple Object.assign-like function.
  *
@@ -675,17 +677,21 @@ var PPN = 10, PPE = 3;
  * @return {object}
  */
 function assign(target, ...object) {
-    target = target || {};
-    var objects = Array.prototype.slice.call(arguments).slice(1), i, k, l;
+    const objects = Array.prototype.slice.call(arguments).slice(1);
+    let i;
+    let k;
+    let l;
     for (i = 0, l = objects.length; i < l; i++) {
         if (!objects[i])
             continue;
+        // eslint-disable-next-line guard-for-in
         for (k in objects[i])
             target[k] = objects[i][k];
     }
     return target;
 }
 exports.assign = assign;
+// eslint-disable-next-line complexity
 function validateSettings(settings) {
     if ('linLogMode' in settings && typeof settings.linLogMode !== 'boolean')
         return { message: 'the `linLogMode` setting should be a boolean.' };
@@ -718,8 +724,12 @@ function validateSettings(settings) {
 }
 exports.validateSettings = validateSettings;
 function graphToByteArrays(data) {
-    var order = data.nodes.length, size = data.links.length, index = {}, j;
-    var NodeMatrix = new Float32Array(order * PPN), LinkMatrix = new Float32Array(size * PPE);
+    let order = data.nodes.length;
+    let size = data.links.length;
+    let index = {};
+    let j;
+    let NodeMatrix = new Float32Array(order * PPN);
+    let LinkMatrix = new Float32Array(size * PPE);
     // Iterate through nodes
     j = 0;
     data.nodes.forEach(function (node, attr) {
@@ -754,7 +764,7 @@ function graphToByteArrays(data) {
 }
 exports.graphToByteArrays = graphToByteArrays;
 function assignLayoutChanges(data, NodeMatrix) {
-    var i = 0;
+    let i = 0;
     data.nodes.forEach(function (node) {
         node.x = NodeMatrix[i];
         node.y = NodeMatrix[i + 1];
@@ -764,12 +774,12 @@ function assignLayoutChanges(data, NodeMatrix) {
 }
 exports.assignLayoutChanges = assignLayoutChanges;
 function createWorker(fn, imports) {
-    var xURL = window.URL || window.webkitURL;
-    var code = fn.toString();
-    var parts = imports === null || imports === void 0 ? void 0 : imports.map((imp) => imp.toString());
+    let xURL = window.URL || window.webkitURL;
+    let code = fn.toString();
+    let parts = imports === null || imports === void 0 ? void 0 : imports.map((imp) => imp.toString());
     parts.push('(' + code + ').call(this);');
-    var objectUrl = xURL.createObjectURL(new Blob(parts, { type: 'text/javascript' }));
-    var worker = new Worker(objectUrl);
+    let objectUrl = xURL.createObjectURL(new Blob(parts, { type: 'text/javascript' }));
+    let worker = new Worker(objectUrl);
     xURL.revokeObjectURL(objectUrl);
     return worker;
 }
@@ -782,6 +792,8 @@ exports.createWorker = createWorker;
 
 "use strict";
 
+/* eslint-disable max-depth */
+/* eslint-disable complexity */
 /**
  * NetV ForceAtlas2 Iteration
  * =================================
@@ -796,24 +808,61 @@ function iterate(options, NodeMatrix, LinkMatrix) {
     /**
      * Matrices properties accessors.
      */
-    const NODE_X = 0, NODE_Y = 1, NODE_DX = 2, NODE_DY = 3, NODE_OLD_DX = 4, NODE_OLD_DY = 5, NODE_MASS = 6, NODE_CONVERGENCE = 7, NODE_SIZE = 8, NODE_FIXED = 9;
-    const EDGE_SOURCE = 0, EDGE_TARGET = 1, EDGE_WEIGHT = 2;
-    const REGION_NODE = 0, REGION_CENTER_X = 1, REGION_CENTER_Y = 2, REGION_SIZE = 3, REGION_NEXT_SIBLING = 4, REGION_FIRST_CHILD = 5, REGION_MASS = 6, REGION_MASS_CENTER_X = 7, REGION_MASS_CENTER_Y = 8;
+    const NODE_X = 0;
+    const NODE_Y = 1;
+    const NODE_DX = 2;
+    const NODE_DY = 3;
+    const NODE_OLD_DX = 4;
+    const NODE_OLD_DY = 5;
+    const NODE_MASS = 6;
+    const NODE_CONVERGENCE = 7;
+    const NODE_SIZE = 8;
+    const NODE_FIXED = 9;
+    const EDGE_SOURCE = 0;
+    const EDGE_TARGET = 1;
+    const EDGE_WEIGHT = 2;
+    const REGION_NODE = 0;
+    const REGION_CENTER_X = 1;
+    const REGION_CENTER_Y = 2;
+    const REGION_SIZE = 3;
+    const REGION_NEXT_SIBLING = 4;
+    const REGION_FIRST_CHILD = 5;
+    const REGION_MASS = 6;
+    const REGION_MASS_CENTER_X = 7;
+    const REGION_MASS_CENTER_Y = 8;
     const SUBDIVISION_ATTEMPTS = 3;
     /**
      * Constants.
      */
-    const PPN = 10, PPE = 3, PPR = 9;
+    const PPN = 10;
+    const PPE = 3;
+    const PPR = 9;
     const MAX_FORCE = 10;
     // Initializing variables
-    var l, r, n, n1, n2, rn, e, w, g, s;
-    var order = NodeMatrix.length, size = LinkMatrix === null || LinkMatrix === void 0 ? void 0 : LinkMatrix.length;
-    var adjustSizes = options.adjustSizes;
-    var thetaSquared = options.barnesHutTheta * options.barnesHutTheta;
-    var outboundAttCompensation, coefficient, xDist, yDist, ewc, distance, factor;
-    var RegionMatrix = [];
+    let l;
+    let r;
+    let n;
+    let n1;
+    let n2;
+    let rn;
+    let e;
+    let w;
+    let g;
+    let s;
+    let order = NodeMatrix.length;
+    let size = LinkMatrix === null || LinkMatrix === void 0 ? void 0 : LinkMatrix.length;
+    let adjustSizes = options.adjustSizes;
+    let thetaSquared = options.barnesHutTheta * options.barnesHutTheta;
+    let outboundAttCompensation;
+    let coefficient;
+    let xDist;
+    let yDist;
+    let ewc;
+    let distance;
+    let factor;
+    let RegionMatrix = [];
     // 1) Initializing layout data
-    //-----------------------------
+    // -----------------------------
     // Resetting positions & computing max values
     for (n = 0; n < order; n += PPN) {
         NodeMatrix[n + NODE_OLD_DX] = NodeMatrix[n + NODE_DX];
@@ -830,10 +879,16 @@ function iterate(options, NodeMatrix, LinkMatrix) {
         outboundAttCompensation /= order / PPN;
     }
     // 1.bis) Barnes-Hut computation
-    //------------------------------
+    // ------------------------------
     if (options.barnesHutOptimize) {
         // Setting up
-        var minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity, q, q2, subdivisionAttempts;
+        let minX = Infinity;
+        let maxX = -Infinity;
+        let minY = Infinity;
+        let maxY = -Infinity;
+        let q;
+        let q2;
+        let subdivisionAttempts;
         // Computing min and max values
         for (n = 0; n < order; n += PPN) {
             minX = Math.min(minX, NodeMatrix[n + NODE_X]);
@@ -842,7 +897,8 @@ function iterate(options, NodeMatrix, LinkMatrix) {
             maxY = Math.max(maxY, NodeMatrix[n + NODE_Y]);
         }
         // squarify bounds, it's a quadtree
-        var dx = maxX - minX, dy = maxY - minY;
+        let dx = maxX - minX;
+        let dy = maxY - minY;
         if (dx > dy) {
             minY -= (dx - dy) / 2;
             maxY = minY + dx;
@@ -1057,7 +1113,7 @@ function iterate(options, NodeMatrix, LinkMatrix) {
         }
     }
     // 2) Repulsion
-    //--------------
+    // --------------
     // NOTES: adjustSizes = antiCollision & scalingRatio = coefficient
     if (options.barnesHutOptimize) {
         coefficient = options.scalingRatio;
@@ -1078,7 +1134,7 @@ function iterate(options, NodeMatrix, LinkMatrix) {
                         xDist = NodeMatrix[n + NODE_X] - RegionMatrix[r + REGION_MASS_CENTER_X];
                         yDist = NodeMatrix[n + NODE_Y] - RegionMatrix[r + REGION_MASS_CENTER_Y];
                         if (adjustSizes === true) {
-                            //-- Linear Anti-collision Repulsion
+                            // -- Linear Anti-collision Repulsion
                             if (distance > 0) {
                                 factor =
                                     (coefficient *
@@ -1099,7 +1155,7 @@ function iterate(options, NodeMatrix, LinkMatrix) {
                             }
                         }
                         else {
-                            //-- Linear Repulsion
+                            // -- Linear Repulsion
                             if (distance > 0) {
                                 factor =
                                     (coefficient *
@@ -1131,7 +1187,7 @@ function iterate(options, NodeMatrix, LinkMatrix) {
                         yDist = NodeMatrix[n + NODE_Y] - NodeMatrix[rn + NODE_Y];
                         distance = xDist * xDist + yDist * yDist;
                         if (adjustSizes === true) {
-                            //-- Linear Anti-collision Repulsion
+                            // -- Linear Anti-collision Repulsion
                             if (distance > 0) {
                                 factor =
                                     (coefficient *
@@ -1152,7 +1208,7 @@ function iterate(options, NodeMatrix, LinkMatrix) {
                             }
                         }
                         else {
-                            //-- Linear Repulsion
+                            // -- Linear Repulsion
                             if (distance > 0) {
                                 factor =
                                     (coefficient *
@@ -1182,7 +1238,7 @@ function iterate(options, NodeMatrix, LinkMatrix) {
                 xDist = NodeMatrix[n1 + NODE_X] - NodeMatrix[n2 + NODE_X];
                 yDist = NodeMatrix[n1 + NODE_Y] - NodeMatrix[n2 + NODE_Y];
                 if (adjustSizes === true) {
-                    //-- Anticollision Linear Repulsion
+                    // -- Anticollision Linear Repulsion
                     distance =
                         Math.sqrt(xDist * xDist + yDist * yDist) -
                             NodeMatrix[n1 + NODE_SIZE] -
@@ -1214,7 +1270,7 @@ function iterate(options, NodeMatrix, LinkMatrix) {
                     }
                 }
                 else {
-                    //-- Linear Repulsion
+                    // -- Linear Repulsion
                     distance = Math.sqrt(xDist * xDist + yDist * yDist);
                     if (distance > 0) {
                         factor =
@@ -1234,7 +1290,7 @@ function iterate(options, NodeMatrix, LinkMatrix) {
         }
     }
     // 3) Gravity
-    //------------
+    // ------------
     g = options.gravity / options.scalingRatio;
     coefficient = options.scalingRatio;
     for (n = 0; n < order; n += PPN) {
@@ -1244,12 +1300,12 @@ function iterate(options, NodeMatrix, LinkMatrix) {
         yDist = NodeMatrix[n + NODE_Y];
         distance = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
         if (options.strongGravityMode) {
-            //-- Strong gravity
+            // -- Strong gravity
             if (distance > 0)
                 factor = coefficient * NodeMatrix[n + NODE_MASS] * g;
         }
         else {
-            //-- Linear Anti-collision Repulsion n
+            // -- Linear Anti-collision Repulsion n
             if (distance > 0)
                 factor = (coefficient * NodeMatrix[n + NODE_MASS] * g) / distance;
         }
@@ -1258,8 +1314,8 @@ function iterate(options, NodeMatrix, LinkMatrix) {
         NodeMatrix[n + NODE_DY] -= yDist * factor;
     }
     // 4) Attraction
-    //---------------
-    coefficient = 1 * (options.outboundAttractionDistribution ? outboundAttCompensation : 1);
+    // ---------------
+    coefficient = Number(options.outboundAttractionDistribution ? outboundAttCompensation : 1);
     // TODO: simplify distance
     // TODO: coefficient is always used as -c --> optimize?
     for (e = 0; e < size; e += PPE) {
@@ -1279,7 +1335,7 @@ function iterate(options, NodeMatrix, LinkMatrix) {
                 NodeMatrix[n2 + NODE_SIZE]);
             if (options.linLogMode) {
                 if (options.outboundAttractionDistribution) {
-                    //-- LinLog Degree Distributed Anti-collision Attraction
+                    // -- LinLog Degree Distributed Anti-collision Attraction
                     if (distance > 0) {
                         factor =
                             (-coefficient * ewc * Math.log(1 + distance)) /
@@ -1288,7 +1344,7 @@ function iterate(options, NodeMatrix, LinkMatrix) {
                     }
                 }
                 else {
-                    //-- LinLog Anti-collision Attraction
+                    // -- LinLog Anti-collision Attraction
                     if (distance > 0) {
                         factor = (-coefficient * ewc * Math.log(1 + distance)) / distance;
                     }
@@ -1296,13 +1352,13 @@ function iterate(options, NodeMatrix, LinkMatrix) {
             }
             else {
                 if (options.outboundAttractionDistribution) {
-                    //-- Linear Degree Distributed Anti-collision Attraction
+                    // -- Linear Degree Distributed Anti-collision Attraction
                     if (distance > 0) {
                         factor = (-coefficient * ewc) / NodeMatrix[n1 + NODE_MASS];
                     }
                 }
                 else {
-                    //-- Linear Anti-collision Attraction
+                    // -- Linear Anti-collision Attraction
                     if (distance > 0) {
                         factor = -coefficient * ewc;
                     }
@@ -1313,7 +1369,7 @@ function iterate(options, NodeMatrix, LinkMatrix) {
             distance = Math.sqrt(Math.pow(xDist, 2) + Math.pow(yDist, 2));
             if (options.linLogMode) {
                 if (options.outboundAttractionDistribution) {
-                    //-- LinLog Degree Distributed Attraction
+                    // -- LinLog Degree Distributed Attraction
                     if (distance > 0) {
                         factor =
                             (-coefficient * ewc * Math.log(1 + distance)) /
@@ -1322,20 +1378,20 @@ function iterate(options, NodeMatrix, LinkMatrix) {
                     }
                 }
                 else {
-                    //-- LinLog Attraction
+                    // -- LinLog Attraction
                     if (distance > 0)
                         factor = (-coefficient * ewc * Math.log(1 + distance)) / distance;
                 }
             }
             else {
                 if (options.outboundAttractionDistribution) {
-                    //-- Linear Attraction Mass Distributed
+                    // -- Linear Attraction Mass Distributed
                     // NOTE: Distance is set to 1 to override next condition
                     distance = 1;
                     factor = (-coefficient * ewc) / NodeMatrix[n1 + NODE_MASS];
                 }
                 else {
-                    //-- Linear Attraction
+                    // -- Linear Attraction
                     // NOTE: Distance is set to 1 to override next condition
                     distance = 1;
                     factor = -coefficient * ewc;
@@ -1353,8 +1409,13 @@ function iterate(options, NodeMatrix, LinkMatrix) {
         }
     }
     // 5) Apply Forces
-    //-----------------
-    var force, swinging, traction, nodespeed, newX, newY;
+    // -----------------
+    let force;
+    let swinging;
+    let traction;
+    let nodespeed;
+    let newX;
+    let newY;
     // MATH: sqrt and square distances
     if (adjustSizes === true) {
         for (n = 0; n < order; n += PPN) {
@@ -1436,8 +1497,6 @@ exports.default = iterate;
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return worker; });
 /* eslint-disable no-undef */
-/* eslint-disable one-var */
-/* eslint-disable no-var */
 /**
  * NetV ForceAtlas2 Layout Webworker
  * ========================================
@@ -1446,10 +1505,12 @@ __webpack_require__.r(__webpack_exports__);
  */
 
 function worker() {
-    var NODES, LINKS, SETTINGS
+    let NODES
+    let LINKS
+    let SETTINGS
 
     self.addEventListener('message', function (event) {
-        var data = event.data
+        let data = event.data
 
         if (data.nodes) NODES = new Float32Array(data.nodes)
 

@@ -10,8 +10,8 @@ import { Data } from 'src/interfaces'
 /**
  * Constants.
  */
-var PPN = 10,
-    PPE = 3
+const PPN = 10
+const PPE = 3
 
 /**
  * Very simple Object.assign-like function.
@@ -21,22 +21,22 @@ var PPN = 10,
  * @return {object}
  */
 export function assign(target, ...object) {
-    target = target || {}
-
-    var objects = Array.prototype.slice.call(arguments).slice(1),
-        i,
-        k,
-        l
+    const objects = Array.prototype.slice.call(arguments).slice(1)
+    let i
+    let k
+    let l
 
     for (i = 0, l = objects.length; i < l; i++) {
         if (!objects[i]) continue
 
+        // eslint-disable-next-line guard-for-in
         for (k in objects[i]) target[k] = objects[i][k]
     }
 
     return target
 }
 
+// eslint-disable-next-line complexity
 export function validateSettings(settings) {
     if ('linLogMode' in settings && typeof settings.linLogMode !== 'boolean')
         return { message: 'the `linLogMode` setting should be a boolean.' }
@@ -87,13 +87,13 @@ export function validateSettings(settings) {
 }
 
 export function graphToByteArrays(data: Data) {
-    var order = data.nodes.length,
-        size = data.links.length,
-        index = {},
-        j
+    let order = data.nodes.length
+    let size = data.links.length
+    let index = {}
+    let j
 
-    var NodeMatrix = new Float32Array(order * PPN),
-        LinkMatrix = new Float32Array(size * PPE)
+    let NodeMatrix = new Float32Array(order * PPN)
+    let LinkMatrix = new Float32Array(size * PPE)
 
     // Iterate through nodes
     j = 0
@@ -132,7 +132,7 @@ export function graphToByteArrays(data: Data) {
 }
 
 export function assignLayoutChanges(data: Data, NodeMatrix: Float32Array) {
-    var i = 0
+    let i = 0
     data.nodes.forEach(function (node) {
         node.x = NodeMatrix[i]
         node.y = NodeMatrix[i + 1]
@@ -144,12 +144,12 @@ export function assignLayoutChanges(data: Data, NodeMatrix: Float32Array) {
 }
 
 export function createWorker(fn: Function, imports?: Function[]): Worker {
-    var xURL = window.URL || window.webkitURL
-    var code = fn.toString()
-    var parts = imports?.map((imp) => imp.toString())
+    let xURL = window.URL || window.webkitURL
+    let code = fn.toString()
+    let parts = imports?.map((imp) => imp.toString())
     parts.push('(' + code + ').call(this);')
-    var objectUrl = xURL.createObjectURL(new Blob(parts, { type: 'text/javascript' }))
-    var worker = new Worker(objectUrl)
+    let objectUrl = xURL.createObjectURL(new Blob(parts, { type: 'text/javascript' }))
+    let worker = new Worker(objectUrl)
     xURL.revokeObjectURL(objectUrl)
 
     return worker

@@ -1,6 +1,4 @@
 /* eslint-disable no-undef */
-/* eslint-disable one-var */
-/* eslint-disable no-var */
 /**
  * NetV ForceAtlas2 Layout Webworker
  * ========================================
@@ -9,10 +7,12 @@
  */
 
 export default function worker() {
-    var NODES, LINKS, SETTINGS
+    let NODES
+    let LINKS
+    let SETTINGS
 
     self.addEventListener('message', function (event) {
-        var data = event.data
+        let data = event.data
 
         if (data.nodes) NODES = new Float32Array(data.nodes)
 
