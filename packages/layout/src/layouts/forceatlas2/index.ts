@@ -18,7 +18,7 @@ interface ForceAtlas2Param {
     barnesHutOptimize?: boolean
     barnesHutTheta?: number
 }
-export default class ForceAtlas2Layout implements Layout {
+export default class ForceAtlas2 implements Layout {
     private _data: Data
     private _param: ForceAtlas2Param = {
         iterations: 1000,
