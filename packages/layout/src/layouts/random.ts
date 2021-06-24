@@ -36,7 +36,7 @@ class Random implements Layout {
         else return this._data
     }
     public parameters(param?: RandomParam) {
-        if (param) this._param = param
+        if (param) this._param = { ...this._param, ...param }
         else return this._param
     }
     public onStop(callback: Callback) {
