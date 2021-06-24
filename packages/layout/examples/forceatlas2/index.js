@@ -77,6 +77,9 @@ document.getElementById("resume").onclick = () => {
 document.getElementById("stop").onclick = () => {
     FA2Layout.stop();
 }
+document.getElementById("restart").onclick = () => {
+    FA2Layout.restart();
+}
 function Switcher(id) {
     let DOMElement = document.createElement("button")
     DOMElement.id = id + "Switcher"

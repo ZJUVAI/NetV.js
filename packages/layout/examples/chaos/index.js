@@ -49,3 +49,6 @@ document.getElementById("resume").onclick = () => {
 document.getElementById("stop").onclick = () => {
     chaosLayout.stop();
 }
+document.getElementById("restart").onclick = () => {
+    chaosLayout.restart();
+}
