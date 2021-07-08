@@ -14,7 +14,7 @@ Homepage: http://netv.zjuvag.org/
 
 ## Usage
 
-Download NetV.js from releases: https://github.com/ZJUVAG/NetV.js/releases
+Download NetV.js from releases: https://github.com/ZJUVAI/NetV.js/releases
 
 Or import from CDN: https://unpkg.com/netv/build/NetV.min.js
 
@@ -48,7 +48,7 @@ netv.draw()
 
 ## Contribution
 
-Feel freely submitting issues and pull requests. You may check our [contribution guide](https://github.com/ZJUVAG/NetV.js/blob/dev/docs/development-guide.md).
+Feel freely submitting issues and pull requests. You may check our [contribution guide](https://github.com/ZJUVAI/NetV.js/blob/dev/docs/development-guide.md).
 
 ## Team
 
