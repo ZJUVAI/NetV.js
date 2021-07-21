@@ -4,6 +4,11 @@
  */
 const netv = new NetV({
     container: document.getElementById('main'),
+    node: {
+        style: {
+            r: 8
+        }
+    },
     link: {
         style: {
             strokeWidth: 1
@@ -37,17 +42,16 @@ netv.draw()
 netv.on('pan', () => {})
 netv.on('zoom', () => {})
 
-const lasso = new Lasso(netv, {
+const boxSelection = new BoxSelection(netv, {
     enable: true,
-    multiSelectKey: 'Shift',
-    pathStyle: {
+    boxStyle: {
         'stroke-dasharray': [5, 5]
     }
 })
 netv.nodes().forEach((node) => {
     node.oriFill = node.fill()
 })
-lasso.onSelected((selectedItems) => {
+boxSelection.onSelected((selectedItems) => {
     netv.nodes().forEach((node) => {
         node.fill({
             r: 0.5,
