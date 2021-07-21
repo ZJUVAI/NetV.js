@@ -17,6 +17,6 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "netv-core": "file:../core"
+        "netv-core": "^1.1.4"
     }
 }

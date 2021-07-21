@@ -49,10 +49,16 @@ netv.draw()
 ## Develop Guide
 
 ```bash
-$ npm install
-
-# lerna bootstrap
+# start and install dependencies for all packages
 $ npm run bootstrap
+
+# add some local package as one dependency of another:
+# first install lerna as a global package
+$ npm install lerna -g
+# second: lerna add local-package-1-name --scope=local-package-2-name
+# e.g. add packages/core to packages/netv
+# their names are defined in their corresponding "package.json"s
+$ lerna add netv-core --scope=netv
 
 # build the packages
 $ npm run build:all
