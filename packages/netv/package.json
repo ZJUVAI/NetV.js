@@ -10,9 +10,7 @@
     "scripts": {
         "build": "webpack --config webpack.prod.js",
         "watch": "webpack --config webpack.dev.js",
-        "lint": "eslint --ext .ts \"./src\"",
-        "build:benchmarks": "webpack --env.watch=false --config benchmarks/webpack.config.js",
-        "watch:benchmarks": "webpack --env.watch=true --config benchmarks/webpack.config.js"
+        "lint": "eslint --ext .ts \"./src\""
     },
     "author": "",
     "license": "MIT",
