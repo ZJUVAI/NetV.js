@@ -1,0 +1,16 @@
+{
+    "name": "netv-label",
+    "version": "1.0.2",
+    "description": "Label plugin for NetV.js",
+    "main": "build/netv-label.js",
+    "directories": {
+        "example": "example"
+    },
+    "scripts": {
+        "build": "webpack --config webpack.prod.js",
+        "watch": "webpack --config webpack.dev.js",
+        "lint": "eslint --ext \"./netv-box-selection.js\""
+    },
+    "author": "",
+    "license": "MIT"
+}

@@ -159,7 +159,7 @@ class Random {
     }
     parameters(param) {
         if (param)
-            this._param = param;
+            this._param = { ...this._param, ...param };
         else
             return this._param;
     }
@@ -218,7 +218,7 @@ class RadialTree {
     }
     parameters(param) {
         if (param)
-            this._param = param;
+            this._param = { ...this._param, ...param };
         else
             return this._param;
     }

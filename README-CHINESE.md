@@ -49,10 +49,16 @@ netv.draw()
 ## 开发指南
 
 ```bash
-$ npm install
-
-# lerna bootstrap
+# 启动、为所有包安装依赖
 $ npm run bootstrap
+
+# 将某个本地的package安装为另一个package的依赖:
+# 第一步：需要全局安装lerna这个库
+$ npm install lerna -g
+# 第二步: lerna add local-package-1-name --scope=local-package-2-name
+# e.g. 将 packages/core 安装为 packages/netv 的依赖
+# 它们的名字已经在他们对应的 "package.json" 中定义了
+$ lerna add netv-core --scope=netv
 
 # 构建所有包
 $ npm run build:all

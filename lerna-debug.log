@@ -1,0 +1,13 @@
+0 silly argv { _: [ 'add' ],
+0 silly argv   scope: 'netv',
+0 silly argv   globs: [],
+0 silly argv   lernaVersion: '4.0.0',
+0 silly argv   '$0':
+0 silly argv    'C:\\Users\\Jackie\\AppData\\Roaming\\npm\\node_modules\\lerna\\cli.js',
+0 silly argv   pkg: 'packages/core' }
+1 notice cli v4.0.0
+2 verbose rootPath D:\Repositories\NetV.js
+3 error Error: command failed
+3 error     at ChildProcess.proc.on (C:\Users\Jackie\AppData\Roaming\npm\node_modules\lerna\node_modules\@npmcli\promise-spawn\index.js:64:27)
+3 error     at ChildProcess.emit (events.js:198:13)
+3 error     at maybeClose (internal/child_process.js:982:16)
