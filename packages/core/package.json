@@ -2,6 +2,7 @@
     "name": "netv-core",
     "version": "1.1.4",
     "main": "build/netv-core.js",
+    "private": true,
     "files": [
         "src",
         "build/*.js"

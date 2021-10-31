@@ -1,13 +1,30 @@
-0 silly argv { _: [ 'add' ],
-0 silly argv   scope: 'netv',
-0 silly argv   globs: [],
+0 silly argv {
+0 silly argv   _: [ 'version' ],
 0 silly argv   lernaVersion: '4.0.0',
-0 silly argv   '$0':
-0 silly argv    'C:\\Users\\Jackie\\AppData\\Roaming\\npm\\node_modules\\lerna\\cli.js',
-0 silly argv   pkg: 'packages/core' }
+0 silly argv   '$0': '..\\..\\AppData\\Roaming\\npm\\node_modules\\lerna\\cli.js',
+0 silly argv   bump: 'patch'
+0 silly argv }
 1 notice cli v4.0.0
-2 verbose rootPath D:\Repositories\NetV.js
-3 error Error: command failed
-3 error     at ChildProcess.proc.on (C:\Users\Jackie\AppData\Roaming\npm\node_modules\lerna\node_modules\@npmcli\promise-spawn\index.js:64:27)
-3 error     at ChildProcess.emit (events.js:198:13)
-3 error     at maybeClose (internal/child_process.js:982:16)
+2 verbose rootPath C:\Users\Administrator\Repository\NetV.js
+3 info versioning independent
+4 silly isAnythingCommitted
+5 verbose isAnythingCommitted 1
+6 silly getCurrentBranch
+7 verbose currentBranch dev
+8 silly remoteBranchExists
+9 silly isBehindUpstream
+10 error Error: Command failed with exit code 1: git remote update
+10 error ssh: connect to host git.zjvis.org port 22: Connection timed out
+10 error fatal: Could not read from remote repository.
+10 error
+10 error Please make sure you have the correct access rights
+10 error and the repository exists.
+10 error error: Could not fetch zjvis
+10 error Fetching origin
+10 error Fetching zjvis
+10 error     at makeError (C:\Users\Administrator\Repository\NetV.js\node_modules\execa\lib\error.js:60:11)
+10 error     at Function.module.exports.sync (C:\Users\Administrator\Repository\NetV.js\node_modules\execa\index.js:194:17)
+10 error     at Object.execSync (C:\Users\Administrator\Repository\NetV.js\node_modules\@lerna\child-process\index.js:39:16)
+10 error     at updateRemote (C:\Users\Administrator\Repository\NetV.js\node_modules\@lerna\version\lib\is-behind-upstream.js:34:16)
+10 error     at isBehindUpstream (C:\Users\Administrator\Repository\NetV.js\node_modules\@lerna\version\lib\is-behind-upstream.js:16:3)
+10 error     at VersionCommand.initialize (C:\Users\Administrator\Repository\NetV.js\node_modules\@lerna\version\index.js:153:9)

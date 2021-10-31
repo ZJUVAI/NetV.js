@@ -15,5 +15,10 @@
     "license": "MIT",
     "dependencies": {
         "robust-point-in-polygon": "^1.0.3"
-    }
+    },
+    "homepage": "https://github.com/ZJUVAI/NetV.js/tree/dev/packages/lasso-selection",
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    },
+    "unpkg": "build/netv-lasso-selection.js"
 }

@@ -12,5 +12,10 @@
         "lint": "eslint --ext \"./netv-box-selection.js\""
     },
     "author": "",
-    "license": "MIT"
+    "license": "MIT",
+    "homepage": "https://github.com/ZJUVAI/NetV.js/tree/dev/packages/box-selection",
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    },
+    "unpkg": "build/netv-box-selection.js"
 }

@@ -1,6 +1,7 @@
 {
     "name": "netv-layout",
     "version": "1.0.0",
+    "private": true,
     "description": "",
     "main": "src/index.ts",
     "scripts": {
@@ -12,5 +13,10 @@
     "license": "MIT",
     "dependencies": {
         "d3": "^6.7.0"
-    }
+    },
+    "homepage": "https://github.com/ZJUVAI/NetV.js/tree/dev/packages/layout",
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    },
+    "unpkg": "build/netv-layout.js"
 }

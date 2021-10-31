@@ -16,5 +16,10 @@
     "license": "MIT",
     "dependencies": {
         "netv-core": "^1.1.4"
-    }
+    },
+    "homepage": "https://github.com/ZJUVAI/NetV.js",
+    "publishConfig": {
+        "registry": "https://registry.npmjs.org/"
+    },
+    "unpkg": "build/NetV.js"
 }
