@@ -1,0 +1,16 @@
+{
+    "name": "netv-layout",
+    "version": "1.0.0",
+    "description": "",
+    "main": "src/index.ts",
+    "scripts": {
+        "build": "webpack --config webpack.prod.js",
+        "watch": "webpack --config webpack.dev.js",
+        "lint": "eslint --ext .ts \"./src\""
+    },
+    "author": "",
+    "license": "MIT",
+    "dependencies": {
+        "d3": "^6.7.0"
+    }
+}

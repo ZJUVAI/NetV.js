@@ -1,9 +1,10 @@
 .DS_Store
-.vscode
-build/stats.json
-node_modules
 npm-debug.log
-test/browser/data
 examples/data
-benchmarks/stats.json
-benchmarks/bundle.js
+
+node_modules/
+
+packages/*/build/stats.json
+
+packages/core/benchmarks/stats.json
+packages/core/benchmarks/bundle.js

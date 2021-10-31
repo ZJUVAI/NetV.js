@@ -46,9 +46,23 @@ netv.data(testData)
 netv.draw()
 ```
 
-## Contribution
+## Develop Guide
 
-Feel freely submitting issues and pull requests. You may check our [contribution guide](https://github.com/ZJUVAI/NetV.js/blob/dev/docs/development-guide.md).
+```bash
+$ npm install
+
+# lerna bootstrap
+$ npm run bootstrap
+
+# build the packages
+$ npm run build:all
+
+# if you wanna watch one of the packages, e.g. packages/core
+$ cd ./packages/core
+$ npm run watch
+```
+
+Feel freely submitting issues and pull requests. You may check our [contribution guide](./docs/development-guide.md).
 
 ## Team
 

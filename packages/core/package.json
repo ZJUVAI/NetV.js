@@ -1,0 +1,21 @@
+{
+    "name": "netv-core",
+    "version": "1.1.4",
+    "main": "build/netv-core.js",
+    "files": [
+        "src",
+        "build/*.js"
+    ],
+    "author": "",
+    "license": "MIT",
+    "scripts": {
+        "build": "webpack --config webpack.prod.js",
+        "watch": "webpack --config webpack.dev.js",
+        "lint": "eslint --ext .ts \"./src\"",
+        "build:benchmarks": "webpack --env.watch=false --config benchmarks/webpack.config.js",
+        "watch:benchmarks": "webpack --env.watch=true --config benchmarks/webpack.config.js"
+    },
+    "devDependencies": {
+        "raw-loader": "^4.0.1"
+    }
+}

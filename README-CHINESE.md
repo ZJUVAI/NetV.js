@@ -46,9 +46,23 @@ netv.data(testData)
 netv.draw()
 ```
 
-## 贡献
+## 开发指南
 
-可以随时向我们提 issuse 或者提交贡献代码，具体细节可以查看 [开发指南](https://github.com/ZJUVAG/NetV.js/blob/dev/docs/development-guide-chinese.md).
+```bash
+$ npm install
+
+# lerna bootstrap
+$ npm run bootstrap
+
+# 构建所有包
+$ npm run build:all
+
+# 只构建一个包，比如packages/core
+$ cd ./packages/core
+$ npm run watch
+```
+
+可以随时向我们提 issuse 或者提交贡献代码，具体细节可以查看 [开发指南](./docs/development-guide-chinese.md).
 
 ## 团队
 

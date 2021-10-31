@@ -6,14 +6,14 @@ module.exports = merge(common, {
     mode: 'development',
     devtool: 'inline-source-map',
     output: {
-        filename: 'NetV.js',
+        filename: 'netv-core.js',
         libraryTarget: 'umd',
-        path: path.resolve(__dirname, 'build'),
+        path: path.resolve(__dirname, 'build')
     },
     watch: true,
     watchOptions: {
         ignored: /node_modules/,
         aggregateTimeout: 300,
-        poll: 1000,
-    },
+        poll: 1000
+    }
 })
