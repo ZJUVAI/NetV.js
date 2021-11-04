@@ -1,8 +1,8 @@
 {
-    "name": "netv-label",
+    "name": "@netv/label",
     "version": "1.0.2",
     "description": "Label plugin for NetV.js",
-    "main": "build/netv-label.js",
+    "main": "build/label.js",
     "directories": {
         "example": "example"
     },
@@ -17,5 +17,5 @@
     "publishConfig": {
         "registry": "https://registry.npmjs.org/"
     },
-    "unpkg": "build/netv-label.js"
+    "unpkg": "build/label.js"
 }

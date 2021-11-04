@@ -1,5 +1,5 @@
 {
-    "name": "netv-lasso-selection",
+    "name": "@netv/lasso-selection",
     "version": "1.0.10",
     "description": "lasso plugin for NetV.js",
     "main": "build/netv-lasso-selection.js",
@@ -9,7 +9,7 @@
     "scripts": {
         "build": "webpack --config webpack.prod.js",
         "watch": "webpack --config webpack.dev.js",
-        "lint": "eslint --ext \"./netv-lasso-selection.js\""
+        "lint": "eslint --ext \"./lasso-selection.js\""
     },
     "author": "",
     "license": "MIT",
@@ -20,5 +20,5 @@
     "publishConfig": {
         "registry": "https://registry.npmjs.org/"
     },
-    "unpkg": "build/netv-lasso-selection.js"
+    "unpkg": "build/lasso-selection.js"
 }

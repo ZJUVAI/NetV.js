@@ -6,8 +6,8 @@ const common = require('./webpack.common.js')
 module.exports = merge(common, {
     mode: 'production',
     entry: {
-        'netv-layout': './src/index.ts',
-        'netv-layout.min': './src/index.ts'
+        layout: './src/index.ts',
+        'layout.min': './src/index.ts'
     },
     devtool: 'source-map',
     output: {

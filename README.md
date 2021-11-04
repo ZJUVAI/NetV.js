@@ -67,7 +67,7 @@ $ npm install lerna -g
 # second: lerna add local-package-1-name --scope=local-package-2-name
 # e.g. add packages/core to packages/netv
 # their names are defined in their corresponding "package.json"s
-$ lerna add netv-core --scope=netv
+$ lerna add @netv/core --scope=netv
 ```
 
 Feel freely submitting issues and pull requests. You may check our [contribution guide](./docs/development-guide.md).

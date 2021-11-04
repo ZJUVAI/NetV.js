@@ -1,5 +1,5 @@
-import NetV from "netv-core"
+import NetV from '@netv/core'
 
-NetV.version = "1.1.4"
+NetV.version = '1.1.5'
 
 export default NetV

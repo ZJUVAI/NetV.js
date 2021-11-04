@@ -6,7 +6,7 @@ module.exports = merge(common, {
     mode: 'development',
     devtool: 'inline-source-map',
     output: {
-        filename: 'netv-label.js',
+        filename: 'label.js',
         libraryTarget: 'umd',
         path: path.resolve(__dirname, 'build')
     },

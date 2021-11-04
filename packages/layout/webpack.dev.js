@@ -6,7 +6,7 @@ module.exports = merge(common, {
     mode: 'development',
     devtool: 'inline-source-map',
     output: {
-        filename: 'netv-layout.js',
+        filename: 'layout.js',
         libraryTarget: 'umd',
         path: path.resolve(__dirname, 'build')
     },

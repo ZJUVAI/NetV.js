@@ -6,8 +6,8 @@ const common = require('./webpack.common.js')
 module.exports = merge(common, {
     mode: 'production',
     entry: {
-        'netv-core': './src/index.ts',
-        'netv-core.min': './src/index.ts'
+        core: './src/index.ts',
+        'core.min': './src/index.ts'
     },
     devtool: 'source-map',
     output: {

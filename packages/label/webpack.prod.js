@@ -6,8 +6,8 @@ const common = require('./webpack.common.js')
 module.exports = merge(common, {
     mode: 'production',
     entry: {
-        'netv-label': './netv-label.js',
-        'netv-label.min': './netv-label.js'
+        label: './label.js',
+        'label.min': './label.js'
     },
     devtool: 'source-map',
     output: {

@@ -6,8 +6,8 @@ const common = require('./webpack.common.js')
 module.exports = merge(common, {
     mode: 'production',
     entry: {
-        'netv-lasso-selection': './netv-lasso-selection.js',
-        'netv-lasso-selection.min': './netv-lasso-selection.js'
+        'lasso-selection': './lasso-selection.js',
+        'lasso-selection.min': './lasso-selection.js'
     },
     devtool: 'source-map',
     output: {

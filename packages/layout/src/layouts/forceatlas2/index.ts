@@ -53,7 +53,7 @@ export default class ForceAtlas2 implements Layout {
     private _stopped = false
     public start() {
         if (this._stopped) {
-            throw new Error('netv-layout-forceatlas2/worker.start: layout was stopped.')
+            throw new Error('@netv/layout/forceatlas2/worker.start: layout was stopped.')
         }
         if (this._running) return this
         this._running = true
@@ -187,14 +187,14 @@ export default class ForceAtlas2 implements Layout {
 
         if (iterations <= 0)
             throw new Error(
-                'netv-layout-forceatlas2: you should provide a positive number of iterations.'
+                '@netv/layout/forceatlas2: you should provide a positive number of iterations.'
             )
 
         // Validating settings
         let settings = helpers.assign({}, this._param)
         let validationError = helpers.validateSettings(settings)
 
-        if (validationError) throw new Error('netv-layout-forceatlas2: ' + validationError.message)
+        if (validationError) throw new Error('@netv/layout/forceatlas2: ' + validationError.message)
         // Building matrices
         let matrices = helpers.graphToByteArrays(this._data)
         // Iterating

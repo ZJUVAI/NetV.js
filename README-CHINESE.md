@@ -58,7 +58,7 @@ $ npm install lerna -g
 # 第二步: lerna add local-package-1-name --scope=local-package-2-name
 # e.g. 将 packages/core 安装为 packages/netv 的依赖
 # 它们的名字已经在他们对应的 "package.json" 中定义了
-$ lerna add netv-core --scope=netv
+$ lerna add @netv/core --scope=netv
 
 # 构建所有包
 $ npm run build:all

@@ -1,8 +1,8 @@
 {
-    "name": "netv-box-selection",
+    "name": "@netv/box-selection",
     "version": "1.0.6",
     "description": "box selection plugin for NetV.js",
-    "main": "build/netv-box-selection.js",
+    "main": "build/box-selection.js",
     "directories": {
         "example": "example"
     },

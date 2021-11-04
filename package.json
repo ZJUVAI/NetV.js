@@ -12,6 +12,7 @@
         "babel-loader": "^8.2.2",
         "eslint": "^7.14.0",
         "eslint-config-alloy": "^3.7.2",
+        "git-cz": "^4.8.0",
         "lerna": "^4.0.0",
         "ts-loader": "^7.0.4",
         "typescript": "^3.9.3",
@@ -44,5 +45,10 @@
         "build:label": "cd ./packages/label && npm run build",
         "watch:label": "cd ./packages/label && npm run watch",
         "lint:label": "cd ./packages/label && npm run lint"
+    },
+    "config": {
+        "commitizen": {
+            "path": "./node_modules/git-cz"
+        }
     }
 }
