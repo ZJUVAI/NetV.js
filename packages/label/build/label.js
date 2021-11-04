@@ -243,4 +243,4 @@ Label.template = {
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=netv-label.js.map
+//# sourceMappingURL=label.js.map

@@ -248,4 +248,4 @@ class BoxSelection {
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=netv-box-selection.js.map
+//# sourceMappingURL=box-selection.js.map

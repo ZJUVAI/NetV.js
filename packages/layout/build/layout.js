@@ -533,7 +533,7 @@ class ForceAtlas2 {
     }
     start() {
         if (this._stopped) {
-            throw new Error('netv-layout-forceatlas2/worker.start: layout was stopped.');
+            throw new Error('@netv/layout/forceatlas2/worker.start: layout was stopped.');
         }
         if (this._running)
             return this;
@@ -650,12 +650,12 @@ class ForceAtlas2 {
     synchronousLayout() {
         let iterations = this._param.iterations;
         if (iterations <= 0)
-            throw new Error('netv-layout-forceatlas2: you should provide a positive number of iterations.');
+            throw new Error('@netv/layout/forceatlas2: you should provide a positive number of iterations.');
         // Validating settings
         let settings = helpers.assign({}, this._param);
         let validationError = helpers.validateSettings(settings);
         if (validationError)
-            throw new Error('netv-layout-forceatlas2: ' + validationError.message);
+            throw new Error('@netv/layout/forceatlas2: ' + validationError.message);
         // Building matrices
         let matrices = helpers.graphToByteArrays(this._data);
         // Iterating
@@ -23433,4 +23433,4 @@ function defaultConstrain(transform, extent, translateExtent) {
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=netv-layout.js.map
+//# sourceMappingURL=layout.js.map

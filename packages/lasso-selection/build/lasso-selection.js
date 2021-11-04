@@ -441,39 +441,81 @@ var EPSILON     = 1.1102230246251565e-16
 var ERRBOUND3   = (3.0 + 16.0 * EPSILON) * EPSILON
 var ERRBOUND4   = (7.0 + 56.0 * EPSILON) * EPSILON
 
-function orientation_3(sum, prod, scale, sub) {
-  return function orientation3Exact(m0, m1, m2) {
-    var p = sum(sum(prod(m1[1], m2[0]), prod(-m2[1], m1[0])), sum(prod(m0[1], m1[0]), prod(-m1[1], m0[0])))
-    var n = sum(prod(m0[1], m2[0]), prod(-m2[1], m0[0]))
-    var d = sub(p, n)
-    return d[d.length - 1]
+function cofactor(m, c) {
+  var result = new Array(m.length-1)
+  for(var i=1; i<m.length; ++i) {
+    var r = result[i-1] = new Array(m.length-1)
+    for(var j=0,k=0; j<m.length; ++j) {
+      if(j === c) {
+        continue
+      }
+      r[k++] = m[i][j]
+    }
+  }
+  return result
+}
+
+function matrix(n) {
+  var result = new Array(n)
+  for(var i=0; i<n; ++i) {
+    result[i] = new Array(n)
+    for(var j=0; j<n; ++j) {
+      result[i][j] = ["m", j, "[", (n-i-1), "]"].join("")
+    }
+  }
+  return result
+}
+
+function sign(n) {
+  if(n & 1) {
+    return "-"
+  }
+  return ""
+}
+
+function generateSum(expr) {
+  if(expr.length === 1) {
+    return expr[0]
+  } else if(expr.length === 2) {
+    return ["sum(", expr[0], ",", expr[1], ")"].join("")
+  } else {
+    var m = expr.length>>1
+    return ["sum(", generateSum(expr.slice(0, m)), ",", generateSum(expr.slice(m)), ")"].join("")
   }
 }
 
-function orientation_4(sum, prod, scale, sub) {
-  return function orientation4Exact(m0, m1, m2, m3) {
-    var p = sum(sum(scale(sum(prod(m2[1], m3[0]), prod(-m3[1], m2[0])), m1[2]), sum(scale(sum(prod(m1[1], m3[0]), prod(-m3[1], m1[0])), -m2[2]), scale(sum(prod(m1[1], m2[0]), prod(-m2[1], m1[0])), m3[2]))), sum(scale(sum(prod(m1[1], m3[0]), prod(-m3[1], m1[0])), m0[2]), sum(scale(sum(prod(m0[1], m3[0]), prod(-m3[1], m0[0])), -m1[2]), scale(sum(prod(m0[1], m1[0]), prod(-m1[1], m0[0])), m3[2]))))
-    var n = sum(sum(scale(sum(prod(m2[1], m3[0]), prod(-m3[1], m2[0])), m0[2]), sum(scale(sum(prod(m0[1], m3[0]), prod(-m3[1], m0[0])), -m2[2]), scale(sum(prod(m0[1], m2[0]), prod(-m2[1], m0[0])), m3[2]))), sum(scale(sum(prod(m1[1], m2[0]), prod(-m2[1], m1[0])), m0[2]), sum(scale(sum(prod(m0[1], m2[0]), prod(-m2[1], m0[0])), -m1[2]), scale(sum(prod(m0[1], m1[0]), prod(-m1[1], m0[0])), m2[2]))))
-    var d = sub(p, n)
-    return d[d.length - 1]
-  }
-}
-
-function orientation_5(sum, prod, scale, sub) {
-  return function orientation5Exact(m0, m1, m2, m3, m4) {
-    var p = sum(sum(sum(scale(sum(scale(sum(prod(m3[1], m4[0]), prod(-m4[1], m3[0])), m2[2]), sum(scale(sum(prod(m2[1], m4[0]), prod(-m4[1], m2[0])), -m3[2]), scale(sum(prod(m2[1], m3[0]), prod(-m3[1], m2[0])), m4[2]))), m1[3]), sum(scale(sum(scale(sum(prod(m3[1], m4[0]), prod(-m4[1], m3[0])), m1[2]), sum(scale(sum(prod(m1[1], m4[0]), prod(-m4[1], m1[0])), -m3[2]), scale(sum(prod(m1[1], m3[0]), prod(-m3[1], m1[0])), m4[2]))), -m2[3]), scale(sum(scale(sum(prod(m2[1], m4[0]), prod(-m4[1], m2[0])), m1[2]), sum(scale(sum(prod(m1[1], m4[0]), prod(-m4[1], m1[0])), -m2[2]), scale(sum(prod(m1[1], m2[0]), prod(-m2[1], m1[0])), m4[2]))), m3[3]))), sum(scale(sum(scale(sum(prod(m2[1], m3[0]), prod(-m3[1], m2[0])), m1[2]), sum(scale(sum(prod(m1[1], m3[0]), prod(-m3[1], m1[0])), -m2[2]), scale(sum(prod(m1[1], m2[0]), prod(-m2[1], m1[0])), m3[2]))), -m4[3]), sum(scale(sum(scale(sum(prod(m3[1], m4[0]), prod(-m4[1], m3[0])), m1[2]), sum(scale(sum(prod(m1[1], m4[0]), prod(-m4[1], m1[0])), -m3[2]), scale(sum(prod(m1[1], m3[0]), prod(-m3[1], m1[0])), m4[2]))), m0[3]), scale(sum(scale(sum(prod(m3[1], m4[0]), prod(-m4[1], m3[0])), m0[2]), sum(scale(sum(prod(m0[1], m4[0]), prod(-m4[1], m0[0])), -m3[2]), scale(sum(prod(m0[1], m3[0]), prod(-m3[1], m0[0])), m4[2]))), -m1[3])))), sum(sum(scale(sum(scale(sum(prod(m1[1], m4[0]), prod(-m4[1], m1[0])), m0[2]), sum(scale(sum(prod(m0[1], m4[0]), prod(-m4[1], m0[0])), -m1[2]), scale(sum(prod(m0[1], m1[0]), prod(-m1[1], m0[0])), m4[2]))), m3[3]), sum(scale(sum(scale(sum(prod(m1[1], m3[0]), prod(-m3[1], m1[0])), m0[2]), sum(scale(sum(prod(m0[1], m3[0]), prod(-m3[1], m0[0])), -m1[2]), scale(sum(prod(m0[1], m1[0]), prod(-m1[1], m0[0])), m3[2]))), -m4[3]), scale(sum(scale(sum(prod(m2[1], m3[0]), prod(-m3[1], m2[0])), m1[2]), sum(scale(sum(prod(m1[1], m3[0]), prod(-m3[1], m1[0])), -m2[2]), scale(sum(prod(m1[1], m2[0]), prod(-m2[1], m1[0])), m3[2]))), m0[3]))), sum(scale(sum(scale(sum(prod(m2[1], m3[0]), prod(-m3[1], m2[0])), m0[2]), sum(scale(sum(prod(m0[1], m3[0]), prod(-m3[1], m0[0])), -m2[2]), scale(sum(prod(m0[1], m2[0]), prod(-m2[1], m0[0])), m3[2]))), -m1[3]), sum(scale(sum(scale(sum(prod(m1[1], m3[0]), prod(-m3[1], m1[0])), m0[2]), sum(scale(sum(prod(m0[1], m3[0]), prod(-m3[1], m0[0])), -m1[2]), scale(sum(prod(m0[1], m1[0]), prod(-m1[1], m0[0])), m3[2]))), m2[3]), scale(sum(scale(sum(prod(m1[1], m2[0]), prod(-m2[1], m1[0])), m0[2]), sum(scale(sum(prod(m0[1], m2[0]), prod(-m2[1], m0[0])), -m1[2]), scale(sum(prod(m0[1], m1[0]), prod(-m1[1], m0[0])), m2[2]))), -m3[3])))))
-    var n = sum(sum(sum(scale(sum(scale(sum(prod(m3[1], m4[0]), prod(-m4[1], m3[0])), m2[2]), sum(scale(sum(prod(m2[1], m4[0]), prod(-m4[1], m2[0])), -m3[2]), scale(sum(prod(m2[1], m3[0]), prod(-m3[1], m2[0])), m4[2]))), m0[3]), scale(sum(scale(sum(prod(m3[1], m4[0]), prod(-m4[1], m3[0])), m0[2]), sum(scale(sum(prod(m0[1], m4[0]), prod(-m4[1], m0[0])), -m3[2]), scale(sum(prod(m0[1], m3[0]), prod(-m3[1], m0[0])), m4[2]))), -m2[3])), sum(scale(sum(scale(sum(prod(m2[1], m4[0]), prod(-m4[1], m2[0])), m0[2]), sum(scale(sum(prod(m0[1], m4[0]), prod(-m4[1], m0[0])), -m2[2]), scale(sum(prod(m0[1], m2[0]), prod(-m2[1], m0[0])), m4[2]))), m3[3]), scale(sum(scale(sum(prod(m2[1], m3[0]), prod(-m3[1], m2[0])), m0[2]), sum(scale(sum(prod(m0[1], m3[0]), prod(-m3[1], m0[0])), -m2[2]), scale(sum(prod(m0[1], m2[0]), prod(-m2[1], m0[0])), m3[2]))), -m4[3]))), sum(sum(scale(sum(scale(sum(prod(m2[1], m4[0]), prod(-m4[1], m2[0])), m1[2]), sum(scale(sum(prod(m1[1], m4[0]), prod(-m4[1], m1[0])), -m2[2]), scale(sum(prod(m1[1], m2[0]), prod(-m2[1], m1[0])), m4[2]))), m0[3]), scale(sum(scale(sum(prod(m2[1], m4[0]), prod(-m4[1], m2[0])), m0[2]), sum(scale(sum(prod(m0[1], m4[0]), prod(-m4[1], m0[0])), -m2[2]), scale(sum(prod(m0[1], m2[0]), prod(-m2[1], m0[0])), m4[2]))), -m1[3])), sum(scale(sum(scale(sum(prod(m1[1], m4[0]), prod(-m4[1], m1[0])), m0[2]), sum(scale(sum(prod(m0[1], m4[0]), prod(-m4[1], m0[0])), -m1[2]), scale(sum(prod(m0[1], m1[0]), prod(-m1[1], m0[0])), m4[2]))), m2[3]), scale(sum(scale(sum(prod(m1[1], m2[0]), prod(-m2[1], m1[0])), m0[2]), sum(scale(sum(prod(m0[1], m2[0]), prod(-m2[1], m0[0])), -m1[2]), scale(sum(prod(m0[1], m1[0]), prod(-m1[1], m0[0])), m2[2]))), -m4[3]))))
-    var d = sub(p, n)
-    return d[d.length - 1]
+function determinant(m) {
+  if(m.length === 2) {
+    return [["sum(prod(", m[0][0], ",", m[1][1], "),prod(-", m[0][1], ",", m[1][0], "))"].join("")]
+  } else {
+    var expr = []
+    for(var i=0; i<m.length; ++i) {
+      expr.push(["scale(", generateSum(determinant(cofactor(m, i))), ",", sign(i), m[0][i], ")"].join(""))
+    }
+    return expr
   }
 }
 
 function orientation(n) {
-  var fn =
-    n === 3 ? orientation_3 :
-    n === 4 ? orientation_4 : orientation_5
-
-  return fn(robustSum, twoProduct, robustScale, robustSubtract)
+  var pos = []
+  var neg = []
+  var m = matrix(n)
+  var args = []
+  for(var i=0; i<n; ++i) {
+    if((i&1)===0) {
+      pos.push.apply(pos, determinant(cofactor(m, i)))
+    } else {
+      neg.push.apply(neg, determinant(cofactor(m, i)))
+    }
+    args.push("m" + i)
+  }
+  var posExpr = generateSum(pos)
+  var negExpr = generateSum(neg)
+  var funcName = "orientation" + n + "Exact"
+  var code = ["function ", funcName, "(", args.join(), "){var p=", posExpr, ",n=", negExpr, ",d=sub(p,n);\
+return d[d.length-1];};return ", funcName].join("")
+  var proc = new Function("sum", "prod", "scale", "sub", code)
+  return proc(robustSum, twoProduct, robustScale, robustSubtract)
 }
 
 var orientation3Exact = orientation(3)
@@ -482,7 +524,7 @@ var orientation4Exact = orientation(4)
 var CACHED = [
   function orientation0() { return 0 },
   function orientation1() { return 0 },
-  function orientation2(a, b) {
+  function orientation2(a, b) { 
     return b[0] - a[0]
   },
   function orientation3(a, b, c) {
@@ -527,7 +569,7 @@ var CACHED = [
     var adxcdy = adx * cdy
     var adxbdy = adx * bdy
     var bdxady = bdx * ady
-    var det = adz * (bdxcdy - cdxbdy)
+    var det = adz * (bdxcdy - cdxbdy) 
             + bdz * (cdxady - adxcdy)
             + cdz * (adxbdy - bdxady)
     var permanent = (Math.abs(bdxcdy) + Math.abs(cdxbdy)) * Math.abs(adz)
@@ -549,34 +591,26 @@ function slowOrient(args) {
   return proc.apply(undefined, args)
 }
 
-function proc (slow, o0, o1, o2, o3, o4, o5) {
-  return function getOrientation(a0, a1, a2, a3, a4) {
-    switch (arguments.length) {
-      case 0:
-      case 1:
-        return 0;
-      case 2:
-        return o2(a0, a1)
-      case 3:
-        return o3(a0, a1, a2)
-      case 4:
-        return o4(a0, a1, a2, a3)
-      case 5:
-        return o5(a0, a1, a2, a3, a4)
-    }
-
-    var s = new Array(arguments.length)
-    for (var i = 0; i < arguments.length; ++i) {
-      s[i] = arguments[i]
-    }
-    return slow(s)
-  }
-}
-
 function generateOrientationProc() {
   while(CACHED.length <= NUM_EXPAND) {
     CACHED.push(orientation(CACHED.length))
   }
+  var args = []
+  var procArgs = ["slow"]
+  for(var i=0; i<=NUM_EXPAND; ++i) {
+    args.push("a" + i)
+    procArgs.push("o" + i)
+  }
+  var code = [
+    "function getOrientation(", args.join(), "){switch(arguments.length){case 0:case 1:return 0;"
+  ]
+  for(var i=2; i<=NUM_EXPAND; ++i) {
+    code.push("case ", i, ":return o", i, "(", args.slice(0, i).join(), ");")
+  }
+  code.push("}var s=new Array(arguments.length);for(var i=0;i<arguments.length;++i){s[i]=arguments[i]};return slow(s);}return getOrientation")
+  procArgs.push(code.join(""))
+
+  var proc = Function.apply(undefined, procArgs)
   module.exports = proc.apply(undefined, [slowOrient].concat(CACHED))
   for(var i=0; i<=NUM_EXPAND; ++i) {
     module.exports[i] = CACHED[i]
@@ -991,4 +1025,4 @@ function robustSubtract(e, f) {
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=netv-lasso-selection.js.map
+//# sourceMappingURL=lasso-selection.js.map
