@@ -2,7 +2,7 @@
 
 Box selection plugin for NetV.js(http://netv.zjuvag.org/)
 
-![box-selection-demo](./images/box-selection.png)
+![box-selection-demo](https://github.com/ZJUVAI/NetV.js/raw/dev/packages/box-selection/images/box-selection.png)
 
 ## API reference
 

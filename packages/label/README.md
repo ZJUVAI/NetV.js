@@ -2,7 +2,7 @@
 
 Label plugin for NetV.js(http://netv.zjuvag.org/)
 
-![label](./images/label.png)
+![label](https://github.com/ZJUVAI/NetV.js/raw/dev/packages/label/images/label.png)
 
 ## API reference
 

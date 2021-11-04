@@ -2,7 +2,7 @@
 
 Lasso plugin for NetV.js(http://netv.zjuvag.org/)
 
-![lasso](./images/lasso.png)
+![lasso](https://github.com/ZJUVAI/NetV.js/raw/dev/packages/lasso-selection/images/lasso.png)
 
 ## API reference
 
