@@ -1,6 +1,6 @@
 {
     "name": "netv",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "description": "A network visualization library based on WebGL",
     "main": "build/NetV.js",
     "files": [
@@ -15,7 +15,7 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "@netv/core": "^1.1.4"
+        "@netv/core": "^1.1.5"
     },
     "homepage": "https://github.com/ZJUVAI/NetV.js",
     "publishConfig": {
