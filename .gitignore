@@ -1,6 +1,6 @@
 .DS_Store
-npm-debug.log
-lerna-debug.log
+/npm-debug.log
+/lerna-debug.log
 examples/data
 
 node_modules/
