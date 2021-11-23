@@ -71,6 +71,14 @@ $ npm run watch
 
 可以随时向我们提 issuse 或者提交贡献代码，具体细节可以查看 [开发指南](./docs/development-guide-chinese.md).
 
+#### 发布
+
+```bash
+$ npm install -g lerna # 如果还没有全局安装lerna
+$ lerna version [major | minor | patch | premajor | preminor | prepatch | prerelease]
+$ lerna publish from-git
+```
+
 ## 团队
 
 NetV.js 由 <img src='https://github.com/ZJUVAI/NetV.js/raw/dev/docs/zju.svg' height=18 style="display: inline; vertical-align: sub;"> [浙江大学](http://www.zju.edu.cn/)和 <img src='https://github.com/ZJUVAI/NetV.js/raw/dev/docs/zjlab.svg' height=18 style="display: inline; vertical-align: sub;"> [之江实验室](https://www.zhejianglab.com/)所有。 <img src='https://github.com/ZJUVAI/NetV.js/raw/dev/docs/zjuvag.png'  height=18 style="display: inline; vertical-align: sub;"> [浙江大学可视分析小组](https://zjuvag.org/)和 <img src='https://github.com/ZJUVAI/NetV.js/raw/dev/docs/jianwei.svg' height=18 style="display: inline; vertical-align: sub;"> [之江实验室见微团队](https://jianwei.projects.zjvis.org/#/)的引导了相关开发。

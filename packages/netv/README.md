@@ -77,7 +77,7 @@ Feel freely submitting issues and pull requests. You may check our [contribution
 ```bash
 $ npm install -g lerna # if you didn't install lerna globally
 $ lerna version [major | minor | patch | premajor | preminor | prepatch | prerelease]
-$ lerna publish
+$ lerna publish from-git
 ```
 
 ## Team
