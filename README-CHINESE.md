@@ -62,7 +62,7 @@ $ lerna add @netv/label --scope=netv
 # 注意，只有public的包能这样使用，否则发布到npm之后会有问题
 
 # 构建所有包
-$ npm run build:all
+$ npm run build
 
 # 只构建一个包，比如packages/label
 $ cd ./packages/label
