@@ -56,15 +56,16 @@ $ npm run bootstrap
 # 第一步：需要全局安装lerna这个库
 $ npm install lerna -g
 # 第二步: lerna add local-package-1-name --scope=local-package-2-name
-# e.g. 将 packages/core 安装为 packages/netv 的依赖
+# e.g. 将 packages/label 安装为 packages/netv 的依赖
 # 它们的名字已经在他们对应的 "package.json" 中定义了
-$ lerna add @netv/core --scope=netv
+$ lerna add @netv/label --scope=netv
+# 注意，只有public的包能这样使用，否则发布到npm之后会有问题
 
 # 构建所有包
 $ npm run build:all
 
-# 只构建一个包，比如packages/core
-$ cd ./packages/core
+# 只构建一个包，比如packages/label
+$ cd ./packages/label
 $ npm run watch
 ```
 

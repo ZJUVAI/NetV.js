@@ -7,5 +7,5 @@ node_modules/
 
 packages/*/build/stats.json
 
-packages/core/benchmarks/stats.json
-packages/core/benchmarks/bundle.js
+packages/netv/benchmarks/stats.json
+packages/netv/benchmarks/bundle.js

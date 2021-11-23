@@ -7,19 +7,21 @@
         "src",
         "build/*.js"
     ],
-    "scripts": {
-        "build": "webpack --config webpack.prod.js",
-        "watch": "webpack --config webpack.dev.js",
-        "lint": "eslint --ext .ts \"./src\""
-    },
     "author": "",
     "license": "MIT",
-    "dependencies": {
-        "@netv/core": "*"
-    },
     "homepage": "https://github.com/ZJUVAI/NetV.js",
     "publishConfig": {
         "registry": "https://registry.npmjs.org/"
     },
-    "unpkg": "build/NetV.js"
+    "unpkg": "build/NetV.js",
+    "scripts": {
+        "build": "webpack --config webpack.prod.js",
+        "watch": "webpack --config webpack.dev.js",
+        "lint": "eslint --ext .ts \"./src\"",
+        "build:benchmarks": "webpack --env.watch=false --config benchmarks/webpack.config.js",
+        "watch:benchmarks": "webpack --env.watch=true --config benchmarks/webpack.config.js"
+    },
+    "devDependencies": {
+        "raw-loader": "^4.0.1"
+    }
 }

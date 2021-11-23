@@ -52,22 +52,22 @@ netv.draw()
 # start and install dependencies for all packages
 $ npm run bootstrap
 
-# build the packages
-$ npm run build
-```
-
-```bash
-# if you wanna watch one of the packages, e.g. packages/core
-$ cd ./packages/core
-$ npm run watch
-
 # to add local dependences (add some local package as one dependency of another)
 # first install lerna as a global package
 $ npm install lerna -g
 # second: lerna add local-package-1-name --scope=local-package-2-name
-# e.g. add packages/core to packages/netv
+# e.g. add packages/label to packages/netv
 # their names are defined in their corresponding "package.json"s
-$ lerna add @netv/core --scope=netv
+$ lerna add @netv/label --scope=netv
+# note that only public packages can be added as local dependency,
+# otherwise, problems will occur after packages are published to NPM
+
+# build the packages
+$ npm run build
+
+# if you wanna watch one of the packages, e.g. packages/label
+$ cd ./packages/label
+$ npm run watch
 ```
 
 Feel freely submitting issues and pull requests. You may check our [contribution guide](./docs/development-guide.md).
