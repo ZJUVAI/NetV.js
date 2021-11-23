@@ -6,8 +6,8 @@ export const width = 800
 export const height = 600
 export const backgroundColor = { r: 1, g: 1, b: 1, a: 1 }
 export const enablePanZoom = true
-export const nodeLimit = 100
-export const linkLimit = 1000
+export const nodeLimit = 1000
+export const linkLimit = 20000
 
 export const node = {
     style: {
