@@ -1020,7 +1020,7 @@ class NetV {
             const link = new link_1.default(this, linkData);
             newLinks[i] = link;
         }
-        this.$_renderer.addLinks([...this.$_ends2link.values()]); // NOTE: preserve link order, not elegant
+        this.$_renderer.addLinks(newLinks); // NOTE: preserve link order, not elegant
         return newLinks;
     }
     /**
@@ -1670,8 +1670,8 @@ exports.width = 800;
 exports.height = 600;
 exports.backgroundColor = { r: 1, g: 1, b: 1, a: 1 };
 exports.enablePanZoom = true;
-exports.nodeLimit = 100;
-exports.linkLimit = 1000;
+exports.nodeLimit = 1000;
+exports.linkLimit = 20000;
 exports.node = {
     style: {
         shape: 'circle',

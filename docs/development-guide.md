@@ -14,16 +14,16 @@
 1. File names must be all lowercase and may include dashes (-), but no additional punctuation (except for `App.vue`).
 2. A file must include a top-level file overview consist of authors, description, usage, dependencies of the file.
 
-   Example
+    Example
 
-   ```js
-   /**
-    * @fileoverview Utilities for handling textareas.
-    * Provide a series of functions.
-    * Based on d3.js, lodash.js.
-    * @author Ran Chen <crcrcry.hello@gmail.com>
-    */
-   ```
+    ```js
+    /**
+     * @fileoverview Utilities for handling textareas.
+     * Provide a series of functions.
+     * Based on d3.js, lodash.js.
+     * @author Ran Chen <crcrcry.hello@gmail.com>
+     */
+    ```
 
 3. Vue component names should be multi-word or at least very different from native html tags to avoid conflicts. Names of sub-components should be tightly coupled, e.g. properly prefixed.
 
@@ -50,7 +50,9 @@ components/
 ## 2 Modules
 
 1. File extension must always be included.
-- Note: TypeScript (3.9.3) does not support import files with `.ts` extension yet. Thus please do not add `.ts` extension to the imported TypeScript files.
+
+-   Note: TypeScript (3.9.3) does not support import files with `.ts` extension yet. Thus please do not add `.ts` extension to the imported TypeScript files.
+
 2. Naming imports
     1. Module import names (`import * as name`) should be lowerCamelCase names derived from the imported file names.
     2. Default import names are derived from the imported file names and follow [the naming rules](#4-naming) based on imported object types.
@@ -83,7 +85,7 @@ Example
 const myObject = {
     shorthandMethod() {
         // ...
-    },
+    }
     // instead of
     // method: function () {
     //   ...
@@ -92,7 +94,7 @@ const myObject = {
 
 // Method shorthand is worse herein.
 new Vue({
-    render: (h) => h(App),
+    render: (h) => h(App)
 }).$mount('#app')
 
 // Enumerations
@@ -100,7 +102,7 @@ const Option = {
     // The option used shall have been the first.
     FIRST_OPTION: 1,
     // The second among two options.
-    SECOND_OPTION: 2,
+    SECOND_OPTION: 2
 }
 ```
 
@@ -265,8 +267,6 @@ const Option = {
     1. Mark deprecated methods, classes or interfaces with @deprecated annotations.
     2. A deprecation comment must include simple, clear directions for people to fix their call sites.
 
-
-
 ## Pull Requests
 
 When you new a Pull request, you need to describe your pull request follow the template:
@@ -290,3 +290,6 @@ When you new a Pull request, you need to describe your pull request follow the t
 
 ```
 
+## License
+
+[MIT license](/LICENSE).
