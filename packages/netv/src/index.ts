@@ -152,7 +152,7 @@ export default class NetV {
             const link = new Link(this, linkData)
             newLinks[i] = link
         }
-        this.$_renderer.addLinks([...this.$_ends2link.values()]) // NOTE: preserve link order, not elegant
+        this.$_renderer.addLinks(newLinks) // NOTE: preserve link order, not elegant
         return newLinks
     }
 
