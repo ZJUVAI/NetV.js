@@ -83,3 +83,7 @@ $ lerna publish from-git
 ## Team
 
 NetV.js is owned by <img src='https://github.com/ZJUVAI/NetV.js/raw/dev/docs/zju.svg' height=18 style="display: inline; vertical-align: sub;"> [Zhejiang University](http://www.zju.edu.cn/) and <img src='https://github.com/ZJUVAI/NetV.js/raw/dev/docs/zjlab.svg' height=18 style="display: inline; vertical-align: sub;"> [Zhejiang Lab](https://www.zhejianglab.com/). The development of NetV.js is led by the <img src='https://github.com/ZJUVAI/NetV.js/raw/dev/docs/zjuvag.png'  height=18 style="display: inline; vertical-align: sub;"> [Visual Analytics Group of Zhejiang University](https://zjuvag.org/) and <img src='https://github.com/ZJUVAI/NetV.js/raw/dev/docs/jianwei.svg' height=18 style="display: inline; vertical-align: sub;"> [Zhejiang Lab Jianwei Team](https://jianwei.projects.zjvis.org/#/).
+
+## License
+
+[MIT license](/LICENSE).
