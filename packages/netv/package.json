@@ -22,6 +22,13 @@
         "watch:benchmarks": "webpack --env.watch=true --config benchmarks/webpack.config.js"
     },
     "devDependencies": {
+        "@types/d3": "^7.1.0",
         "raw-loader": "^4.0.1"
+    },
+    "dependencies": {
+        "@netv/label": "^1.0.3",
+        "d3": "^7.2.1",
+        "stardust-core": "^0.2.4",
+        "stardust-webgl": "^0.2.4"
     }
 }
