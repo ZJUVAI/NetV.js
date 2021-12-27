@@ -91,7 +91,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 5);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -100,9 +100,191 @@ return /******/ (function(modules) { // webpackBootstrap
 
 "use strict";
 
+/**
+ * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
+ * @description utility functions for renderer
+ */
 Object.defineProperty(exports, "__esModule", { value: true });
-const utils_1 = __webpack_require__(1);
-const const_1 = __webpack_require__(2);
+exports.Shader = exports.decodeRenderId = exports.encodeRenderId = exports.extractAttributesFromShader = exports.createArrayBuffer = exports.createProgram = exports.compileShader = void 0;
+/**
+ * compile webgl shader
+ * @param gl WebGL instance
+ * @param shaderStr shader file in string
+ * @param shaderType vertex or fragment shader
+ */
+function compileShader(gl, shaderStr, shaderType) {
+    const shader = gl.createShader(shaderType);
+    gl.shaderSource(shader, shaderStr);
+    gl.compileShader(shader);
+    if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+        throw new Error('Shader compile failed: ' + gl.getShaderInfoLog(shader));
+    }
+    return shader;
+}
+exports.compileShader = compileShader;
+/**
+ * generate WebGL program
+ * @param gl WebGL instance
+ * @param vertShaderStr vertex shader in string format
+ * @param fragShaderStr fragment shader in string format
+ * @param attributes attributes
+ */
+function createProgram(gl, vertShaderStr, fragShaderStr, attributes) {
+    const vertShader = compileShader(gl, vertShaderStr, gl.VERTEX_SHADER);
+    const fragShader = compileShader(gl, fragShaderStr, gl.FRAGMENT_SHADER);
+    const program = gl.createProgram();
+    attributes.forEach((attr) => {
+        gl.bindAttribLocation(program, attr.location, attr.name);
+    });
+    gl.attachShader(program, vertShader);
+    gl.attachShader(program, fragShader);
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        throw new Error(`Could not link shaders: ${gl.getProgramInfoLog(program)}`);
+    }
+    return program;
+}
+exports.createProgram = createProgram;
+/**
+ * create WebGL array buffer given data array
+ * @param gl WebGL context
+ * @param data data to store in buffer
+ * @returns WebGL buffer store given data
+ */
+function createArrayBuffer(gl, data) {
+    const buffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffer);
+    gl.bufferData(gl.ARRAY_BUFFER, data, gl.DYNAMIC_DRAW);
+    return buffer;
+}
+exports.createArrayBuffer = createArrayBuffer;
+/**
+ * extract attributes from a shader sring
+ * @param {string} shaderStr
+ * @returns {RenderAttribute[]} attributes array
+ */
+function extractAttributesFromShader(shader) {
+    // const matchings = shaderStr.match(/in\s.*;/g)
+    const inputs = shader.inputs;
+    const attributesMap = new Map();
+    Object.entries(inputs).forEach(([name, type], location) => {
+        let size = 1;
+        if (type.slice(0, 3) === 'vec') {
+            size = Number(type.slice(-1));
+        }
+        let isBuildIn = false;
+        if (name === 'inVertexPos') {
+            // an instance is formed by two triangles,
+            // thus we need four point positions to initial the instance
+            // more details: https://panjiacheng.site/wiki/2019/06/06/webGL/WebGL-BatchDraw%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB+%E7%90%86%E8%A7%A3/
+            isBuildIn = true;
+        }
+        attributesMap.set(name, {
+            name,
+            size,
+            location,
+            isBuildIn,
+            extractAttributeValueFrom: () => [] // a function which is use to append an element into the array of this attribute
+        });
+    });
+    // matchings.forEach((match, location) => {
+    //     const name = match.split(' ')[2].slice(0, -1)
+    //     const type = match.split(' ')[1]
+    //     let size = 1
+    //     if (type.slice(0, 3) === 'vec') {
+    //         size = Number(type.slice(-1))
+    //     }
+    //     let isBuildIn = false
+    //     if (name === 'inVertexPos') {
+    //         // an instance is formed by two triangles,
+    //         // thus we need four point positions to initial the instance
+    //         // more details: https://panjiacheng.site/wiki/2019/06/06/webGL/WebGL-BatchDraw%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB+%E7%90%86%E8%A7%A3/
+    //         isBuildIn = true
+    //     }
+    //     attributesMap.set(name, {
+    //         name,
+    //         size, // the space of one attribute, e.g. vec3 ocuppies 3 units of space
+    //         location, // the appearance order of one attribute in the shader code, which is equal to the result of getAttribLocation
+    //         isBuildIn, // which means four vertices in one element: inVertexPos
+    //         extractAttributeValueFrom: () => [] // a function which is use to append an element into the array of this attribute
+    //     })
+    // })
+    return attributesMap;
+}
+exports.extractAttributesFromShader = extractAttributesFromShader;
+/**
+ * encode a render id as color to pass in texture
+ * @param id render id
+ */
+function encodeRenderId(id) {
+    // split a large number by 8-bit: id = concat(a, b, g, r), and normalize them into (0, 1)
+    const r = (id & 255) / 255.0;
+    const g = ((id >> 8) & 255) / 255.0;
+    const b = ((id >> 16) & 255) / 255.0;
+    const a = ((id >> 24) & 255) / 255.0;
+    return { r, g, b, a };
+}
+exports.encodeRenderId = encodeRenderId;
+/**
+ * decode pixel value to number
+ * @param pixelVal a pixel's value on texture
+ */
+function decodeRenderId(pixelVal) {
+    // parse normalized parts of id number, bit shift to origin position and concat
+    const renderId = pixelVal[0] | (pixelVal[1] << 8) | (pixelVal[2] << 16) | (pixelVal[3] << 24);
+    return renderId;
+}
+exports.decodeRenderId = decodeRenderId;
+class Shader {
+    constructor() {
+        this.inputs = {};
+        this.outputs = {};
+        this.uniforms = {};
+        this.methods = [[]];
+        this.main = [];
+        this.header = `#version 300 es\nprecision highp float;\n`;
+    }
+    copy() {
+        const copyShader = new Shader();
+        copyShader.inputs = { ...this.inputs };
+        copyShader.outputs = { ...this.outputs };
+        copyShader.uniforms = { ...this.uniforms };
+        copyShader.main = this.main.map((str) => str);
+        copyShader.methods = this.methods.map((method) => method.map((str) => str));
+        return copyShader;
+    }
+    connect() {
+        const variablesPrefix = [
+            { prefix: 'in', variables: this.inputs },
+            { prefix: 'out', variables: this.outputs },
+            { prefix: 'uniform', variables: this.uniforms }
+        ];
+        const variableDefinitions = variablesPrefix
+            .map((variablePrefix) => Object.entries(variablePrefix.variables)
+            .map(([name, type]) => {
+            return `${variablePrefix.prefix} ${type} ${name};\n`;
+        })
+            .join(''))
+            .join('');
+        return (this.header +
+            variableDefinitions +
+            this.methods.map((method) => method.join('\n')).join('\n') +
+            '\n' +
+            this.main.join('\n'));
+    }
+}
+exports.Shader = Shader;
+
+
+/***/ }),
+/* 1 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+const utils_1 = __webpack_require__(2);
+const const_1 = __webpack_require__(3);
 class Element {
     constructor(core, data, type) {
         this.$_style = {};
@@ -215,7 +397,7 @@ exports.default = Element;
 
 
 /***/ }),
-/* 1 */
+/* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -282,7 +464,7 @@ exports.override = override;
 
 
 /***/ }),
-/* 2 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -292,7 +474,420 @@ const EMPTY_FUNCTION = () => {}
 
 
 /***/ }),
-/* 3 */
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RenderElementManager = void 0;
+const utils_1 = __webpack_require__(0);
+class RenderElementManager {
+    constructor(gl, params, shaders, idTexture) {
+        this.count = 0;
+        this.elementToRenderId = new Map();
+        const { limit, width, height, instanceVerteces } = params;
+        this.gl = gl;
+        this.capacity = limit;
+        this.width = width;
+        this.height = height;
+        this.pixelRatio = window.devicePixelRatio || 1;
+        this.attributes = utils_1.extractAttributesFromShader(shaders.vertex);
+        this.program = utils_1.createProgram(this.gl, shaders.vertex.connect(), shaders.fragment.connect(), this.attributes);
+        this.idAttributes = utils_1.extractAttributesFromShader(shaders.idVertex);
+        this.idProgram = utils_1.createProgram(this.gl, shaders.idVertex.connect(), shaders.idFragment.connect(), this.idAttributes);
+        this.idTexture = idTexture;
+        // initial attributes arrays and buffers
+        this.attributes.forEach((attr) => {
+            if (!attr.isBuildIn) {
+                attr.array = new Float32Array(attr.size * this.capacity);
+            }
+            else {
+                // build in attribute: veteces positions
+                // four verteces of one element (https://panjiacheng.site/wiki/2019/06/06/webGL/WebGL-BatchDraw%E4%BB%A3%E7%A0%81%E9%98%85%E8%AF%BB+%E7%90%86%E8%A7%A3/)
+                // prettier-ignore
+                attr.array = new Float32Array(instanceVerteces);
+            }
+            attr.buffer = utils_1.createArrayBuffer(this.gl, attr.array);
+        });
+        // init id attributes and buffers
+        this.idAttributes.forEach((attr, name) => {
+            if (name === 'in_id') {
+                // attr: in vec4 inId;
+                // TODO: hardcode check, need refactor
+                if (!attr.isBuildIn)
+                    attr.array = new Float32Array(attr.size * this.capacity);
+                attr.buffer = utils_1.createArrayBuffer(this.gl, attr.array);
+            }
+            else {
+                this.idAttributes.set(name, this.attributes.get(name));
+            }
+        });
+        // init uniforms
+        this.gl.useProgram(this.program);
+        // get uniform locations in Memory
+        const projectionLocation = this.gl.getUniformLocation(this.program, 'projection');
+        const scaleLocation = this.gl.getUniformLocation(this.program, 'scale');
+        const translateLocation = this.gl.getUniformLocation(this.program, 'translate');
+        const viewportLocation = this.gl.getUniformLocation(this.program, 'viewport');
+        const pixelRatioLocation = this.gl.getUniformLocation(this.program, 'pixelRatio');
+        // set uniform values
+        // prettier-ignore
+        const projection = new Float32Array([
+            2 / this.width, 0, 0,
+            0, -2 / this.height, 0,
+            -1, 1, 1
+        ]);
+        projectionLocation !== null &&
+            this.gl.uniformMatrix3fv(projectionLocation, false, projection);
+        const scale = new Float32Array([1, 1]);
+        scaleLocation !== null && this.gl.uniform2fv(scaleLocation, scale);
+        const translate = new Float32Array([0, 0]);
+        translateLocation !== null && this.gl.uniform2fv(translateLocation, translate);
+        const viewport = new Float32Array([this.width, this.height]);
+        viewportLocation !== null && this.gl.uniform2fv(viewportLocation, viewport);
+        pixelRatioLocation !== null && this.gl.uniform1f(pixelRatioLocation, this.pixelRatio);
+        // id uniforms, identical to node
+        // TODO: need refactor too
+        this.gl.useProgram(this.idProgram);
+        const idProjectionLocation = this.gl.getUniformLocation(this.idProgram, 'projection');
+        const idScaleLocation = this.gl.getUniformLocation(this.idProgram, 'scale');
+        const idTranslateLocation = this.gl.getUniformLocation(this.idProgram, 'translate');
+        const idViewportLocation = this.gl.getUniformLocation(this.idProgram, 'viewport');
+        const idPixelRatioLocation = this.gl.getUniformLocation(this.idProgram, 'pixelRatio');
+        idProjectionLocation !== null &&
+            this.gl.uniformMatrix3fv(idProjectionLocation, false, projection);
+        idScaleLocation !== null && this.gl.uniform2fv(idScaleLocation, scale);
+        idTranslateLocation !== null && this.gl.uniform2fv(idTranslateLocation, translate);
+        idViewportLocation !== null && this.gl.uniform2fv(idViewportLocation, viewport);
+        idPixelRatioLocation !== null && this.gl.uniform1f(idPixelRatioLocation, this.pixelRatio);
+    }
+    setRenderIdOf(element, renderId) {
+        this.renderIdToElement[renderId] = element;
+        this.elementToRenderId.set(element, renderId);
+    }
+    getRenderIdOf(element) {
+        return this.elementToRenderId.get(element);
+    }
+    /**
+     * render id to link ids(source and target)
+     * @param renderId
+     */
+    getElementByRenderId(renderId) {
+        return this.renderIdToElement[renderId];
+    }
+    /**
+     * set Transform in Render Link
+     * @param transform current transform(pan&zoom condition)
+     */
+    setTransform(transform) {
+        this.gl.useProgram(this.program);
+        const scaleLoc = this.gl.getUniformLocation(this.program, 'scale');
+        const translateLoc = this.gl.getUniformLocation(this.program, 'translate');
+        const scale = new Float32Array([transform.k, transform.k]);
+        this.gl.uniform2fv(scaleLoc, scale);
+        const translate = new Float32Array([transform.x, transform.y]);
+        this.gl.uniform2fv(translateLoc, translate);
+        // id uniforms, identical to link
+        // TODO: need refactor too
+        this.gl.useProgram(this.idProgram);
+        const idScaleLoc = this.gl.getUniformLocation(this.idProgram, 'scale');
+        const idTranslateLoc = this.gl.getUniformLocation(this.idProgram, 'translate');
+        this.gl.uniform2fv(idScaleLoc, scale);
+        this.gl.uniform2fv(idTranslateLoc, translate);
+    }
+    draw() {
+        if (this.count > 0) {
+            this.gl.enable(this.gl.BLEND);
+            this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA);
+            this.gl.useProgram(this.program);
+            this.attributes.forEach((attr) => {
+                this.gl.enableVertexAttribArray(attr.location);
+            });
+            this.attributes.forEach((attr, i) => {
+                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer);
+                this.gl.vertexAttribPointer(attr.location, attr.size, this.gl.FLOAT, false, attr.size * attr.array.BYTES_PER_ELEMENT, 0);
+                if (!attr.isBuildIn)
+                    this.gl.vertexAttribDivisor(attr.location, 1);
+            });
+            this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count);
+            // draw id
+            this.gl.blendFunc(this.gl.ONE, this.gl.ZERO);
+            this.gl.useProgram(this.idProgram);
+            this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.idTexture);
+            this.idAttributes.forEach((attr) => {
+                this.gl.enableVertexAttribArray(attr.location);
+            });
+            const attr = this.idAttributes.get('in_id'); // ! HARDCODE CHECK
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer);
+            this.gl.vertexAttribPointer(attr.location, attr.size, this.gl.FLOAT, false, attr.size * attr.array.BYTES_PER_ELEMENT, 0);
+            this.gl.vertexAttribDivisor(attr.location, 1);
+            this.gl.drawArraysInstanced(this.gl.TRIANGLE_STRIP, 0, 4, this.count);
+            this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
+            this.gl.enable(this.gl.BLEND);
+            this.gl.blendFunc(this.gl.ONE, this.gl.ONE_MINUS_SRC_ALPHA);
+        }
+    }
+    /**
+     * add element data to engine
+     * @param elements elements data
+     */
+    addData(elements) {
+        // set array
+        elements.forEach((element, i) => {
+            const index = this.count + i;
+            // link attribute => webgl attribute
+            this.attributes.forEach((attr) => {
+                if (!attr.isBuildIn) {
+                    const array = getShaderAttributeValue(element, attr.name);
+                    attr.array.set(array, attr.size * index);
+                }
+            });
+            const offset = element.type === 'Node' ? 0 : 1; // NOTE: node render id, use even integer
+            const renderId = 2 * index + offset;
+            const renderIdColor = utils_1.encodeRenderId(renderId);
+            const idAttr = this.idAttributes.get('in_id');
+            idAttr.array.set([renderIdColor.r, renderIdColor.g, renderIdColor.b, renderIdColor.a], 4 * index);
+            this.setRenderIdOf(element, renderId);
+        });
+        this.attributes.forEach((attr) => {
+            if (!attr.isBuildIn) {
+                this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer);
+                this.gl.bufferSubData(this.gl.ARRAY_BUFFER, attr.size * this.count * attr.array.BYTES_PER_ELEMENT, attr.array, attr.size * this.count, attr.size * elements.length);
+            }
+        });
+        // id buffer data
+        const attr = this.idAttributes.get('in_id');
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer);
+        this.gl.bufferSubData(this.gl.ARRAY_BUFFER, attr.size * this.count * attr.array.BYTES_PER_ELEMENT, attr.array, attr.size * this.count, attr.size * elements.length);
+        this.count += elements.length;
+    }
+    /**
+     * change an element's attribute
+     * @param element link/node data
+     * @param attribute attribute key to change
+     */
+    changeAttribute(element, attribute) {
+        const renderId = this.getRenderIdOf(element);
+        const index = Math.floor(renderId / 2);
+        const shaderAttr = this.getAttributeByElement(element, attribute);
+        const shaderVariableName = shaderAttr.name;
+        const shaderVariableValue = shaderAttr.value;
+        const attr = this.attributes.get(shaderVariableName);
+        if (attr === undefined) {
+            console.error(`Attribute: ${attribute} is not supported in a ${element.type} instance.`);
+        }
+        // const data = attr.extractAttributeValueFrom(element)
+        attr.array.set(shaderVariableValue, attr.size * index);
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer);
+        this.gl.bufferSubData(this.gl.ARRAY_BUFFER, attr.size * index * attr.array.BYTES_PER_ELEMENT, attr.array, attr.size * index, attr.size);
+    }
+    /**
+     * clear data
+     * not actually erase data, but reset count
+     */
+    clearData() {
+        this.count = 0;
+    }
+    getAttributeByElement(element, attributeName) {
+        let map;
+        if (element.type === 'Link') {
+            const link = element;
+            const style = link.$_style;
+            map = {
+                source: {
+                    name: 'in_source',
+                    value: [link.$_source.$_position.x, link.$_source.$_position.y]
+                },
+                target: {
+                    name: 'in_target',
+                    value: [link.$_target.$_position.x, link.$_target.$_position.y]
+                },
+                shape: {
+                    name: 'in_shape',
+                    value: [style.shape === 'dash-line' ? 2 : style.shape === 'curve' ? 1 : 0]
+                },
+                strokeWidth: {
+                    name: 'in_strokeWidth',
+                    value: [style.strokeWidth]
+                },
+                strokeColor: {
+                    name: 'in_strokeColor',
+                    value: [
+                        style.strokeColor.r,
+                        style.strokeColor.g,
+                        style.strokeColor.b,
+                        style.strokeColor.a
+                    ]
+                },
+                curveness: {
+                    name: 'in_curveness',
+                    value: [style.curveness]
+                },
+                dashInterval: {
+                    name: 'in_dashInterval',
+                    value: [style.dashInterval]
+                }
+            };
+        }
+        else {
+            const node = element;
+            const style = node.$_style;
+            map = {
+                position: {
+                    name: 'in_position',
+                    value: [node.$_position.x, node.$_position.y]
+                },
+                shape: {
+                    name: 'in_shape',
+                    value: [
+                        style.shape === 'rect'
+                            ? 1
+                            : style.shape === 'triangle'
+                                ? 2
+                                : style.shape === 'cross'
+                                    ? 3
+                                    : 0
+                    ]
+                },
+                offset: {
+                    name: 'in_offset',
+                    value: [style.offset.x, style.offset.y]
+                },
+                fill: {
+                    name: 'in_fill',
+                    value: [style.fill.r, style.fill.g, style.fill.b, style.fill.a]
+                },
+                strokeWidth: {
+                    name: 'in_strokeWidth',
+                    value: [style.strokeWidth]
+                },
+                strokeColor: {
+                    name: 'in_strokeColor',
+                    value: [
+                        style.strokeColor.r,
+                        style.strokeColor.g,
+                        style.strokeColor.b,
+                        style.strokeColor.a
+                    ]
+                },
+                rotate: {
+                    name: 'in_rotate',
+                    value: [style.rotate]
+                },
+                /* circle */
+                r: {
+                    name: 'in_r',
+                    value: [style.r]
+                },
+                /* rect */
+                width: {
+                    name: 'in_size',
+                    value: [style.width, style.height]
+                },
+                height: {
+                    name: 'in_size',
+                    value: [style.width, style.height]
+                },
+                /* triangle */
+                vertexAlpha: {
+                    name: 'in_vertexAlpha',
+                    value: [style.vertexAlpha.x, style.vertexAlpha.y]
+                },
+                vertexBeta: {
+                    name: 'in_vertexBeta',
+                    value: [style.vertexBeta.x, style.vertexBeta.y]
+                },
+                vertexGamma: {
+                    name: 'in_vertexGamma',
+                    value: [style.vertexGamma.x, style.vertexGamma.y]
+                },
+                /* cross */
+                innerWidth: {
+                    name: 'in_innerSize',
+                    value: [style.innerWidth, style.innerHeight]
+                },
+                innerHeight: {
+                    name: 'in_innerSize',
+                    value: [style.innerWidth, style.innerHeight]
+                }
+            };
+        }
+        if (attributeName in map) {
+            return map[attributeName];
+        }
+        // TODO: consider unused reversed_map?
+        const reversed_map = {};
+        Object.entries(map).forEach(([k, v]) => {
+            const value = v;
+            const key = k;
+            reversed_map[value.name] = {
+                name: key,
+                value: value.value
+            };
+        });
+        return reversed_map[attributeName];
+    }
+}
+exports.RenderElementManager = RenderElementManager;
+const linkShaderAttrMap = {
+    'in_source': (link) => [link.$_source.$_position.x, link.$_source.$_position.y],
+    'in_target': (link) => [link.$_target.$_position.x, link.$_target.$_position.y],
+    'in_shape': (link) => [link.$_style.shape === 'dash-line' ? 2 : link.$_style.shape === 'curve' ? 1 : 0],
+    'in_strokeWidth': (link) => [link.$_style.strokeWidth],
+    'in_strokeColor': (link) => [
+        link.$_style.strokeColor.r,
+        link.$_style.strokeColor.g,
+        link.$_style.strokeColor.b,
+        link.$_style.strokeColor.a
+    ],
+    'in_curveness': (link) => [link.$_style.curveness],
+    'in_dashInterval': (link) => [link.$_style.dashInterval]
+};
+const nodeShaderAttrMap = {
+    'in_position': (node) => [node.$_position.x, node.$_position.y],
+    'in_shape': (node) => [
+        node.$_style.shape === 'rect'
+            ? 1
+            : node.$_style.shape === 'triangle'
+                ? 2
+                : node.$_style.shape === 'cross'
+                    ? 3
+                    : 0
+    ],
+    'in_offset': (node) => [node.$_style.offset.x, node.$_style.offset.y],
+    'in_fill': (node) => [node.$_style.fill.r, node.$_style.fill.g, node.$_style.fill.b, node.$_style.fill.a],
+    'in_strokeWidth': (node) => [node.$_style.strokeWidth],
+    'in_strokeColor': (node) => [
+        node.$_style.strokeColor.r,
+        node.$_style.strokeColor.g,
+        node.$_style.strokeColor.b,
+        node.$_style.strokeColor.a
+    ],
+    'in_rotate': (node) => [node.$_style.rotate],
+    /* circle */
+    'in_r': (node) => [node.$_style.r],
+    /* rect */
+    'in_size': (node) => [node.$_style.width, node.$_style.height],
+    /* triangle */
+    'in_vertexAlpha': (node) => [node.$_style.vertexAlpha.x, node.$_style.vertexAlpha.y],
+    'in_vertexBeta': (node) => [node.$_style.vertexBeta.x, node.$_style.vertexBeta.y],
+    'in_vertexGamma': (node) => [node.$_style.vertexGamma.x, node.$_style.vertexGamma.y],
+    /* cross */
+    'in_innerSize': (node) => [node.$_style.innerWidth, node.$_style.innerHeight],
+};
+function getShaderAttributeValue(element, attributeName) {
+    if (element.type === 'Link') {
+        return linkShaderAttrMap[attributeName](element);
+    }
+    else {
+        return nodeShaderAttrMap[attributeName](element);
+    }
+}
+
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -303,16 +898,17 @@ const EMPTY_FUNCTION = () => {}
  * @dependences interfaces.ts, utils/map2.js, node.ts, link.ts
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const map2_1 = __webpack_require__(4);
-const node_1 = __webpack_require__(5);
-const link_1 = __webpack_require__(7);
-const defaultConfigs = __webpack_require__(8);
-const dataset = __webpack_require__(9);
-const interaction_1 = __webpack_require__(12);
-const Utils = __webpack_require__(1);
-const const_1 = __webpack_require__(2);
-const testjs = __webpack_require__(13);
-const Stardust = __webpack_require__(14);
+const map2_1 = __webpack_require__(6);
+const node_1 = __webpack_require__(7);
+const link_1 = __webpack_require__(9);
+const defaultConfigs = __webpack_require__(10);
+const dataset = __webpack_require__(11);
+const renderer_1 = __webpack_require__(14);
+const interaction_1 = __webpack_require__(19);
+const Utils = __webpack_require__(2);
+const const_1 = __webpack_require__(3);
+const testjs = __webpack_require__(20);
+const Stardust = __webpack_require__(21);
 //import * as d3 from "d3"
 class NetV {
     /**
@@ -334,84 +930,32 @@ class NetV {
         this.$_container = configs.container;
         this.$_configs = Utils.override(this.$_configs, configs);
         delete this.$_configs['container'];
-        // const canvas = document.createElement('canvas') // TODO: consider node enviroment, document not defined
-        // const pixelRatio = window.devicePixelRatio || 1
-        // canvas.style.width = this.$_configs.width + 'px'
-        // canvas.style.height = this.$_configs.height + 'px'
-        // canvas.setAttribute('width', String(this.$_configs.width * pixelRatio))
-        // canvas.setAttribute('height', String(this.$_configs.height * pixelRatio))
-        // this.$_container.appendChild(canvas)
-        // this.$_canvas = canvas
-        // this.$_renderer = new Renderer({
-        //     canvas,
-        //     width: this.$_configs.width,
-        //     height: this.$_configs.height,
-        //     backgroundColor: this.$_configs.backgroundColor,
-        //     nodeLimit: this.$_configs.nodeLimit,
-        //     linkLimit: this.$_configs.linkLimit,
-        //     getAllNodes: this.nodes.bind(this),
-        //     getAllLinks: this.links.bind(this)
-        // })
+        const canvas = document.createElement('canvas'); // TODO: consider node enviroment, document not defined
+        const pixelRatio = window.devicePixelRatio || 1;
+        canvas.style.width = this.$_configs.width + 'px';
+        canvas.style.height = this.$_configs.height + 'px';
+        canvas.setAttribute('width', String(this.$_configs.width * pixelRatio));
+        canvas.setAttribute('height', String(this.$_configs.height * pixelRatio));
+        this.$_container.appendChild(canvas);
+        this.$_canvas = canvas;
+        this.$_renderer = new renderer_1.Renderer({
+            canvas,
+            width: this.$_configs.width,
+            height: this.$_configs.height,
+            backgroundColor: this.$_configs.backgroundColor,
+            nodeLimit: this.$_configs.nodeLimit,
+            linkLimit: this.$_configs.linkLimit,
+            getAllNodes: this.nodes.bind(this),
+            getAllLinks: this.links.bind(this)
+        });
         console.log("lyhlyh11");
         testjs.logJs();
         var width = 960;
         var height = 500;
         const canvas2 = document.getElementById('main-canvas');
         const platform = Stardust.platform('webgl-2d', canvas2, this.$_configs.width, this.$_configs.height);
-        var Nx = 96 * 1;
-        var Ny = 50 * 1;
-        console.log('init platform');
-        var data = [];
-        for (var i = 0; i < Nx; i++) {
-            for (var j = 0; j < Ny; j++) {
-                var x = i / (Nx - 1) * 2 - 1;
-                var y = j / (Ny - 1) * 2 - 1;
-                var scale = 2;
-                var len = Math.sqrt(x * x + y * y);
-                var d = len * Math.exp(-len * len * 5);
-                var dx = y / len * d;
-                var dy = -x / len * d;
-                data.push({
-                    x: x + dx * scale,
-                    y: y + dy * scale
-                });
-            }
-        }
-        let circle = new Stardust.mark.circle(16);
-        console.log('init mark');
-        var circles = Stardust.mark.create(circle, platform);
-        var circles2 = Stardust.mark.create(circle, platform);
-        var scaleX = Stardust.scale.linear()
-            .domain([-1, 1])
-            .range([10, width - 10]);
-        var scaleY = Stardust.scale.linear()
-            .domain([-1, 1])
-            .range([10, height - 10]);
-        circles.attr("center", Stardust.scale.Vector2(scaleX(d => d.x), scaleY(d => d.y)));
-        circles.attr("radius", 2);
-        circles.attr("color", [0, 0, 0, 0.4]);
-        circles2.attr("center", Stardust.scale.Vector2(scaleX(d => d.x), scaleY(d => d.y)));
-        circles2.attr("radius", 4);
-        circles2.attr("color", [255, 0, 0, 1]);
-        circles.data(data);
-        console.log('init data');
-        circles.render();
-        console.log('init render');
-        platform.endPicking();
-        canvas2.onmousemove = e => {
-            let bounds = canvas2.getBoundingClientRect();
-            var x = e.clientX - bounds.left;
-            var y = e.clientY - bounds.top;
-            var p = platform.getPickingPixel(x * 2, y * 2);
-            if (p) {
-                platform.clear();
-                circles.render();
-                circles2.attr("color", [1, 0, 0, 1]);
-                circles2.data([data[p[1]]]);
-                circles2.render();
-                console.log('log in render');
-            }
-        };
+        this.$_platform = platform;
+        this.$_canvas2 = canvas2;
         this.$_interactionManager = new interaction_1.InteractionManager(this);
     }
     /**
@@ -430,6 +974,44 @@ class NetV {
      * @param nodeLinkData? the node-link-data of a graph, provided?setter:getter;
      */
     data(nodeLinkData) {
+        var Nx = 96 * 1;
+        var Ny = 50 * 1;
+        var data = [];
+        for (var i = 0; i < Nx; i++) {
+            for (var j = 0; j < Ny; j++) {
+                var x = i / (Nx - 1) * 2 - 1;
+                var y = j / (Ny - 1) * 2 - 1;
+                var scale = 2;
+                var len = Math.sqrt(x * x + y * y);
+                var d = len * Math.exp(-len * len * 5);
+                var dx = y / len * d;
+                var dy = -x / len * d;
+                data.push({
+                    x: x + dx * scale,
+                    y: y + dy * scale
+                });
+            }
+        }
+        this.$_data_star = data;
+        let circle = new Stardust.mark.circle(16);
+        console.log('init mark');
+        var circles = Stardust.mark.create(circle, this.$_platform);
+        var circles2 = Stardust.mark.create(circle, this.$_platform);
+        var scaleX = Stardust.scale.linear()
+            .domain([-1, 1])
+            .range([10, this.$_configs.width - 10]);
+        var scaleY = Stardust.scale.linear()
+            .domain([-1, 1])
+            .range([10, this.$_configs.height - 10]);
+        circles.attr("center", Stardust.scale.Vector2(scaleX(d => d.x), scaleY(d => d.y)));
+        circles.attr("radius", 2);
+        circles.attr("color", [0, 0, 0, 0.4]);
+        circles2.attr("center", Stardust.scale.Vector2(scaleX(d => d.x), scaleY(d => d.y)));
+        circles2.attr("radius", 4);
+        circles2.attr("color", [255, 0, 0, 1]);
+        circles.data(data);
+        this.$_circles = circles;
+        this.$_circles2 = circles2;
         if (nodeLinkData === undefined) {
             return this.$_data;
         }
@@ -575,6 +1157,22 @@ class NetV {
      * @description draw elements
      */
     draw() {
+        this.$_circles.render();
+        this.$_platform.endPicking();
+        this.$_canvas2.onmousemove = e => {
+            let bounds = this.$_canvas2.getBoundingClientRect();
+            var x = e.clientX - bounds.left;
+            var y = e.clientY - bounds.top;
+            var p = this.$_platform.getPickingPixel(x * 2, y * 2);
+            if (p) {
+                this.$_platform.clear();
+                this.$_circles.render();
+                this.$_circles2.attr("color", [1, 0, 0, 1]);
+                this.$_circles2.data([this.$_data_star[p[1]]]);
+                this.$_circles2.render();
+                console.log('log in render');
+            }
+        };
         this.$_renderer.draw();
     }
     /**
@@ -711,7 +1309,7 @@ window.NetV = NetV;
 
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -810,7 +1408,7 @@ exports.default = Map2;
 
 
 /***/ }),
-/* 5 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -821,8 +1419,8 @@ exports.default = Map2;
  * @dependences interfaces.ts, utils/is.ts
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const is_1 = __webpack_require__(6);
-const element_1 = __webpack_require__(0);
+const is_1 = __webpack_require__(8);
+const element_1 = __webpack_require__(1);
 class Node extends element_1.default {
     constructor(core, nodeData) {
         super(core, nodeData, /* type: */ 'Node');
@@ -986,7 +1584,7 @@ exports.default = Node;
 
 
 /***/ }),
-/* 6 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1005,7 +1603,7 @@ exports.isValidId = isValidId;
 
 
 /***/ }),
-/* 7 */
+/* 9 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1016,7 +1614,7 @@ exports.isValidId = isValidId;
  * @dependences interfaces.ts, utils/is.ts
  */
 Object.defineProperty(exports, "__esModule", { value: true });
-const element_1 = __webpack_require__(0);
+const element_1 = __webpack_require__(1);
 class Link extends element_1.default {
     constructor(core, linkData) {
         super(core, linkData, /* type: */ 'Link');
@@ -1122,7 +1720,7 @@ exports.default = Link;
 
 
 /***/ }),
-/* 8 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1173,7 +1771,7 @@ exports.link = {
 
 
 /***/ }),
-/* 9 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1184,14 +1782,14 @@ exports.link = {
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.patents = exports.miserables = void 0;
-const miserables_1 = __webpack_require__(10);
+const miserables_1 = __webpack_require__(12);
 Object.defineProperty(exports, "miserables", { enumerable: true, get: function () { return miserables_1.miserables; } });
-const patents_1 = __webpack_require__(11);
+const patents_1 = __webpack_require__(13);
 Object.defineProperty(exports, "patents", { enumerable: true, get: function () { return patents_1.patents; } });
 
 
 /***/ }),
-/* 10 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1545,7 +2143,7 @@ exports.miserables = {
 
 
 /***/ }),
-/* 11 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4793,7 +5391,861 @@ exports.patents = {
 
 
 /***/ }),
-/* 12 */
+/* 14 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @description render graph using webgl
+ * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.Renderer = void 0;
+const nodeShaders = __webpack_require__(15);
+const linkShaders = __webpack_require__(16);
+const render_node_1 = __webpack_require__(17);
+const render_link_1 = __webpack_require__(18);
+const utils_1 = __webpack_require__(0);
+const MODIFIED_ELEMENTS_COUNT_UPPER_THRESHOLD = 100; // when modifiedElementCount is larger than it, $_shouldLazyUpdate will be true
+class Renderer {
+    /**
+     * create renderer object
+     * @param configs {canvas: HTMLCanvasElement, width: number, height: number, backgroundColor: Color, defaultConfigs: Object} configs passed to renderer
+     */
+    constructor(configs) {
+        this.modifiedElementsCount = 0; // record modified link num to control lazy update
+        this.shouldLazyUpdate = false; // flag to control lazy update
+        const { canvas, width, height, backgroundColor, nodeLimit, linkLimit, getAllNodes, getAllLinks } = configs;
+        try {
+            this.gl = canvas.getContext('webgl2');
+        }
+        catch (_a) {
+            throw new Error('NetV requires WebGL2 supported by your browser');
+        }
+        this.backgroundColor = backgroundColor;
+        this.width = width;
+        this.height = height;
+        this.pixelRatio = window.devicePixelRatio || 1;
+        this.getAllNodes = getAllNodes;
+        this.getAllLinks = getAllLinks;
+        this.initIdTexture();
+        this.nodeManager = new render_node_1.RenderNodeManager(this.gl, { width, height, limit: nodeLimit }, nodeShaders, this.idTexture);
+        this.linkManager = new render_link_1.RenderLinkManager(this.gl, { width, height, limit: linkLimit }, linkShaders, this.idTexture);
+    }
+    /**
+     * dispose renderer stuffs
+     */
+    dispose() {
+        // refer: https://stackoverflow.com/a/23606581
+        const numTextureUnits = this.gl.getParameter(this.gl.MAX_TEXTURE_IMAGE_UNITS);
+        for (let unit = 0; unit < numTextureUnits; ++unit) {
+            this.gl.activeTexture(this.gl.TEXTURE0 + unit);
+            this.gl.bindTexture(this.gl.TEXTURE_2D, null);
+            this.gl.bindTexture(this.gl.TEXTURE_CUBE_MAP, null);
+        }
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, null);
+        this.gl.bindBuffer(this.gl.ELEMENT_ARRAY_BUFFER, null);
+        this.gl.bindRenderbuffer(this.gl.RENDERBUFFER, null);
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
+        this.gl.getExtension('WEBGL_lose_context').loseContext();
+        // TODO: maybe need free more buffers or something else
+    }
+    /**
+     * set clearColor for renderer
+     * @param color
+     */
+    setBackgroundColor(color) {
+        this.backgroundColor = color;
+    }
+    /**
+     * clear data in renderer
+     */
+    clearData() {
+        this.nodeManager.clearData();
+        this.linkManager.clearData();
+    }
+    /**
+     * add nodes to node manager
+     * @param nodes node data in NetV
+     */
+    addNodes(nodes) {
+        this.nodeManager.addData(nodes);
+    }
+    /**
+     * add links to link manager
+     * @param links link data in NetV
+     */
+    addLinks(links) {
+        this.linkManager.addData(links);
+    }
+    setTransform(transform) {
+        this.nodeManager.setTransform(transform);
+        this.linkManager.setTransform(transform);
+    }
+    /**
+     * draw all elements
+     */
+    draw() {
+        if (this.shouldLazyUpdate) {
+            // TODO: not only position needs to be refreshed, but also other styles
+            this.nodeManager.refreshPosition(this.getAllNodes());
+            this.linkManager.refreshPosition(this.getAllLinks());
+            this.shouldLazyUpdate = false;
+            this.modifiedElementsCount = 0;
+        }
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, this.idTexture);
+        this.gl.clearColor(1, 1, 1, 1);
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+        this.gl.bindFramebuffer(this.gl.FRAMEBUFFER, null);
+        this.gl.clearColor(this.backgroundColor.r, this.backgroundColor.g, this.backgroundColor.b, this.backgroundColor.a);
+        this.gl.clear(this.gl.COLOR_BUFFER_BIT);
+        this.linkManager.draw();
+        this.nodeManager.draw();
+    }
+    /**
+     * get element's id at (x, y) of canvas if exists
+     * @param x x pos
+     * @param y y pos
+     */
+    getIdByPosition(position) {
+        const renderId = this.readIdTexture(position);
+        if (renderId >= 0) {
+            if (renderId % 2 === 0) {
+                // NOTE: node has even render id, link has odd render id
+                const node = this.nodeManager.getElementByRenderId(renderId);
+                return node.id();
+            }
+            else {
+                const link = this.linkManager.getElementByRenderId(renderId);
+                const sourceTarget = link.sourceTarget();
+                return [sourceTarget.source.id(), sourceTarget.target.id()];
+            }
+        }
+    }
+    /**
+     * read pixel value at (x, y) of texture
+     * @param x x pos
+     * @param y y pos
+     */
+    readIdTexture(position) {
+        const ratio = this.pixelRatio;
+        this.gl.bindFramebuffer(this.gl.READ_FRAMEBUFFER, this.idTexture);
+        const readPixelBuffer = new Uint8Array([255, 255, 255, 255]); // -1
+        this.gl.readPixels(
+        // !Warning: x and y are optional in Position, need to check them
+        position.x * ratio, position.y * ratio, 1, 1, this.gl.RGBA, this.gl.UNSIGNED_BYTE, readPixelBuffer);
+        const objectID = utils_1.decodeRenderId(readPixelBuffer);
+        return objectID;
+    }
+    /**
+     * increase modified elements count
+     * When it is larger than a threshold, the lazy update mode will be turned on.
+     */
+    increaseModifiedElementsCountBy(n) {
+        this.modifiedElementsCount += n;
+        if (this.modifiedElementsCount > MODIFIED_ELEMENTS_COUNT_UPPER_THRESHOLD) {
+            this.shouldLazyUpdate = true;
+        }
+    }
+    /**
+     * init WebGL texture for recording position of elements
+     */
+    initIdTexture() {
+        const gl = this.gl;
+        const pixelRatio = this.pixelRatio;
+        const screenWidth = this.width * pixelRatio;
+        const screenHeight = this.height * pixelRatio;
+        const fbo = gl.createFramebuffer();
+        gl.bindFramebuffer(gl.FRAMEBUFFER, fbo);
+        const idTexture = gl.createTexture();
+        gl.bindTexture(gl.TEXTURE_2D, idTexture);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, screenWidth, screenHeight, 0, gl.RGBA, gl.UNSIGNED_BYTE, null);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.bindTexture(gl.TEXTURE_2D, null);
+        gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, idTexture, 0);
+        if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) {
+            throw new Error('Framebuffer generate failed');
+        }
+        gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+        this.idTexture = fbo;
+    }
+}
+exports.Renderer = Renderer;
+
+
+/***/ }),
+/* 15 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.idFragment = exports.fragment = exports.idVertex = exports.vertex = void 0;
+const utils_1 = __webpack_require__(0);
+const vertex = new utils_1.Shader();
+exports.vertex = vertex;
+vertex.inputs = {
+    inVertexPos: 'vec3',
+    in_shape: 'float',
+    in_position: 'vec2',
+    in_offset: 'vec2',
+    in_size: 'vec2',
+    in_innerSize: 'vec2',
+    in_rotate: 'float',
+    in_r: 'float',
+    in_vertexAlpha: 'vec2',
+    in_vertexBeta: 'vec2',
+    in_vertexGamma: 'vec2',
+    in_fill: 'vec4',
+    in_strokeWidth: 'float',
+    in_strokeColor: 'vec4'
+};
+vertex.outputs = {
+    position: 'vec2',
+    shape: 'float',
+    size: 'vec2',
+    innerSize: 'vec2',
+    rotate: 'float',
+    r: 'float',
+    vertexAlpha: 'vec2',
+    vertexBeta: 'vec2',
+    vertexGamma: 'vec2',
+    fill: 'vec4',
+    strokeWidth: 'float',
+    strokeColor: 'vec4'
+};
+vertex.uniforms = {
+    projection: 'mat3',
+    scale: 'vec2',
+    translate: 'vec2',
+    viewport: 'vec2',
+    pixelRatio: 'float'
+};
+vertex.methods = [
+    [
+        `vec2 calculate_inner_point (vec2 p1, vec2 p2, vec2 p3) {`,
+        `    float inner_p1 = distance(p2, p3);`,
+        `    float inner_p2 = distance(p1, p3);`,
+        `    float inner_p3 = distance(p1, p2);`,
+        `    vec2 inner = (p1 * inner_p1 + p2 * inner_p2 + p3 * inner_p3) / (inner_p1 + inner_p2 + inner_p3);`,
+        `    return inner;`,
+        `}`
+    ],
+    [
+        `float distance2line (vec2 point, vec2 line_begin, vec2 line_end) {`,
+        `   vec3 cross_product = cross(vec3(point - line_begin, 0), vec3(line_end - line_begin, 0));`,
+        `   float area = length(cross_product);`,
+        `   return area / length(line_begin - line_end);`,
+        `}`
+    ],
+    [
+        `float calculate_stroke_scale (vec2 p1, vec2 p2, vec2 p3) {`,
+        `   vec2 inner = calculate_inner_point(p1, p2, p3);`,
+        `   float radius = distance2line(inner, p1, p2);`,
+        `   float stroke_scale = strokeWidth / 2.0 / radius;`,
+        `   return stroke_scale;`,
+        `}`
+    ]
+];
+vertex.main = [
+    `void main(void) {`,
+    `   r = in_r;`,
+    `   size = in_size;`,
+    `   float width = size.x;`,
+    `   float height = size.y;`,
+    `   innerSize = in_innerSize;`,
+    `   shape = in_shape;`,
+    `   fill = in_fill;`,
+    `   strokeColor = in_strokeColor;`,
+    `   strokeWidth = in_strokeWidth;`,
+    `   rotate = in_rotate;`,
+    `   position = scale * (in_position + in_offset) + translate;`,
+    `   vertexAlpha = in_vertexAlpha;`,
+    `   vertexBeta = in_vertexBeta;`,
+    `   vertexGamma = in_vertexGamma;`,
+    `   mat3 scale_mat = mat3(`,
+    `       1, 0, 0,`,
+    `       0, 1, 0,`,
+    `       0, 0, 1`,
+    `   );`,
+    `   mat3 rotate_mat = mat3(`,
+    `       cos(rotate), sin(rotate), 0,`,
+    `       -sin(rotate), cos(rotate), 0,`,
+    `       0, 0, 1`,
+    `   );`,
+    `   mat3 translate_mat = mat3(`,
+    `       1, 0, 0,`,
+    `       0, 1, 0,`,
+    `       position.x, position.y, 1`,
+    `   );`,
+    `   if (shape == 0.0) {`,
+    `       float size = (r + strokeWidth / 2.) * 2. * 1.5;`,
+    `       scale_mat = mat3(`,
+    `           size, 0, 0,`,
+    `           0, size, 0,`,
+    `           0, 0, 1`,
+    `           );`,
+    `   } else if (shape == 1.0 || shape == 3.0) {`,
+    `       scale_mat = mat3(`,
+    `           width + strokeWidth, 0, 0,`,
+    `           0, height + strokeWidth, 0,`,
+    `           0, 0, 1`,
+    `       );`,
+    `   } else if (shape == 2.0) {`,
+    // calculate the normal of the edge: alpha => beta
+    `       vec2 inner = calculate_inner_point(vertexAlpha, vertexBeta, vertexGamma);`,
+    `       float stroke_scale = calculate_stroke_scale(vertexAlpha, vertexBeta, vertexGamma);`,
+    `       vec2 outer_vertexAlpha = (vertexAlpha - inner) * (1.0 + stroke_scale) + inner;`,
+    `       vec2 outer_vertexBeta = (vertexBeta - inner) * (1.0 + stroke_scale) + inner;`,
+    `       vec2 outer_vertexGamma = (vertexGamma - inner) * (1.0 + stroke_scale) + inner;`,
+    // to ensure the fragment cutting is within the rectangle
+    // `       width = 1.5 * (max(max(outer_vertexAlpha.x, outer_vertexBeta.x), outer_vertexGamma.x) - min(min(outer_vertexAlpha.x, outer_vertexBeta.x), outer_vertexGamma.x));`,
+    // `       height = 1.5 * (max(max(outer_vertexAlpha.y, outer_vertexBeta.y), outer_vertexGamma.y)- min(min(outer_vertexAlpha.y, outer_vertexBeta.y), outer_vertexGamma.y));`,
+    `       width = 2.0 * max(abs(max(max(outer_vertexAlpha.x, outer_vertexBeta.x), outer_vertexGamma.x)), abs(min(min(outer_vertexAlpha.x, outer_vertexBeta.x), outer_vertexGamma.x)));`,
+    `       height = 2.0 * max(abs(max(max(outer_vertexAlpha.y, outer_vertexBeta.y), outer_vertexGamma.y)), abs(min(min(outer_vertexAlpha.y, outer_vertexBeta.y), outer_vertexGamma.y)));`,
+    `       scale_mat = mat3(`,
+    `           width, 0, 0,`,
+    `           0, height, 0,`,
+    `           0, 0, 1`,
+    `       );`,
+    `   }`,
+    `   mat3 transform = translate_mat * rotate_mat * scale_mat;`,
+    `   gl_Position = vec4(projection * transform * inVertexPos, 1.);`,
+    `}`
+];
+const idVertex = vertex.copy();
+exports.idVertex = idVertex;
+idVertex.inputs['in_id'] = 'vec4';
+idVertex.outputs['id'] = 'vec4';
+idVertex.main.splice(1, 0, `id = in_id;`);
+const fragment = new utils_1.Shader();
+exports.fragment = fragment;
+fragment.inputs = { ...vertex.outputs };
+fragment.outputs = {
+    fragmentColor: 'vec4'
+};
+fragment.uniforms = {
+    viewport: 'vec2',
+    pixelRatio: 'float'
+};
+fragment.methods = [
+    vertex.methods[0],
+    vertex.methods[1],
+    vertex.methods[2],
+    [
+        `float sign (vec2 p1, vec2 p2, vec2 p3) {`,
+        `    return (p1.x - p3.x) * (p2.y - p3.y) - (p2.x - p3.x) * (p1.y - p3.y);`,
+        `}`
+    ],
+    [
+        `float inTriangle() {`,
+        `    mat2 rotate_mat = mat2(`,
+        `        cos(rotate), sin(rotate),`,
+        `        -sin(rotate), cos(rotate)`,
+        `    );`,
+        `    vec2 inner = calculate_inner_point(vertexAlpha, vertexBeta, vertexGamma);`,
+        `    float stroke_scale = calculate_stroke_scale(vertexAlpha, vertexBeta, vertexGamma);`,
+        `    vec2 flip_pos = vec2(position.x, viewport.y - position.y);`,
+        `    vec2 rotate_related_FragCoord = rotate_mat * (gl_FragCoord.xy / pixelRatio - flip_pos);`,
+        `    vec2 inner_vertexAlpha = (vertexAlpha - inner) * (1.0 - stroke_scale) + inner;`,
+        `    vec2 inner_vertexBeta = (vertexBeta - inner) * (1.0 - stroke_scale) + inner;`,
+        `    vec2 inner_vertexGamma = (vertexGamma - inner) * (1.0 - stroke_scale) + inner;`,
+        `    vec2 flip_vertexAlpha = vec2(inner_vertexAlpha.x, - inner_vertexAlpha.y);`,
+        `    vec2 flip_vertexBeta = vec2(inner_vertexBeta.x, - inner_vertexBeta.y);`,
+        `    vec2 flip_vertexGamma = vec2(inner_vertexGamma.x, - inner_vertexGamma.y);`,
+        `    float d1 = sign(rotate_related_FragCoord, flip_vertexAlpha, flip_vertexBeta);`,
+        `    float d2 = sign(rotate_related_FragCoord, flip_vertexBeta, flip_vertexGamma);`,
+        `    float d3 = sign(rotate_related_FragCoord, flip_vertexGamma, flip_vertexAlpha);`,
+        `    bool has_neg = (d1 < 0.0) || (d2 < 0.0) || (d3 < 0.0);`,
+        `    bool has_pos = (d1 > 0.0) || (d2 > 0.0) || (d3 > 0.0);`,
+        `    if (!(has_neg && has_pos)) {`,
+        `        return 1.0;`,
+        `    } else {`,
+        `        return 0.0;`,
+        `    }`,
+        `}`
+    ],
+    [
+        `float inTriangleBorder() {`,
+        `    mat2 rotate_mat = mat2(`,
+        `        cos(rotate), sin(rotate),`,
+        `        -sin(rotate), cos(rotate)`,
+        `    );`,
+        `    vec2 inner = calculate_inner_point(vertexAlpha, vertexBeta, vertexGamma);`,
+        `    float stroke_scale = calculate_stroke_scale(vertexAlpha, vertexBeta, vertexGamma);`,
+        `    vec2 outer_vertexAlpha = (vertexAlpha - inner) * (1.0 + stroke_scale) + inner;`,
+        `    vec2 outer_vertexBeta = (vertexBeta - inner) * (1.0 + stroke_scale) + inner;`,
+        `    vec2 outer_vertexGamma = (vertexGamma - inner) * (1.0 + stroke_scale) + inner;`,
+        `    vec2 flip_pos = vec2(position.x, viewport.y - position.y);`,
+        `    vec2 rotate_related_FragCoord = rotate_mat * (gl_FragCoord.xy / pixelRatio - flip_pos);`,
+        `    vec2 flip_vertexAlpha = vec2(outer_vertexAlpha.x, - outer_vertexAlpha.y);`,
+        `    vec2 flip_vertexBeta = vec2(outer_vertexBeta.x, - outer_vertexBeta.y);`,
+        `    vec2 flip_vertexGamma =vec2(outer_vertexGamma.x, - outer_vertexGamma.y);`,
+        ``,
+        `    float d1 = sign(rotate_related_FragCoord, flip_vertexAlpha, flip_vertexBeta);`,
+        `    float d2 = sign(rotate_related_FragCoord, flip_vertexBeta, flip_vertexGamma);`,
+        `    float d3 = sign(rotate_related_FragCoord, flip_vertexGamma, flip_vertexAlpha);`,
+        ``,
+        `    bool has_neg = (d1 <= 0.0) || (d2 <= 0.0) || (d3 <= 0.0);`,
+        `    bool has_pos = (d1 >= 0.0) || (d2 >= 0.0) || (d3 >= 0.0);`,
+        ``,
+        `    bool inTriangle = inTriangle() > 0.5;`,
+        `    bool inTriangleBorder = !(has_neg && has_pos);`,
+        ``,
+        `    if (!inTriangle && inTriangleBorder) {`,
+        `        return 1.0;`,
+        `    } else {`,
+        `        return 0.0;`,
+        `    }`,
+        `}`
+    ],
+    [
+        `float inRect() {`,
+        `    float width = size.x;`,
+        `    float height = size.y;`,
+        `    vec2 flip_pos = position;`,
+        `    flip_pos.y = viewport.y - position.y;`,
+        `    mat2 rotate_mat = mat2(`,
+        `        cos(rotate), sin(rotate),`,
+        `        -sin(rotate), cos(rotate)`,
+        `    );`,
+        `    vec2 rotate_related_FragCoord = rotate_mat * (gl_FragCoord.xy / pixelRatio - flip_pos);`,
+        `    float x_in = step(rotate_related_FragCoord.x, width / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - width / 2.0 + strokeWidth / 2.0));`,
+        `    float y_in = step(rotate_related_FragCoord.y, height / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - height / 2.0 + strokeWidth / 2.0));`,
+        `    return x_in * y_in;`,
+        `}`
+    ],
+    [
+        `float inRectBorder() {`,
+        `    float width = size.x;`,
+        `    float height = size.y;`,
+        `    vec2 flip_pos = position;`,
+        `    flip_pos.y = viewport.y - position.y;`,
+        `    mat2 rotate_mat = mat2(`,
+        `        cos(rotate), sin(rotate),`,
+        `        -sin(rotate), cos(rotate)`,
+        `    );`,
+        `    vec2 rotate_related_FragCoord = rotate_mat * (gl_FragCoord.xy / pixelRatio - flip_pos);`,
+        `    float x_in_outer = step(rotate_related_FragCoord.x, width / 2.0 + strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - width / 2.0 - strokeWidth / 2.0));`,
+        `    float y_in_outer = step(rotate_related_FragCoord.y, height / 2.0 + strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - height / 2.0 - strokeWidth / 2.0));`,
+        `    float x_in_inner = step(rotate_related_FragCoord.x, width / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - width / 2.0 + strokeWidth / 2.0));`,
+        `    float y_in_inner = step(rotate_related_FragCoord.y, height / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - height / 2.0 + strokeWidth / 2.0));`,
+        ``,
+        `    return x_in_outer * y_in_outer * (1.0 - x_in_inner * y_in_inner);`,
+        `}`
+    ],
+    [
+        `float inCross() {`,
+        `    vec2 flip_pos = position;`,
+        `    flip_pos.y = viewport.y - position.y;`,
+        `    mat2 rotate_mat = mat2(`,
+        `        cos(rotate), sin(rotate),`,
+        `        -sin(rotate), cos(rotate)`,
+        `    );`,
+        `    vec2 rotate_related_FragCoord = rotate_mat * (gl_FragCoord.xy / pixelRatio - flip_pos);`,
+        `    float innerWidth = innerSize.x;`,
+        `    float innerHeight = innerSize.y;`,
+        `    float width = size.x;`,
+        `    float height = size.y;`,
+        `    float x_in1 = step(rotate_related_FragCoord.x, width / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - width / 2.0 + strokeWidth / 2.0));`,
+        `    float y_in1 = step(rotate_related_FragCoord.y, innerHeight / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - innerHeight / 2.0 + strokeWidth / 2.0));`,
+        `    float x_in2 = step(rotate_related_FragCoord.x, innerWidth / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - innerWidth / 2.0 + strokeWidth / 2.0));`,
+        `    float y_in2 = step(rotate_related_FragCoord.y, height / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - height / 2.0 + strokeWidth / 2.0));`,
+        `    return min(1., x_in1 * y_in1 + x_in2 * y_in2);`,
+        `}`
+    ],
+    [
+        `float inCrossBorder() {`,
+        `    vec2 flip_pos = position;`,
+        `    flip_pos.y = viewport.y - position.y;`,
+        `    mat2 rotate_mat = mat2(`,
+        `        cos(rotate), sin(rotate),`,
+        `        -sin(rotate), cos(rotate)`,
+        `    );`,
+        `    vec2 rotate_related_FragCoord = rotate_mat * (gl_FragCoord.xy / pixelRatio - flip_pos);`,
+        `    float innerWidth = innerSize.x;`,
+        `    float innerHeight = innerSize.y;`,
+        `    float width = size.x;`,
+        `    float height = size.y;`,
+        // TODO: need refactor
+        `    float x_in1 = step(rotate_related_FragCoord.x, width / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - width / 2.0 + strokeWidth / 2.0));`,
+        `    float y_in1 = step(rotate_related_FragCoord.y, innerHeight / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - innerHeight / 2.0 + strokeWidth / 2.0));`,
+        `    float x_in2 = step(rotate_related_FragCoord.x, innerWidth / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - innerWidth / 2.0 + strokeWidth / 2.0));`,
+        `    float y_in2 = step(rotate_related_FragCoord.y, height / 2.0 - strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - height / 2.0 + strokeWidth / 2.0));`,
+        `    float outCross = 1. - min(1., x_in1 * y_in1 + x_in2 * y_in2);`,
+        ``,
+        `    float x_out1 = step(rotate_related_FragCoord.x, width / 2.0 + strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - width / 2.0 - strokeWidth / 2.0));`,
+        `    float y_out1 = step(rotate_related_FragCoord.y, innerHeight / 2.0 + strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - innerHeight / 2.0 - strokeWidth / 2.0));`,
+        `    float x_out2 = step(rotate_related_FragCoord.x, innerWidth / 2.0 + strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.x, - innerWidth / 2.0 - strokeWidth / 2.0));`,
+        `    float y_out2 = step(rotate_related_FragCoord.y, height / 2.0 + strokeWidth / 2.0) * (1.0 - step(rotate_related_FragCoord.y, - height / 2.0 - strokeWidth / 2.0));`,
+        `    float inCrossBorder = min(1., x_out1 * y_out1 + x_out2 * y_out2);`,
+        `    return inCrossBorder * outCross;`,
+        `}`
+    ],
+    [
+        `float inCircle() {`,
+        `    vec2 flip_pos = position;`,
+        `    flip_pos.y = viewport.y - position.y;`,
+        `    float dist = distance(gl_FragCoord.xy / pixelRatio, flip_pos);`,
+        `    return 1. - smoothstep((r - strokeWidth / 2.) - 2. * fwidth(dist), (r - strokeWidth / 2.), dist);`,
+        `}`
+    ],
+    [
+        `float inCircleBorder() {`,
+        `    if (strokeWidth == 0.) {`,
+        `      return 0.;`,
+        `    }`,
+        `    vec2 flip_pos = position;`,
+        `    flip_pos.y = viewport.y - position.y;`,
+        ``,
+        `    float dist = distance(gl_FragCoord.xy / pixelRatio, flip_pos);`,
+        `    float drawOuter = 1. - smoothstep((r + strokeWidth / 2.) - fwidth(dist), (r + strokeWidth / 2.), dist);`,
+        `    float drawInner = 1. - smoothstep((r - strokeWidth / 2.) - fwidth(dist), (r - strokeWidth / 2.), dist);`,
+        `    return drawOuter * (1. - drawInner);`,
+        `}`
+    ]
+];
+fragment.main = [
+    `void main(void) {`,
+    `    if (shape == 0.0) {`,
+    `        // circle shape`,
+    `        // border check, using 0.5(center of smoothstep)`,
+    `        if (inCircle() < 0.1 && (inCircleBorder() < 0.1)) {`,
+    `            discard;`,
+    `        }`,
+    `        fragmentColor = inCircleBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inCircle() * vec4(fill.rgb * fill.a, fill.a);`,
+    `    } else if (shape == 1.0) {`,
+    `        if (inRect() < 0.5 && (inRectBorder() < 0.5)) {`,
+    `            discard;`,
+    `        }`,
+    `        // rect shape`,
+    `        fragmentColor = inRectBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inRect() * vec4(fill.rgb * fill.a, fill.a);`,
+    `    } else if (shape == 2.0) {`,
+    `        if (inTriangle() < 0.5 && (inTriangleBorder() < 0.5)) {`,
+    `            discard;`,
+    `        }`,
+    `        // triangle shape`,
+    `        fragmentColor = inTriangleBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inTriangle() * vec4(fill.rgb * fill.a, fill.a);`,
+    `    } else if (shape == 3.0) {`,
+    `        if (inCross() < 0.5 && (inCrossBorder() < 0.5)) {`,
+    `            discard;`,
+    `        }`,
+    `        // cross shape`,
+    `        fragmentColor = inCrossBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inCross() * vec4(fill.rgb * fill.a, fill.a);`,
+    `    }`,
+    `}`
+];
+const idFragment = fragment.copy();
+exports.idFragment = idFragment;
+idFragment.inputs['id'] = 'vec4';
+// delete old fragmentColor and add new fragmentColor
+const sentencesTobeReplaced = [
+    `        fragmentColor = inCircleBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inCircle() * vec4(fill.rgb * fill.a, fill.a);`,
+    `        fragmentColor = inRectBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inRect() * vec4(fill.rgb * fill.a, fill.a);`,
+    `        fragmentColor = inTriangleBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inTriangle() * vec4(fill.rgb * fill.a, fill.a);`,
+    `        fragmentColor = inCrossBorder() * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a) + inCross() * vec4(fill.rgb * fill.a, fill.a);`
+];
+sentencesTobeReplaced.forEach((sentence) => {
+    idFragment.main[idFragment.main.indexOf(sentence)] = `fragmentColor = id;`;
+});
+
+
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.idFragment = exports.fragment = exports.idVertex = exports.vertex = void 0;
+const utils_1 = __webpack_require__(0);
+const vertex = new utils_1.Shader();
+exports.vertex = vertex;
+vertex.inputs = {
+    inVertexPos: 'vec3',
+    in_shape: 'float',
+    in_source: 'vec2',
+    in_target: 'vec2',
+    in_curveness: 'float',
+    in_dashInterval: 'float',
+    in_strokeWidth: 'float',
+    in_strokeColor: 'vec4'
+};
+vertex.outputs = {
+    shape: 'float',
+    strokeColor: 'vec4',
+    strokeWidth: 'float',
+    cpA: 'vec2',
+    cpB: 'vec2',
+    cpC: 'vec2',
+    curveness: 'float',
+    dashInterval: 'float'
+};
+vertex.uniforms = {
+    projection: 'mat3',
+    scale: 'vec2',
+    translate: 'vec2'
+};
+vertex.main = [
+    `void main(void) {`,
+    `    strokeColor = in_strokeColor;`,
+    `    strokeWidth = in_strokeWidth;`,
+    `    shape = in_shape;`,
+    `    dashInterval = in_dashInterval;`,
+    `    vec2 source = in_source * scale + translate;`,
+    `    vec2 target = in_target * scale + translate;`,
+    `    vec2 delta = target - source;`,
+    `    vec2 center = 0.5 * (source + target);`,
+    `    float len = length(delta);`,
+    `    float phi = atan(delta.y / delta.x);`,
+    `    float containerWidth = in_strokeWidth;`,
+    `    if (in_shape == 1.) {`,
+    `       containerWidth = 2. * (in_curveness * len + in_strokeWidth); // TODO: can optimize to half`,
+    `    }`,
+    `    vec2 normal = normalize(vec2(delta.y, -delta.x)); // TODO: link's normal, need control side`,
+    `    cpA = source;`,
+    `    cpB = center + normal * len * in_curveness;`,
+    `    cpC = target;`,
+    ``,
+    `    mat3 line_scale = mat3(`,
+    `        len, 0, 0,`,
+    `        0, containerWidth, 0,`,
+    `        0, 0, 1`,
+    `    );`,
+    `    mat3 line_rotate = mat3(`,
+    `        cos(phi), sin(phi), 0,`,
+    `        -sin(phi), cos(phi), 0,`,
+    `        0, 0, 1`,
+    `    );`,
+    `    mat3 line_translate = mat3(`,
+    `        1, 0, 0,`,
+    `        0, 1, 0,`,
+    `        center.x, center.y, 1`,
+    `    );`,
+    `    `,
+    `    mat3 transform = line_translate * line_rotate * line_scale;`,
+    ``,
+    `    gl_Position = vec4(projection * transform * inVertexPos, 1.);`,
+    `}`
+];
+const idVertex = vertex.copy();
+exports.idVertex = idVertex;
+idVertex.inputs['in_id'] = 'vec4';
+idVertex.outputs['id'] = 'vec4';
+idVertex.main.splice(1, 0, `id = in_id;`);
+const fragment = new utils_1.Shader();
+exports.fragment = fragment;
+fragment.inputs = { ...vertex.outputs };
+fragment.outputs = {
+    fragmentColor: 'vec4'
+};
+fragment.uniforms = {
+    viewport: 'vec2',
+    pixelRatio: 'float'
+};
+fragment.methods = [
+    [
+        `// reference paper: http://hhoppe.com/ravg.pdf`,
+        `// distance vector to origin(0, 0)`,
+        `float det(vec2 a, vec2 b) { return a.x * b.y - b.x * a.y; }`,
+        ``,
+        `vec2 get_distance_vector(vec2 b0, vec2 b1, vec2 b2) {`,
+        `  float a = det(b0, b2), b = 2.0 * det(b1, b0), d = 2.0 * det(b2, b1);`,
+        `  float f = b * d - a * a;`,
+        `  vec2 d21 = b2 - b1, d10 = b1 - b0, d20 = b2 - b0;`,
+        `  vec2 gf = 2.0 * (b * d21 + d * d10 + a * d20);`,
+        `  gf = vec2(gf.y, -gf.x);`,
+        `  vec2 pp = -f * gf / dot(gf, gf);`,
+        `  vec2 d0p = b0 - pp;`,
+        `  float ap = det(d0p, d20), bp = 2.0 * det(d10, d0p);`,
+        `  float t = clamp((ap + bp) / (2.0 * a + b + d), 0.0, 1.0);`,
+        `  return mix(mix(b0, b1, t), mix(b1, b2, t), t);`,
+        `}`
+    ],
+    [
+        `float distToQuadraticBezierCurve(vec2 p, vec2 b0, vec2 b1, vec2 b2) {`,
+        `  return length(get_distance_vector(b0 - p, b1 - p, b2 - p));`,
+        `}`
+    ],
+    [
+        `float isInDash(vec2 p, vec2 p0, vec2 p1, int dashInterval) {`,
+        `  if (dashInterval <= 0) {`,
+        `    return 0.;`,
+        `  }`,
+        `  if (dashInterval >= int(length(p1 - p0))) {`,
+        `    return 1.;`,
+        `  }`,
+        `  float d = dot((p - p0), (p1 - p0)) / length(p1 - p0);`,
+        `  int idx = int(d) / dashInterval;`,
+        `  return 1. - float(idx % 2);`,
+        `}`
+    ]
+];
+fragment.main = [
+    `void main(void) {`,
+    `  if (shape == 0.) {`,
+    `    // line`,
+    `    fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
+    `  } else if (shape == 1.) {`,
+    `    // curve`,
+    `    vec2 pos = gl_FragCoord.xy / pixelRatio;`,
+    `    vec2 cpAFlipped = vec2(cpA.x, viewport.y - cpA.y);`,
+    `    vec2 cpBFlipped = vec2(cpB.x, viewport.y - cpB.y);`,
+    `    vec2 cpCFlipped = vec2(cpC.x, viewport.y - cpC.y);`,
+    `    float dist = distToQuadraticBezierCurve(pos, cpAFlipped, cpBFlipped, cpCFlipped);`,
+    `    float epsilon = fwidth(dist);`,
+    `    if (dist < strokeWidth / 2. + epsilon) {`,
+    `      float inCurve = 1. - smoothstep(strokeWidth / 2. - epsilon, strokeWidth / 2. + epsilon, dist);`,
+    `      fragmentColor = inCurve * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
+    `    } else {`,
+    `      discard;`,
+    `    }`,
+    `  } else if (shape == 2.) {`,
+    `    // dash-line`,
+    `    vec2 pos = gl_FragCoord.xy / pixelRatio;`,
+    `    vec2 cpAFlipped = vec2(cpA.x, viewport.y - cpA.y);`,
+    `    vec2 cpCFlipped = vec2(cpC.x, viewport.y - cpC.y);`,
+    `    if(isInDash(pos, cpAFlipped, cpCFlipped, int(dashInterval)) > 0.5) {`,
+    `      fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
+    `    } else {`,
+    `      discard;`,
+    `    }`,
+    `  }`,
+    `}`
+];
+const idFragment = fragment.copy();
+exports.idFragment = idFragment;
+idFragment.inputs['id'] = 'vec4';
+const sentencesTobeReplaced = [
+    `    fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
+    `      fragmentColor = inCurve * vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`,
+    `      fragmentColor = vec4(strokeColor.rgb * strokeColor.a, strokeColor.a);`
+];
+sentencesTobeReplaced.forEach((sentence) => {
+    idFragment.main[idFragment.main.indexOf(sentence)] = `fragmentColor = id;`;
+});
+
+
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
+ * @description Node using in Renderer
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RenderNodeManager = void 0;
+const render_element_1 = __webpack_require__(4);
+class RenderNodeManager extends render_element_1.RenderElementManager {
+    // private idToIndex: { [key: string]: number }
+    /**
+     * create render node manager
+     * @param gl WebGL context
+     * @param params nessesary configs for node manager
+     * @param idTexture texture store elements id of each pixel
+     */
+    constructor(gl, params, shaders, 
+    // shaders: ShaderSeries,
+    idTexture) {
+        super(
+        /* webgl context */ gl, 
+        // prettier-ignore
+        /* parameters */ { ...params, instanceVerteces: [
+                -0.5, 0.5, 1.0,
+                -0.5, -0.5, 1.0,
+                0.5, 0.5, 1.0,
+                0.5, -0.5, 1.0,
+            ] }, 
+        /* shader series */ {
+            ...shaders
+        }, 
+        /* idTexture */ idTexture);
+        this.renderIdToElement = {};
+    }
+    /**
+     * refresh all nodes position after lazy update
+     * @param nodes all node data
+     */
+    refreshPosition(nodes) {
+        // set array
+        const attr = this.attributes.get('in_position');
+        nodes.forEach((node, i) => {
+            attr.array[2 * i] = node.$_position.x;
+            attr.array[2 * i + 1] = node.$_position.y;
+        });
+        this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer);
+        this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, attr.array, 0, attr.size * nodes.length);
+    }
+}
+exports.RenderNodeManager = RenderNodeManager;
+
+
+/***/ }),
+/* 18 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+/**
+ * @author Xiaodong Zhao <zhaoxiaodong@zju.edu.cn>
+ * @description Link used in renderer
+ */
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.RenderLinkManager = void 0;
+const render_element_1 = __webpack_require__(4);
+class RenderLinkManager extends render_element_1.RenderElementManager {
+    /**
+     * create render link manager
+     * @param gl WebGL context
+     * @param params nessesary configs for link manager
+     * @param idTexture texture store elements id of each pixel
+     */
+    constructor(gl, params, shaders, idTexture) {
+        super(
+        /* webgl context */ gl, 
+        // prettier-ignore
+        /* parameters */ { ...params, instanceVerteces: [
+                -0.5, 0.5, 1.0,
+                -0.5, -0.5, 1.0,
+                0.5, 0.5, 1.0,
+                0.5, -0.5, 1.0,
+            ] }, 
+        /* shader series */ {
+            ...shaders
+        }, 
+        /* idTexture */ idTexture);
+        this.renderIdToElement = {};
+    }
+    /**
+     * refresh all position of edges
+     * @param links all link data
+     */
+    refreshPosition(links) {
+        const sourceAttribute = this.attributes.get('in_source');
+        const targetAttribute = this.attributes.get('in_target');
+        links.forEach((link, i) => {
+            sourceAttribute.array[2 * i] = link.$_source.$_position.x;
+            sourceAttribute.array[2 * i + 1] = link.$_source.$_position.y;
+            targetAttribute.array[2 * i] = link.$_target.$_position.x;
+            targetAttribute.array[2 * i + 1] = link.$_target.$_position.y;
+        });
+        const arr = [sourceAttribute, targetAttribute];
+        arr.forEach((attr) => {
+            this.gl.bindBuffer(this.gl.ARRAY_BUFFER, attr.buffer);
+            this.gl.bufferSubData(this.gl.ARRAY_BUFFER, 0, attr.array, 0, attr.size * links.length);
+        });
+    }
+}
+exports.RenderLinkManager = RenderLinkManager;
+
+
+/***/ }),
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5165,7 +6617,7 @@ exports.InteractionManager = InteractionManager;
 
 
 /***/ }),
-/* 13 */
+/* 20 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -5176,7 +6628,7 @@ function logJs(){
 }
 
 /***/ }),
-/* 14 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var require;var require;(function(f){if(true){module.exports=f()}else { var g; }})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return require(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){

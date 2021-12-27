@@ -39,6 +39,11 @@ export default class NetV {
     public $_lazyUpdate = false // flag to control lazy update
 
     public $_interactionManager: InteractionManager
+    public $_platform: any
+    public $_canvas2: any
+    public $_circles: any
+    public $_circles2: any
+    public $_data_star: any
     private $_data: interfaces.NodeLinkData = { nodes: [], links: [] }
 
     /**
@@ -55,25 +60,25 @@ export default class NetV {
         delete this.$_configs['container']
 
         
-        // const canvas = document.createElement('canvas') // TODO: consider node enviroment, document not defined
-        // const pixelRatio = window.devicePixelRatio || 1
-        // canvas.style.width = this.$_configs.width + 'px'
-        // canvas.style.height = this.$_configs.height + 'px'
-        // canvas.setAttribute('width', String(this.$_configs.width * pixelRatio))
-        // canvas.setAttribute('height', String(this.$_configs.height * pixelRatio))
-        // this.$_container.appendChild(canvas)
-        // this.$_canvas = canvas
+        const canvas = document.createElement('canvas') // TODO: consider node enviroment, document not defined
+        const pixelRatio = window.devicePixelRatio || 1
+        canvas.style.width = this.$_configs.width + 'px'
+        canvas.style.height = this.$_configs.height + 'px'
+        canvas.setAttribute('width', String(this.$_configs.width * pixelRatio))
+        canvas.setAttribute('height', String(this.$_configs.height * pixelRatio))
+        this.$_container.appendChild(canvas)
+        this.$_canvas = canvas
 
-        // this.$_renderer = new Renderer({
-        //     canvas,
-        //     width: this.$_configs.width,
-        //     height: this.$_configs.height,
-        //     backgroundColor: this.$_configs.backgroundColor,
-        //     nodeLimit: this.$_configs.nodeLimit,
-        //     linkLimit: this.$_configs.linkLimit,
-        //     getAllNodes: this.nodes.bind(this),
-        //     getAllLinks: this.links.bind(this)
-        // })
+        this.$_renderer = new Renderer({
+            canvas,
+            width: this.$_configs.width,
+            height: this.$_configs.height,
+            backgroundColor: this.$_configs.backgroundColor,
+            nodeLimit: this.$_configs.nodeLimit,
+            linkLimit: this.$_configs.linkLimit,
+            getAllNodes: this.nodes.bind(this),
+            getAllLinks: this.links.bind(this)
+        })
 
 
 
@@ -83,62 +88,10 @@ export default class NetV {
         var height = 500;
         const canvas2 = document.getElementById('main-canvas')
         const platform = Stardust.platform('webgl-2d', canvas2, this.$_configs.width, this.$_configs.height)
-        var Nx = 96 * 1;
-        var Ny = 50 * 1;
-        console.log('init platform')
-        var data = [];
-        for(var i = 0; i < Nx; i++) {
-            for(var j = 0; j < Ny; j++) {
-                var x = i / (Nx - 1) * 2 - 1;
-                var y = j / (Ny - 1) * 2 - 1;
-                var scale = 2;
-                var len = Math.sqrt(x * x + y * y);
-                var d = len * Math.exp(-len * len * 5);
-                var dx = y / len * d;
-                var dy = -x / len * d;
-                data.push({
-                    x: x + dx * scale,
-                    y: y + dy * scale
-                });
-            }
-        }
-        let circle = new Stardust.mark.circle(16);
-        console.log('init mark')
-        var circles = Stardust.mark.create(circle, platform);
-        var circles2 = Stardust.mark.create(circle, platform);
-    
-        var scaleX = Stardust.scale.linear()
-            .domain([ -1, 1 ])
-            .range([ 10, width - 10 ]);
-        var scaleY = Stardust.scale.linear()
-            .domain([ -1, 1 ])
-            .range([ 10, height - 10 ]);
-        circles.attr("center", Stardust.scale.Vector2(scaleX(d => d.x), scaleY(d => d.y)));
-        circles.attr("radius", 2);
-        circles.attr("color", [ 0, 0, 0, 0.4 ]);
-        circles2.attr("center", Stardust.scale.Vector2(scaleX(d => d.x), scaleY(d => d.y)));
-        circles2.attr("radius", 4);
-        circles2.attr("color", [ 255, 0, 0, 1 ]);
-        circles.data(data);
-        console.log('init data')
-        circles.render();
-        console.log('init render')
-        platform.endPicking();
-    
-        canvas2.onmousemove = e => {
-            let bounds = canvas2.getBoundingClientRect();
-            var x = e.clientX - bounds.left;
-            var y = e.clientY - bounds.top;
-            var p = platform.getPickingPixel(x * 2, y * 2);
-            if(p) {
-                platform.clear();
-                circles.render();
-                circles2.attr("color", [ 1, 0, 0, 1 ]);
-                circles2.data([ data[p[1]] ]);
-                circles2.render();
-                console.log('log in render')
-            }
-        }
+        this.$_platform = platform
+        this.$_canvas2 = canvas2
+
+        
         
        
 
@@ -162,6 +115,45 @@ export default class NetV {
      * @param nodeLinkData? the node-link-data of a graph, provided?setter:getter;
      */
     public data(nodeLinkData?: interfaces.NodeLinkData) {
+        var Nx = 96 * 1;
+        var Ny = 50 * 1;
+        var data = [];
+        for(var i = 0; i < Nx; i++) {
+            for(var j = 0; j < Ny; j++) {
+                var x = i / (Nx - 1) * 2 - 1;
+                var y = j / (Ny - 1) * 2 - 1;
+                var scale = 2;
+                var len = Math.sqrt(x * x + y * y);
+                var d = len * Math.exp(-len * len * 5);
+                var dx = y / len * d;
+                var dy = -x / len * d;
+                data.push({
+                    x: x + dx * scale,
+                    y: y + dy * scale
+                });
+            }
+        }
+        this.$_data_star = data
+        let circle = new Stardust.mark.circle(16);
+        console.log('init mark')
+        var circles = Stardust.mark.create(circle, this.$_platform);
+        var circles2 = Stardust.mark.create(circle, this.$_platform);
+    
+        var scaleX = Stardust.scale.linear()
+            .domain([ -1, 1 ])
+            .range([ 10, this.$_configs.width - 10 ]);
+        var scaleY = Stardust.scale.linear()
+            .domain([ -1, 1 ])
+            .range([ 10, this.$_configs.height - 10 ]);
+        circles.attr("center", Stardust.scale.Vector2(scaleX(d => d.x), scaleY(d => d.y)));
+        circles.attr("radius", 2);
+        circles.attr("color", [ 0, 0, 0, 0.4 ]);
+        circles2.attr("center", Stardust.scale.Vector2(scaleX(d => d.x), scaleY(d => d.y)));
+        circles2.attr("radius", 4);
+        circles2.attr("color", [ 255, 0, 0, 1 ]);
+        circles.data(data);
+        this.$_circles = circles
+        this.$_circles2 = circles2
         if (nodeLinkData === undefined) {
             return this.$_data
         } else {
@@ -324,7 +316,24 @@ export default class NetV {
     /**
      * @description draw elements
      */
-    public draw() {
+    public draw() {    
+        this.$_circles.render();
+        this.$_platform.endPicking();
+    
+        this.$_canvas2.onmousemove = e => {
+            let bounds = this.$_canvas2.getBoundingClientRect();
+            var x = e.clientX - bounds.left;
+            var y = e.clientY - bounds.top;
+            var p = this.$_platform.getPickingPixel(x * 2, y * 2);
+            if(p) {
+                this.$_platform.clear();
+                this.$_circles.render();
+                this.$_circles2.attr("color", [ 1, 0, 0, 1 ]);
+                this.$_circles2.data([ this.$_data_star[p[1]] ]);
+                this.$_circles2.render();
+                console.log('log in render')
+            }
+        }
         this.$_renderer.draw()
     }
 

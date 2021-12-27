@@ -31,5 +31,5 @@ const testData = {
 const netv = new NetV({
     container: document.getElementById('main')
 })
-// netv.data(testData)
-// netv.draw()
+ netv.data(testData)
+ netv.draw()
