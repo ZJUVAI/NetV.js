@@ -9,6 +9,7 @@ import {
 import { Transform } from '../../interfaces'
 import Node from '../../elements/node'
 import Link from '../../elements/link'
+import { node } from 'src/configs'
 
 export class RenderElementManager {
     public attributes: Map<string, RenderAttribute>
@@ -29,7 +30,13 @@ export class RenderElementManager {
     protected idAttributes: Map<string, RenderAttribute>
     protected idTexture: WebGLTexture
 
-    protected renderIdToElement: { [key: number]: Node | Link }
+    public renderIdToElement: { [key: number]: Node | Link }
+
+    public nodeRenderIdToIndex: Map<number, Node | Link>
+    public linkRenderIdToIndex: Map<number, Node | Link>
+    public maxNodeOffset: number
+    public maxLinkOffset: number
+
     protected elementToRenderId = new Map()
 
     public constructor(
@@ -43,6 +50,8 @@ export class RenderElementManager {
         this.capacity = limit
         this.width = width
         this.height = height
+        this.maxNodeOffset = 0
+        this.maxLinkOffset = 0
         this.pixelRatio = window.devicePixelRatio || 1
 
         this.attributes = extractAttributesFromShader(shaders.vertex)
@@ -62,7 +71,8 @@ export class RenderElementManager {
         )
 
         this.idTexture = idTexture
-
+        this.nodeRenderIdToIndex = new Map()
+        this.linkRenderIdToIndex = new Map()
         // initial attributes arrays and buffers
         this.attributes.forEach((attr) => {
             if (!attr.isBuildIn) {
@@ -239,22 +249,79 @@ export class RenderElementManager {
     public addData(elements: Node[] | Link[]) {
         // set array
         elements.forEach((element: Node | Link, i) => {
-            const index = this.count + i
+            if(element.type === 'Node'){
+                const zIndex = element.$_style.zindex + this.maxNodeOffset
+                if(this.nodeRenderIdToIndex.has(zIndex)) {
+                    for(let i = zIndex + 1; ; i++) {
+                        if( !this.nodeRenderIdToIndex.has(i)) {
+                            this.nodeRenderIdToIndex.set(i, element)
+                            break
+                        }
+                    } 
+                }else{
+                    this.nodeRenderIdToIndex.set(zIndex, element)
+                }
+            }else{ //link
+                const zIndex = element.$_style.zindex + this.maxLinkOffset
+                if(this.linkRenderIdToIndex.has(zIndex)) {
+                    for(let i = zIndex + 1; ; i++) {
+                        if( !this.linkRenderIdToIndex.has(i)) {
+                            this.linkRenderIdToIndex.set(i, element)
+                            break
+                        }
+                    } 
+                }else{
+                    this.linkRenderIdToIndex.set(zIndex, element)
+                }
+            }
+        })
+
+        const NodeArray = Array.from(this.nodeRenderIdToIndex).sort((a, b)=> a[0] - b[0])
+        if(NodeArray.length !== 0){
+            this.maxNodeOffset = NodeArray[NodeArray.length - 1][0] 
+        }
+        
+        NodeArray.forEach((item, i) => {
+            const index = i
+
             // link attribute => webgl attribute
             this.attributes.forEach((attr) => {
                 if (!attr.isBuildIn) {
-                    const array = getShaderAttributeValue(element, attr.name)
+                    const array = getShaderAttributeValue(item[1], attr.name)
                     attr.array.set(array, attr.size * index)
                 }
             })
 
-            const offset = element.type === 'Node' ? 0 : 1 // NOTE: node render id, use even integer
+            const offset = item[1].type === 'Node' ? 0 : 1 // NOTE: node render id, use even integer
             const renderId = 2 * index + offset
             const renderIdColor = encodeRenderId(renderId)
             const idAttr = this.idAttributes.get('in_id')
             idAttr.array.set([renderIdColor.r, renderIdColor.g, renderIdColor.b, renderIdColor.a], 4 * index)
+            this.setRenderIdOf(item[1], renderId)
+        })
 
-            this.setRenderIdOf(element, renderId)
+        const LinkArray = Array.from(this.linkRenderIdToIndex).sort((a, b)=> a[0] - b[0])
+        if(LinkArray.length !== 0){
+            this.maxLinkOffset = LinkArray[LinkArray.length - 1][0] 
+        }
+        
+        LinkArray.forEach((item, i) => {
+            const index = i
+
+            // link attribute => webgl attribute
+            this.attributes.forEach((attr) => {
+                if (!attr.isBuildIn) {
+                    const array = getShaderAttributeValue(item[1], attr.name)
+                    attr.array.set(array, attr.size * index)
+                }
+            })
+
+            const offset = item[1].type === 'Node' ? 0 : 1 // NOTE: node render id, use even integer
+            const renderId = 2 * index + offset
+            const renderIdColor = encodeRenderId(renderId)
+            const idAttr = this.idAttributes.get('in_id')
+            idAttr.array.set([renderIdColor.r, renderIdColor.g, renderIdColor.b, renderIdColor.a], 4 * index)
+            this.setRenderIdOf(item[1], renderId)
         })
 
         this.attributes.forEach((attr) => {

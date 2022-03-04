@@ -18,6 +18,7 @@ export const node = {
         strokeWidth: 2,
         /* circle shape styles */
         r: 10,
+        zindex:10,
         /* rect shape styles */
         width: 5,
         height: 5,
@@ -38,6 +39,7 @@ export const link = {
         strokeWidth: 2,
         /* curve shape style */
         curveness: 0.2,
+        zindex:10,
         dashInterval: 5
     }
 }

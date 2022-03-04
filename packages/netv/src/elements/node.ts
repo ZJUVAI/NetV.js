@@ -19,6 +19,8 @@ class Node extends Element {
     public fill: (value?: interfaces.Color) => interfaces.Color
     /* circle shape styles */
     public r?: (value?: number) => number
+    /* z-index */
+    public zindex?: (value?: number) => number
     /* rect shape styles */
     public width?: (value?: number) => number // also for cross shape
     public height?: (value?: number) => number // also for cross shape

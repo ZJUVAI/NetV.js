@@ -18,6 +18,8 @@ class Link extends Element {
 
     public $_source: Node
     public $_target: Node
+    /* z-index */
+    public zindex?: (value?: number) => number
 
     private $_elementReservedKeys = new Set(['source', 'target', 'style'])
 

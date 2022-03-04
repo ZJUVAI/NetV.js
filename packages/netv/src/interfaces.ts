@@ -28,6 +28,8 @@ export interface NodeStyle {
     strokeWidth?: number
     strokeColor?: Color
     rotate?: number
+    /* z-index */
+    zindex?: number
     /* circle shape styles */
     r?: number
     /* rect shape styles */
@@ -55,6 +57,8 @@ export type LinkShape = 'line' | 'curve' | 'dash-line'
 
 export interface LinkStyle {
     shape?: LinkShape
+    /* z-index */
+    zindex?: number
     strokeWidth?: number
     strokeColor?: Color
     /* curve shape */
@@ -66,6 +70,7 @@ export interface LinkStyle {
 export interface LinkData {
     source: string
     target: string
+    zindex?: number
     style?: LinkStyle
     clickCallback?: (link: Link) => void
     hoverCallback?: (link: Link) => void
