@@ -12,7 +12,7 @@
     "author": "",
     "license": "MIT",
     "dependencies": {
-        "d3": "^6.7.0"
+        "d3": "^7.6.1"
     },
     "homepage": "https://github.com/ZJUVAI/NetV.js/tree/dev/packages/layout",
     "publishConfig": {
