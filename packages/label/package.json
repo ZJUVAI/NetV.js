@@ -1,6 +1,6 @@
 {
     "name": "@netv/label",
-    "version": "1.0.3",
+    "version": "1.0.4",
     "description": "Label plugin for NetV.js",
     "main": "build/label.js",
     "directories": {
