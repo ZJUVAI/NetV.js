@@ -18,6 +18,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
+      # 构建 NetV.js 库
       - uses: actions/checkout@v4
 
       - uses: actions/setup-node@v4
@@ -33,16 +34,26 @@ jobs:
         env:
           NODE_OPTIONS: --openssl-legacy-provider
 
-      # 拉取 docs 分支的文档站点
+      # 构建 VuePress 文档站
       - uses: actions/checkout@v4
         with:
           ref: docs
           path: docs-branch
 
+      - name: Build docs site
+        working-directory: docs-branch
+        run: |
+          npm install
+          # 修改 VuePress base 路径以适配 GitHub Pages 子路径部署
+          sed -i "s|base: '/'|base: '/NetV.js/'|" src/.vuepress/config.js
+          npm run build
+        env:
+          NODE_OPTIONS: --openssl-legacy-provider
+
       - name: Prepare site
         run: |
           mkdir -p _site
-          # 复制 docs 分支的文档站点
+          # 复制 VuePress 文档站构建产物
           cp -r docs-branch/docs/* _site/
           # 复制 benchmarks 演示页面
           mkdir -p _site/benchmarks
