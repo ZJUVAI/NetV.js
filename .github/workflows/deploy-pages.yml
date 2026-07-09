@@ -26,8 +26,7 @@ jobs:
           cache: npm
 
       - run: npm install
-      - run: npx lerna bootstrap
-      - run: npm run build
+      - run: npm run build:netv
         env:
           NODE_OPTIONS: --openssl-legacy-provider
       - run: cd packages/netv && npm run build:benchmarks
