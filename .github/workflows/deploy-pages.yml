@@ -34,28 +34,15 @@ jobs:
         env:
           NODE_OPTIONS: --openssl-legacy-provider
 
-      # 构建 VuePress 文档站
+      # 拉取 docs 分支的预构建文档站
       - uses: actions/checkout@v4
         with:
           ref: docs
           path: docs-branch
 
-      - name: Build docs site
-        working-directory: docs-branch
+      - name: Fix asset paths for /NetV.js/ subpath
         run: |
-          npm install
-          # 修改 VuePress base 路径以适配 GitHub Pages 子路径部署
-          sed -i "s|base: '/'|base: '/NetV.js/'|" src/.vuepress/config.js
-          # 同时修改 head 中的绝对路径
-          sed -i "s|src: '/|src: '/NetV.js/|g" src/.vuepress/config.js
-          sed -i "s|href: '/|href: '/NetV.js/|g" src/.vuepress/config.js
-          npm run build
-        env:
-          NODE_OPTIONS: --openssl-legacy-provider
-
-      - name: Fix asset paths for subpath deployment
-        run: |
-          # VuePress base 可能未完全生效，对 HTML 做兜底路径重写
+          # 将所有绝对路径 /xxx 重写为 /NetV.js/xxx
           find docs-branch/docs -name "*.html" -exec sed -i \
             -e 's|href="/|href="/NetV.js/|g' \
             -e 's|src="/|src="/NetV.js/|g' \
@@ -64,7 +51,7 @@ jobs:
       - name: Prepare site
         run: |
           mkdir -p _site
-          # 复制 VuePress 文档站构建产物
+          # 复制文档站（已修正路径）
           cp -r docs-branch/docs/* _site/
           # 复制 benchmarks 演示页面
           mkdir -p _site/benchmarks
