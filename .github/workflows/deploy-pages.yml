@@ -33,12 +33,21 @@ jobs:
         env:
           NODE_OPTIONS: --openssl-legacy-provider
 
+      # 拉取 docs 分支的文档站点
+      - uses: actions/checkout@v4
+        with:
+          ref: docs
+          path: docs-branch
+
       - name: Prepare site
         run: |
           mkdir -p _site
+          # 复制 docs 分支的文档站点
+          cp -r docs-branch/docs/* _site/
           # 复制 benchmarks 演示页面
-          cp packages/netv/benchmarks/index.html _site/
-          cp packages/netv/benchmarks/bundle.js _site/
+          mkdir -p _site/benchmarks
+          cp packages/netv/benchmarks/index.html _site/benchmarks/
+          cp packages/netv/benchmarks/bundle.js _site/benchmarks/
           # 复制构建产物
           mkdir -p _site/build
           cp packages/netv/build/NetV.js _site/build/
