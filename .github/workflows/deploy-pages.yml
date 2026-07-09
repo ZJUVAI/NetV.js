@@ -46,9 +46,20 @@ jobs:
           npm install
           # 修改 VuePress base 路径以适配 GitHub Pages 子路径部署
           sed -i "s|base: '/'|base: '/NetV.js/'|" src/.vuepress/config.js
+          # 同时修改 head 中的绝对路径
+          sed -i "s|src: '/|src: '/NetV.js/|g" src/.vuepress/config.js
+          sed -i "s|href: '/|href: '/NetV.js/|g" src/.vuepress/config.js
           npm run build
         env:
           NODE_OPTIONS: --openssl-legacy-provider
+
+      - name: Fix asset paths for subpath deployment
+        run: |
+          # VuePress base 可能未完全生效，对 HTML 做兜底路径重写
+          find docs-branch/docs -name "*.html" -exec sed -i \
+            -e 's|href="/|href="/NetV.js/|g' \
+            -e 's|src="/|src="/NetV.js/|g' \
+            {} \;
 
       - name: Prepare site
         run: |
