@@ -13,7 +13,7 @@
         "eslint": "^7.14.0",
         "eslint-config-alloy": "^3.7.2",
         "git-cz": "^4.8.0",
-        "lerna": "^4.0.0",
+        "lerna": "^9.0.7",
         "ts-loader": "^7.0.4",
         "typescript": "^3.9.3",
         "webpack": "^4.43.0",
