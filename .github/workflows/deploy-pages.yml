@@ -25,7 +25,8 @@ jobs:
           node-version: 18
           cache: npm
 
-      - run: npm ci
+      - run: npm install
+      - run: npx lerna bootstrap
       - run: npm run build
         env:
           NODE_OPTIONS: --openssl-legacy-provider
