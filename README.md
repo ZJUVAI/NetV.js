@@ -82,7 +82,9 @@ $ lerna publish from-git
 
 ## Team
 
-NetV.js is owned by <img src='https://github.com/ZJUVAI/NetV.js/raw/dev/docs/zju.svg' height=18 style="display: inline; vertical-align: sub;"> [Zhejiang University](http://www.zju.edu.cn/) and <img src='https://github.com/ZJUVAI/NetV.js/raw/dev/docs/zjlab.svg' height=18 style="display: inline; vertical-align: sub;"> [Zhejiang Lab](https://www.zhejianglab.com/). The development of NetV.js is led by the <img src='https://github.com/ZJUVAI/NetV.js/raw/dev/docs/zjuvag.png'  height=18 style="display: inline; vertical-align: sub;"> [Visual Analytics Group of Zhejiang University](https://zjuvag.org/) and <img src='https://github.com/ZJUVAI/NetV.js/raw/dev/docs/jianwei.svg' height=18 style="display: inline; vertical-align: sub;"> [Zhejiang Lab Jianwei Team](https://jianwei.projects.zjvis.org/#/).
+NetV.js 归 <img src='https://github.com/ZJUVAI/NetV.js/raw/dev/docs/zju.svg' height=18 style="display: inline; vertical-align: sub;"> [浙江大学](http://www.zju.edu.cn/) 与 <img src='https://github.com/ZJUVAI/NetV.js/raw/dev/docs/zjlab.svg' height=18 style="display: inline; vertical-align: sub;"> [之江实验室](https://www.zhejianglab.com/) 所有。NetV.js 的开发由 <img src='https://github.com/ZJUVAI/NetV.js/raw/dev/docs/zjuvag.png'  height=18 style="display: inline; vertical-align: sub;"> [浙江大学可视分析小组](https://zjuvag.org/) 与 <img src='https://github.com/ZJUVAI/NetV.js/raw/dev/docs/jianwei.svg' height=18 style="display: inline; vertical-align: sub;"> [之江实验室见微团队](https://jianwei.projects.zjvis.org/#/) 主导。
+
+贡献者：赵晓冬、潘嘉铖、韩东明、周杰辉、[朱闽峰](https://person.zju.edu.cn/minfengzhu)、陈为（现由[朱闽峰](https://person.zju.edu.cn/minfengzhu)维护）。
 
 ## License
 
