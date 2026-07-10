@@ -1,18 +1,22 @@
 <template>
     <div id="footer-div">
-        NetV.js is owned by
+        NetV.js 归
         <img src="/zju.svg" height="18" style="display: inline; vertical-align: sub" />
-        <a href="http://www.zju.edu.cn/">Zhejiang University</a>
-        and
+        <a href="http://www.zju.edu.cn/">浙江大学</a>
+        与
         <img src="/zjlab.svg" height="18" style="display: inline; vertical-align: sub" />
-        <a href="https://www.zhejianglab.com/">Zhejiang Lab</a>
+        <a href="https://www.zhejianglab.com/">之江实验室</a>
+        所有
         <br />
-        The development of NetV.js is led by
+        NetV.js 的开发由
         <img src="/zjuvag.png" height="18" style="display: inline; vertical-align: sub" />
-        <a href="https://zjuvag.org/">Visual Analytics Group of Zhejiang University</a>
-        and
+        <a href="https://zjuvag.org/">浙江大学可视分析小组</a>
+        与
         <img src="/jianwei.svg" height="18" style="display: inline; vertical-align: sub" />
-        <a href="https://jianwei.projects.zjvis.org/#/">Zhejiang Lab Jianwei Team</a>
+        <a href="https://jianwei.projects.zjvis.org/#/">之江实验室见微团队</a>
+        主导
+        <br />
+        贡献者：赵晓冬、潘嘉铖、韩东明、周杰辉、朱闽峰、陈为（现由朱闽峰维护）
     </div>
 </template>
 
